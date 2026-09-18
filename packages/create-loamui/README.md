@@ -35,8 +35,17 @@ npm create loamui -- doctor
 npm create loamui -- doctor --fix
 ```
 
+`doctor` detects the framework (Next.js, Vite, Create React App) and wires the
+stylesheet the right way for each; other setups are reported with guidance.
 Every fix is additive: existing scripts, configuration and styles are
 preserved.
+
+If it finds Tailwind or another global reset, it reports the conflict and
+holds back the cascade wiring rather than breaking your styles. LoamUI keeps
+every rule inside `@layer loamui.*`, so an unlayered reset would override its
+element styles. Resolve it — use Tailwind for utilities only with Preflight
+off, or scope LoamUI to a subtree — then re-run. Your agent with the LoamUI
+skill can do this.
 
 ## Options
 
@@ -44,7 +53,8 @@ preserved.
   Default `claude-code`; `none` skips skills.
 - `--pm <pnpm|npm|yarn|bun>` — package manager. Default: detected from the
   invoker.
-- `--framework <next>` — framework to scaffold. Next.js App Router today.
+- `--framework <next>` — framework to scaffold. Next.js App Router today;
+  `doctor` supports more (Next.js, Vite, Create React App).
 - `--fix` — `doctor` only: apply the additive fixes.
 - `-y`, `--yes` — skip prompts and accept defaults.
 

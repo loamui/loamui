@@ -1,15 +1,9 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { detectPackageManager, projectLayout, readJson, run, ui } from "./util.mjs";
+import { detectPackageManager, ui } from "./util.mjs";
+import { detectFramework } from "./frameworks.mjs";
+import { detectConflicts } from "./conflicts.mjs";
 import { steps } from "./setup.mjs";
-
-function detectFramework(cwd) {
-  const pkg = readJson(join(cwd, "package.json")) ?? {};
-  const all = { ...pkg.dependencies, ...pkg.devDependencies };
-  if (all.next) return "next";
-  if (all["@tanstack/react-start"]) return "tanstack-start";
-  return null;
-}
 
 /** Verify (and with --fix, complete) LoamUI setup in the current project. */
 export async function doctor({ pm, agent, fix }) {
@@ -21,24 +15,34 @@ export async function doctor({ pm, agent, fix }) {
   }
 
   const framework = detectFramework(cwd);
-  if (framework !== "next") {
-    ui.warn(
-      framework === "tanstack-start"
-        ? "TanStack Start setup verification is not automated yet; follow the docs at loamui.com/docs/installation/tanstack-start."
-        : "No supported framework detected (expected Next.js). Checking what applies anyway.",
-    );
+  const resolvedPm = pm ?? detectPackageManager();
+  ui.heading(`Checking LoamUI setup — ${framework.label}${fix ? " (fixing gaps)" : ""}`);
+  if (framework.id === "unknown")
+    ui.warn("No supported framework detected. Checking what applies; wire the stylesheet by hand.");
+
+  const conflicts = detectConflicts(cwd, framework);
+  const blockWiring = conflicts.some((c) => c.severity === "blocking");
+  if (conflicts.length) {
+    ui.heading("Conflicts");
+    for (const c of conflicts) {
+      ui.fail(c.title);
+      ui.dim(`  ${c.detail}`);
+    }
+    ui.warn("Cascade wiring (layer order and stylesheet link) is held back until this is resolved.");
+    ui.heading("Checks");
   }
 
-  const resolvedPm = pm ?? detectPackageManager();
-  const layout = projectLayout(cwd);
-
-  ui.heading(`Checking LoamUI setup${fix ? " (fixing gaps)" : ""}`);
-
+  const blocked = [];
   const missing = [];
   const manual = [];
-  for (const step of steps({ pm: resolvedPm, agent, layout })) {
+  for (const step of steps({ pm: resolvedPm, agent, framework })) {
     if (step.check(cwd)) {
       ui.ok(step.title);
+      continue;
+    }
+    if (step.wiring && blockWiring) {
+      ui.warn(`${step.title} — held back by the conflict above`);
+      blocked.push(step);
       continue;
     }
     if (!fix) {
@@ -50,8 +54,8 @@ export async function doctor({ pm, agent, fix }) {
     if (step.fix?.(cwd) && step.check(cwd)) {
       ui.ok(`${step.title} — fixed`);
     } else if (step.manual) {
-      ui.warn(`${step.title} — ${step.manual(cwd)}`);
       manual.push(step.manual(cwd));
+      ui.warn(`${step.title} — ${step.manual(cwd)}`);
     } else {
       ui.fail(`${step.title} — could not fix automatically`);
       missing.push(step);
@@ -59,16 +63,17 @@ export async function doctor({ pm, agent, fix }) {
   }
 
   ui.heading("Result");
-  if (!missing.length && !manual.length) {
+  if (!missing.length && !manual.length && !blocked.length) {
     ui.ok("LoamUI setup is complete.");
     if (agent !== "none")
       ui.dim("If the skill was just installed, open a new agent session so it is discovered.");
     return 0;
   }
 
-  if (!fix) {
+  if (blocked.length)
+    ui.info("Resolve the conflict above (your agent with the LoamUI skill can do this), then re-run.");
+  if (!fix && (missing.length || manual.length))
     ui.info("Re-run with --fix to apply the additive fixes automatically.");
-  }
   for (const line of manual) ui.warn(line);
-  return missing.length || manual.length ? 1 : 0;
+  return 1;
 }

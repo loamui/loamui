@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
-import { projectLayout, run, ui } from "./util.mjs";
+import { run, ui } from "./util.mjs";
+import { detectFramework } from "./frameworks.mjs";
 import { CORE_STYLESHEET, steps } from "./setup.mjs";
 
 const LAYOUT_TSX = `import type { Metadata } from "next";
@@ -93,9 +94,9 @@ export async function scaffold({ dir, pm, agent, framework }) {
   writeFileSync(join(appDir, "page.tsx"), PAGE_TSX);
   writeFileSync(join(appDir, "welcome.css"), WELCOME_CSS);
 
-  const layout = projectLayout(target);
+  const detected = detectFramework(target);
   const failures = [];
-  for (const step of steps({ pm, agent, layout })) {
+  for (const step of steps({ pm, agent, framework: detected })) {
     if (step.check(target)) {
       ui.ok(step.title);
       continue;
@@ -115,7 +116,7 @@ export async function scaffold({ dir, pm, agent, framework }) {
   ui[composition.ok ? "ok" : "warn"](`check:composition ${composition.ok ? "passed" : "reported findings"}`);
 
   ui.heading(`Done — ${name} is ready`);
-  ui.info(`  cd ${dir}`);
+  if (dir !== ".") ui.info(`  cd ${dir}`);
   ui.info(`  ${pm} run dev`);
   if (agent !== "none") {
     ui.info("");

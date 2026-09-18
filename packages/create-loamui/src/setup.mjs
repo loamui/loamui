@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { addArgs, addDevArgs, dlxArgs, dlxBin, readJson, run } from "./util.mjs";
@@ -45,13 +45,52 @@ function copyAssets(targetDir, files) {
   for (const file of files) copyFileSync(join(ASSETS, file), join(targetDir, file));
 }
 
-function globalsHasLayerOrder(source) {
+function layerOrderedFirst(source) {
   const layer = source.indexOf(LAYER_DECLARATION);
   if (layer === -1) return false;
   const firstImport = source.indexOf("@import");
-  const firstOtherLayer = source.replace(LAYER_DECLARATION, " ".repeat(LAYER_DECLARATION.length)).indexOf("@layer");
+  const masked = source.replace(LAYER_DECLARATION, " ".repeat(LAYER_DECLARATION.length));
+  const firstOtherLayer = masked.indexOf("@layer");
   const before = (other) => other === -1 || layer < other;
   return before(firstImport) && before(firstOtherLayer);
+}
+
+function anyCssHasLayer(cwd, roots) {
+  for (const root of roots) {
+    const base = join(cwd, root);
+    let entries;
+    try {
+      entries = readdirSync(base, { recursive: true });
+    } catch {
+      continue;
+    }
+    for (const rel of entries) {
+      if (typeof rel === "string" && rel.endsWith(".css")) {
+        try {
+          if (layerOrderedFirst(readFileSync(join(base, rel), "utf8"))) return true;
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+  }
+  return false;
+}
+
+function linkInHead(source) {
+  return source.includes(CORE_STYLESHEET);
+}
+
+function injectLink(cwd, file) {
+  const path = join(cwd, file);
+  if (!existsSync(path)) return false;
+  const source = readFileSync(path, "utf8");
+  if (source.includes(CORE_STYLESHEET)) return true;
+  const closing = source.search(/<\/head>/i);
+  if (closing === -1) return false;
+  const link = `    <link rel="stylesheet" href="${CORE_STYLESHEET}" />\n`;
+  writeFileSync(path, source.slice(0, closing) + link + source.slice(closing));
+  return true;
 }
 
 function skillPresent(cwd, name) {
@@ -66,11 +105,81 @@ function installSkill(cwd, pm, repo, skill, agent) {
   return run(dlxBin(pm), dlxArgs(pm, rest), { cwd }).ok;
 }
 
+function layerStep(fw) {
+  const file = fw.layerFile;
+  return {
+    id: "layer",
+    wiring: true,
+    title: file ? `${file} declares the layer order` : "a global stylesheet declares the layer order",
+    check: (cwd) =>
+      file
+        ? existsSync(join(cwd, file)) && layerOrderedFirst(readFileSync(join(cwd, file), "utf8"))
+        : anyCssHasLayer(cwd, fw.cssRoots),
+    fix:
+      fw.autoWireLayer && file
+        ? (cwd) => {
+            const path = join(cwd, file);
+            const existing = existsSync(path) ? readFileSync(path, "utf8") : "";
+            if (existing.includes(LAYER_DECLARATION)) return false; // present but misordered
+            mkdirSync(dirname(path), { recursive: true });
+            writeFileSync(path, existing ? `${LAYER_DECLARATION}\n\n${existing}` : `${LAYER_DECLARATION}\n`);
+            return true;
+          }
+        : undefined,
+    manual: () =>
+      `Add "${LAYER_DECLARATION}" as the first line of your global stylesheet (see ${fw.stylesheet.docs}).`,
+  };
+}
+
+function stylesheetStep(fw) {
+  const { mode, file, docs } = fw.stylesheet;
+  const noBundledImport = (cwd) => {
+    if (!file || !existsSync(join(cwd, file))) return true;
+    return !readFileSync(join(cwd, file), "utf8").includes("@loamui/core/styles.css");
+  };
+  const base = {
+    id: "stylesheet",
+    wiring: true,
+    title: "the core stylesheet is loaded",
+  };
+  if (mode === "html") {
+    return {
+      ...base,
+      title: `${file} links the core stylesheet`,
+      check: (cwd) => existsSync(join(cwd, file)) && linkInHead(readFileSync(join(cwd, file), "utf8")),
+      fix: (cwd) => injectLink(cwd, file),
+      manual: () => `Add <link rel="stylesheet" href="${CORE_STYLESHEET}" /> to <head> in ${file}.`,
+    };
+  }
+  if (mode === "code") {
+    return {
+      ...base,
+      title: `${file} links the core stylesheet`,
+      check: (cwd) =>
+        existsSync(join(cwd, file)) &&
+        linkInHead(readFileSync(join(cwd, file), "utf8")) &&
+        noBundledImport(cwd),
+      manual: (cwd) =>
+        !noBundledImport(cwd)
+          ? `Remove the @loamui/core/styles.css import in ${file} and add <link rel="stylesheet" href="${CORE_STYLESHEET}" /> inside <head>.`
+          : `Add <link rel="stylesheet" href="${CORE_STYLESHEET}" /> inside <head> in ${file}.`,
+    };
+  }
+  return {
+    ...base,
+    check: (cwd) => (file ? existsSync(join(cwd, file)) && linkInHead(readFileSync(join(cwd, file), "utf8")) : false),
+    manual: () =>
+      `Load ${CORE_STYLESHEET} through a <link> in your root document's <head> (see ${docs}).`,
+  };
+}
+
 /**
- * The ordered setup steps. Each reports whether it is satisfied and can apply
- * an additive fix. `scaffold` steps run only for a brand-new application.
+ * The ordered setup steps for a project. `framework` supplies the CSS paths and
+ * delivery. Steps tagged `wiring` change the cascade; a caller that has found a
+ * blocking conflict should report them rather than apply them.
  */
-export function steps({ pm, agent, layout }) {
+export function steps({ pm, agent, framework }) {
+  const fw = framework;
   const list = [
     {
       id: "core",
@@ -78,39 +187,8 @@ export function steps({ pm, agent, layout }) {
       check: (cwd) => hasDependency(cwd, "@loamui/core"),
       fix: (cwd) => run(pm, addArgs(pm, ["@loamui/core"]), { cwd }).ok,
     },
-    {
-      id: "globals",
-      title: `${layout.appDir}/globals.css declares the layer order`,
-      check: (cwd) => {
-        const path = join(cwd, layout.appDir, "globals.css");
-        return existsSync(path) && globalsHasLayerOrder(readFileSync(path, "utf8"));
-      },
-      fix: (cwd) => {
-        const path = join(cwd, layout.appDir, "globals.css");
-        const existing = existsSync(path) ? readFileSync(path, "utf8") : "";
-        if (existing.includes(LAYER_DECLARATION)) return false; // present but misordered — needs a human
-        mkdirSync(dirname(path), { recursive: true });
-        writeFileSync(path, existing ? `${LAYER_DECLARATION}\n\n${existing}` : `${LAYER_DECLARATION}\n`);
-        return true;
-      },
-    },
-    {
-      id: "stylesheet",
-      title: "root layout links the core stylesheet",
-      check: (cwd) => {
-        const path = join(cwd, layout.appDir, "layout.tsx");
-        if (!existsSync(path)) return false;
-        const source = readFileSync(path, "utf8");
-        return source.includes(CORE_STYLESHEET) && !source.includes("@loamui/core/styles.css");
-      },
-      // Editing an arbitrary layout safely is out of scope; report and guide.
-      manual: (cwd) => {
-        const path = join(cwd, layout.appDir, "layout.tsx");
-        if (existsSync(path) && readFileSync(path, "utf8").includes("@loamui/core/styles.css"))
-          return `Remove the \`@loamui/core/styles.css\` import in ${layout.appDir}/layout.tsx and add <link rel="stylesheet" href="${CORE_STYLESHEET}" /> inside <head>.`;
-        return `Add <link rel="stylesheet" href="${CORE_STYLESHEET}" /> inside <head> in ${layout.appDir}/layout.tsx.`;
-      },
-    },
+    layerStep(fw),
+    stylesheetStep(fw),
     {
       id: "stylelint-files",
       title: "Stylelint configuration copied to the project",
@@ -127,7 +205,7 @@ export function steps({ pm, agent, layout }) {
       id: "lint-css-script",
       title: "lint:css script present",
       check: (cwd) => Boolean((readJson(join(cwd, "package.json"))?.scripts ?? {})["lint:css"]),
-      fix: (cwd) => upsertScript(cwd, "lint:css", `stylelint "${layout.lintGlob}"`),
+      fix: (cwd) => upsertScript(cwd, "lint:css", `stylelint "${fw.lintGlob}"`),
     },
     {
       id: "checker-files",
@@ -146,7 +224,7 @@ export function steps({ pm, agent, layout }) {
       title: "check:composition script present",
       check: (cwd) => Boolean((readJson(join(cwd, "package.json"))?.scripts ?? {})["check:composition"]),
       fix: (cwd) =>
-        upsertScript(cwd, "check:composition", `node scripts/loamui/check-composition.mjs ${layout.compositionArgs}`),
+        upsertScript(cwd, "check:composition", `node scripts/loamui/check-composition.mjs ${fw.compositionArgs}`),
     },
   ];
 

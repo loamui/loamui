@@ -1,6 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync } from "node:fs";
 
 const styles = {
   reset: "[0m",
@@ -98,26 +97,4 @@ export function readJson(path) {
   } catch {
     return null;
   }
-}
-
-/**
- * Resolve the authored layout of a Next.js project: whether it uses a `src/`
- * directory, the app directory, and the CSS paths the generated scripts target.
- */
-export function projectLayout(cwd) {
-  const hasSrc = existsSync(join(cwd, "src", "app"));
-  const appDir = hasSrc ? join("src", "app") : "app";
-  const hasComponents = !hasSrc && existsSync(join(cwd, "components"));
-  const cssRoots = hasSrc ? ["src"] : hasComponents ? ["app", "components"] : ["app"];
-  return {
-    hasSrc,
-    appDir,
-    cssRoots,
-    lintGlob: hasSrc
-      ? "src/**/*.css"
-      : hasComponents
-        ? "{app,components}/**/*.css"
-        : "app/**/*.css",
-    compositionArgs: cssRoots.join(" "),
-  };
 }
