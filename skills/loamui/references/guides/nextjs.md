@@ -18,7 +18,7 @@ For a new project, create an empty application without Tailwind:
 
 ```bash
 pnpm create next-app@latest my-app \
-  --ts --app --empty --no-tailwind --use-pnpm --yes
+  --ts --app --empty --no-tailwind --no-src-dir --use-pnpm --yes
 cd my-app
 ```
 
@@ -26,7 +26,7 @@ cd my-app
 
 ```bash
 npx create-next-app@latest my-app \
-  --ts --app --empty --no-tailwind --use-npm --yes
+  --ts --app --empty --no-tailwind --no-src-dir --use-npm --yes
 cd my-app
 ```
 
@@ -34,7 +34,7 @@ cd my-app
 
 ```bash
 yarn create next-app my-app \
-  --ts --app --empty --no-tailwind --use-yarn --yes
+  --ts --app --empty --no-tailwind --no-src-dir --use-yarn --yes
 cd my-app
 ```
 
@@ -42,7 +42,7 @@ cd my-app
 
 ```bash
 bun create next-app@latest my-app \
-  --ts --app --empty --no-tailwind --use-bun --yes
+  --ts --app --empty --no-tailwind --no-src-dir --use-bun --yes
 cd my-app
 ```
 
@@ -103,7 +103,7 @@ The browser loads tokens, element styles and component styles without sending co
 
 **Hosted stylesheet:** the URL follows the documentation deployment rather than your installed package version. See [stylesheet delivery](/docs/installation#stylesheet-delivery-during-the-beta) for versioning and self-hosting guidance.
 
-Start `app/globals.css` with this layer order, before any imports or rules that create LoamUI layers:
+The `--empty` scaffold does not create `app/globals.css`. Create it with this layer order as its first line, before any imports or rules that create LoamUI layers:
 
 ```css
 @layer loamui.tokens, loamui.elements, loamui.components;
@@ -111,7 +111,7 @@ Start `app/globals.css` with this layer order, before any imports or rules that 
 
 Next.js can emit bundled recipe styles before the manual stylesheet link. This declaration keeps element defaults below component and recipe rules. A later layer declaration cannot repair an order already established.
 
-For a fresh application, replace the starter styles with that declaration. Preserve existing application styles when integrating into a working project. Import recipe styles alongside their components. Check the emitted stylesheet order on a direct page load and after client navigation.
+For a fresh application, this declaration is the whole file, and the layout above imports it. Preserve existing application styles when integrating into a working project. Import recipe styles alongside their components. Check the emitted stylesheet order on a direct page load and after client navigation.
 
 ## Check your first interface
 

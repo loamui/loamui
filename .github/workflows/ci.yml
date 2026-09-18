@@ -19,6 +19,7 @@ jobs:
         env:
           PAGES: "true"
       - run: pnpm check:skill
+      - run: pnpm check:cli-assets
       - run: pnpm check:prompts
       - run: pnpm check:strings
       - run: pnpm test:checks
@@ -35,3 +36,4 @@ jobs:
       - run: pnpm --filter @loamui/core audit:contrast
       - run: pnpm --filter @loamui/core test
       - run: pnpm --filter @loamui/docs test
+      - run: pnpm --filter create-loamui test

@@ -12,6 +12,64 @@ Create a framework application, install `@loamui/core`, and load its stylesheet.
 
 `@loamui/core` is available on [npm](https://www.npmjs.com/package/@loamui/core). Installing the agent skill does not install the library.
 
+## Quick start
+
+One command scaffolds a new Next.js App Router project with the stylesheet, layer order, quality checks and the agent skill already wired:
+
+**pnpm**
+
+```bash
+pnpm create loamui@latest my-app
+```
+
+**npm**
+
+```bash
+npm create loamui@latest my-app
+```
+
+**yarn**
+
+```bash
+yarn create loamui my-app
+```
+
+**bun**
+
+```bash
+bun create loamui my-app
+```
+
+It creates the app, installs `@loamui/core`, adds the Stylelint and composition checks with their scripts, and installs the LoamUI skill and its companions for your agent. Open your agent in the new folder, confirm `loamui` is listed among its skills, and describe what to build.
+
+Already have a project? Run the same tool in it to add and verify LoamUI setup:
+
+**pnpm**
+
+```bash
+pnpm create loamui doctor --fix
+```
+
+**npm**
+
+```bash
+npm create loamui -- doctor --fix
+```
+
+**yarn**
+
+```bash
+yarn create loamui doctor --fix
+```
+
+**bun**
+
+```bash
+bun create loamui doctor --fix
+```
+
+To follow each step by hand instead, or to understand what the tool does, use the guides below.
+
 ## 1. Choose your framework
 
 Use a working framework application before adding LoamUI. These guides cover a fresh project, the package and the stylesheet setup:

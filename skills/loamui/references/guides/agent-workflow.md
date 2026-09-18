@@ -70,6 +70,8 @@ bunx skills@latest add loamui/loamui --skill loamui --agent codex --yes
 
 Open a new agent session in the project and confirm `loamui` appears among its available skills before using a recipe prompt. For another agent, use its explicit target from the [installer's supported agents](https://github.com/vercel-labs/skills#supported-agents).
 
+LoamUI pairs with two companion skills, Modern CSS and Google Chrome Modern Web Guidance. Your agent installs them the first time you ask it to build, or you can set up everything at once with [`create loamui`](/docs/installation#quick-start).
+
 ## 2. Describe what you want to build
 
 > Use the LoamUI skill to build a profile form with name and email fields and a Save changes button.

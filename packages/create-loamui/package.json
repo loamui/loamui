@@ -1,0 +1,29 @@
+{
+  "name": "create-loamui",
+  "version": "0.1.0",
+  "description": "Scaffold a LoamUI application and verify LoamUI setup in an existing project.",
+  "keywords": ["loamui", "create", "scaffold", "cli", "setup"],
+  "homepage": "https://loamui.com/",
+  "bugs": {
+    "url": "https://github.com/loamui/loamui/issues"
+  },
+  "license": "MIT",
+  "author": "Danger Farms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loamui/loamui.git",
+    "directory": "packages/create-loamui"
+  },
+  "type": "module",
+  "bin": {
+    "create-loamui": "bin/create-loamui.mjs"
+  },
+  "files": ["bin", "src", "assets", "README.md"],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "sync-assets": "node scripts/sync-assets.mjs",
+    "test": "node --test \"test/**/*.test.mjs\""
+  }
+}
