@@ -29,7 +29,7 @@ export const PACKAGE_COMMANDS = {
   },
   "loamui-doctor": {
     pnpm: "pnpm create loamui doctor --fix",
-    npm: "npm create loamui -- doctor --fix",
+    npm: "npm create loamui@latest -- doctor --fix",
     yarn: "yarn create loamui doctor --fix",
     bun: "bun create loamui doctor --fix",
   },

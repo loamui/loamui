@@ -12,30 +12,35 @@ const RESET_PACKAGES = [
   "@csstools/normalize.css",
 ];
 
-function anyCss(cwd, roots, test, limit = 400) {
-  const seen = [];
+const SKIPPED = new Set(["node_modules", ".git", ".next", ".output", "dist", "build"]);
+
+/** Find the first CSS file under `roots` whose source satisfies `test`. */
+function findCss(cwd, roots, test, limit = 400) {
+  let visited = 0;
   const walk = (dir, depth) => {
-    if (depth > 6 || seen.length > limit) return;
+    if (depth > 6 || visited > limit) return null;
     let entries;
     try {
       entries = readdirSync(dir, { withFileTypes: true });
     } catch {
-      return;
+      return null;
     }
     for (const entry of entries) {
-      if (["node_modules", ".git", ".next", ".output", "dist", "build"].includes(entry.name)) continue;
+      if (SKIPPED.has(entry.name)) continue;
       const path = join(dir, entry.name);
-      if (entry.isDirectory()) walk(path, depth + 1);
-      else if (entry.name.endsWith(".css")) {
-        seen.push(path);
+      if (entry.isDirectory()) {
+        const hit = walk(path, depth + 1);
+        if (hit) return hit;
+      } else if (entry.name.endsWith(".css")) {
+        visited++;
         try {
-          if (test(readFileSync(path, "utf8"), path)) return path;
+          if (test(readFileSync(path, "utf8"))) return path;
         } catch {
           /* unreadable */
         }
       }
     }
-    return undefined;
+    return null;
   };
   for (const root of roots) {
     const hit = walk(join(cwd, root), 0);
@@ -43,6 +48,25 @@ function anyCss(cwd, roots, test, limit = 400) {
   }
   return null;
 }
+
+function tailwindMajor(deps, css) {
+  const spec = deps.tailwindcss ?? "";
+  const match = /(\d+)/.exec(spec);
+  if (match) return Number(match[1]);
+  if (css && /@import\s+["']tailwindcss/.test(css)) return 4;
+  if (css && /@tailwind\b/.test(css)) return 3;
+  return null;
+}
+
+const TAILWIND_V3 =
+  "Tailwind 3 emits Preflight unlayered, so it overrides LoamUI's element layer. " +
+  "Either use Tailwind for utilities only with Preflight disabled (corePlugins.preflight: false) " +
+  "and let LoamUI own elements, or scope LoamUI to a subtree with @scope and adopt route by route.";
+const TAILWIND_V4 =
+  "Tailwind 4 uses real cascade layers, so the first @layer statement the browser sees decides. " +
+  "Declare one combined order before any other stylesheet: " +
+  "@layer theme, base, loamui.tokens, loamui.elements, loamui.components, components, utilities; " +
+  "— or scope LoamUI to a subtree with @scope.";
 
 /**
  * Detect setups that fight LoamUI's all-layered CSS. LoamUI keeps every rule
@@ -59,24 +83,24 @@ export function detectConflicts(cwd, framework) {
   const tailwindConfig = ["js", "ts", "cjs", "mjs"].some((ext) =>
     existsSync(join(cwd, `tailwind.config.${ext}`)),
   );
-  const tailwindCss = anyCss(cwd, roots, (css) => /@tailwind\b|@import\s+["']tailwindcss/.test(css));
-  if (deps.tailwindcss || tailwindConfig || tailwindCss) {
+  const tailwindCssFile = findCss(cwd, roots, (css) => /@tailwind\b|@import\s+["']tailwindcss/.test(css));
+  if (deps.tailwindcss || tailwindConfig || tailwindCssFile) {
+    const css = tailwindCssFile ? readFileSync(tailwindCssFile, "utf8") : null;
+    const major = tailwindMajor(deps, css);
+    const detail =
+      major === 3 ? TAILWIND_V3 : major === 4 ? TAILWIND_V4 : `${TAILWIND_V3} With Tailwind 4: ${TAILWIND_V4}`;
     conflicts.push({
       id: "tailwind",
       severity: "blocking",
-      title: "Tailwind CSS detected",
-      detail:
-        "Tailwind's Preflight is an unlayered reset; it overrides LoamUI's element layer. " +
-        "Choose one: (a) use Tailwind for utilities only and disable Preflight, letting LoamUI own " +
-        "elements; or (b) scope LoamUI to a subtree with @scope and adopt route by route. Ask your " +
-        "agent with the LoamUI skill to apply either path — do not wire LoamUI over a live Preflight.",
+      title: `Tailwind CSS${major ? ` ${major}` : ""} detected`,
+      detail: `${detail} Ask your agent with the LoamUI skill to apply it; do not wire LoamUI over a live reset.`,
     });
   }
 
   const resetPkg = RESET_PACKAGES.find((name) => deps[name]);
   const resetImport = resetPkg
     ? null
-    : anyCss(cwd, roots, (css) => RESET_PACKAGES.some((name) => css.includes(name)));
+    : findCss(cwd, roots, (css) => RESET_PACKAGES.some((name) => css.includes(name)));
   if (resetPkg || resetImport) {
     conflicts.push({
       id: "reset",

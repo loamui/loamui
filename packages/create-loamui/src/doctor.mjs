@@ -18,7 +18,9 @@ export async function doctor({ pm, agent, fix }) {
   const resolvedPm = pm ?? detectPackageManager();
   ui.heading(`Checking LoamUI setup — ${framework.label}${fix ? " (fixing gaps)" : ""}`);
   if (framework.id === "unknown")
-    ui.warn("No supported framework detected. Checking what applies; wire the stylesheet by hand.");
+    ui.warn(
+      `${framework.reason ?? "No supported framework detected."} Checking what applies; wire the stylesheet by hand.`,
+    );
 
   const conflicts = detectConflicts(cwd, framework);
   const blockWiring = conflicts.some((c) => c.severity === "blocking");

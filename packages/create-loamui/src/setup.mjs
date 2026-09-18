@@ -173,6 +173,32 @@ function stylesheetStep(fw) {
   };
 }
 
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** The layer file only takes effect once the framework entry imports it. */
+function layerImportStep(fw) {
+  const { file, specifier } = fw.layerImport;
+  const pattern = new RegExp(`import\\s+["']${escapeRegExp(specifier)}["']`);
+  return {
+    id: "layer-import",
+    wiring: true,
+    title: `${file} imports ${specifier}`,
+    check: (cwd) => existsSync(join(cwd, file)) && pattern.test(readFileSync(join(cwd, file), "utf8")),
+    fix: (cwd) => {
+      const path = join(cwd, file);
+      if (!existsSync(path)) return false;
+      const source = readFileSync(path, "utf8");
+      if (pattern.test(source)) return true;
+      const line = `import "${specifier}";\n`;
+      // A "use client" / "use server" directive must stay the first statement.
+      const directive = /^(\s*["'](?:use client|use server)["'];?[^\S\n]*\n)/.exec(source);
+      writeFileSync(path, directive ? directive[1] + line + source.slice(directive[1].length) : line + source);
+      return true;
+    },
+    manual: () => `Add import "${specifier}"; to ${file} so the layer declaration loads.`,
+  };
+}
+
 /**
  * The ordered setup steps for a project. `framework` supplies the CSS paths and
  * delivery. Steps tagged `wiring` change the cascade; a caller that has found a
@@ -188,6 +214,7 @@ export function steps({ pm, agent, framework }) {
       fix: (cwd) => run(pm, addArgs(pm, ["@loamui/core"]), { cwd }).ok,
     },
     layerStep(fw),
+    ...(fw.layerImport ? [layerImportStep(fw)] : []),
     stylesheetStep(fw),
     {
       id: "stylelint-files",

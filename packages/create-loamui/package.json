@@ -22,6 +22,9 @@
   "engines": {
     "node": ">=20"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "sync-assets": "node scripts/sync-assets.mjs",
     "test": "node --test \"test/**/*.test.mjs\""

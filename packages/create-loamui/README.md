@@ -12,6 +12,10 @@ npm create loamui@latest my-app
 # or: bun create loamui my-app
 ```
 
+`npm create loamui` and `npx create-loamui@latest` run the same package; the
+`create` form drops the `create-` prefix. Pass `.` as the directory to
+scaffold into the current folder.
+
 This creates a Next.js App Router project and wires everything LoamUI needs:
 
 - installs `@loamui/core` and loads its stylesheet with the correct layer
@@ -31,21 +35,25 @@ Run `doctor` inside a project to report what is missing, and `--fix` to
 complete it:
 
 ```bash
-npm create loamui -- doctor
-npm create loamui -- doctor --fix
+npm create loamui@latest -- doctor
+npm create loamui@latest -- doctor --fix
+# or: npx create-loamui@latest doctor --fix
 ```
 
 `doctor` detects the framework (Next.js, Vite, Create React App) and wires the
-stylesheet the right way for each; other setups are reported with guidance.
-Every fix is additive: existing scripts, configuration and styles are
-preserved.
+stylesheet the right way for each, including the import that loads the layer
+declaration; other setups are reported with guidance. Every fix is additive:
+existing scripts, configuration and styles are preserved.
 
 If it finds Tailwind or another global reset, it reports the conflict and
 holds back the cascade wiring rather than breaking your styles. LoamUI keeps
-every rule inside `@layer loamui.*`, so an unlayered reset would override its
-element styles. Resolve it — use Tailwind for utilities only with Preflight
-off, or scope LoamUI to a subtree — then re-run. Your agent with the LoamUI
-skill can do this.
+every rule inside `@layer loamui.*`, so an unlayered reset overrides its
+element styles. With Tailwind 3, disable Preflight and keep Tailwind for
+utilities, or scope LoamUI to a subtree. With Tailwind 4, whose layers are
+real cascade layers, declare one combined order before any other stylesheet:
+`@layer theme, base, loamui.tokens, loamui.elements, loamui.components,
+components, utilities;`. Your agent with the LoamUI skill can apply either.
+Then re-run `doctor`.
 
 ## Options
 

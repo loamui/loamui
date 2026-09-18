@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Set up LoamUI in Next.js or TanStack Start, check your first interface, then add the agent skill.
+description: Set up LoamUI in one command, or by hand in Next.js or TanStack Start, check your first interface, then build with the agent skill.
 ---
 
 > LoamUI documentation, generated from the same source as the live page —
@@ -53,7 +53,7 @@ pnpm create loamui doctor --fix
 **npm**
 
 ```bash
-npm create loamui -- doctor --fix
+npm create loamui@latest -- doctor --fix
 ```
 
 **yarn**
@@ -79,7 +79,7 @@ Use a working framework application before adding LoamUI. These guides cover a f
 
 The beta setup uses LoamUI as the styling foundation, without Tailwind or another global reset. [React recommends starting new applications with a framework](https://react.dev/learn/creating-a-react-app).
 
-**Already have a project?** Check its framework, React version, CSS imports and resets first. Tailwind's presence in a manifest alone does not prove a conflict: inspect Preflight, utility classes and global rules that affect the interface. Follow the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing shared styles or dependencies.
+**Already have a project?** Check its framework, React version, CSS imports and resets first. Tailwind's presence in a manifest alone does not prove a conflict: inspect Preflight, utility classes and global rules that affect the interface. LoamUI keeps every rule inside `@layer loamui.*`, so an unlayered reset overrides its element styles. With Tailwind 3, Preflight is unlayered: disable it and keep Tailwind for utilities, or scope LoamUI to a subtree. With Tailwind 4, whose layers are real cascade layers, declare one combined order before any other stylesheet: `@layer theme, base, loamui.tokens, loamui.elements, loamui.components, components, utilities;`. Follow the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing shared styles or dependencies.
 
 ## Stylesheet delivery during the beta
 

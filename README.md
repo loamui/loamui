@@ -17,6 +17,15 @@ teaches those foundations, component APIs and worked recipes to your coding agen
 
 ## Install
 
+Start a new project with the package, stylesheet, quality checks and agent
+skill wired in one command:
+
+```bash
+npm create loamui@latest my-app
+```
+
+Or add the package to an existing application:
+
 ```bash
 npm install @loamui/core
 ```
@@ -137,6 +146,8 @@ package includes an `AGENTS.md` summary of the consumer conventions.
 This is a pnpm and Turborepo monorepo. Use Node.js 22.13 or later and pnpm 11.
 
 - [`packages/core`](./packages/core): the published `@loamui/core` library.
+- [`packages/create-loamui`](./packages/create-loamui): the published
+  `create-loamui` scaffolder and setup checker.
 - [`apps/docs`](./apps/docs): the documentation site and live examples.
 - [`apps/docs/src/examples`](./apps/docs/src/examples): the worked recipes.
 
