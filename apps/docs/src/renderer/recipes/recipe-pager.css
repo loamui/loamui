@@ -1,0 +1,49 @@
+@scope (.site-RecipePager) {
+  :scope {
+    border-block-start: 1px solid var(--loam-color-line);
+    display: block grid;
+    gap: var(--loam-space-s);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block-start: var(--loam-space-l);
+
+    @container examples (inline-size < 40rem) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .link {
+    border: 1px solid var(--loam-color-line);
+    border-radius: var(--loam-radius-lg);
+    display: block grid;
+    gap: var(--loam-space-3xs);
+    padding: var(--loam-space-xs) var(--loam-space-s);
+
+    &[data-next] {
+      text-align: end;
+    }
+
+    &:hover {
+      background: var(--loam-color-surface-hover);
+      border-color: var(--loam-color-line-strong);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        background var(--loam-duration-md) var(--loam-ease),
+        border-color var(--loam-duration-md) var(--loam-ease);
+    }
+  }
+
+  .eyebrow {
+    color: var(--loam-color-fg-dim);
+    font-size: var(--loam-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .title {
+    color: var(--loam-color-fg-strong);
+    font-weight: 600;
+  }
+}

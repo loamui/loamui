@@ -23,17 +23,17 @@ import { join, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { componentForExport, COMPONENTS, CATEGORY_ORDER } from "../src/site/nav.js";
 import type { ComponentContent } from "../src/renderer/types.js";
-import { EXAMPLE_CATEGORIES } from "../src/examples/categories.js";
-import { EXAMPLE_META } from "../src/examples/generated-meta.js";
-import { linkedRecipePrompt } from "../src/examples/recipe-prompt.js";
-import { PILLARS } from "../src/examples/types.js";
+import { RECIPE_CATEGORIES } from "../src/recipes/categories.js";
+import { RECIPE_META } from "../src/recipes/generated/meta.js";
+import { linkedRecipePrompt } from "../src/recipes/recipe-prompt.js";
+import { PILLARS } from "../src/recipes/types.js";
 import {
   PACKAGE_COMMANDS,
   SKILL_AGENTS,
   packageCommand,
   PACKAGE_MANAGERS,
   type PackageCommandName,
-} from "../src/renderer/package-commands.js";
+} from "../src/renderer/shared/package-commands.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const APP = join(ROOT, "src", "app");
@@ -453,15 +453,15 @@ try {
 
 // ---- examples: the folder's own files → markdown ------------------------
 
-const EXAMPLES_DIR = join(ROOT, "src", "examples");
+const RECIPES_DIR = join(ROOT, "src", "recipes");
 
 /** An example's twin: its meta, the pillar notes, then both files in fences. */
-function exampleMarkdown(entry: (typeof EXAMPLE_META)[number]): string {
+function exampleMarkdown(entry: (typeof RECIPE_META)[number]): string {
   const { slug, category, meta } = entry;
-  const dir = join(EXAMPLES_DIR, category, slug);
-  const tsx = readFileSync(join(dir, "Example.tsx"), "utf8").trim();
-  const css = readFileSync(join(dir, "example.css"), "utf8").trim();
-  const categoryTitle = EXAMPLE_CATEGORIES.find((c) => c.slug === category)?.title ?? category;
+  const dir = join(RECIPES_DIR, category, slug);
+  const tsx = readFileSync(join(dir, "Recipe.tsx"), "utf8").trim();
+  const css = readFileSync(join(dir, "recipe.css"), "utf8").trim();
+  const categoryTitle = RECIPE_CATEGORIES.find((c) => c.slug === category)?.title ?? category;
   const out: string[] = [];
   out.push(
     "---",
@@ -520,12 +520,12 @@ function exampleMarkdown(entry: (typeof EXAMPLE_META)[number]): string {
     out.push(`- [${name}](${ORIGIN}/docs/components/${component.slug}.md)`);
   }
   out.push("");
-  out.push("## Example.tsx", "", "```tsx", tsx, "```", "");
-  out.push("## example.css", "", "```css", css, "```", "");
+  out.push("## Recipe.tsx", "", "```tsx", tsx, "```", "");
+  out.push("## recipe.css", "", "```css", css, "```", "");
   return out.join("\n").replace(/\n{3,}/g, "\n\n") + "\n";
 }
 
-for (const entry of EXAMPLE_META) {
+for (const entry of RECIPE_META) {
   writeBoth(
     join(PUBLIC, "recipes", entry.category, `${entry.slug}.md`),
     join(SKILL_REFS, "recipes", entry.category, `${entry.slug}.md`),
@@ -570,7 +570,7 @@ const absoluteLinks = (markdown: string) => markdown.replace(/\]\(\/(?!\/)/g, `]
 // Short prompts mirror the recipe pages; detailed references ship separately with the skill.
 const PROMPTS = join(PUBLIC, "recipe-prompts");
 rmSync(PROMPTS, { recursive: true, force: true });
-for (const entry of EXAMPLE_META) {
+for (const entry of RECIPE_META) {
   const file = join(PROMPTS, entry.category, `${entry.slug}.txt`);
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, linkedRecipePrompt(entry) + "\n");
@@ -623,8 +623,8 @@ lines.push(
   "> Recipes grouped by purpose, built from `@loamui/core` to copy and change: each twin",
   "> carries the component and its stylesheet in full.",
 );
-for (const category of EXAMPLE_CATEGORIES) {
-  const items = EXAMPLE_META.filter((e) => e.category === category.slug);
+for (const category of RECIPE_CATEGORIES) {
+  const items = RECIPE_META.filter((e) => e.category === category.slug);
   if (!items.length) continue;
   lines.push("", `### Recipes: ${category.title}`, "");
   for (const e of items)
@@ -673,8 +673,8 @@ for (const category of CATEGORY_ORDER) {
       `- [${c.name}](components/${c.slug}.md) — ${c.description} · [live](${ORIGIN}/docs/components/${c.slug}.md)`,
     );
 }
-for (const category of EXAMPLE_CATEGORIES) {
-  const items = EXAMPLE_META.filter((e) => e.category === category.slug);
+for (const category of RECIPE_CATEGORIES) {
+  const items = RECIPE_META.filter((e) => e.category === category.slug);
   if (!items.length) continue;
   idx.push("", `## Recipes: ${category.title}`, "");
   for (const e of items)
@@ -685,5 +685,5 @@ for (const category of EXAMPLE_CATEGORIES) {
 writeFileSync(join(SKILL_REFS, "index.md"), idx.join("\n") + "\n");
 
 console.log(
-  `markdown export: ${guides.length} guide twins (mdx-derived), ${COMPONENTS.length} component twins (data-derived), ${EXAMPLE_META.length} example twins (folder-derived), llms.txt + recipe prompts → public/, references → skills/loamui/references/`,
+  `markdown export: ${guides.length} guide twins (mdx-derived), ${COMPONENTS.length} component twins (data-derived), ${RECIPE_META.length} example twins (folder-derived), llms.txt + recipe prompts → public/, references → skills/loamui/references/`,
 );

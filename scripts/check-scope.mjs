@@ -21,10 +21,11 @@ export { nakedScopes } from "../skills/loamui/assets/scope-rules.mjs";
 const ROOT = new URL("..", import.meta.url).pathname;
 const ROOTS = [
   "packages/core/src/components",
-  "apps/docs/src/examples",
+  "apps/docs/src/recipes",
   "apps/docs/src/app",
   "apps/docs/src/site",
   "apps/docs/src/renderer",
+  "apps/docs/src/home",
 ].map((p) => join(ROOT, p));
 const DONUT = /to\s*\([^)]*\[class\*="loam-"\]/;
 

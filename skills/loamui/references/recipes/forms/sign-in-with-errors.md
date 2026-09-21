@@ -46,21 +46,21 @@ These notes explain the design. The included tests cover structure and selected 
 - [Input](https://loamui.com/docs/components/input.md)
 - [PasswordInput](https://loamui.com/docs/components/password-input.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
 import { Button, Card, Checkbox, ErrorSummary, Field, Input, PasswordInput } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
 type SignInResponse = {
   values: { email: string; remember: boolean };
   errors: { email?: string; password?: string; form?: string };
 };
 
-export default function Example({
+export default function Recipe({
   action = "/sign-in",
   initialResponse,
 }: {
@@ -181,7 +181,7 @@ export default function Example({
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.sign-in-with-errors) to ([class*="loam-"]) {

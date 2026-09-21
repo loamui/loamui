@@ -20,7 +20,7 @@ function walk(dir) {
 export function checkedFiles() {
   const published = new Set(
     [
-      ...readFileSync(join(ROOT, "apps/docs/src/examples/recipes.ts"), "utf8").matchAll(
+      ...readFileSync(join(ROOT, "apps/docs/src/recipes/recipes.ts"), "utf8").matchAll(
         /^\s*"([^"\n]+)"/gm,
       ),
     ].map((m) => m[1]),
@@ -29,7 +29,7 @@ export function checkedFiles() {
     .flatMap((dir) => walk(join(ROOT, dir)))
     .filter((file) => {
       if (!/\.(css|tsx)$/.test(file) || /\.(test|stories)\.tsx$/.test(file)) return false;
-      const recipe = relative(ROOT, file).match(/^apps\/docs\/src\/examples\/([^/]+\/[^/]+)\//);
+      const recipe = relative(ROOT, file).match(/^apps\/docs\/src\/recipes\/([^/]+\/[^/]+)\//);
       return !recipe || published.has(recipe[1]);
     });
 }

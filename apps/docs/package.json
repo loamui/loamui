@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node scripts/sync-css.mjs && node scripts/sync-agent-demo.mjs && tsx --tsconfig scripts/tsconfig.export.json scripts/build-examples.mts && tsx --tsconfig scripts/tsconfig.export.json scripts/export-markdown.mts",
+    "predev": "node scripts/sync-css.mjs && node scripts/sync-agent-demo.mjs && tsx --tsconfig scripts/tsconfig.export.json scripts/build-recipes.mts && tsx --tsconfig scripts/tsconfig.export.json scripts/export-markdown.mts",
     "dev": "node scripts/sync-css.mjs --watch & next dev --port 3007",
-    "prebuild": "node scripts/sync-css.mjs && node scripts/sync-agent-demo.mjs && tsx --tsconfig scripts/tsconfig.export.json scripts/build-examples.mts && tsx --tsconfig scripts/tsconfig.export.json scripts/export-markdown.mts",
+    "prebuild": "node scripts/sync-css.mjs && node scripts/sync-agent-demo.mjs && tsx --tsconfig scripts/tsconfig.export.json scripts/build-recipes.mts && tsx --tsconfig scripts/tsconfig.export.json scripts/export-markdown.mts",
     "build": "next build",
     "start": "next start --port 3007",
     "check-types": "tsc --noEmit",
     "lint": "oxlint --config ../../.oxlintrc.json src && stylelint \"src/**/*.css\"",
-    "build-examples": "tsx --tsconfig scripts/tsconfig.export.json scripts/build-examples.mts",
+    "build-recipes": "tsx --tsconfig scripts/tsconfig.export.json scripts/build-recipes.mts",
     "test": "vitest run"
   },
   "dependencies": {

@@ -28,8 +28,8 @@ test("spacing inspects React objects, not copied code strings", () => {
     2,
   );
   assert.equal(spacingFindings('const code = `gap: "1rem"`;', "demo.tsx").length, 0);
-  assert.ok(checkedFiles().some((file) => file.endsWith("/heroes/hero-with-image/example.css")));
-  assert.ok(!checkedFiles().some((file) => file.endsWith("/forms/sign-up/example.css")));
+  assert.ok(checkedFiles().some((file) => file.endsWith("/heroes/hero-with-image/recipe.css")));
+  assert.ok(!checkedFiles().some((file) => file.endsWith("/forms/sign-up/recipe.css")));
 });
 
 test("scope inspection finds nested type rules independently of indentation", () => {

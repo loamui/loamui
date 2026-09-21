@@ -1,5 +1,5 @@
 import type { ComponentContent } from "@/renderer/types";
-import { DetailsBasicDemo, DetailsDefaultOpenDemo, DetailsExclusiveDemo } from "./examples";
+import { DetailsBasicDemo, DetailsDefaultOpenDemo, DetailsExclusiveDemo } from "./demos";
 
 const doc: ComponentContent = {
   slug: "details",

@@ -15,7 +15,7 @@ import {
   QuantityInput,
   Tabs,
 } from "../src/index.js";
-import CurrencyExample from "../../../apps/docs/src/examples/forms/number-with-currency/Example.js";
+import CurrencyRecipe from "../../../apps/docs/src/recipes/forms/number-with-currency/Recipe.js";
 
 function Help() {
   return <Field.Description id="email-help">Use your work email.</Field.Description>;
@@ -129,7 +129,7 @@ export function Fixture() {
             </Combobox.List>
           </Combobox.Root>
         </Field.Root>
-        <CurrencyExample />
+        <CurrencyRecipe />
       </section>
     </main>
   );

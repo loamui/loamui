@@ -44,16 +44,16 @@ These notes explain the design. The included tests cover structure and selected 
 - [SignpostLink](https://loamui.com/docs/components/signpost-link.md)
 - [VisuallyHidden](https://loamui.com/docs/components/visually-hidden.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 "use client";
 
 import { useId } from "react";
 import { Badge, Card, Carousel, SignpostLink, VisuallyHidden } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const instanceId = useId();
   return (
     <Carousel.Root
@@ -266,7 +266,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.article-carousel) to ([class*="loam-"]) {

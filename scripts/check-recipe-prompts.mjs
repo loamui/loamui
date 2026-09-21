@@ -27,10 +27,10 @@ for (const category of readdirSync(join(root, prompts))) {
       assert.ok(existsSync(join(root, "apps/docs/public", path)), `${slug}: broken ${path}`);
     }
     for (const [source, language] of [
-      ["Example.tsx", "tsx"],
-      ["example.css", "css"],
+      ["Recipe.tsx", "tsx"],
+      ["recipe.css", "css"],
     ]) {
-      const code = read(`apps/docs/src/examples/${category}/${slug}/${source}`).trim();
+      const code = read(`apps/docs/src/recipes/${category}/${slug}/${source}`).trim();
       assert.ok(
         twin.includes(`\`\`\`${language}\n${code}\n\`\`\``),
         `${category}/${slug}: ${source} drift`,
@@ -48,7 +48,7 @@ for (const category of readdirSync(join(root, prompts))) {
     count++;
   }
 }
-const recipeCount = (read("apps/docs/src/examples/recipes.ts").match(/^  "[^"\n]+",$/gm) ?? [])
+const recipeCount = (read("apps/docs/src/recipes/recipes.ts").match(/^  "[^"\n]+",$/gm) ?? [])
   .length;
 assert.equal(count, recipeCount, "Every published recipe needs one prompt");
 assert.ok(

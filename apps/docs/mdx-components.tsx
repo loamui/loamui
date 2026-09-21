@@ -1,8 +1,8 @@
 import type { MDXComponents } from "mdx/types";
 import type { ReactElement, ReactNode } from "react";
-import { CodeBlock } from "@/renderer/CodeBlock";
-import { PromptBlock } from "@/renderer/CopyPanel";
-import { PackageCommands, PackageManagerProvider } from "@/renderer/PackageCommands";
+import { CodeBlock } from "@/renderer/components/CodeBlock";
+import { PromptBlock } from "@/renderer/shared/CopyPanel";
+import { PackageCommands, PackageManagerProvider } from "@/renderer/shared/PackageCommands";
 import "@/app/docs/prose.css";
 
 /** Native fences render through the site's CodeBlock. */

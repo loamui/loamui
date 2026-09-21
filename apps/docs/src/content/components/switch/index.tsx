@@ -1,5 +1,5 @@
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/Example";
+import { Example } from "@/renderer/components/Example";
 import { Field, Switch } from "@loamui/core";
 
 export function SwitchFieldDemo() {

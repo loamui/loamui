@@ -4,7 +4,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation";
 import { SearchIcon } from "./Icons";
 import { COMPONENTS, EXAMPLES_NAV, GETTING_STARTED, GUIDES, PRIMITIVES } from "./nav";
-import { EXAMPLE_META } from "@/examples/generated-meta";
+import { RECIPE_META } from "@/recipes/generated/meta";
 import "./CommandMenu.css";
 
 interface Result {
@@ -34,7 +34,7 @@ const ALL: Result[] = [
     hint: "Recipes",
     href: e.href,
   })),
-  ...EXAMPLE_META.map((e) => ({
+  ...RECIPE_META.map((e) => ({
     label: e.meta.title,
     hint: "Example",
     href: `/recipes/${e.category}/${e.slug}`,

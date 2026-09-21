@@ -43,11 +43,11 @@
   "overrides": [
     // list-style: none drops list semantics in some browsers (WebKit); every
     // component that strips markers restores them with role="list", so the
-    // rule is off for core and the examples rather than per file.
+    // rule is off for core and the recipes rather than per file.
     {
       "files": [
         "**/packages/core/src/components/**/*.tsx",
-        "**/apps/docs/src/examples/**/Example.tsx"
+        "**/apps/docs/src/recipes/**/Recipe.tsx"
       ],
       "rules": {
         "jsx-a11y/no-redundant-roles": "off"
@@ -60,7 +60,7 @@
       "files": [
         "**/apps/ui/src/content/*.tsx",
         "**/apps/docs/src/content/components/**/*.tsx",
-        "**/apps/docs/src/examples/**/Example.tsx"
+        "**/apps/docs/src/recipes/**/Recipe.tsx"
       ],
       "rules": {
         "jsx-a11y/heading-has-content": "off",
@@ -71,7 +71,7 @@
     },
     // A sandbox permissive enough for a video or map player is no sandbox; the consumer passes one for untrusted sources.
     {
-      "files": ["**/Embed/Embed.tsx", "**/apps/docs/src/examples/**/embed-*/Example.tsx"],
+      "files": ["**/Embed/Embed.tsx", "**/apps/docs/src/recipes/**/embed-*/Recipe.tsx"],
       "rules": {
         "react/iframe-missing-sandbox": "off"
       }
@@ -100,7 +100,7 @@
     // Roving tabindex: the tablist element carries the keydown handler but
     // is never itself a tab stop — the tabs inside it are.
     {
-      "files": ["**/Tabs/list/TabsList.tsx", "**/renderer/Preview.tsx"],
+      "files": ["**/Tabs/list/TabsList.tsx", "**/renderer/components/Preview.tsx"],
       "rules": {
         "jsx-a11y/interactive-supports-focus": "off"
       }
@@ -116,7 +116,7 @@
     // The modal example demonstrates initial-focus placement, which is
     // what autofocus is for inside a just-opened dialog.
     {
-      "files": ["**/content/components/modal/examples.tsx"],
+      "files": ["**/content/components/modal/demos.tsx"],
       "rules": {
         "jsx-a11y/no-autofocus": "off"
       }
@@ -124,7 +124,7 @@
     // Highlighted code lines have no identity beyond their position and the
     // list rebuilds wholesale on change — index keys are the correct keys.
     {
-      "files": ["**/renderer/CodeBlock.tsx"],
+      "files": ["**/renderer/components/CodeBlock.tsx"],
       "rules": {
         "react/no-array-index-key": "off"
       }

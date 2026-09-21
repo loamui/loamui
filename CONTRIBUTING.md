@@ -26,8 +26,8 @@ pnpm dev        # runs the docs site
   component has several roots); parts inside the scope are type selectors or
   short classes (`label`, `p.description`). The encapsulation is `@scope`'s
   job, not the class name's.
-- `apps/docs/src/examples`: the copy-paste recipes at `/recipes`, one folder
-  each, built from core alone and gated by `check:examples`.
+- `apps/docs/src/recipes`: the copy-paste recipes at `/recipes`, one folder
+  each, built from core alone and gated by `check:recipes`.
 - `apps/docs`: the Next.js marketing + documentation site. Every page of the
   docs site has a markdown twin at the same URL with `.md` appended, and
   `/llms.txt` indexes them; the export is generated from source by
@@ -322,15 +322,15 @@ Core holds primitives; the docs site's Recipes collection holds selected
 compositions: heroes, cards, timelines and layouts. A recipe is copied and
 changed, never installed, so
 it is written as the markup a reader will paste. Each lives in
-`apps/docs/src/examples/<category>/<slug>/` as four files, and
-`pnpm check:examples` refuses one that breaks the rules below.
+`apps/docs/src/recipes/<category>/<slug>/` as four files, and
+`pnpm check:recipes` refuses one that breaks the rules below.
 
 Recipes are grouped by purpose: Heroes, Banners, Cards, Media, Grids, Content
 and Forms. A hero introduces a page, a banner promotes one message within
 it, and a card represents one item. Each published recipe's `whenToUse` explains
 its distinct purpose and how to choose it over nearby patterns.
 
-Only entries enabled in `apps/docs/src/examples/recipes.ts` are published.
+Only entries enabled in `apps/docs/src/recipes/recipes.ts` are published.
 Keep other entries commented out until reviewed. The generator applies this
 selection to pages, previews, source and agent references; source folders and
 their tests remain available.
@@ -339,12 +339,12 @@ their tests remain available.
    exactly what it does; the content is specific (one fictional organisation,
    Hedgerow, throughout; never lorem); siblings in a category are told apart
    at a glance. A near-duplicate is merged, not added.
-2. **The markup is the deliverable.** `Example.tsx` is one root element
+2. **The markup is the deliverable.** `Recipe.tsx` is one root element
    carrying the slug as its class, core components used as they come, and
    nothing that depends on the docs page. Literal markup over data arrays and
    abstractions: a reader edits three cards, not a config object.
 3. **Built the way any consumer would.** Imports are `@loamui/core`, `react`
-   and `./example.css` only. Every rule in `example.css` sits inside
+   and `./recipe.css` only. Every rule in `recipe.css` sits inside
    `@scope (.<slug>…) to ([class*="loam-"])`; a second scope may be rooted at
    a core element to place it (grid area, flex basis, a public `--loam-*`
    property), never to change how it looks. Use tokens for design values and
@@ -365,18 +365,18 @@ their tests remain available.
 6. **It says why.** `meta.ts` carries one sentence per pillar that applies,
    stating the specific judgment the example encodes, and a comment in the
    stylesheet only where it names a trap, in three lines or fewer.
-7. **It proves one promise.** `example.test.tsx` renders, runs axe, and
+7. **It proves one promise.** `recipe.test.tsx` renders, runs axe, and
    asserts the recipe's promised behaviour. Check repeated instances, narrow
    and wide plain parents, both schemes and keyboard interaction. Record
    visual and contrast checks separately; axe does not verify every pillar.
 
-For a static composition, use [Hero with image](apps/docs/src/examples/heroes/hero-with-image/Example.tsx)
-and its [stylesheet](apps/docs/src/examples/heroes/hero-with-image/example.css)
+For a static composition, use [Hero with image](apps/docs/src/recipes/heroes/hero-with-image/Recipe.tsx)
+and its [stylesheet](apps/docs/src/recipes/heroes/hero-with-image/recipe.css)
 as the reference: scoped element selectors, an intrinsic grid, fluid tokens
 resolved inside the measuring container, and core components left to own their
 internals. Recipe CSS declares `@layer loamui.components` inside its donut
 scope: the library's CSS orchestrator cannot assign a layer to a consumer's
-stylesheet. The [background-image hero](apps/docs/src/examples/heroes/hero-background-image/Example.tsx)
+stylesheet. The [background-image hero](apps/docs/src/recipes/heroes/hero-background-image/Recipe.tsx)
 shows the corresponding decorative-image pattern with inherited colour scheme
 and content-driven height. Keep classes for meaningful editorial roles such as
 eyebrow and

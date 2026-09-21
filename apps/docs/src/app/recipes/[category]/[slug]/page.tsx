@@ -1,23 +1,22 @@
-import { recipeRouteParams, recipeDestination } from "@/examples/redirects";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Badge } from "@loamui/core";
-import { exampleHref, examplesIn, getCategory, getExample } from "@/examples";
-import { EXAMPLE_SOURCE } from "@/examples/generated-source";
+import { RECIPES, recipeHref, recipesIn, getCategory, getRecipe } from "@/recipes";
+import { RECIPE_SOURCE } from "@/recipes/generated/source";
 import { componentForExport } from "@/site/nav";
-import { RecipePlayground } from "@/renderer/recipe-playground";
-import { linkedRecipePrompt } from "@/examples/recipe-prompt";
-import { PromptBlock } from "@/renderer/CopyPanel";
-import "@/renderer/recipe-prompt-button.css";
-import { ExamplePillars } from "@/renderer/examples-pillars";
-import { ExampleCrumbs } from "@/renderer/examples-crumbs";
-import { ExamplePager } from "@/renderer/examples-pager";
-import "@/renderer/examples-page.css";
+import { RecipePlayground } from "@/renderer/recipes/recipe-playground";
+import { linkedRecipePrompt } from "@/recipes/recipe-prompt";
+import { PromptBlock } from "@/renderer/shared/CopyPanel";
+import "@/renderer/recipes/recipe-prompt-button.css";
+import { RecipePillars } from "@/renderer/recipes/recipe-pillars";
+import { RecipeCrumbs } from "@/renderer/recipes/recipe-crumbs";
+import { RecipePager } from "@/renderer/recipes/recipe-pager";
+import "@/renderer/recipes/recipe-page.css";
 import "@/site/MarkdownLink.css";
 
 export function generateStaticParams() {
-  return recipeRouteParams();
+  return RECIPES.map(({ category, slug }) => ({ category, slug }));
 }
 
 export async function generateMetadata({
@@ -26,9 +25,9 @@ export async function generateMetadata({
   params: Promise<{ category: string; slug: string }>;
 }): Promise<Metadata> {
   const { category, slug } = await params;
-  const example = getExample(category, slug);
-  if (!example) return {};
-  return { title: `${example.meta.title} recipe`, description: example.meta.description };
+  const recipe = getRecipe(category, slug);
+  if (!recipe) return {};
+  return { title: `${recipe.meta.title} recipe`, description: recipe.meta.description };
 }
 
 /** The docs page for a core component, by its export name. */
@@ -37,34 +36,31 @@ function docHref(name: string): string | undefined {
   return item ? `/docs/components/${item.slug}` : undefined;
 }
 
-export default async function ExamplePage({
+export default async function RecipePage({
   params,
 }: {
   params: Promise<{ category: string; slug: string }>;
 }) {
   const { category: categorySlug, slug } = await params;
-  const destination = recipeDestination(categorySlug, slug);
-  if (destination && destination !== `/recipes/${categorySlug}/${slug}`)
-    permanentRedirect(destination);
-  const example = getExample(categorySlug, slug);
+  const recipe = getRecipe(categorySlug, slug);
   const category = getCategory(categorySlug);
-  const source = EXAMPLE_SOURCE[slug];
-  if (!example || !category || !source) notFound();
+  const source = RECIPE_SOURCE[slug];
+  if (!recipe || !category || !source) notFound();
   const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  const prompt = linkedRecipePrompt(example);
+  const prompt = linkedRecipePrompt(recipe);
 
   // Previous and next within the category, in its display order.
-  const siblings = examplesIn(categorySlug);
+  const siblings = recipesIn(categorySlug);
   const at = siblings.findIndex((e) => e.slug === slug);
   const toLink = (e?: (typeof siblings)[number]) =>
-    e ? { href: exampleHref(e), title: e.meta.title } : undefined;
+    e ? { href: recipeHref(e), title: e.meta.title } : undefined;
 
   return (
     <div className="site-RecipePage">
       <article className="single">
         <header className="singleHead">
           <div className="crumbRow">
-            <ExampleCrumbs category={category} title={example.meta.title} />
+            <RecipeCrumbs category={category} title={recipe.meta.title} />
             <a
               className="site-MarkdownLink"
               href={`${base}/recipes/${categorySlug}/${slug}.md`}
@@ -73,9 +69,9 @@ export default async function ExamplePage({
               View as Markdown
             </a>
           </div>
-          <h1 className="title">{example.meta.title}</h1>
-          <p className="lead">{example.meta.description}</p>
-          {example.meta.whenToUse && <p className="sectionNote">{example.meta.whenToUse}</p>}
+          <h1 className="title">{recipe.meta.title}</h1>
+          <p className="lead">{recipe.meta.description}</p>
+          {recipe.meta.whenToUse && <p className="sectionNote">{recipe.meta.whenToUse}</p>}
         </header>
 
         <section className="site-RecipePrompt" aria-labelledby="build-with-skill">
@@ -84,15 +80,15 @@ export default async function ExamplePage({
             Already added the LoamUI skill? Copy the prompt below. Your agent will check your
             project and help complete any missing setup before building.
           </p>
-          <PromptBlock prompt={prompt} copyLabel={`Copy prompt for ${example.meta.title}`} />
+          <PromptBlock prompt={prompt} copyLabel={`Copy prompt for ${recipe.meta.title}`} />
           <p className="help">
             Add your content or describe what you want to change. New to the skill?{" "}
             <Link href="/docs/agent-workflow">Add it to your project</Link>.
           </p>
         </section>
 
-        <RecipePlayground title={example.meta.title} source={source}>
-          <example.Example />
+        <RecipePlayground title={recipe.meta.title} source={source}>
+          <recipe.Recipe />
         </RecipePlayground>
 
         <section className="section" aria-labelledby="code">
@@ -100,14 +96,14 @@ export default async function ExamplePage({
             Use this recipe
           </h2>
           <p className="sectionNote">
-            Copy <code>Example.tsx</code> and <code>example.css</code> side by side into a React 19
+            Copy <code>Recipe.tsx</code> and <code>recipe.css</code> side by side into a React 19
             project. Install <code>@loamui/core</code> and load the core stylesheet at your
             application root, as shown in the{" "}
             <Link href="/docs/installation">installation guide</Link>. The component imports its own
             stylesheet.
           </p>
           <p className="sectionNote">
-            {example.meta.integration ??
+            {recipe.meta.integration ??
               "Replace the sample content and images with your own. Links and form actions illustrate application routes; provide those destinations and connect any action buttons to your application before shipping."}
           </p>
         </section>
@@ -116,9 +112,9 @@ export default async function ExamplePage({
           <h2 id="uses" className="h2">
             Uses
           </h2>
-          {example.meta.uses.length > 0 ? (
+          {recipe.meta.uses.length > 0 ? (
             <ul className="uses">
-              {example.meta.uses.map((name) => {
+              {recipe.meta.uses.map((name) => {
                 const href = docHref(name);
                 return (
                   <li key={name}>
@@ -153,10 +149,10 @@ export default async function ExamplePage({
             selected interactions; check contrast, keyboard behaviour and assistive technology
             support in your application.
           </p>
-          <ExamplePillars notes={example.meta.notes} composition={example.meta.composition} />
+          <RecipePillars notes={recipe.meta.notes} composition={recipe.meta.composition} />
         </section>
 
-        <ExamplePager
+        <RecipePager
           label="recipe"
           previous={toLink(siblings[at - 1])}
           next={toLink(siblings[at + 1])}

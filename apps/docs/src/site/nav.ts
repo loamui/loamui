@@ -4,7 +4,7 @@
 // and command menu can import it without pulling in demo code.
 
 import type { Category } from "@/renderer/types";
-import { examplesByCategory } from "../examples/catalog";
+import { recipesByCategory } from "../recipes/catalog";
 
 export interface NavItem {
   name: string;
@@ -57,7 +57,7 @@ export const PRIMITIVES: { name: string; href: string }[] = [
 export const EXAMPLES_NAV: { name: string; href: string }[] = [
   { name: "All recipes", href: "/recipes" },
   { name: "Building your own recipes", href: "/recipes/guide" },
-  ...examplesByCategory().map(({ category: c }) => ({ name: c.title, href: `/recipes/${c.slug}` })),
+  ...recipesByCategory().map(({ category: c }) => ({ name: c.title, href: `/recipes/${c.slug}` })),
 ];
 
 export const CATEGORY_ORDER = [

@@ -174,15 +174,15 @@ The CSS and TSX are the easy part; these are the steps low-risk additions miss:
 If the ladder in Step 1 ends at "composition of existing parts", the thing is
 not a component: it is an example, a section built from core the way any
 consumer would and copied rather than installed. Examples live in
-`apps/docs/src/examples/<category>/<slug>/` as four files (`Example.tsx`,
-`example.css`, `meta.ts`, `example.test.tsx`) and are held to the seven
+`apps/docs/src/recipes/<category>/<slug>/` as four files (`Recipe.tsx`,
+`recipe.css`, `meta.ts`, `recipe.test.tsx`) and are held to the seven
 rules in [CONTRIBUTING → Examples](../../../CONTRIBUTING.md): a real problem
 solved honestly; the markup is the deliverable; built the way any consumer
 would (core imports only, the donut, tokens, core parts never restyled); the
 pillars in the copy; idiomatic current React; it says why in `meta.ts`; it
 proves one promise in its test. Model a new one on `forms/input-with-button`
-or `commerce/order-summary`, run `pnpm --filter @loamui/docs build-examples`
-so the registry picks it up, and `pnpm check:examples` refuses anything that
+or `commerce/order-summary`, run `pnpm --filter @loamui/docs build-recipes`
+so the registry picks it up, and `pnpm check:recipes` refuses anything that
 breaks the rules. Only when an example needs behaviour that is not an
 arrangement (a carousel's paging, a nav's dropdown) does a new core primitive
 follow, through Steps 1 to 6.

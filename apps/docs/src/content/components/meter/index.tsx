@@ -1,7 +1,7 @@
 import { Meter } from "@loamui/core";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/Example";
+import { Example } from "@/renderer/components/Example";
 
 const doc: ComponentContent = {
   slug: "meter",

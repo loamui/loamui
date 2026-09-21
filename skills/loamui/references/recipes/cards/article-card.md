@@ -43,14 +43,14 @@ These notes explain the design. The included tests cover structure and selected 
 - [Card](https://loamui.com/docs/components/card.md)
 - [Time](https://loamui.com/docs/components/time.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 import { useId } from "react";
 import { Avatar, Badge, Card, Time } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const title = useId();
   return (
     <Card render={<article className="article-card" aria-labelledby={title} />}>
@@ -95,7 +95,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.article-card) to ([class*="loam-"]) {

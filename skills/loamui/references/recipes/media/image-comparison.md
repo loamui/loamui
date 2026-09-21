@@ -40,7 +40,7 @@ These notes explain the design. The included tests cover structure and selected 
 - [Element styles](https://loamui.com/docs/element-styles.md)
 - [Range](https://loamui.com/docs/components/range.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 "use client";
@@ -48,9 +48,9 @@ These notes explain the design. The included tests cover structure and selected 
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { Range } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const controlId = useId();
   const [position, setPosition] = useState(50);
   return (
@@ -100,7 +100,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.image-comparison) to ([class*="loam-"]) {

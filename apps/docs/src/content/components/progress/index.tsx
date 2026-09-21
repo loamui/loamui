@@ -2,7 +2,7 @@ import { Progress } from "@loamui/core";
 import { ProgressValueLabelDemo } from "./demos";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/Example";
+import { Example } from "@/renderer/components/Example";
 
 const doc: ComponentContent = {
   slug: "progress",

@@ -158,7 +158,7 @@ This is a pnpm and Turborepo monorepo. Use Node.js 22.13 or later and pnpm 11.
 
 - [`packages/core`](./packages/core): the published `@loamui/core` library.
 - [`apps/docs`](./apps/docs): the documentation site and live examples.
-- [`apps/docs/src/examples`](./apps/docs/src/examples): the worked recipes.
+- [`apps/docs/src/recipes`](./apps/docs/src/recipes): the worked recipes.
 
 ```bash
 pnpm install

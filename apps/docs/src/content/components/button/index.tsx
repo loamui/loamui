@@ -1,7 +1,7 @@
 import { Button, Checkbox, Loader, VisuallyHidden, Field } from "@loamui/core";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/Example";
+import { Example } from "@/renderer/components/Example";
 import { IconCheck } from "@tabler/icons-react";
 
 const doc: ComponentContent = {

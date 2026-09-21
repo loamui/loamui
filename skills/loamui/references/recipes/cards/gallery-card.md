@@ -43,16 +43,16 @@ These notes explain the design. The included tests cover structure and selected 
 - [Price](https://loamui.com/docs/components/price.md)
 - [Rating](https://loamui.com/docs/components/rating.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 "use client";
 
 import { useId } from "react";
 import { Card, Carousel, Price, Rating } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const instanceId = useId();
   return (
     <Card
@@ -136,7 +136,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.gallery-card) to ([class*="loam-"]) {

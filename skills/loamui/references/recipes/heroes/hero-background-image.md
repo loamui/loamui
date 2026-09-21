@@ -40,14 +40,14 @@ These notes explain the design. The included tests cover structure and selected 
 - [Element styles](https://loamui.com/docs/element-styles.md)
 - [SignpostLink](https://loamui.com/docs/components/signpost-link.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 import { useId } from "react";
 import { SignpostLink } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const titleId = useId();
   return (
     <section className="hero-background-image" aria-labelledby={titleId}>
@@ -81,7 +81,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.hero-background-image) to ([class*="loam-"]) {

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { ExamplesRail } from "@/renderer/examples-rail";
-import { ExamplesIndex } from "@/renderer/examples-index";
-import "@/renderer/examples-page.css";
+import { RecipesRail } from "@/renderer/recipes/recipe-rail";
+import { RecipesIndex } from "@/renderer/recipes/recipe-index";
+import "@/renderer/recipes/recipe-page.css";
 
 export const metadata: Metadata = {
   title: "Example recipes",
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Example recipes we built for our own products with LoamUI’s tokens, element styles and React components: worked references to take inspiration from.",
 };
 
-export default function ExamplesPage() {
+export default function RecipesPage() {
   return (
     <div className="site-RecipePage">
       <header className="hero">
@@ -28,10 +28,10 @@ export default function ExamplesPage() {
       </header>
       <div className="shell">
         <aside className="aside">
-          <ExamplesRail />
+          <RecipesRail />
         </aside>
         <div className="content">
-          <ExamplesIndex />
+          <RecipesIndex />
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Badge, Card, SignpostLink } from "@loamui/core";
-import { HeroShowcase, ContextShowcase } from "./home.client";
-import { AgentShowcase } from "./AgentShowcase.client";
-import { RestaurantMenu } from "./agent-demo/menu";
-import { menu } from "./agent-demo/generated";
-import "./home.css";
+import { HeroShowcase, ContextShowcase } from "@/home/showcases";
+import { AgentShowcase } from "@/home/AgentShowcase";
+import { RestaurantMenu } from "@/home/agent-demo/menu";
+import { menu } from "@/home/agent-demo/generated";
+import "@/home/home.css";
 
 const primitives = [
   {

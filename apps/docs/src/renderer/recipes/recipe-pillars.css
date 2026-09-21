@@ -1,0 +1,32 @@
+@scope (.site-RecipePillars) {
+  :scope {
+    border-block-start: 1px solid var(--loam-color-line);
+    display: block grid;
+    margin: 0;
+  }
+
+  .row {
+    border-block-end: 1px solid var(--loam-color-line);
+    display: block grid;
+    gap: var(--loam-space-3xs) var(--loam-space-l);
+    grid-template-columns: minmax(9rem, 12rem) 1fr;
+    padding-block: var(--loam-space-xs);
+
+    @container examples (inline-size < 40rem) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .name {
+    color: var(--loam-color-fg-strong);
+    font-size: var(--loam-text-sm);
+    font-weight: 600;
+  }
+
+  .note {
+    color: var(--loam-color-fg-muted);
+    font-size: var(--loam-text-sm);
+    margin: 0;
+    text-wrap: pretty;
+  }
+}

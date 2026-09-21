@@ -1,5 +1,5 @@
 // The homepage shows agent-generated code next to what it renders. The
-// component and stylesheet under src/app/agent-demo/ are the real files
+// component and stylesheet under src/home/agent-demo/ are the real files
 // (imported and rendered); this script copies their text into
 // generated.ts so the code tabs show exactly what runs, and cannot drift.
 // Runs before dev and build.
@@ -9,7 +9,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const dir = join(here, "..", "src", "app", "agent-demo");
+const dir = join(here, "..", "src", "home", "agent-demo");
 
 const demos = readdirSync(dir)
   .filter((f) => f.endsWith(".tsx"))
@@ -31,4 +31,4 @@ writeFileSync(join(dir, "generated.ts"), out.join("\n"));
 // The repo's format gate covers generated files too; format the output the
 // same way a hand-written file would be.
 execFileSync("npx", ["oxfmt", join(dir, "generated.ts")], { stdio: "ignore" });
-console.log(`sync-agent-demo: ${demos.length} demo(s) → src/app/agent-demo/generated.ts`);
+console.log(`sync-agent-demo: ${demos.length} demo(s) → src/home/agent-demo/generated.ts`);

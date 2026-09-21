@@ -1,0 +1,222 @@
+@layer loamui.ui {
+  @scope (.site-RecipesIndex) to ([class*="loam-"], [class*="site-"], .thumbInner > *) {
+    /* Explicit columns here, on .group and on the page's .content avoid
+     repeated intrinsic sizing through nested grids as previews mount or resize. */
+    :scope {
+      display: block grid;
+      gap: var(--loam-space-xl);
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* One row: the search, the component filter and the count. Wraps as a
+     row of controls where the column is narrow. */
+    .filters {
+      align-items: center;
+      display: block flex;
+      flex-wrap: wrap;
+      gap: var(--loam-space-2xs) var(--loam-space-xs);
+    }
+
+    /* The label and its select travel as one unit when the row wraps. */
+    .usesGroup {
+      align-items: center;
+      display: block flex;
+      flex: 0 1 16rem;
+      gap: var(--loam-space-2xs);
+      min-inline-size: 12rem;
+    }
+
+    .usesLabel {
+      color: var(--loam-color-fg-muted);
+      font-size: var(--loam-text-sm);
+      font-weight: 550;
+    }
+
+    .status {
+      color: var(--loam-color-fg-dim);
+      font-size: var(--loam-text-sm);
+      font-variant-numeric: tabular-nums;
+      margin-inline-start: auto;
+      white-space: nowrap;
+    }
+
+    /* Nothing matched: a quiet panel where the grid would be, with the two
+     ways on. */
+    .empty {
+      background: var(--loam-color-bg-subtle);
+      border: 1px dashed var(--loam-color-line-strong);
+      border-radius: var(--loam-radius-lg);
+      display: block grid;
+      gap: var(--loam-space-2xs);
+      justify-items: center;
+      padding: var(--loam-space-xl) var(--loam-space-l);
+      text-align: center;
+    }
+
+    .emptyTitle {
+      color: var(--loam-color-fg-strong);
+      font-size: var(--loam-text-lg);
+      font-weight: 650;
+    }
+
+    .emptyText {
+      color: var(--loam-color-fg-muted);
+      max-inline-size: 32rem;
+
+      a {
+        color: var(--loam-color-link);
+        text-decoration: underline;
+      }
+    }
+
+    .group {
+      display: block grid;
+      gap: var(--loam-space-s);
+      grid-template-columns: minmax(0, 1fr);
+      scroll-margin-block-start: 5rem;
+    }
+
+    .groupHead {
+      align-items: baseline;
+      display: block flex;
+      gap: var(--loam-space-s);
+      justify-content: space-between;
+    }
+
+    .groupTitle {
+      font-size: var(--loam-text-xl);
+      font-weight: 700;
+    }
+
+    .groupLink {
+      color: var(--loam-color-fg-muted);
+      font-size: var(--loam-text-sm);
+      font-weight: 550;
+      white-space: nowrap;
+
+      &:hover {
+        color: var(--loam-color-fg);
+      }
+    }
+
+    .grid {
+      display: block grid;
+      gap: var(--loam-space-m);
+      grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* A card: the preview above, the title and its parts below. The whole
+     card is the link's hit area (see .cardLink); hover lifts it, keyboard
+     focus rings it. */
+
+    /* LazyThumb defers the preview. Keep the card laid out so its observer
+     can detect approaching previews and its placeholder stays the same size. */
+    .card {
+      background: var(--loam-color-surface);
+      border: 1px solid var(--loam-color-line);
+      border-radius: var(--loam-radius-lg);
+      display: block grid;
+      grid-template-rows: auto 1fr auto;
+      margin: 0;
+      overflow: clip;
+      position: relative;
+
+      &:has(.cardLink:hover) {
+        border-color: var(--loam-color-line-strong);
+        box-shadow: var(--loam-shadow-md);
+        translate: 0 -2px;
+      }
+
+      &:has(.cardLink:focus-visible) {
+        outline: var(--loam-ring-width) solid var(--loam-color-ring);
+        outline-offset: 2px;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition:
+          border-color var(--loam-duration-md) var(--loam-ease),
+          box-shadow var(--loam-duration-md) var(--loam-ease),
+          translate var(--loam-duration-md) var(--loam-ease);
+      }
+    }
+
+    /* A scaled-down live render: the example at two fifths of its size on a
+     page-coloured ground, clipped to a fixed aspect. Centred when it fits;
+     "safe" falls back to the start when it does not, so a tall section shows
+     its heading and loses its foot rather than both. */
+    .thumb {
+      aspect-ratio: 16 / 10;
+      background: var(--loam-color-bg);
+      border-block-end: 1px solid var(--loam-color-line);
+      overflow: clip;
+      pointer-events: none;
+      position: relative;
+    }
+
+    .thumbInner {
+      align-content: safe center;
+      block-size: 250%;
+      container-type: inline-size;
+      display: block grid;
+      inline-size: 250%;
+      inset: 0;
+      padding: var(--loam-space-l);
+      position: absolute;
+      scale: 0.4;
+      transform-origin: 0 0;
+    }
+
+    .cardBody {
+      align-content: start;
+      display: block grid;
+      gap: var(--loam-space-2xs);
+      padding: var(--loam-space-xs) var(--loam-space-s) var(--loam-space-s);
+    }
+
+    /* The title is the link; its ::after stretches the hit area over the card. */
+    .cardLink {
+      color: var(--loam-color-fg-strong);
+      font-weight: 600;
+
+      &::after {
+        content: "";
+        inset: 0;
+        position: absolute;
+      }
+
+      &:focus-visible {
+        outline: none;
+      }
+    }
+
+    .cardUses {
+      display: block flex;
+      flex-wrap: wrap;
+      gap: var(--loam-space-3xs);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0;
+      }
+    }
+  }
+
+  @scope (.site-RecipesIndex .search) {
+    :scope {
+      flex: 1 1 14rem;
+      max-inline-size: 22rem;
+    }
+  }
+
+  @scope (.site-RecipesIndex .usesField) {
+    :scope {
+      flex: 1 1 auto;
+      min-inline-size: 0;
+    }
+  }
+}

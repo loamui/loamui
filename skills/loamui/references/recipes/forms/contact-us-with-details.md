@@ -44,14 +44,14 @@ These notes explain the design. The included tests cover structure and selected 
 - [Input](https://loamui.com/docs/components/input.md)
 - [Textarea](https://loamui.com/docs/components/textarea.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 "use client";
 
 import { useCallback, useId, useState, type FormEvent } from "react";
 import { Button, ErrorSummary, Field, Input, Textarea } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
 type ContactResponse =
   | { status: "sent" }
@@ -61,7 +61,7 @@ type ContactResponse =
       errors: { email?: string; message?: string; form?: string };
     };
 
-export default function Example({
+export default function Recipe({
   action = "/contact",
   initialResponse,
 }: {
@@ -281,7 +281,7 @@ export default function Example({
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.contact-us-with-details) to ([class*="loam-"]) {

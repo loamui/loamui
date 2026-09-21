@@ -13,7 +13,7 @@
     "check:skill": "node scripts/check-skill.mjs",
     "check:strings": "node scripts/check-strings.mjs",
     "check:scope": "node scripts/check-scope.mjs",
-    "check:examples": "node scripts/check-examples.mjs",
+    "check:recipes": "node scripts/check-recipes.mjs",
     "check:anatomy": "node scripts/check-anatomy.mjs",
     "check:prompts": "node scripts/check-recipe-prompts.mjs",
     "lint:prose": "slopless \"*.md\" \"packages/*/*.md\" \"apps/*/*.md\" && node scripts/check-site-prose.mjs",

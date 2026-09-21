@@ -1,5 +1,5 @@
 import type { ComponentContent } from "@/renderer/types";
-import { ModalAlertDemo, ModalDemo, ModalHeaderCloseDemo, ModalWidthDemo } from "./examples";
+import { ModalAlertDemo, ModalDemo, ModalHeaderCloseDemo, ModalWidthDemo } from "./demos";
 
 const doc: ComponentContent = {
   slug: "modal",
