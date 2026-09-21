@@ -26,7 +26,7 @@ export interface SelectProps extends Omit<PartProps<"select">, "size"> {
  * by composing {@link Field}; the control reads its wiring from the
  * surrounding `Field.Root`.
  */
-export function Select({
+export function SelectRoot({
   wrapperProps,
   className,
   children,

@@ -21,7 +21,9 @@ export default function Example() {
         </p>
         <ul className="meta" role="list">
           <li className="status">
-            <Badge>Accepted into the library</Badge>
+            <Badge.Root>
+              <Badge.Text>Accepted into the library</Badge.Text>
+            </Badge.Root>
           </li>
           <li>
             Updated <Time value="2026-09-01" locale="en-GB" />

@@ -85,7 +85,7 @@ function RadioControl({
  * the bare input (it self-wires inside a `Field`). Usually lives inside a
  * {@link RadioGroup}.
  */
-function RadioLabelled({
+export function Radio({
   label,
   description,
   id,
@@ -124,8 +124,3 @@ function RadioLabelled({
     </label>
   );
 }
-
-export const Radio = Object.assign(RadioLabelled, {
-  /** The bare input, for composing inside a `Field.Label` of its own. */
-  Control: RadioControl,
-});

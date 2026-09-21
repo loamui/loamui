@@ -66,10 +66,10 @@ const cases: Array<[string, ReactElement]> = [
     "Select",
     <Field.Root>
       <Field.Label>Country</Field.Label>
-      <Select>
-        <option>United States</option>
-        <option>Canada</option>
-      </Select>
+      <Select.Root>
+        <Select.Option>United States</Select.Option>
+        <Select.Option>Canada</Select.Option>
+      </Select.Root>
     </Field.Root>,
   ],
   [
@@ -138,10 +138,15 @@ const cases: Array<[string, ReactElement]> = [
     "Range",
     <Field.Root>
       <Field.Label>Volume</Field.Label>
-      <Range defaultValue={50} />
+      <Range.Control defaultValue={50} />
     </Field.Root>,
   ],
-  ["Badge", <Badge>New</Badge>],
+  [
+    "Badge",
+    <Badge.Root>
+      <Badge.Text>New</Badge.Text>
+    </Badge.Root>,
+  ],
   ["Card", <Card>Card content</Card>],
   [
     "Avatar",
@@ -175,21 +180,21 @@ const cases: Array<[string, ReactElement]> = [
   ],
   [
     "Table",
-    <Table>
-      <caption>Users</caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Role</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Ada</td>
-          <td>Admin</td>
-        </tr>
-      </tbody>
-    </Table>,
+    <Table.Root>
+      <Table.Caption>Users</Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Name</Table.Th>
+          <Table.Th>Role</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        <Table.Tr>
+          <Table.Td>Ada</Table.Td>
+          <Table.Td>Admin</Table.Td>
+        </Table.Tr>
+      </Table.Tbody>
+    </Table.Root>,
   ],
   [
     "Alert",

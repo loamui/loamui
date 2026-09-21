@@ -3,7 +3,7 @@ import { cx, type LoamUISize, type PartProps } from "../../utils.js";
 import { renderWithProps } from "../../render.js";
 import type { RenderProp } from "../../render.js";
 
-export interface BadgeProps extends Omit<PartProps<"span">, "color"> {
+export interface BadgeRootProps extends Omit<PartProps<"span">, "color"> {
   /** Control size. @default "md" */
   size?: LoamUISize;
   /**
@@ -15,14 +15,19 @@ export interface BadgeProps extends Omit<PartProps<"span">, "color"> {
   children?: ReactNode;
 }
 
-export interface BadgeDotProps extends PartProps<"span"> {}
+export interface BadgeTextProps extends PartProps<"span"> {}
 
 /**
- * A status dot before the label, carrying the raw context colour: a swatch,
- * not text. Decoration, so the visible word must carry the state on its own.
+ * The label. A real element rather than a bare text node, so the pill can let
+ * it shrink and truncate: bare text in a flex row is an anonymous flex item
+ * and can do neither.
  */
-function BadgeDot({ className, ...rest }: BadgeDotProps) {
-  return <span className={cx("dot", className)} aria-hidden {...rest} />;
+export function BadgeText({ className, children, ref, ...rest }: BadgeTextProps) {
+  return (
+    <span ref={ref} className={cx("text", className)} {...rest}>
+      {children}
+    </span>
+  );
 }
 
 /**
@@ -31,17 +36,27 @@ function BadgeDot({ className, ...rest }: BadgeDotProps) {
  * Neutral by default; a --loam-context region colours it. Declare
  * `--loam-context` on a region (an ancestor — a style query never matches
  * the element that declares it, so a one-element region is a wrapper) and
- * the pill's tint and text derive from that status's colour. Icons and the
- * status dot are composed as children and detected — there are no slot
- * props:
+ * the pill's tint and text derive from that status's colour.
+ *
+ * The label goes in `Badge.Text`, so anything beside it is composed on either
+ * side and the markup says which: an icon before the words, a count after
+ * them. Icons are detected children — there are no slot props:
  *
  * ```tsx
- * <Badge>
- *   <Badge.Dot /> Live
- * </Badge>
+ * <Badge.Root>
+ *   <CheckIcon />
+ *   <Badge.Text>Shipped</Badge.Text>
+ * </Badge.Root>
  * ```
  */
-function BadgeBase({ size = "md", render, className, children, ref, ...rest }: BadgeProps) {
+export function BadgeRoot({
+  size = "md",
+  render,
+  className,
+  children,
+  ref,
+  ...rest
+}: BadgeRootProps) {
   const wiring = {
     ref,
     className: cx("loam-Badge", className),
@@ -54,10 +69,3 @@ function BadgeBase({ size = "md", render, className, children, ref, ...rest }: B
   }
   return <span {...wiring} />;
 }
-
-/**
- * Callable, because a Badge is one element: `<Badge>Live</Badge>`. The dot is
- * the only part worth naming, so it hangs off the component rather than
- * forcing a `Badge` that would say nothing the bare tag does not.
- */
-export const Badge = Object.assign(BadgeBase, { Dot: BadgeDot });

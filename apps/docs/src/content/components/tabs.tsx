@@ -28,14 +28,11 @@ const doc: ComponentContent = {
       code: `<Tabs.Root defaultValue="files">
   <Tabs.List>
     <Tabs.Tab value="files">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-        <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0
-          2-2V8l-6-6H6Zm7 1.5L18.5 9H13V3.5Z" />
-      </svg>
+      <IconFile aria-hidden />
       Files
     </Tabs.Tab>
-    <Tabs.Tab value="team"><svg>…</svg> Team</Tabs.Tab>
-    <Tabs.Tab value="settings"><svg>…</svg> Settings</Tabs.Tab>
+    <Tabs.Tab value="team"><IconFile aria-hidden /> Team</Tabs.Tab>
+    <Tabs.Tab value="settings"><IconFile aria-hidden /> Settings</Tabs.Tab>
   </Tabs.List>
   <Tabs.Panel value="files">All your documents in one place.</Tabs.Panel>
   <Tabs.Panel value="team">Invite teammates and manage roles.</Tabs.Panel>
@@ -80,7 +77,7 @@ const doc: ComponentContent = {
     },
     {
       title: "View state stays out of the URL",
-      body: "Switching a tab updates React state, not the URL; reloading returns to defaultValue and the back button ignores tab changes. When a view should be linkable, use the controlled form (value/onChange) and mirror the value in the query string yourself; if every view deserves its own URL, you want pages with links, not tabs.",
+      body: "Switching a tab updates React state, not the URL; reloading returns to defaultValue and the back button ignores tab changes. When a view should be linkable, use the controlled form (value/onValueChange) and mirror the value in the query string yourself; if every view deserves its own URL, you want pages with links, not tabs.",
     },
   ],
   accessibility: [
@@ -108,7 +105,7 @@ const doc: ComponentContent = {
           description: "Controlled active tab value. Required when defaultValue is omitted.",
         },
         {
-          name: "onChange",
+          name: "onValueChange",
           type: "(value: string) => void",
           description: "Called with the new value when the active tab changes.",
         },

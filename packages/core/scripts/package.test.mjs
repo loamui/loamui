@@ -13,6 +13,11 @@ const pkg = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
 async function bundle(contents, options = {}) {
   return build({
     stdin: { contents, resolveDir: root, sourcefile: "consumer.js" },
+    // Pin esbuild's working directory so the metafile's relative output paths
+    // mean the same thing wherever the test is run from. Without it the paths
+    // resolve against process.cwd(), and running from the repo root instead of
+    // the package silently breaks the lookup below.
+    absWorkingDir: root,
     bundle: true,
     format: "esm",
     minify: true,
@@ -35,26 +40,72 @@ test("every public component entry point resolves to the root's named exports", 
     }
     await readFile(join(root, entry.types), "utf8");
   }
-  // Two shapes, chosen by what the component is.
+  // Two shapes, and no hybrids.
   //
-  // A component with an obvious default rendering is callable, with its parts
-  // attached: `<Alert title="…">` for the common case, `Alert.Root` when the
-  // arrangement has to change. A component that is only ever an arrangement of
-  // coordinated parts is a namespace, and has no callable form to offer.
-  for (const name of ["Alert", "Avatar", "Badge", "Switch", "Table", "Range", "Checkbox"]) {
-    assert.equal(typeof main[name], "function", `${name} is callable`);
-  }
-  assert.equal(typeof main.Alert.Root, "function", "a callable component still exposes its parts");
-  assert.equal(typeof main.Badge.Dot, "function");
+  // A component with parts is a namespace, and you build it from those parts:
+  // there is no one-invocation shortcut past them, because asking consumers to
+  // compose IS the composition model. Each part is its own module, so it keeps
+  // its own client reference and shakes on its own. A component with no parts
+  // worth exposing is a plain callable export, with no `.Root` standing between
+  // a consumer and a tag that says nothing more than the tag does.
+  //
+  // A part is worth exposing when it renders something you could not otherwise
+  // get. That is the whole test, and it is why Checkbox and Radio have none:
+  // with no label they already ARE the bare control, and the tick is painted in
+  // CSS, so there is no indicator element to hand out.
+  const NAMESPACES = [
+    "Alert", "Avatar", "Badge", "Breadcrumbs", "Carousel", "Combobox", "DateInput",
+    "Details", "Drawer", "ErrorSummary", "Field", "Fieldset", "FileInput", "Menu",
+    "Modal", "Nav", "Pagination", "Popover", "RadioGroup", "Range", "Search",
+    "SegmentedControl", "Select", "Stepper", "Switch", "Table", "Tabs", "Toast", "Tooltip",
+  ];
+  const CALLABLE = [
+    "Button", "Card", "Checkbox", "CopyButton", "Input", "Loader", "Meter",
+    "PasswordInput", "Price", "Progress", "QuantityInput", "Radio", "Rating",
+    "Separator", "SignpostLink", "Skeleton", "SkipLink", "Textarea",
+    "Time", "Toasts", "VisuallyHidden",
+  ];
 
-  for (const name of ["Modal", "Field", "Tabs", "Menu", "Combobox"]) {
+  // Every exported component is in exactly one bucket: the rule is the whole
+  // surface, not a sample of it.
+  const components = Object.entries(main)
+    .filter(([k, v]) => /^[A-Z]/.test(k) && (typeof v === "function" || (v && typeof v === "object" && v.Root)))
+    .map(([k]) => k);
+  assert.deepEqual(
+    components.sort(),
+    [...NAMESPACES, ...CALLABLE].sort(),
+    "every component is classified, and nothing ships unclassified",
+  );
+
+  for (const name of NAMESPACES) {
     assert.equal(typeof main[name], "object", `${name} is a namespace of parts`);
     assert.equal(typeof main[name].Root, "function", `${name}.Root is the root part`);
+    assert.notEqual(typeof main[name], "function", `${name} offers no callable shortcut`);
   }
 
-  // One name per thing: the flat part names were a second public API for the
-  // same components, and nothing outside core ever used them.
-  for (const name of ["ModalRoot", "TabsTab", "FieldDescription"]) {
+  for (const name of CALLABLE) {
+    assert.equal(typeof main[name], "function", `${name} is callable`);
+    assert.equal(main[name].Root, undefined, `${name} has no parts, so no Root`);
+  }
+
+  // No part survives that only renamed what the component already renders.
+  assert.equal(main.Checkbox.Control, undefined, "Checkbox with no label is the bare control");
+  assert.equal(main.Radio.Control, undefined, "Radio with no label is the bare control");
+  assert.equal(main.Badge.Dot, undefined, "a status dot is an icon child, not a part");
+  // Badge's label is a part, so what sits beside it is composed on one side.
+  assert.equal(typeof main.Badge.Text, "function", "Badge.Text holds the label");
+
+  // Anatomy completeness: a namespace exposes every element its scope styles,
+  // so the library never ships a component for half a table. `check:anatomy`
+  // gates this against the stylesheets; these pin the two that were partial.
+  for (const part of ["Caption", "Thead", "Tbody", "Tfoot", "Tr", "Th", "Td"]) {
+    assert.equal(typeof main.Table[part], "function", `Table.${part} is a part`);
+  }
+  for (const part of ["Option", "OptGroup"]) {
+    assert.equal(typeof main.Select[part], "function", `Select.${part} is a part`);
+  }
+
+  for (const name of ["ModalRoot", "TabsTab", "FieldDescription", "RadioGroupRoot", "RadioGroupLegend"]) {
     assert.equal(main[name], undefined, `${name} is not a second way to say ${name}`);
   }
 });
@@ -148,7 +199,7 @@ export default function DeferredModal() {
     );
     const outputs = new Map(result.outputFiles.map((file) => [file.path, file.text]));
     const metadata = new Map(
-      Object.entries(result.metafile.outputs).map(([file, meta]) => [resolve(file), meta]),
+      Object.entries(result.metafile.outputs).map(([file, meta]) => [resolve(root, file), meta]),
     );
     const entry = [...metadata].find(([, meta]) => meta.entryPoint === "consumer.js");
     assert.ok(entry, "consumer entry exists");
@@ -158,7 +209,7 @@ export default function DeferredModal() {
       eager.add(file);
       for (const dependency of metadata.get(file).imports) {
         if (!dependency.external && dependency.kind !== "dynamic-import")
-          visit(resolve(dependency.path));
+          visit(resolve(root, dependency.path));
       }
     }
     visit(entry[0]);

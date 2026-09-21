@@ -50,7 +50,9 @@ export default function Example() {
               >
                 Nia Prosser
               </a>
-              <Badge>Author</Badge>
+              <Badge.Root>
+                <Badge.Text>Author</Badge.Text>
+              </Badge.Root>
               <Time value="2026-09-05T16:05:00Z" locale="en-GB" relative={{ now: NOW }} />
             </header>
             <div className="body">

@@ -23,7 +23,9 @@ export default function Example() {
         height="750"
       />
       <p className="meta">
-        <Badge>Summer planting</Badge>
+        <Badge.Root>
+          <Badge.Text>Summer planting</Badge.Text>
+        </Badge.Root>
       </p>
       <h3 id={`${instanceId}-vertical-article-card-title`}>
         <a href="/journal/summer-container-colours">Colour ideas for summer containers</a>

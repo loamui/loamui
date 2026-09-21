@@ -38,10 +38,12 @@ export default function Example() {
     setSort({ column, direction });
 
   return (
-    <Table className="table-sortable" highlightOnHover>
-      <caption>Seed stock on 8 September 2026: packets on the shelf, by variety.</caption>
-      <thead>
-        <tr>
+    <Table.Root className="table-sortable" highlightOnHover>
+      <Table.Caption>
+        Seed stock on 8 September 2026: packets on the shelf, by variety.
+      </Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
           <Table.Th sort={sortFor("variety")}>
             <Table.SortButton onSortChange={sortBy("variety")}>Variety</Table.SortButton>
           </Table.Th>
@@ -52,27 +54,29 @@ export default function Example() {
           <Table.Th sort={sortFor("price")} className="number">
             <Table.SortButton onSortChange={sortBy("price")}>Price</Table.SortButton>
           </Table.Th>
-        </tr>
-      </thead>
-      <tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
         {rows.map((row) => (
-          <tr key={row.variety}>
-            <th scope="row">{row.variety}</th>
-            <td>{row.type}</td>
-            <td className="number">
+          <Table.Tr key={row.variety}>
+            <Table.Th scope="row">{row.variety}</Table.Th>
+            <Table.Td>{row.type}</Table.Td>
+            <Table.Td className="number">
               {row.packets.toLocaleString("en")}
               {row.packets < 20 && (
                 <span className="low">
-                  <Badge>Low</Badge>
+                  <Badge.Root>
+                    <Badge.Text>Low</Badge.Text>
+                  </Badge.Root>
                 </span>
               )}
-            </td>
-            <td className="number">
+            </Table.Td>
+            <Table.Td className="number">
               <Price value={row.price} currency="GBP" />
-            </td>
-          </tr>
+            </Table.Td>
+          </Table.Tr>
         ))}
-      </tbody>
-    </Table>
+      </Table.Tbody>
+    </Table.Root>
   );
 }

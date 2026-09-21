@@ -63,44 +63,44 @@ const doc: ComponentContent = {
     {
       title: "Basic usage",
       description:
-        'Native table markup inside Table: a caption names it, th scope="col" marks the header cells, and the component styles what you write. Nothing is re-implemented.',
-      code: `<Table>
-  <caption>Invoices</caption>
-  <thead>
-    <tr>
-      <th scope="col">Invoice</th>
-      <th scope="col">Status</th>
-      <th scope="col">Amount</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td>INV-1024</td><td>Paid</td><td>$1,240.00</td></tr>
-    <tr><td>INV-1025</td><td>Pending</td><td>$820.00</td></tr>
-    <tr><td>INV-1026</td><td>Paid</td><td>$2,010.00</td></tr>
-    <tr><td>INV-1027</td><td>Overdue</td><td>$640.00</td></tr>
-  </tbody>
-</Table>`,
+        "The whole table is composed from parts: Caption names it, Thead and Tbody group the rows, Th marks a header cell and Td a data cell. Each one renders the native element it is named for, so the markup stays a real table and the scope styles it.",
+      code: `<Table.Root>
+  <Table.Caption>Invoices</Table.Caption>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th scope="col">Invoice</Table.Th>
+      <Table.Th scope="col">Status</Table.Th>
+      <Table.Th scope="col">Amount</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
+    <Table.Tr><Table.Td>INV-1025</Table.Td><Table.Td>Pending</Table.Td><Table.Td>$820.00</Table.Td></Table.Tr>
+    <Table.Tr><Table.Td>INV-1026</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$2,010.00</Table.Td></Table.Tr>
+    <Table.Tr><Table.Td>INV-1027</Table.Td><Table.Td>Overdue</Table.Td><Table.Td>$640.00</Table.Td></Table.Tr>
+  </Table.Tbody>
+</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
-          <Table>
-            <caption>Invoices</caption>
-            <thead>
-              <tr>
-                <th scope="col">Invoice</th>
-                <th scope="col">Status</th>
-                <th scope="col">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table.Root>
+            <Table.Caption>Invoices</Table.Caption>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th scope="col">Invoice</Table.Th>
+                <Table.Th scope="col">Status</Table.Th>
+                <Table.Th scope="col">Amount</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {rows.map((r) => (
-                <tr key={r.invoice}>
-                  <td>{r.invoice}</td>
-                  <td>{r.status}</td>
-                  <td>{r.amount}</td>
-                </tr>
+                <Table.Tr key={r.invoice}>
+                  <Table.Td>{r.invoice}</Table.Td>
+                  <Table.Td>{r.status}</Table.Td>
+                  <Table.Td>{r.amount}</Table.Td>
+                </Table.Tr>
               ))}
-            </tbody>
-          </Table>
+            </Table.Tbody>
+          </Table.Root>
         </div>
       ),
     },
@@ -108,30 +108,30 @@ const doc: ComponentContent = {
       title: "Striped",
       description:
         "Shade alternating body rows. Stripes help the eye hold a row across many columns; on a short, narrow table like this one they are noise, so reach for them when rows are long, not by default.",
-      code: `<Table striped>
+      code: `<Table.Root striped>
   {/* caption / thead / tbody */}
-</Table>`,
+</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
-          <Table striped>
-            <caption>Invoices</caption>
-            <thead>
-              <tr>
-                <th scope="col">Invoice</th>
-                <th scope="col">Status</th>
-                <th scope="col">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table.Root striped>
+            <Table.Caption>Invoices</Table.Caption>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th scope="col">Invoice</Table.Th>
+                <Table.Th scope="col">Status</Table.Th>
+                <Table.Th scope="col">Amount</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {rows.map((r) => (
-                <tr key={r.invoice}>
-                  <td>{r.invoice}</td>
-                  <td>{r.status}</td>
-                  <td>{r.amount}</td>
-                </tr>
+                <Table.Tr key={r.invoice}>
+                  <Table.Td>{r.invoice}</Table.Td>
+                  <Table.Td>{r.status}</Table.Td>
+                  <Table.Td>{r.amount}</Table.Td>
+                </Table.Tr>
               ))}
-            </tbody>
-          </Table>
+            </Table.Tbody>
+          </Table.Root>
         </div>
       ),
     },
@@ -139,30 +139,30 @@ const doc: ComponentContent = {
       title: "Column borders",
       description:
         "Draw vertical borders between columns. Padding already separates columns of short values; borders earn their place when cells hold text that wraps, or numbers that would otherwise run into their neighbours.",
-      code: `<Table withColumnBorders>
+      code: `<Table.Root withColumnBorders>
   {/* caption / thead / tbody */}
-</Table>`,
+</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
-          <Table withColumnBorders>
-            <caption>Invoices</caption>
-            <thead>
-              <tr>
-                <th scope="col">Invoice</th>
-                <th scope="col">Status</th>
-                <th scope="col">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table.Root withColumnBorders>
+            <Table.Caption>Invoices</Table.Caption>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th scope="col">Invoice</Table.Th>
+                <Table.Th scope="col">Status</Table.Th>
+                <Table.Th scope="col">Amount</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {rows.map((r) => (
-                <tr key={r.invoice}>
-                  <td>{r.invoice}</td>
-                  <td>{r.status}</td>
-                  <td>{r.amount}</td>
-                </tr>
+                <Table.Tr key={r.invoice}>
+                  <Table.Td>{r.invoice}</Table.Td>
+                  <Table.Td>{r.status}</Table.Td>
+                  <Table.Td>{r.amount}</Table.Td>
+                </Table.Tr>
               ))}
-            </tbody>
-          </Table>
+            </Table.Tbody>
+          </Table.Root>
         </div>
       ),
     },
@@ -170,30 +170,30 @@ const doc: ComponentContent = {
       title: "Highlight on hover",
       description:
         "Shade the row under the pointer; the highlight appears on pointer hover, so it is not visible in a static screenshot.",
-      code: `<Table highlightOnHover>
+      code: `<Table.Root highlightOnHover>
   {/* caption / thead / tbody */}
-</Table>`,
+</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
-          <Table highlightOnHover>
-            <caption>Invoices</caption>
-            <thead>
-              <tr>
-                <th scope="col">Invoice</th>
-                <th scope="col">Status</th>
-                <th scope="col">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table.Root highlightOnHover>
+            <Table.Caption>Invoices</Table.Caption>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th scope="col">Invoice</Table.Th>
+                <Table.Th scope="col">Status</Table.Th>
+                <Table.Th scope="col">Amount</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {rows.map((r) => (
-                <tr key={r.invoice}>
-                  <td>{r.invoice}</td>
-                  <td>{r.status}</td>
-                  <td>{r.amount}</td>
-                </tr>
+                <Table.Tr key={r.invoice}>
+                  <Table.Td>{r.invoice}</Table.Td>
+                  <Table.Td>{r.status}</Table.Td>
+                  <Table.Td>{r.amount}</Table.Td>
+                </Table.Tr>
               ))}
-            </tbody>
-          </Table>
+            </Table.Tbody>
+          </Table.Root>
         </div>
       ),
     },
@@ -203,10 +203,10 @@ const doc: ComponentContent = {
         "A sortable column is a Table.Th carrying the current sort and a Table.SortButton inside it. The parts announce and style; you hold the state, filter and sort the rows, and pass the result back as sort.",
       code: `const [sort, setSort] = useState({ column: "name", direction: "ascending" });
 
-<Table>
-  <caption>People</caption>
-  <thead>
-    <tr>
+<Table.Root>
+  <Table.Caption>People</Table.Caption>
+  <Table.Thead>
+    <Table.Tr>
       {columns.map((column) => (
         <Table.Th
           key={column.key}
@@ -219,63 +219,63 @@ const doc: ComponentContent = {
           </Table.SortButton>
         </Table.Th>
       ))}
-    </tr>
-  </thead>
-  <tbody>{sortedRows.map((row) => …)}</tbody>
-</Table>`,
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>{sortedRows.map((row) => …)}</Table.Tbody>
+</Table.Root>`,
       render: () => <TableSortDemo />,
     },
     {
       title: "Wider than its container",
       description:
         "The table scrolls in place instead of stretching the page. Only once it overflows does the wrapper become a focusable region named by the caption, so Tab reaches it and the arrow keys scroll it; the same table in a wider container adds no tab stop. Without a caption the region is named by labels.scrollable.",
-      code: `<Table>
-  <caption>Invoices by quarter</caption>
-  <thead>
-    <tr>
-      <th scope="col">Invoice</th>
-      <th scope="col">Status</th>
-      <th scope="col">Q1</th>
-      <th scope="col">Q2</th>
-      <th scope="col">Q3</th>
-      <th scope="col">Q4</th>
-      <th scope="col">Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td>INV-1024</td><td>Paid</td><td>$310.00</td><td>$310.00</td><td>$310.00</td><td>$310.00</td><td>$1,240.00</td></tr>
+      code: `<Table.Root>
+  <Table.Caption>Invoices by quarter</Table.Caption>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th scope="col">Invoice</Table.Th>
+      <Table.Th scope="col">Status</Table.Th>
+      <Table.Th scope="col">Q1</Table.Th>
+      <Table.Th scope="col">Q2</Table.Th>
+      <Table.Th scope="col">Q3</Table.Th>
+      <Table.Th scope="col">Q4</Table.Th>
+      <Table.Th scope="col">Total</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
     …
-  </tbody>
-</Table>`,
+  </Table.Tbody>
+</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "24rem" }}>
-          <Table>
-            <caption>Invoices by quarter</caption>
-            <thead>
-              <tr>
-                <th scope="col">Invoice</th>
-                <th scope="col">Status</th>
-                <th scope="col">Q1</th>
-                <th scope="col">Q2</th>
-                <th scope="col">Q3</th>
-                <th scope="col">Q4</th>
-                <th scope="col">Total</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table.Root>
+            <Table.Caption>Invoices by quarter</Table.Caption>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th scope="col">Invoice</Table.Th>
+                <Table.Th scope="col">Status</Table.Th>
+                <Table.Th scope="col">Q1</Table.Th>
+                <Table.Th scope="col">Q2</Table.Th>
+                <Table.Th scope="col">Q3</Table.Th>
+                <Table.Th scope="col">Q4</Table.Th>
+                <Table.Th scope="col">Total</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {quarters.map((r) => (
-                <tr key={r.invoice}>
-                  <td>{r.invoice}</td>
-                  <td>{r.status}</td>
-                  <td>{r.q1}</td>
-                  <td>{r.q2}</td>
-                  <td>{r.q3}</td>
-                  <td>{r.q4}</td>
-                  <td>{r.total}</td>
-                </tr>
+                <Table.Tr key={r.invoice}>
+                  <Table.Td>{r.invoice}</Table.Td>
+                  <Table.Td>{r.status}</Table.Td>
+                  <Table.Td>{r.q1}</Table.Td>
+                  <Table.Td>{r.q2}</Table.Td>
+                  <Table.Td>{r.q3}</Table.Td>
+                  <Table.Td>{r.q4}</Table.Td>
+                  <Table.Td>{r.total}</Table.Td>
+                </Table.Tr>
               ))}
-            </tbody>
-          </Table>
+            </Table.Tbody>
+          </Table.Root>
         </div>
       ),
     },
@@ -283,41 +283,41 @@ const doc: ComponentContent = {
       title: "Sticky header",
       description:
         "A long table capped in height scrolls in place, and stickyHeader keeps the column names at the top of the scroller while the rows pass beneath. The cap is --loam-table-block-size on the component's own element, so no wrapper is needed; once the rows overflow it, the wrapper becomes the same focusable region as a wide table does, named by the caption. The header cells take an opaque surface and their own bottom edge, which travels with them.",
-      code: `<Table stickyHeader style={{ "--loam-table-block-size": "14rem" }}>
-  <caption>Invoices</caption>
-  <thead>
-    <tr>
-      <th scope="col">Invoice</th>
-      <th scope="col">Status</th>
-      <th scope="col">Amount</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td>INV-1024</td><td>Paid</td><td>$1,240.00</td></tr>
+      code: `<Table.Root stickyHeader style={{ "--loam-table-block-size": "14rem" }}>
+  <Table.Caption>Invoices</Table.Caption>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th scope="col">Invoice</Table.Th>
+      <Table.Th scope="col">Status</Table.Th>
+      <Table.Th scope="col">Amount</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
     …
-  </tbody>
-</Table>`,
+  </Table.Tbody>
+</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
-          <Table stickyHeader style={{ "--loam-table-block-size": "14rem" } as CSSProperties}>
-            <caption>Invoices</caption>
-            <thead>
-              <tr>
-                <th scope="col">Invoice</th>
-                <th scope="col">Status</th>
-                <th scope="col">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table.Root stickyHeader style={{ "--loam-table-block-size": "14rem" } as CSSProperties}>
+            <Table.Caption>Invoices</Table.Caption>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th scope="col">Invoice</Table.Th>
+                <Table.Th scope="col">Status</Table.Th>
+                <Table.Th scope="col">Amount</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {ledger.map((r) => (
-                <tr key={r.invoice}>
-                  <td>{r.invoice}</td>
-                  <td>{r.status}</td>
-                  <td>{r.amount}</td>
-                </tr>
+                <Table.Tr key={r.invoice}>
+                  <Table.Td>{r.invoice}</Table.Td>
+                  <Table.Td>{r.status}</Table.Td>
+                  <Table.Td>{r.amount}</Table.Td>
+                </Table.Tr>
               ))}
-            </tbody>
-          </Table>
+            </Table.Tbody>
+          </Table.Root>
         </div>
       ),
     },
@@ -325,31 +325,31 @@ const doc: ComponentContent = {
       title: "Caption below the table",
       description:
         "Caption placement is the platform's own caption-side property, set on the <table> through tableProps (or a class of your own).",
-      code: `<Table tableProps={{ style: { captionSide: "bottom" } }}>
-  <caption>Recent invoices by status</caption>
+      code: `<Table.Root tableProps={{ style: { captionSide: "bottom" } }}>
+  <Table.Caption>Recent invoices by status</Table.Caption>
   {/* thead / tbody */}
-</Table>`,
+</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
-          <Table tableProps={{ style: { captionSide: "bottom" } }}>
-            <caption>Recent invoices by status</caption>
-            <thead>
-              <tr>
-                <th scope="col">Invoice</th>
-                <th scope="col">Status</th>
-                <th scope="col">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table.Root tableProps={{ style: { captionSide: "bottom" } }}>
+            <Table.Caption>Recent invoices by status</Table.Caption>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th scope="col">Invoice</Table.Th>
+                <Table.Th scope="col">Status</Table.Th>
+                <Table.Th scope="col">Amount</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
               {rows.map((r) => (
-                <tr key={r.invoice}>
-                  <td>{r.invoice}</td>
-                  <td>{r.status}</td>
-                  <td>{r.amount}</td>
-                </tr>
+                <Table.Tr key={r.invoice}>
+                  <Table.Td>{r.invoice}</Table.Td>
+                  <Table.Td>{r.status}</Table.Td>
+                  <Table.Td>{r.amount}</Table.Td>
+                </Table.Tr>
               ))}
-            </tbody>
-          </Table>
+            </Table.Tbody>
+          </Table.Root>
         </div>
       ),
     },
@@ -402,7 +402,7 @@ const doc: ComponentContent = {
   ],
   parts: [
     {
-      name: "Table",
+      name: "Table.Root",
       description: "The table and its scroll wrapper; compose native table elements inside it.",
       props: [
         {

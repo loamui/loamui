@@ -13,7 +13,7 @@ export interface SwitchControlProps extends Omit<PartProps<"input">, "size" | "t
  * (`<Field.Label><Switch.Control /> …</Field.Label>`); otherwise it uses
  * its own props.
  */
-function SwitchControl({
+export function SwitchControl({
   id,
   className,
   "aria-invalid": ariaInvalid,
@@ -55,5 +55,3 @@ function SwitchControl({
     </>
   );
 }
-
-export { SwitchControl };

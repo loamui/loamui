@@ -11,40 +11,40 @@ const TOTAL = SHARE.reduce((sum, row) => sum + row.visits, 0);
 
 export default function Example() {
   return (
-    <Table className="stats-with-segments">
-      <caption>How members reached the shop in August, by device.</caption>
-      <thead>
-        <tr>
-          <th scope="col">Device</th>
-          <th scope="col" className="number">
+    <Table.Root className="stats-with-segments">
+      <Table.Caption>How members reached the shop in August, by device.</Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th scope="col">Device</Table.Th>
+          <Table.Th scope="col" className="number">
             Visits
-          </th>
-          <th scope="col" className="share">
+          </Table.Th>
+          <Table.Th scope="col" className="share">
             Share
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+          </Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
         {SHARE.map((row) => (
-          <tr key={row.device}>
-            <th scope="row">{row.device}</th>
-            <td className="number">{row.visits.toLocaleString("en")}</td>
-            <td className="share">
+          <Table.Tr key={row.device}>
+            <Table.Th scope="row">{row.device}</Table.Th>
+            <Table.Td className="number">{row.visits.toLocaleString("en")}</Table.Td>
+            <Table.Td className="share">
               <span className="figure">{row.share}%</span>
               <Meter value={row.share} max={100} label={`${row.device}, share of visits`} />
-            </td>
-          </tr>
+            </Table.Td>
+          </Table.Tr>
         ))}
-      </tbody>
-      <tfoot>
-        <tr>
-          <th scope="row">All devices</th>
-          <td className="number">{TOTAL.toLocaleString("en")}</td>
-          <td className="share">
+      </Table.Tbody>
+      <Table.Tfoot>
+        <Table.Tr>
+          <Table.Th scope="row">All devices</Table.Th>
+          <Table.Td className="number">{TOTAL.toLocaleString("en")}</Table.Td>
+          <Table.Td className="share">
             <span className="figure">100%</span>
-          </td>
-        </tr>
-      </tfoot>
-    </Table>
+          </Table.Td>
+        </Table.Tr>
+      </Table.Tfoot>
+    </Table.Root>
   );
 }

@@ -35,7 +35,9 @@ export default function HomePage() {
     <div className="site-Home" data-no-hyphens>
       <section className="hero">
         <div className="intro">
-          <Badge>v0.1 Beta</Badge>
+          <Badge.Root>
+            <Badge.Text>v0.1 Beta</Badge.Text>
+          </Badge.Root>
           <h1>
             Modern UI primitives for <span>agent-assisted developers.</span>
           </h1>

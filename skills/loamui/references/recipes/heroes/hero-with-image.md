@@ -55,7 +55,9 @@ export default function Example() {
       <div>
         <header>
           <p className="eyebrow">
-            <Badge>Catalogue</Badge>
+            <Badge.Root>
+              <Badge.Text>Catalogue</Badge.Text>
+            </Badge.Root>
             <span>Sowing from March</span>
           </p>
           <h1 id={titleId}>Seed saved by growers, for growers.</h1>

@@ -1,5 +1,6 @@
 import { Button, VisuallyHidden } from "@loamui/core";
 import type { ComponentContent } from "@/renderer/types";
+import { IconTrash } from "@tabler/icons-react";
 
 const doc: ComponentContent = {
   slug: "visually-hidden",
@@ -11,20 +12,12 @@ const doc: ComponentContent = {
       description:
         "The glyph is decoration and the words are the name. Nothing is visible in the button but the icon, and a screen reader reads “Remove Climbing bean seeds”.",
       code: `<Button>
-  <TrashIcon aria-hidden />
+  <IconTrash aria-hidden />
   <VisuallyHidden>Remove Climbing bean ‘Blue Lake’ seeds</VisuallyHidden>
 </Button>`,
       render: () => (
         <Button>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-            <path
-              d="M3 4h10M6.5 4V2.5h3V4M4.5 4l.5 9h6l.5-9"
-              stroke="currentColor"
-              strokeWidth="1.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <IconTrash aria-hidden />
           <VisuallyHidden>Remove Climbing bean ‘Blue Lake’ seeds</VisuallyHidden>
         </Button>
       ),

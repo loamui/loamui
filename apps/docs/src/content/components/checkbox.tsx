@@ -11,7 +11,7 @@ const doc: ComponentContent = {
       title: "Basic usage",
       description:
         "One self-contained opt-in. The label is a complete statement of what ticking the box does, and the box starts unticked so every tick is a deliberate act.",
-      code: `<Field.Item><Field.Label><Checkbox  /> Subscribe to the newsletter</Field.Label></Field.Item>`,
+      code: `<Field.Item><Field.Label><Checkbox /> Subscribe to the newsletter</Field.Label></Field.Item>`,
       render: () => (
         <Field.Item>
           <Field.Label>
@@ -37,7 +37,7 @@ const doc: ComponentContent = {
       title: "With description",
       description:
         "Field.Description is helper text under the label, joined to the box through aria-describedby, so the consequence of ticking is read with the choice.",
-      code: `<Field.Item><Field.Label><Checkbox  /> Share anonymised usage data</Field.Label><Field.Description>Helps us improve the product. You can opt out anytime.</Field.Description></Field.Item>`,
+      code: `<Field.Item><Field.Label><Checkbox /> Share anonymised usage data</Field.Label><Field.Description>Helps us improve the product. You can opt out anytime.</Field.Description></Field.Item>`,
       render: () => (
         <div style={{ maxInlineSize: "24rem" }}>
           <Field.Item>
@@ -78,7 +78,7 @@ const doc: ComponentContent = {
         "Set invalid on Field.Root and compose Field.Error before the checkbox for its announced message.",
       code: `<Field.Root invalid>
   <Field.Error>Accept the terms of service to continue</Field.Error>
-  <><Field.Label><Checkbox  /> Accept the terms of service</Field.Label></>
+  <><Field.Label><Checkbox /> Accept the terms of service</Field.Label></>
 </Field.Root>`,
       render: () => <CheckboxErrorDemo />,
     },
@@ -88,7 +88,7 @@ const doc: ComponentContent = {
         "The bare Checkbox carries no label prop: it reads its id, aria-describedby and aria-invalid from the surrounding Field, so the label lives on Field.Label and nothing wires them by hand.",
       code: `<Field.Root>
   <Field.Label>
-    <Checkbox  /> Subscribe to the newsletter
+    <Checkbox /> Subscribe to the newsletter
   </Field.Label>
   <Field.Description>A short summary, once a week.</Field.Description>
 </Field.Root>`,

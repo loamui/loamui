@@ -16,7 +16,9 @@ export default function Example() {
         height="600"
       />
       <p className="meta">
-        <Badge>Save 20%</Badge>
+        <Badge.Root>
+          <Badge.Text>Save 20%</Badge.Text>
+        </Badge.Root>
       </p>
       <h3 id={title}>
         <a href="/seeds/climbing-bean-blue-lake">Climbing bean ‘Blue Lake’ seeds</a>

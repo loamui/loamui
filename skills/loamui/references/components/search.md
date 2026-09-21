@@ -38,20 +38,11 @@ The header recipe: the search sits beside the brand, in the row a site's actions
 An svg child is detected by Button as an icon, and the aria-label names the button and makes it square; the name is still read. Keep the word for the landmark and the box; the icon is only what is seen, so it is aria-hidden.
 
 ```tsx
-function MagnifierIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 <Search.Root>
   <Search.Label>Search this site</Search.Label>
   <Search.Input />
   <Search.Button aria-label="Search">
-    <MagnifierIcon />
+    <IconSearch aria-hidden />
   </Search.Button>
 </Search.Root>
 ```

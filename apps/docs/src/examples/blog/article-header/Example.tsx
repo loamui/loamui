@@ -37,13 +37,34 @@ export default function Example() {
         </div>
         <ul className="tags" role="list" aria-label="Tags">
           <li>
-            <Badge size="lg" render={<a href="/tags/broad-beans">Broad beans</a>} />
+            <Badge.Root
+              size="lg"
+              render={
+                <a href="/tags/broad-beans">
+                  <Badge.Text>Broad beans</Badge.Text>
+                </a>
+              }
+            />
           </li>
           <li>
-            <Badge size="lg" render={<a href="/tags/autumn-sowing">Autumn sowing</a>} />
+            <Badge.Root
+              size="lg"
+              render={
+                <a href="/tags/autumn-sowing">
+                  <Badge.Text>Autumn sowing</Badge.Text>
+                </a>
+              }
+            />
           </li>
           <li>
-            <Badge size="lg" render={<a href="/tags/legumes">Legumes</a>} />
+            <Badge.Root
+              size="lg"
+              render={
+                <a href="/tags/legumes">
+                  <Badge.Text>Legumes</Badge.Text>
+                </a>
+              }
+            />
           </li>
         </ul>
         <figure>

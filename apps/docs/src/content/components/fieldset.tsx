@@ -14,7 +14,7 @@ const doc: ComponentContent = {
   <Fieldset.Legend>Email notifications</Fieldset.Legend>
   <Field.Item><Field.Label><Checkbox defaultChecked /> Product updates</Field.Label></Field.Item>
   <Field.Item><Field.Label><Checkbox defaultChecked /> Security alerts</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Checkbox  /> Marketing</Field.Label></Field.Item>
+  <Field.Item><Field.Label><Checkbox /> Marketing</Field.Label></Field.Item>
 </Fieldset.Root>`,
       render: () => <FieldsetCheckboxDemo />,
     },
@@ -23,8 +23,8 @@ const doc: ComponentContent = {
       description: "Mark the whole group optional in words rather than with an asterisk.",
       code: `<Fieldset.Root>
   <Fieldset.Legend optional>Interests</Fieldset.Legend>
-  <Field.Item><Field.Label><Checkbox  /> Design</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Checkbox  /> Engineering</Field.Label></Field.Item>
+  <Field.Item><Field.Label><Checkbox /> Design</Field.Label></Field.Item>
+  <Field.Item><Field.Label><Checkbox /> Engineering</Field.Label></Field.Item>
 </Fieldset.Root>`,
       render: () => <FieldsetOptionalDemo />,
     },

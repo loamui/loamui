@@ -93,7 +93,7 @@ function CheckboxControl({
  * same Field points at it, and the Field's description and error join its
  * own description in `aria-describedby`.
  */
-function CheckboxLabelled({
+export function Checkbox({
   label,
   description,
   id,
@@ -134,8 +134,3 @@ function CheckboxLabelled({
     </div>
   );
 }
-
-export const Checkbox = Object.assign(CheckboxLabelled, {
-  /** The bare box, for composing inside a `Field.Label` of its own. */
-  Control: CheckboxControl,
-});

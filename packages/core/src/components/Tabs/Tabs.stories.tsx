@@ -12,7 +12,7 @@ const meta = {
         component:
           "Switch between related panels of content, composed from " +
           "`Tabs.Root`, `Tabs.List`, `Tabs.Tab` and `Tabs.Panel`. Supports uncontrolled " +
-          "(`defaultValue`) and controlled (`value`/`onChange`) usage.",
+          "(`defaultValue`) and controlled (`value`/`onValueChange`) usage.",
       },
     },
   },

@@ -1,5 +1,4 @@
-export { Alert } from "./AlertBase.js";
-export type { AlertProps } from "./AlertBase.js";
+export * as Alert from "./Alert.parts.js";
 export type {
   AlertRootProps,
   AlertIconProps,

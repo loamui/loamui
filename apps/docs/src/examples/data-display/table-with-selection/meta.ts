@@ -13,7 +13,7 @@ export const meta: ExampleMeta = {
       "Each box is named for its row, Select order HW-1042, and the header's is Select all orders; the count of selected rows is a status region, so a reader hears it change without leaving the table.",
   },
   composition:
-    "Checkbox.Control is the bare box, named by aria-label because there is no room for a visible label in the cell; the page holds the set of selected ids and derives all and some from it.",
+    "A Checkbox with no label is the bare box, named by aria-label because there is no room for a visible label in the cell; the page holds the set of selected ids and derives all and some from it.",
   tags: ["table", "selection", "checkbox", "bulk", "orders", "select all"],
   order: 17,
 };

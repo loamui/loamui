@@ -38,26 +38,15 @@ function useTabsContext(part: string): TabsContextValue {
   return useRequiredContext(TabsContext, part, "Tabs.Root");
 }
 
-interface TabsRootCommonProps extends Omit<PartProps<"div">, "onChange" | "defaultValue"> {
+export interface TabsRootProps extends Omit<PartProps<"div">, "onChange" | "defaultValue"> {
+  /** The active tab's value. Use when the component is controlled. */
+  value?: string;
+  /** The tab active by default. Use when the component is not controlled. */
+  defaultValue?: string;
   /** Called with the new value when the active tab changes. */
-  onChange?: (value: string) => void;
+  onValueChange?: (value: string) => void;
   children?: ReactNode;
 }
-
-/** Tabs must start with one selected value, controlled or uncontrolled. */
-export type TabsRootProps = TabsRootCommonProps &
-  (
-    | {
-        /** Controlled active tab value. */
-        value: string;
-        defaultValue?: never;
-      }
-    | {
-        /** Value of the tab active by default (uncontrolled). */
-        defaultValue: string;
-        value?: never;
-      }
-  );
 
 export interface TabsListProps extends PartProps<"div"> {}
 
@@ -74,7 +63,7 @@ export interface TabsPanelProps extends PartProps<"div"> {
 /**
  * Switch between related panels of content, composed from parts.
  *
- * Supports uncontrolled (`defaultValue`) and controlled (`value`/`onChange`)
+ * Supports uncontrolled (`defaultValue`) and controlled (`value`/`onValueChange`)
  * usage.
  *
  * ```tsx
@@ -91,7 +80,7 @@ export interface TabsPanelProps extends PartProps<"div"> {
 function TabsRoot({
   defaultValue,
   value: controlled,
-  onChange,
+  onValueChange,
   className,
   children,
   ...rest
@@ -104,9 +93,9 @@ function TabsRoot({
   const setValue = useCallback(
     (next: string) => {
       if (!isControlled) setUncontrolled(next);
-      onChange?.(next);
+      onValueChange?.(next);
     },
-    [isControlled, onChange],
+    [isControlled, onValueChange],
   );
 
   // The tabs, keyed by value. `tabCount` mirrors the map's size so an effect

@@ -16,7 +16,7 @@ export default function Example() {
     <Field.Root className="slider-with-marks">
       <Field.Label>Target soil moisture</Field.Label>
       <Field.Description>The irrigation runs until the bed's sensor reads this.</Field.Description>
-      <Range name="moisture" min={0} max={100} step={5} defaultValue={50} marks={MARKS} />
+      <Range.Control name="moisture" min={0} max={100} step={5} defaultValue={50} marks={MARKS} />
     </Field.Root>
   );
 }

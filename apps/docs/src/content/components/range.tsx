@@ -20,10 +20,10 @@ const doc: ComponentContent = {
       title: "Basic usage",
       description:
         "Rendered bare, the control needs an aria-label; a Field.Label (below) is the usual way to name it.",
-      code: `<Range defaultValue={40} aria-label="Value" />`,
+      code: `<Range.Control defaultValue={40} aria-label="Value" />`,
       render: () => (
         <div style={{ maxInlineSize: "22rem", inlineSize: "100%" }}>
-          <Range defaultValue={40} aria-label="Value" />
+          <Range.Control defaultValue={40} aria-label="Value" />
         </div>
       ),
     },
@@ -34,7 +34,7 @@ const doc: ComponentContent = {
       code: `<Field.Root>
   <Field.Label>Volume</Field.Label>
   <Field.Description>Applies to alerts only.</Field.Description>
-  <Range defaultValue={70} />
+  <Range.Control defaultValue={70} />
 </Field.Root>`,
       render: () => <RangeFieldDemo />,
     },
@@ -43,7 +43,7 @@ const doc: ComponentContent = {
       description: "Snap to increments with the step prop.",
       code: `<Field.Root>
   <Field.Label>Fertiliser (kg)</Field.Label>
-  <Range min={0} max={100} step={10} defaultValue={30} />
+  <Range.Control min={0} max={100} step={10} defaultValue={30} />
 </Field.Root>`,
       render: () => <RangeStepsDemo />,
     },
@@ -53,7 +53,7 @@ const doc: ComponentContent = {
         "marks are points on the track: they go to a <datalist> the input references, so the thumb snaps to them, and the stylesheet draws a tick under each.",
       code: `<Field.Root>
   <Field.Label>Zoom</Field.Label>
-  <Range min={0} max={100} defaultValue={50} marks={[{ value: 0 }, { value: 25 }, { value: 50 }, { value: 75 }, { value: 100 }]} />
+  <Range.Control min={0} max={100} defaultValue={50} marks={[{ value: 0 }, { value: 25 }, { value: 50 }, { value: 75 }, { value: 100 }]} />
 </Field.Root>`,
       render: () => <RangeMarksDemo />,
     },
@@ -63,7 +63,7 @@ const doc: ComponentContent = {
         "A mark's label is written under its tick, aligned to where the thumb sits at that value. Label the ends, or the values that mean something; the ticks in between can stay bare.",
       code: `<Field.Root>
   <Field.Label>Fertiliser</Field.Label>
-  <Range
+  <Range.Control
     min={0}
     max={100}
     step={25}
@@ -84,7 +84,7 @@ const doc: ComponentContent = {
       code: `<Field.Root>
   <Field.Label>Volume</Field.Label>
   <Range.Root>
-    <Range defaultValue={70} />
+    <Range.Control defaultValue={70} />
     <Range.Output labels={{ value: (n) => \`\${n}%\` }} />
   </Range.Root>
 </Field.Root>`,
@@ -97,7 +97,7 @@ const doc: ComponentContent = {
       code: `<Field.Root>
   <Field.Label>Year</Field.Label>
   <Range.Root>
-    <Range min={1990} max={2030} step={5} defaultValue={2010} marks={[{ value: 1990, label: "1990" }, { value: 2010, label: "2010" }, { value: 2030, label: "2030" }]} />
+    <Range.Control min={1990} max={2030} step={5} defaultValue={2010} marks={[{ value: 1990, label: "1990" }, { value: 2010, label: "2010" }, { value: 2030, label: "2030" }]} />
     <Range.Output labels={{ value: String }} />
   </Range.Root>
 </Field.Root>`,
@@ -109,7 +109,7 @@ const doc: ComponentContent = {
         "disabled reaches the native input: the track and thumb dim, the value stays readable, and the control leaves the Tab sequence.",
       code: `<Field.Root>
   <Field.Label>Alert volume</Field.Label>
-  <Range defaultValue={50} disabled />
+  <Range.Control defaultValue={50} disabled />
 </Field.Root>`,
       render: () => <RangeDisabledDemo />,
     },
@@ -130,7 +130,7 @@ const doc: ComponentContent = {
 
 <Field.Root>
   <Field.Label>Volume: {volume}</Field.Label>
-  <Range
+  <Range.Control
     value={volume}
     onChange={(e) => setVolume(e.target.valueAsNumber)}
   />
@@ -151,7 +151,7 @@ const doc: ComponentContent = {
 
   parts: [
     {
-      name: "Range",
+      name: "Range.Control",
       description:
         "The native range input. It self-wires inside Field.Root; Range.Root is optional when composing an output.",
       props: [

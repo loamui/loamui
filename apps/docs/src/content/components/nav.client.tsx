@@ -4,36 +4,20 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { Menu, Nav, useScrollSpy } from "@loamui/core";
 import Link from "next/link";
+import { IconLayoutGrid, IconFolder, IconUsers, IconChevronDown } from "@tabler/icons-react";
 
 const rail: CSSProperties = { inlineSize: "100%", maxInlineSize: "16rem" };
 
 function DashboardIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
-    </svg>
-  );
+  return <IconLayoutGrid aria-hidden />;
 }
 
 function FolderIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-    </svg>
-  );
+  return <IconFolder aria-hidden />;
 }
 
 function PeopleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <circle cx="9" cy="8" r="3.5" />
-      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
-      <path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4.5-6.2" />
-    </svg>
-  );
+  return <IconUsers aria-hidden />;
 }
 
 /** A side nav for an application, named by its Title, with icons. */
@@ -236,19 +220,7 @@ export function NavInlineDemo() {
 }
 
 function Chevron() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
+  return <IconChevronDown aria-hidden />;
 }
 
 const row: CSSProperties = { display: "flex", flexWrap: "wrap", gap: "var(--loam-space-3xs)" };

@@ -66,7 +66,9 @@ export default function Example() {
           srcSet="https://picsum.photos/id/292/400/225 400w, https://picsum.photos/id/292/800/450 800w"
         />
         <p className="meta">
-          <Badge>Guide</Badge>
+          <Badge.Root>
+            <Badge.Text>Guide</Badge.Text>
+          </Badge.Root>
           <Time value="2026-09-01" locale="en-GB" dateStyle="long" />
         </p>
         <h3 id={title}>

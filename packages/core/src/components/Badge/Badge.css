@@ -52,19 +52,12 @@
     }
   }
 
-  /* The status dot carries the raw channel — a swatch, not text. */
-  span.dot {
-    background: var(--_color);
-    block-size: 0.5em;
-    border-radius: var(--loam-radius-full);
-    flex: none;
-    inline-size: 0.5em;
-
-    /* Background paint is dropped in forced colors; the dot survives as an
-       outline in the text colour. */
-    @media (forced-colors: active) {
-      border: max(1px, 0.12em) solid CanvasText;
-    }
+  /* A real element for the label, so it can shrink and truncate; bare text in
+     the flex row is an anonymous item and can do neither. */
+  span.text {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   :scope:has(svg) {

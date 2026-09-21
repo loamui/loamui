@@ -95,7 +95,9 @@ export default function Example() {
                 loading="lazy"
               />
               <p className="meta">
-                <Badge>Guide</Badge>
+                <Badge.Root>
+                  <Badge.Text>Guide</Badge.Text>
+                </Badge.Root>
               </p>
               <h3 id={`${instanceId}-article-carousel-picking-french-beans`}>
                 Picking French beans at their best
@@ -130,7 +132,9 @@ export default function Example() {
                 loading="lazy"
               />
               <p className="meta">
-                <Badge>Harvest</Badge>
+                <Badge.Root>
+                  <Badge.Text>Harvest</Badge.Text>
+                </Badge.Root>
               </p>
               <h3 id={`${instanceId}-article-carousel-haymaking`}>
                 Haymaking on the member fields
@@ -165,7 +169,9 @@ export default function Example() {
                 loading="lazy"
               />
               <p className="meta">
-                <Badge>Plants</Badge>
+                <Badge.Root>
+                  <Badge.Text>Plants</Badge.Text>
+                </Badge.Root>
               </p>
               <h3 id={`${instanceId}-article-carousel-spring-buds`}>
                 A closer look at spring buds
@@ -200,7 +206,9 @@ export default function Example() {
                 loading="lazy"
               />
               <p className="meta">
-                <Badge>Spring</Badge>
+                <Badge.Root>
+                  <Badge.Text>Spring</Badge.Text>
+                </Badge.Root>
               </p>
               <h3 id={`${instanceId}-article-carousel-woodland-tulips`}>
                 Tulips at the woodland edge
@@ -235,7 +243,9 @@ export default function Example() {
                 loading="lazy"
               />
               <p className="meta">
-                <Badge>Notes</Badge>
+                <Badge.Root>
+                  <Badge.Text>Notes</Badge.Text>
+                </Badge.Root>
               </p>
               <h3 id={`${instanceId}-article-carousel-changing-weather`}>
                 Reading the weather over the fields

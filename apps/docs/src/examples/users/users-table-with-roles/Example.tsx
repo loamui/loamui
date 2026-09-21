@@ -81,20 +81,20 @@ export default function Example() {
   const instanceId = useId();
   return (
     <form className="users-table-with-roles" method="post" action="/team/roles">
-      <Table>
-        <caption>Team members and their roles. Change a role, then save.</caption>
-        <thead>
-          <tr>
+      <Table.Root>
+        <Table.Caption>Team members and their roles. Change a role, then save.</Table.Caption>
+        <Table.Thead>
+          <Table.Tr>
             <Table.Th>Member</Table.Th>
             <Table.Th>Role</Table.Th>
             <Table.Th>Last active</Table.Th>
             <Table.Th>Status</Table.Th>
-          </tr>
-        </thead>
-        <tbody>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {MEMBERS.map((member) => (
-            <tr key={member.id}>
-              <th scope="row">
+            <Table.Tr key={member.id}>
+              <Table.Th scope="row">
                 <span className="member">
                   <Avatar.Root aria-hidden>
                     <Avatar.Image src={`https://picsum.photos/id/${member.photo}/96/96`} alt="" />
@@ -110,42 +110,45 @@ export default function Example() {
                     <span>{member.email}</span>
                   </span>
                 </span>
-              </th>
-              <td className="role">
+              </Table.Th>
+              <Table.Td className="role">
                 <label className="loam-VisuallyHidden" htmlFor={`${instanceId}-role-${member.id}`}>
                   Role for {member.name}
                 </label>
-                <Select
+                <Select.Root
                   id={`${instanceId}-role-${member.id}`}
                   name={`role[${member.id}]`}
                   defaultValue={member.role}
                 >
                   {ROLES.map((role) => (
-                    <option key={role.value} value={role.value}>
+                    <Select.Option key={role.value} value={role.value}>
                       {role.label}
-                    </option>
+                    </Select.Option>
                   ))}
-                </Select>
-              </td>
-              <td>
+                </Select.Root>
+              </Table.Td>
+              <Table.Td>
                 {member.lastActive ? (
                   <Time value={member.lastActive} locale="en-GB" relative={{ now: NOW }} />
                 ) : (
                   <span className="never">Not yet</span>
                 )}
-              </td>
-              <td>
+              </Table.Td>
+              <Table.Td>
                 <span className={member.status}>
-                  <Badge>
-                    <Badge.Dot />
-                    {STATUS[member.status]}
-                  </Badge>
+                  <Badge.Root>
+                    {" "}
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+                      <circle cx="8" cy="8" r="4" />
+                    </svg>
+                    <Badge.Text>{STATUS[member.status]}</Badge.Text>
+                  </Badge.Root>
                 </span>
-              </td>
-            </tr>
+              </Table.Td>
+            </Table.Tr>
           ))}
-        </tbody>
-      </Table>
+        </Table.Tbody>
+      </Table.Root>
       <div className="actions">
         <Button type="submit">Save roles</Button>
       </div>

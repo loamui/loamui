@@ -9,7 +9,9 @@ export function HeroDemo() {
   return (
     <section className="demo-hero">
       <div style={{ "--loam-context": "primary" } as CSSProperties}>
-        <Badge>New</Badge>
+        <Badge.Root>
+          <Badge.Text>New</Badge.Text>
+        </Badge.Root>
       </div>
       <h2>Modern UI primitives for agent-assisted developers.</h2>
       <p className="description">
@@ -29,7 +31,10 @@ export function PlanDemo() {
   return (
     <Card className="demo-plan" style={{ "--loam-context": "primary" } as CSSProperties}>
       <h3>
-        Team <Badge>Most popular</Badge>
+        Team{" "}
+        <Badge.Root>
+          <Badge.Text>Most popular</Badge.Text>
+        </Badge.Root>
       </h3>
       <p className="price">
         <Price value={24} currency="GBP">

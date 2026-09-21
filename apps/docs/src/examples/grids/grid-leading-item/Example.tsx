@@ -30,7 +30,9 @@ export default function Example() {
         <li className="lead">
           <Card render={<article aria-labelledby={`${instanceId}-grid-leading-item-lead`} />}>
             <p className="eyebrow">
-              <Badge>Start here</Badge>
+              <Badge.Root>
+                <Badge.Text>Start here</Badge.Text>
+              </Badge.Root>
             </p>
             <h3 id={`${instanceId}-grid-leading-item-lead`}>Your first year of seed saving</h3>
             <p>

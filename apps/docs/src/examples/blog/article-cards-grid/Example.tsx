@@ -59,7 +59,9 @@ export default function Example() {
               height="450"
             />
             <p className="meta">
-              <Badge>{article.category}</Badge>
+              <Badge.Root>
+                <Badge.Text>{article.category}</Badge.Text>
+              </Badge.Root>
               <Time value={article.date} locale="en-GB" dateStyle="long" />
             </p>
             <h3 id={`${instanceId}-article-${article.slug}-title`}>

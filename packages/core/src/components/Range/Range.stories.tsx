@@ -3,7 +3,7 @@ import { Field, Range } from "../../index.js";
 
 const meta = {
   title: "Inputs/Range",
-  component: Range,
+  component: Range.Control,
   tags: ["autodocs"],
   parameters: {
     docs: {
@@ -31,10 +31,10 @@ const meta = {
   render: (args) => (
     <Field.Root>
       <Field.Label>Irrigation level</Field.Label>
-      <Range {...args} />
+      <Range.Control {...args} />
     </Field.Root>
   ),
-} satisfies Meta<typeof Range>;
+} satisfies Meta<typeof Range.Control>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -46,7 +46,7 @@ export const Steps: Story = {
   render: (args) => (
     <Field.Root>
       <Field.Label>Field count</Field.Label>
-      <Range {...args} />
+      <Range.Control {...args} />
     </Field.Root>
   ),
 };
@@ -65,7 +65,7 @@ export const WithError: Story = {
     <Field.Root invalid>
       <Field.Label>Irrigation level</Field.Label>
       <Field.Error>Choose a level of at least 20</Field.Error>
-      <Range {...args} />
+      <Range.Control {...args} />
     </Field.Root>
   ),
 };

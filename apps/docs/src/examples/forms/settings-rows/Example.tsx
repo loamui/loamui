@@ -35,11 +35,11 @@ export default function Example() {
               </Field.Description>
             </div>
             <div className="control">
-              <Select name="reminders" defaultValue="monthly">
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-                <option value="never">Never</option>
-              </Select>
+              <Select.Root name="reminders" defaultValue="monthly">
+                <Select.Option value="weekly">Weekly</Select.Option>
+                <Select.Option value="monthly">Monthly</Select.Option>
+                <Select.Option value="never">Never</Select.Option>
+              </Select.Root>
             </div>
           </div>
         </Field.Root>

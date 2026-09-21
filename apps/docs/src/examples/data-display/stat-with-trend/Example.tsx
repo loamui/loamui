@@ -11,7 +11,8 @@ export default function Example() {
       <dt>Orders posted this week</dt>
       <dd className="value">3,904</dd>
       <dd className="trend">
-        <Badge>
+        <Badge.Root>
+          {" "}
           <svg
             viewBox="0 0 16 16"
             fill="none"
@@ -21,8 +22,8 @@ export default function Example() {
           >
             <path d="M3 11l5-5 5 5" />
           </svg>
-          Up 18% on last week
-        </Badge>
+          <Badge.Text>Up 18% on last week</Badge.Text>
+        </Badge.Root>
         <svg
           className="sparkline"
           viewBox="0 0 80 24"

@@ -64,7 +64,9 @@ export default function Example() {
       <div>
         <header>
           <p className="eyebrow">
-            <Badge>Offer</Badge>
+            <Badge.Root>
+              <Badge.Text>Offer</Badge.Text>
+            </Badge.Root>
             <span>Until 30 November · bare-root season</span>
           </p>
           <h2 id={titleId}>Members save 20% on fruit plants</h2>

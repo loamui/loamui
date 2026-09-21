@@ -12,36 +12,36 @@ const VARIETIES = [
 
 export default function Example() {
   return (
-    <Table className="table-reviews" highlightOnHover>
-      <caption>
+    <Table.Root className="table-reviews" highlightOnHover>
+      <Table.Caption>
         Member reviews of the most-grown varieties, to 8 September 2026: the rating, the count, and
         how many would grow it again.
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col">Variety</th>
-          <th scope="col" className="number">
+      </Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th scope="col">Variety</Table.Th>
+          <Table.Th scope="col" className="number">
             Listed since
-          </th>
-          <th scope="col">Rating</th>
-          <th scope="col" className="number">
+          </Table.Th>
+          <Table.Th scope="col">Rating</Table.Th>
+          <Table.Th scope="col" className="number">
             Reviews
-          </th>
-          <th scope="col" className="split">
+          </Table.Th>
+          <Table.Th scope="col" className="split">
             Would grow again
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+          </Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
         {VARIETIES.map((row) => (
-          <tr key={row.variety}>
-            <th scope="row">{row.variety}</th>
-            <td className="number">{row.since}</td>
-            <td>
+          <Table.Tr key={row.variety}>
+            <Table.Th scope="row">{row.variety}</Table.Th>
+            <Table.Td className="number">{row.since}</Table.Td>
+            <Table.Td>
               <Rating readOnly label="Average rating" value={row.rating} />
-            </td>
-            <td className="number">{row.reviews.toLocaleString("en")}</td>
-            <td className="split">
+            </Table.Td>
+            <Table.Td className="number">{row.reviews.toLocaleString("en")}</Table.Td>
+            <Table.Td className="split">
               <span className="yes">
                 {row.again}%<span className="loam-VisuallyHidden"> would</span>
               </span>
@@ -49,10 +49,10 @@ export default function Example() {
               <span className="no">
                 {100 - row.again}%<span className="loam-VisuallyHidden"> would not</span>
               </span>
-            </td>
-          </tr>
+            </Table.Td>
+          </Table.Tr>
         ))}
-      </tbody>
-    </Table>
+      </Table.Tbody>
+    </Table.Root>
   );
 }

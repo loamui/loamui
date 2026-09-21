@@ -35,7 +35,7 @@ export function PackageCommands({ name }: { name: PackageCommandName }) {
       {name === "skill" && (
         <Field.Root>
           <Field.Label>Coding agent</Field.Label>
-          <Select
+          <Select.Root
             value={agent}
             onChange={(event) => {
               const selected = SKILL_AGENTS.find((item) => item.value === event.target.value);
@@ -43,16 +43,16 @@ export function PackageCommands({ name }: { name: PackageCommandName }) {
             }}
           >
             {SKILL_AGENTS.map((item) => (
-              <option key={item.value} value={item.value}>
+              <Select.Option key={item.value} value={item.value}>
                 {item.label}
-              </option>
+              </Select.Option>
             ))}
-          </Select>
+          </Select.Root>
         </Field.Root>
       )}
       <Tabs.Root
         value={manager}
-        onChange={(value) => {
+        onValueChange={(value) => {
           const selected = PACKAGE_MANAGERS.find((item) => item === value);
           if (selected) select(selected);
         }}

@@ -192,7 +192,7 @@ describe("Inline controls composed inside Field", () => {
       <Field.Root>
         <Field.Label>Volume</Field.Label>
         <Field.Description>Between 0 and 100.</Field.Description>
-        <Field.Control render={<Range />} />
+        <Field.Control render={<Range.Control />} />
       </Field.Root>,
     );
 
@@ -206,7 +206,7 @@ describe("Inline controls composed inside Field", () => {
       <>
         <Field.Root>
           <Field.Label>Brightness</Field.Label>
-          <Range defaultValue={40} />
+          <Range.Control defaultValue={40} />
         </Field.Root>
       </>,
     );
@@ -237,7 +237,7 @@ describe("Inline controls composed inside Field", () => {
             Off
           </Field.Label>
         </Field.Item>
-        <Range aria-label="Off" disabled />
+        <Range.Control aria-label="Off" disabled />
       </>,
     );
     expect(container.querySelector("[data-disabled]")).toBeNull();

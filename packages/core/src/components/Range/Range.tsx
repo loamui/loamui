@@ -67,7 +67,7 @@ function toNumber(value: string | number | readonly string[] | undefined, fallba
  * with `value` + `onChange`. Inside a `Range.Root` it reports its value,
  * so a `Range.Output` beside it can show it.
  */
-function RangeInput({
+export function RangeInput({
   min = 0,
   max = 100,
   step = 1,
@@ -167,7 +167,7 @@ export interface RangeRootProps extends PartProps<"div"> {}
  * a fraction) so the output can sit above the thumb. Not needed for a
  * range without an output.
  */
-function RangeRoot({ className, style, children, ...rest }: RangeRootProps) {
+export function RangeRoot({ className, style, children, ...rest }: RangeRootProps) {
   const field = useFieldControlProps();
   const autoId = useId();
   const [state, setState] = useState<RangeState | null>(null);
@@ -227,7 +227,7 @@ export interface RangeOutputProps extends PartProps<"output"> {
  * `<output for>` bound to the input, positioned above the thumb. Belongs
  * inside `Range.Root`, beside the `Range`.
  */
-function RangeOutput({ labels, className, children, ...rest }: RangeOutputProps) {
+export function RangeOutput({ labels, className, children, ...rest }: RangeOutputProps) {
   const ctx = useRangeContext("Range.Output");
   const format = labels?.value ?? ((n: number) => new Intl.NumberFormat().format(n));
   const value = ctx.state?.value;
@@ -239,12 +239,3 @@ function RangeOutput({ labels, className, children, ...rest }: RangeOutputProps)
     </output>
   );
 }
-
-/**
- * Callable, because the common case is one slider: `<Range max={10} />`. The
- * labelled wrapper and the readout are parts for when a recipe needs them.
- */
-export const Range = Object.assign(RangeInput, {
-  Root: RangeRoot,
-  Output: RangeOutput,
-});

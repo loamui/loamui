@@ -1,2 +1,2 @@
-export { Badge } from "./Badge.js";
-export type { BadgeProps, BadgeDotProps } from "./Badge.js";
+export * as Badge from "./Badge.parts.js";
+export type { BadgeRootProps, BadgeRootProps as BadgeProps, BadgeTextProps } from "./Badge.js";

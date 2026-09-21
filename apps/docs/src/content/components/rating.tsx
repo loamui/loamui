@@ -18,7 +18,7 @@ const doc: ComponentContent = {
     {
       title: "Prefilled",
       description:
-        "An existing rating the user can change. Use defaultValue for a form the browser owns, or value with onChange to hold the number yourself, exactly as with RadioGroup.",
+        "An existing rating the user can change. Use defaultValue for a form the browser owns, or value with onValueChange to hold the number yourself, exactly as with RadioGroup.",
       code: `<Rating label="Rate this recipe" defaultValue={4} />`,
       render: () => <Rating label="Rate this recipe" defaultValue={4} />,
     },
@@ -138,7 +138,7 @@ const doc: ComponentContent = {
       name: "value",
       type: "number",
       description:
-        "Controlled rating (pair with onChange). With readOnly, the rating shown; halves allowed.",
+        "Controlled rating (pair with onValueChange). With readOnly, the rating shown; halves allowed.",
     },
     {
       name: "defaultValue",
@@ -153,7 +153,7 @@ const doc: ComponentContent = {
         'The words the stars speak, for another language or a different noun: star names each input ("3 stars"), value names the picture in display mode ("3.5 out of 5").',
     },
     {
-      name: "onChange",
+      name: "onValueChange",
       type: "(value: number) => void",
       description: "Fires with the number of stars chosen.",
     },

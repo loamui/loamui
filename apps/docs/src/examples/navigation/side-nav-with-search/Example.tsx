@@ -47,9 +47,12 @@ export default function Example() {
                 <path d="m3 8 9 5 9-5M12 13v8" />
               </svg>
               <span className="label">Orders</span>
-              <Badge>
-                12<span className="loam-VisuallyHidden"> to pack</span>
-              </Badge>
+              <Badge.Root>
+                {" "}
+                <Badge.Text>
+                  12<span className="loam-VisuallyHidden"> to pack</span>
+                </Badge.Text>
+              </Badge.Root>
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
@@ -67,9 +70,12 @@ export default function Example() {
                 <path d="m3 7 9 6 9-6" />
               </svg>
               <span className="label">Messages</span>
-              <Badge>
-                3<span className="loam-VisuallyHidden"> unread</span>
-              </Badge>
+              <Badge.Root>
+                {" "}
+                <Badge.Text>
+                  3<span className="loam-VisuallyHidden"> unread</span>
+                </Badge.Text>
+              </Badge.Root>
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>

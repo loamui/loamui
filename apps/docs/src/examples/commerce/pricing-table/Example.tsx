@@ -15,7 +15,9 @@ export default function Example() {
           }
         >
           <p className="eyebrow">
-            <Badge>Starter</Badge>
+            <Badge.Root>
+              <Badge.Text>Starter</Badge.Text>
+            </Badge.Root>
           </p>
           <h3 id={`${instanceId}-pricing-table-seedling`}>Seedling</h3>
           <p className="description">For a windowsill, a balcony or a first raised bed.</p>
@@ -48,7 +50,9 @@ export default function Example() {
           }
         >
           <p className="eyebrow">
-            <Badge>Most popular</Badge>
+            <Badge.Root>
+              <Badge.Text>Most popular</Badge.Text>
+            </Badge.Root>
           </p>
           <h3 id={`${instanceId}-pricing-table-grower`}>Grower</h3>
           <p className="description">For a household that sows most of what it eats.</p>
@@ -78,7 +82,9 @@ export default function Example() {
           }
         >
           <p className="eyebrow">
-            <Badge>With a bed</Badge>
+            <Badge.Root>
+              <Badge.Text>With a bed</Badge.Text>
+            </Badge.Root>
           </p>
           <h3 id={`${instanceId}-pricing-table-plot-holder`}>Plot-holder</h3>
           <p className="description">For a grower who wants ground of their own.</p>

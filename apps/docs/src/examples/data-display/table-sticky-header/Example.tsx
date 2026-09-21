@@ -19,33 +19,33 @@ const STOCK = [
 export default function Example() {
   return (
     <div className="table-sticky-header">
-      <Table stickyHeader className="stock">
-        <caption>
+      <Table.Root stickyHeader className="stock">
+        <Table.Caption>
           Seed stock on 8 September 2026, all 12 lines: scroll the list and the header stays.
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">Variety</th>
-            <th scope="col">Type</th>
-            <th scope="col" className="number">
+        </Table.Caption>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th scope="col">Variety</Table.Th>
+            <Table.Th scope="col">Type</Table.Th>
+            <Table.Th scope="col" className="number">
               In stock
-            </th>
-            <th scope="col" className="number">
+            </Table.Th>
+            <Table.Th scope="col" className="number">
               Germination
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+            </Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {STOCK.map((row) => (
-            <tr key={row.variety}>
-              <th scope="row">{row.variety}</th>
-              <td>{row.type}</td>
-              <td className="number">{row.packets.toLocaleString("en")}</td>
-              <td className="number">{row.germination}%</td>
-            </tr>
+            <Table.Tr key={row.variety}>
+              <Table.Th scope="row">{row.variety}</Table.Th>
+              <Table.Td>{row.type}</Table.Td>
+              <Table.Td className="number">{row.packets.toLocaleString("en")}</Table.Td>
+              <Table.Td className="number">{row.germination}%</Table.Td>
+            </Table.Tr>
           ))}
-        </tbody>
-      </Table>
+        </Table.Tbody>
+      </Table.Root>
     </div>
   );
 }

@@ -72,13 +72,13 @@ export default function Example() {
             <path d="M8 9V6a4 4 0 0 1 8 0v3" />
           </svg>
           Basket
-          <Badge>
-            {lines.length}
+          <Badge.Root>
+            {" "}
+            <Badge.Text>{lines.length}</Badge.Text>
             <span className="loam-VisuallyHidden">
-              {" "}
-              {lines.length === 1 ? "product" : "products"}
+              <Badge.Text>{lines.length === 1 ? "product" : "products"}</Badge.Text>
             </span>
-          </Badge>
+          </Badge.Root>
         </Drawer.Trigger>
         <Drawer.Popup side="end">
           <div className="basket">

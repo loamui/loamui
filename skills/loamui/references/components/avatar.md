@@ -98,7 +98,7 @@ Both parts are present in server HTML. Fallback remains visible until hydration 
 
 ### Avatar.Root
 
-A span containing one Image and a Fallback, or plain content.
+A span containing one Image and a Fallback, or plain content. It holds parts, not content props: what shows is composed, never derived behind your back.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

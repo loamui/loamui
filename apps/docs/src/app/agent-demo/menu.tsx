@@ -39,7 +39,10 @@ export function RestaurantMenu({ headingLevel = 2 }: { headingLevel?: 2 | 3 }) {
         <Card key={title}>
           <div className={`menu-card ${status}`}>
             <CourseHeading>
-              {title} <Badge>{label}</Badge>
+              {title}{" "}
+              <Badge.Root>
+                <Badge.Text>{label}</Badge.Text>
+              </Badge.Root>
             </CourseHeading>
             <dl>
               {dishes.map(([name, description, price]) => (

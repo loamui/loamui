@@ -23,7 +23,7 @@ import { Checkbox, Field } from "@loamui/core";
 One self-contained opt-in. The label is a complete statement of what ticking the box does, and the box starts unticked so every tick is a deliberate act.
 
 ```tsx
-<Field.Item><Field.Label><Checkbox  /> Subscribe to the newsletter</Field.Label></Field.Item>
+<Field.Item><Field.Label><Checkbox /> Subscribe to the newsletter</Field.Label></Field.Item>
 ```
 
 ### Checked
@@ -39,7 +39,7 @@ defaultChecked starts the box ticked for a form the browser owns; checked with o
 Field.Description is helper text under the label, joined to the box through aria-describedby, so the consequence of ticking is read with the choice.
 
 ```tsx
-<Field.Item><Field.Label><Checkbox  /> Share anonymised usage data</Field.Label><Field.Description>Helps us improve the product. You can opt out anytime.</Field.Description></Field.Item>
+<Field.Item><Field.Label><Checkbox /> Share anonymised usage data</Field.Label><Field.Description>Helps us improve the product. You can opt out anytime.</Field.Description></Field.Item>
 ```
 
 ### Disabled
@@ -58,7 +58,7 @@ Set invalid on Field.Root and compose Field.Error before the checkbox for its an
 ```tsx
 <Field.Root invalid>
   <Field.Error>Accept the terms of service to continue</Field.Error>
-  <><Field.Label><Checkbox  /> Accept the terms of service</Field.Label></>
+  <><Field.Label><Checkbox /> Accept the terms of service</Field.Label></>
 </Field.Root>
 ```
 
@@ -69,7 +69,7 @@ The bare Checkbox carries no label prop: it reads its id, aria-describedby and a
 ```tsx
 <Field.Root>
   <Field.Label>
-    <Checkbox  /> Subscribe to the newsletter
+    <Checkbox /> Subscribe to the newsletter
   </Field.Label>
   <Field.Description>A short summary, once a week.</Field.Description>
 </Field.Root>

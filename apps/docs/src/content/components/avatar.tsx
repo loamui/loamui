@@ -101,7 +101,8 @@ const doc: ComponentContent = {
   parts: [
     {
       name: "Avatar.Root",
-      description: "A span containing one Image and a Fallback, or plain content.",
+      description:
+        "A span containing one Image and a Fallback, or plain content. It holds parts, not content props: what shows is composed, never derived behind your back.",
       props: [
         {
           name: "...others",

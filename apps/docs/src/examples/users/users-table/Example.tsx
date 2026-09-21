@@ -53,10 +53,10 @@ const MEMBERS = [
 
 export default function Example() {
   return (
-    <Table className="users-table" highlightOnHover>
-      <caption>The co-op&rsquo;s stewards and staff, with how to reach them.</caption>
-      <thead>
-        <tr>
+    <Table.Root className="users-table" highlightOnHover>
+      <Table.Caption>The co-op&rsquo;s stewards and staff, with how to reach them.</Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
           <Table.Th>Member</Table.Th>
           <Table.Th>Role</Table.Th>
           <Table.Th>Email</Table.Th>
@@ -64,12 +64,12 @@ export default function Example() {
           <Table.Th>
             <span className="loam-VisuallyHidden">Actions</span>
           </Table.Th>
-        </tr>
-      </thead>
-      <tbody>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
         {MEMBERS.map((member) => (
-          <tr key={member.id}>
-            <th scope="row">
+          <Table.Tr key={member.id}>
+            <Table.Th scope="row">
               <span className="member">
                 <Avatar.Root aria-hidden>
                   <Avatar.Image src={`https://picsum.photos/id/${member.photo}/96/96`} alt="" />
@@ -82,15 +82,15 @@ export default function Example() {
                 </Avatar.Root>
                 {member.name}
               </span>
-            </th>
-            <td>{member.role}</td>
-            <td>
+            </Table.Th>
+            <Table.Td>{member.role}</Table.Td>
+            <Table.Td>
               <a href={`mailto:${member.email}`}>{member.email}</a>
-            </td>
-            <td className="phone">
+            </Table.Td>
+            <Table.Td className="phone">
               <a href={`tel:${member.tel}`}>{member.phone}</a>
-            </td>
-            <td className="actions">
+            </Table.Td>
+            <Table.Td className="actions">
               <Menu.Root>
                 <Menu.Trigger>
                   <svg
@@ -114,10 +114,10 @@ export default function Example() {
                   </form>
                 </Menu.Popup>
               </Menu.Root>
-            </td>
-          </tr>
+            </Table.Td>
+          </Table.Tr>
         ))}
-      </tbody>
-    </Table>
+      </Table.Tbody>
+    </Table.Root>
   );
 }

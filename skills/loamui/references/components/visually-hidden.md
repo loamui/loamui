@@ -24,7 +24,7 @@ The glyph is decoration and the words are the name. Nothing is visible in the bu
 
 ```tsx
 <Button>
-  <TrashIcon aria-hidden />
+  <IconTrash aria-hidden />
   <VisuallyHidden>Remove Climbing bean ‘Blue Lake’ seeds</VisuallyHidden>
 </Button>
 ```

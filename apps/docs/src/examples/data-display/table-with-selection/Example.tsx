@@ -35,52 +35,52 @@ export default function Example() {
 
   return (
     <div className="table-with-selection">
-      <Table className="orders" highlightOnHover>
-        <caption>Orders placed this week, each with a box to select it.</caption>
-        <thead>
-          <tr>
-            <th scope="col" className="select">
+      <Table.Root className="orders" highlightOnHover>
+        <Table.Caption>Orders placed this week, each with a box to select it.</Table.Caption>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th scope="col" className="select">
               <Checkbox
                 aria-label="Select all orders"
                 checked={all}
                 indeterminate={some}
                 onChange={toggleAll}
               />
-            </th>
-            <th scope="col">Order</th>
-            <th scope="col">Member</th>
-            <th scope="col">Placed</th>
-            <th scope="col" className="number">
+            </Table.Th>
+            <Table.Th scope="col">Order</Table.Th>
+            <Table.Th scope="col">Member</Table.Th>
+            <Table.Th scope="col">Placed</Table.Th>
+            <Table.Th scope="col" className="number">
               Items
-            </th>
-            <th scope="col" className="number">
+            </Table.Th>
+            <Table.Th scope="col" className="number">
               Total
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+            </Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {ORDERS.map((order) => (
-            <tr key={order.id}>
-              <td className="select">
+            <Table.Tr key={order.id}>
+              <Table.Td className="select">
                 <Checkbox
                   aria-label={`Select order ${order.id}`}
                   checked={selected.has(order.id)}
                   onChange={() => toggle(order.id)}
                 />
-              </td>
-              <th scope="row">{order.id}</th>
-              <td>{order.member}</td>
-              <td>
+              </Table.Td>
+              <Table.Th scope="row">{order.id}</Table.Th>
+              <Table.Td>{order.member}</Table.Td>
+              <Table.Td>
                 <Time value={order.placed} locale="en-GB" dateStyle="medium" />
-              </td>
-              <td className="number">{order.items}</td>
-              <td className="number">
+              </Table.Td>
+              <Table.Td className="number">{order.items}</Table.Td>
+              <Table.Td className="number">
                 <Price value={order.total} currency="GBP" locale="en-GB" />
-              </td>
-            </tr>
+              </Table.Td>
+            </Table.Tr>
           ))}
-        </tbody>
-      </Table>
+        </Table.Tbody>
+      </Table.Root>
       <p className="status" role="status">
         {selected.size === 0
           ? "No orders selected."

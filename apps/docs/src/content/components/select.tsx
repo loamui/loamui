@@ -18,11 +18,11 @@ const doc: ComponentContent = {
         "Inside Field.Root the select reads its id from the field, so Field.Label is wired without any props.",
       code: `<Field.Root>
   <Field.Label>Country</Field.Label>
-  <Select>
-    <option>Canada</option>
-    <option>United Kingdom</option>
-    <option>United States</option>
-  </Select>
+  <Select.Root>
+    <Select.Option>Canada</Select.Option>
+    <Select.Option>United Kingdom</Select.Option>
+    <Select.Option>United States</Select.Option>
+  </Select.Root>
 </Field.Root>`,
       render: () => <SelectBasicDemo />,
     },
@@ -32,12 +32,12 @@ const doc: ComponentContent = {
         "An unanswered start is an option like any other: a first child with an empty value, disabled so it can never be chosen. The select starts on it, so a required field the user skipped is caught, and the prompt reads muted until answered.",
       code: `<Field.Root>
   <Field.Label>Country</Field.Label>
-  <Select>
-    <option value="" disabled>Pick a country</option>
-    <option value="ca">Canada</option>
-    <option value="uk">United Kingdom</option>
-    <option value="us">United States</option>
-  </Select>
+  <Select.Root>
+    <Select.Option value="" disabled>Pick a country</Select.Option>
+    <Select.Option value="ca">Canada</Select.Option>
+    <Select.Option value="uk">United Kingdom</Select.Option>
+    <Select.Option value="us">United States</Select.Option>
+  </Select.Root>
 </Field.Root>`,
       render: () => <SelectPlaceholderDemo />,
     },
@@ -47,16 +47,16 @@ const doc: ComponentContent = {
         "Options pass straight to the native select, so optgroup and disabled work exactly as the platform defines them.",
       code: `<Field.Root>
   <Field.Label>Instrument</Field.Label>
-  <Select>
-    <optgroup label="Strings">
-      <option>Violin</option>
-      <option>Cello</option>
-    </optgroup>
-    <optgroup label="Brass">
-      <option>Trumpet</option>
-      <option disabled>Tuba (unavailable)</option>
-    </optgroup>
-  </Select>
+  <Select.Root>
+    <Select.OptGroup label="Strings">
+      <Select.Option>Violin</Select.Option>
+      <Select.Option>Cello</Select.Option>
+    </Select.OptGroup>
+    <Select.OptGroup label="Brass">
+      <Select.Option>Trumpet</Select.Option>
+      <Select.Option disabled>Tuba (unavailable)</Select.Option>
+    </Select.OptGroup>
+  </Select.Root>
 </Field.Root>`,
       render: () => <SelectGroupsDemo />,
     },
@@ -67,10 +67,10 @@ const doc: ComponentContent = {
       code: `<Field.Root>
   <Field.Label>Country</Field.Label>
   <Field.Description>Where you are resident for tax.</Field.Description>
-  <Select>
-    <option>United States</option>
-    <option>Canada</option>
-  </Select>
+  <Select.Root>
+    <Select.Option>United States</Select.Option>
+    <Select.Option>Canada</Select.Option>
+  </Select.Root>
 </Field.Root>`,
       render: () => <SelectDescriptionDemo />,
     },
@@ -81,12 +81,12 @@ const doc: ComponentContent = {
       code: `<Field.Root invalid>
   <Field.Label>Country</Field.Label>
   <Field.Error>Select a country</Field.Error>
-  <Select>
-    <option value="" disabled>Pick a country</option>
-    <option>Canada</option>
-    <option>United Kingdom</option>
-    <option>United States</option>
-  </Select>
+  <Select.Root>
+    <Select.Option value="" disabled>Pick a country</Select.Option>
+    <Select.Option>Canada</Select.Option>
+    <Select.Option>United Kingdom</Select.Option>
+    <Select.Option>United States</Select.Option>
+  </Select.Root>
 </Field.Root>`,
       render: () => <SelectErrorDemo />,
     },

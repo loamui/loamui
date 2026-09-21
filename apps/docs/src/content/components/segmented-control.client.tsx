@@ -3,6 +3,13 @@
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { SegmentedControl, VisuallyHidden } from "@loamui/core";
+import {
+  IconDeviceDesktop,
+  IconSun,
+  IconMoon,
+  IconList,
+  IconLayoutGrid,
+} from "@tabler/icons-react";
 
 const frame: CSSProperties = {
   display: "grid",
@@ -11,51 +18,23 @@ const frame: CSSProperties = {
 };
 
 function SystemIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <rect x="3" y="4" width="18" height="12" rx="2" />
-      <path d="M8 20h8M12 16v4" strokeLinecap="round" />
-    </svg>
-  );
+  return <IconDeviceDesktop aria-hidden />;
 }
 
 function LightIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <circle cx="12" cy="12" r="4" />
-      <path
-        d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
+  return <IconSun aria-hidden />;
 }
 
 function DarkIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" strokeLinejoin="round" />
-    </svg>
-  );
+  return <IconMoon aria-hidden />;
 }
 
 function ListIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" />
-    </svg>
-  );
+  return <IconList aria-hidden />;
 }
 
 function GridIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <rect x="3" y="3" width="7" height="7" rx="1" />
-      <rect x="14" y="3" width="7" height="7" rx="1" />
-      <rect x="3" y="14" width="7" height="7" rx="1" />
-      <rect x="14" y="14" width="7" height="7" rx="1" />
-    </svg>
-  );
+  return <IconLayoutGrid aria-hidden />;
 }
 
 type Scheme = "system" | "light" | "dark";

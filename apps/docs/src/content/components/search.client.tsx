@@ -1,15 +1,7 @@
 "use client";
 
 import { Field, Search } from "@loamui/core";
-
-function MagnifierIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" strokeLinecap="round" />
-    </svg>
-  );
-}
+import { IconSearch } from "@tabler/icons-react";
 
 export function SearchSiteDemo() {
   return (
@@ -38,7 +30,7 @@ export function SearchIconDemo() {
       <Search.Label>Search this site</Search.Label>
       <Search.Input />
       <Search.Button aria-label="Search">
-        <MagnifierIcon />
+        <IconSearch aria-hidden />
       </Search.Button>
     </Search.Root>
   );

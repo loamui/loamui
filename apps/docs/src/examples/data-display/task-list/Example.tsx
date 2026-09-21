@@ -20,7 +20,9 @@ export default function Example() {
             Your details
           </a>
           <div className="status complete" id={`${instanceId}-task-list-details-status`}>
-            <Badge>Completed</Badge>
+            <Badge.Root>
+              <Badge.Text>Completed</Badge.Text>
+            </Badge.Root>
           </div>
         </li>
         <li>
@@ -35,7 +37,9 @@ export default function Example() {
             Pick a bed on one of the member fields, or join the waiting list for Ludlow.
           </p>
           <div className="status started" id={`${instanceId}-task-list-plot-status`}>
-            <Badge>In progress</Badge>
+            <Badge.Root>
+              <Badge.Text>In progress</Badge.Text>
+            </Badge.Root>
           </div>
         </li>
         <li>
@@ -50,7 +54,9 @@ export default function Example() {
             A council tax letter or a utility bill from the last three months.
           </p>
           <div className="status" id={`${instanceId}-task-list-proof-status`}>
-            <Badge>Not started</Badge>
+            <Badge.Root>
+              <Badge.Text>Not started</Badge.Text>
+            </Badge.Root>
           </div>
         </li>
         <li>
@@ -64,7 +70,9 @@ export default function Example() {
             Available once every section above is complete.
           </p>
           <div className="status" id={`${instanceId}-task-list-fee-status`}>
-            <Badge>Cannot start yet</Badge>
+            <Badge.Root>
+              <Badge.Text>Cannot start yet</Badge.Text>
+            </Badge.Root>
           </div>
         </li>
       </ul>

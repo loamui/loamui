@@ -23,7 +23,9 @@ export default function Example() {
         height="450"
       />
       <p className="meta">
-        <Badge>Harvest</Badge>
+        <Badge.Root>
+          <Badge.Text>Harvest</Badge.Text>
+        </Badge.Root>
       </p>
       <h3 id={`${instanceId}-article-card-footer-title`}>
         <a href="/journal/curing-winter-squash">Curing winter squash for storage</a>

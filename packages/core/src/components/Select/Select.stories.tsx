@@ -15,7 +15,7 @@ const frameworkOptions = (
 
 const meta = {
   title: "Inputs/Select",
-  component: Select,
+  component: Select.Root,
   tags: ["autodocs"],
   parameters: {
     docs: {
@@ -36,10 +36,10 @@ const meta = {
   render: (args) => (
     <Field.Root>
       <Field.Label>Framework</Field.Label>
-      <Select {...args} />
+      <Select.Root {...args} />
     </Field.Root>
   ),
-} satisfies Meta<typeof Select>;
+} satisfies Meta<typeof Select.Root>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -50,16 +50,16 @@ export const Grouped: Story = {
   render: () => (
     <Field.Root>
       <Field.Label>Instrument</Field.Label>
-      <Select>
-        <optgroup label="Strings">
-          <option>Violin</option>
-          <option>Cello</option>
-        </optgroup>
-        <optgroup label="Brass">
-          <option>Trumpet</option>
-          <option disabled>Tuba (unavailable)</option>
-        </optgroup>
-      </Select>
+      <Select.Root>
+        <Select.OptGroup label="Strings">
+          <Select.Option>Violin</Select.Option>
+          <Select.Option>Cello</Select.Option>
+        </Select.OptGroup>
+        <Select.OptGroup label="Brass">
+          <Select.Option>Trumpet</Select.Option>
+          <Select.Option disabled>Tuba (unavailable)</Select.Option>
+        </Select.OptGroup>
+      </Select.Root>
     </Field.Root>
   ),
 };
@@ -69,7 +69,7 @@ export const WithDescription: Story = {
     <Field.Root>
       <Field.Label>Framework</Field.Label>
       <Field.Description>You can change this later in settings.</Field.Description>
-      <Select {...args} />
+      <Select.Root {...args} />
     </Field.Root>
   ),
 };
@@ -79,7 +79,7 @@ export const WithError: Story = {
     <Field.Root invalid>
       <Field.Label>Framework</Field.Label>
       <Field.Error>Select a framework</Field.Error>
-      <Select {...args} />
+      <Select.Root {...args} />
     </Field.Root>
   ),
 };
@@ -88,7 +88,7 @@ export const Required: Story = {
   render: (args) => (
     <Field.Root>
       <Field.Label>Framework</Field.Label>
-      <Select {...args} required />
+      <Select.Root {...args} required />
     </Field.Root>
   ),
 };

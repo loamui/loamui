@@ -44,10 +44,14 @@ export default function Example() {
         <h3 id={`${instanceId}-card-with-badges-title`}>Hedgerow Nursery, Ludlow</h3>
         <ul className="tags" role="list" aria-label="Where and when">
           <li>
-            <Badge>Shropshire</Badge>
+            <Badge.Root>
+              <Badge.Text>Shropshire</Badge.Text>
+            </Badge.Root>
           </li>
           <li>
-            <Badge>Open Tuesday to Saturday</Badge>
+            <Badge.Root>
+              <Badge.Text>Open Tuesday to Saturday</Badge.Text>
+            </Badge.Root>
           </li>
         </ul>
       </div>

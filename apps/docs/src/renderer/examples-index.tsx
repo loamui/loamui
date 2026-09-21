@@ -71,20 +71,20 @@ export function ExamplesIndex() {
           <label className="usesLabel" htmlFor={usesId}>
             Uses
           </label>
-          <Select
+          <Select.Root
             id={usesId}
             className="uses"
             wrapperProps={{ className: "usesField" }}
             value={uses}
             onChange={(e) => setUses(e.target.value)}
           >
-            <option value="">Any component</option>
+            <Select.Option value="">Any component</Select.Option>
             {componentsUsed().map((c) => (
-              <option key={c.name} value={c.name}>
+              <Select.Option key={c.name} value={c.name}>
                 {c.name} ({c.count})
-              </option>
+              </Select.Option>
             ))}
-          </Select>
+          </Select.Root>
         </div>
         <p className="status" role="status">
           {filtered ? `${shown} matching` : ""}
@@ -146,7 +146,9 @@ export function ExamplesIndex() {
                       <ul className="cardUses" aria-label="Uses">
                         {e.meta.uses.map((name) => (
                           <li key={name}>
-                            <Badge size="sm">{name}</Badge>
+                            <Badge.Root size="sm">
+                              <Badge.Text>{name}</Badge.Text>
+                            </Badge.Root>
                           </li>
                         ))}
                       </ul>

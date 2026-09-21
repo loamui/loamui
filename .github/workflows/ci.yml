@@ -24,6 +24,7 @@ jobs:
       - run: pnpm test:checks
       - run: pnpm check:scope
       - run: pnpm check:spacing
+      - run: pnpm check:anatomy
       - run: pnpm check:examples
       - run: pnpm -r lint
       - run: pnpm lint:md

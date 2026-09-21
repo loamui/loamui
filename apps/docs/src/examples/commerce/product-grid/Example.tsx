@@ -68,7 +68,9 @@ export default function Example() {
             />
             {product.offer && (
               <p className="meta">
-                <Badge>{product.offer}</Badge>
+                <Badge.Root>
+                  <Badge.Text>{product.offer}</Badge.Text>
+                </Badge.Root>
               </p>
             )}
             <h3 id={`${instanceId}-product-${product.slug}-title`}>

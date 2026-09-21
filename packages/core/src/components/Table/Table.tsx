@@ -64,7 +64,7 @@ export interface TableProps extends PartProps<"div"> {
  */
 const TableContext = createContext(false);
 
-function TableRoot({
+export function TableRoot({
   striped,
   highlightOnHover,
   withColumnBorders,
@@ -151,9 +151,9 @@ export interface TableThProps extends PartProps<"th"> {
  * value to say what a press will do. Belongs inside a `Table`, whose
  * stylesheet sets it.
  */
-function TableTh({ sort, scope = "col", className, children, ...rest }: TableThProps) {
+export function TableTh({ sort, scope = "col", className, children, ...rest }: TableThProps) {
   if (!use(TableContext)) {
-    throw new Error("Table.Th must be rendered inside <Table>.");
+    throw new Error("Table.Th must be rendered inside <Table.Root>.");
   }
   return (
     <ThContext value={sort ?? null}>
@@ -195,7 +195,7 @@ export interface TableSortButtonProps extends ButtonProps {
  * around it carries the current sort as `aria-sort`. The glyph is the
  * stylesheet's, keyed off that same attribute.
  */
-function TableSortButton({
+export function TableSortButton({
   onSortChange,
   labels,
   onClick,
@@ -225,12 +225,3 @@ function TableSortButton({
     </Button>
   );
 }
-
-/**
- * Callable, because a table is one element: `<Table>` renders the scroll
- * region and the table. Th and SortButton are the cells that need behaviour.
- */
-export const Table = Object.assign(TableRoot, {
-  Th: TableTh,
-  SortButton: TableSortButton,
-});

@@ -51,10 +51,10 @@ export function TableSortDemo() {
           style={{ maxInlineSize: "18rem" }}
         />
       </Field.Root>
-      <Table>
-        <caption>People</caption>
-        <thead>
-          <tr>
+      <Table.Root>
+        <Table.Caption>People</Table.Caption>
+        <Table.Thead>
+          <Table.Tr>
             {columns.map((column) => (
               <Table.Th
                 key={column.key}
@@ -67,18 +67,18 @@ export function TableSortDemo() {
                 </Table.SortButton>
               </Table.Th>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {rows.map((p) => (
-            <tr key={p.name}>
-              <td>{p.name}</td>
-              <td>{p.role}</td>
-              <td>{p.joined}</td>
-            </tr>
+            <Table.Tr key={p.name}>
+              <Table.Td>{p.name}</Table.Td>
+              <Table.Td>{p.role}</Table.Td>
+              <Table.Td>{p.joined}</Table.Td>
+            </Table.Tr>
           ))}
-        </tbody>
-      </Table>
+        </Table.Tbody>
+      </Table.Root>
     </div>
   );
 }

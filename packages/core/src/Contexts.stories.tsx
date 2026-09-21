@@ -66,7 +66,7 @@ export const DangerContext: Story = {
             Also delete backups
           </Field.Label>
         </Field.Root>
-        <Range defaultValue={70} aria-label="Retention days" />
+        <Range.Control defaultValue={70} aria-label="Retention days" />
         <Input aria-label="Workspace name" />
         <div style={{ display: "flex", gap: "0.75rem" }}>
           <Button>Delete</Button>

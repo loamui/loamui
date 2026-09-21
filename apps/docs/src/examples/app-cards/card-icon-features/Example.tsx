@@ -42,7 +42,9 @@ export default function Example() {
       <div className="head">
         <h3 id={`${instanceId}-card-icon-features-title`}>Succulent bowl</h3>
         <p className="flag">
-          <Badge>Gift idea</Badge>
+          <Badge.Root>
+            <Badge.Text>Gift idea</Badge.Text>
+          </Badge.Root>
         </p>
       </div>
       <p className="description">

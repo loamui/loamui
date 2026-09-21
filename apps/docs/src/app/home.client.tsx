@@ -45,7 +45,9 @@ export function HeroShowcase() {
               } as CSSProperties
             }
           >
-            <Badge>Pro</Badge>
+            <Badge.Root>
+              <Badge.Text>Pro</Badge.Text>
+            </Badge.Root>
           </div>
         </header>
 
@@ -87,10 +89,13 @@ export function HeroShowcase() {
               } as CSSProperties
             }
           >
-            <Badge>
-              <Badge.Dot />
-              {saved.notify ? "Notifications on" : "Muted"}
-            </Badge>
+            <Badge.Root>
+              {" "}
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+                <circle cx="8" cy="8" r="4" />
+              </svg>
+              <Badge.Text>{saved.notify ? "Notifications on" : "Muted"}</Badge.Text>
+            </Badge.Root>
           </span>
         </div>
 
@@ -115,18 +120,18 @@ export function ContextShowcase() {
       <div className="controls">
         <Field.Root>
           <Field.Label>Region meaning</Field.Label>
-          <Select value={context} onChange={(event) => setContext(event.currentTarget.value)}>
-            <option value="primary">Neutral</option>
-            <option value="success">Success</option>
-            <option value="danger">Danger</option>
-          </Select>
+          <Select.Root value={context} onChange={(event) => setContext(event.currentTarget.value)}>
+            <Select.Option value="primary">Neutral</Select.Option>
+            <Select.Option value="success">Success</Select.Option>
+            <Select.Option value="danger">Danger</Select.Option>
+          </Select.Root>
         </Field.Root>
         <Field.Root>
           <Field.Label>Available space</Field.Label>
-          <Select value={space} onChange={(event) => setSpace(event.currentTarget.value)}>
-            <option value="wide">Wide</option>
-            <option value="narrow">Narrow</option>
-          </Select>
+          <Select.Root value={space} onChange={(event) => setSpace(event.currentTarget.value)}>
+            <Select.Option value="wide">Wide</Select.Option>
+            <Select.Option value="narrow">Narrow</Select.Option>
+          </Select.Root>
         </Field.Root>
       </div>
       <div
@@ -141,7 +146,9 @@ export function ContextShowcase() {
         <Card>
           <div className="site-ContextSample">
             <header>
-              <Badge>Live example</Badge>
+              <Badge.Root>
+                <Badge.Text>Live example</Badge.Text>
+              </Badge.Root>
               <h4>One region, shared styles</h4>
             </header>
             <p>The same content adapts to its surroundings.</p>

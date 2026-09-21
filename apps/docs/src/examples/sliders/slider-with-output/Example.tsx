@@ -9,7 +9,7 @@ export default function Example() {
       <Field.Label>Row spacing</Field.Label>
       <Field.Description>Carrots do well at 15 cm; brassicas want the room.</Field.Description>
       <Range.Root>
-        <Range name="spacing" min={15} max={60} step={5} defaultValue={30} />
+        <Range.Control name="spacing" min={15} max={60} step={5} defaultValue={30} />
         <Range.Output labels={{ value: (n) => `${n} cm` }} />
       </Range.Root>
     </Field.Root>

@@ -79,7 +79,7 @@ export default function Example() {
           />
         </div>
         <label htmlFor={controlId}>Reveal the colour photograph</label>
-        <Range
+        <Range.Control
           id={controlId}
           aria-describedby={`${controlId}-caption`}
           aria-valuetext={`${position}% colour photograph`}

@@ -1,6 +1,7 @@
 import { CopyButton } from "@loamui/core";
 import type { ComponentContent } from "@/renderer/types";
 import { CopyButtonOnCopyDemo } from "./copy-button.client";
+import { IconCopy } from "@tabler/icons-react";
 
 const doc: ComponentContent = {
   slug: "copy-button",
@@ -19,31 +20,11 @@ const doc: ComponentContent = {
       description:
         "An svg child is detected by Button as an icon, and the aria-label names the button and makes it square. The label swaps to Copied only when the button has visible text: an icon-only button keeps its icon and its name, and the confirmation is carried by the announcement alone, so pair it with a Tooltip or nearby text where a sighted user needs to see it.",
       code: `<CopyButton value="pnpm add @loamui/core" aria-label="Copy install command">
-  <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-    <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"
-      stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
+  <IconCopy aria-hidden />
 </CopyButton>`,
       render: () => (
         <CopyButton value="pnpm add @loamui/core" aria-label="Copy install command">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-            <rect
-              x="9"
-              y="9"
-              width="11"
-              height="11"
-              rx="2"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            />
-            <path
-              d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+          <IconCopy aria-hidden />
         </CopyButton>
       ),
     },

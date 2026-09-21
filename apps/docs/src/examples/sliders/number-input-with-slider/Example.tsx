@@ -47,7 +47,7 @@ export default function Example() {
           <span aria-hidden="true">°C</span>
         </div>
         <Field.Item>
-          <Range
+          <Range.Control
             aria-describedby={`${instanceId}-temperature-hint`}
             id={`${instanceId}-propagator-slider`}
             aria-labelledby={`${instanceId}-propagator-label`}

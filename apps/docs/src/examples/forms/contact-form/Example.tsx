@@ -31,16 +31,16 @@ export default function Example() {
       </Field.Root>
       <Field.Root>
         <Field.Label>What is it about?</Field.Label>
-        <Select name="subject" required>
-          <option value="" disabled>
+        <Select.Root name="subject" required>
+          <Select.Option value="" disabled>
             Choose a subject
-          </option>
-          <option value="order">An order</option>
-          <option value="seed">Seed availability</option>
-          <option value="membership">Membership</option>
-          <option value="trade">Trade orders</option>
-          <option value="other">Something else</option>
-        </Select>
+          </Select.Option>
+          <Select.Option value="order">An order</Select.Option>
+          <Select.Option value="seed">Seed availability</Select.Option>
+          <Select.Option value="membership">Membership</Select.Option>
+          <Select.Option value="trade">Trade orders</Select.Option>
+          <Select.Option value="other">Something else</Select.Option>
+        </Select.Root>
       </Field.Root>
       <Field.Root>
         <Field.Label>Message</Field.Label>

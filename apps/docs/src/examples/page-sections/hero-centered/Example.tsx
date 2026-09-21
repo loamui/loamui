@@ -9,7 +9,9 @@ export default function Example() {
   return (
     <section className="hero-centered" aria-labelledby={`${instanceId}-hero-centered-title`}>
       <p className="eyebrow">
-        <Badge>Membership</Badge>
+        <Badge.Root>
+          <Badge.Text>Membership</Badge.Text>
+        </Badge.Root>
         <span>From £3 a month</span>
       </p>
       <h1 id={`${instanceId}-hero-centered-title`}>Join the co-op that grows its own seed.</h1>

@@ -31,7 +31,7 @@ export interface RatingProps extends Omit<PartProps<"fieldset">, "defaultValue" 
   name?: string;
   /**
    * The rating. In input mode this is the controlled value (pair with
-   * `onChange`); in display mode it is the rating shown, halves allowed.
+   * `onValueChange`); in display mode it is the rating shown, halves allowed.
    */
   value?: number;
   /** Initial rating for uncontrolled input usage. */
@@ -43,7 +43,7 @@ export interface RatingProps extends Omit<PartProps<"fieldset">, "defaultValue" 
    */
   labels?: RatingLabels;
   /** Fires with the number of stars chosen. */
-  onChange?: (value: number) => void;
+  onValueChange?: (value: number) => void;
   /**
    * Display mode: the stars are a picture of `value` rather than inputs.
    * No radios, no fieldset — just the glyphs and their accessible name.
@@ -85,7 +85,7 @@ function Star() {
  * the surrounding type.
  *
  * ```tsx
- * <Rating label="Rate this recipe" onChange={setStars} />
+ * <Rating label="Rate this recipe" onValueChange={setStars} />
  * <Rating readOnly label="Average rating" value={4.5} />
  * ```
  */
@@ -97,7 +97,7 @@ export function Rating({
   name,
   value,
   defaultValue,
-  onChange,
+  onValueChange,
   readOnly,
   required,
   disabled,
@@ -146,7 +146,7 @@ export function Rating({
 
   const groupName = name ?? autoId;
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange?.(Number(event.currentTarget.value));
+    onValueChange?.(Number(event.currentTarget.value));
   };
 
   return (

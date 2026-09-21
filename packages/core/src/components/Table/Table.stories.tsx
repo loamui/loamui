@@ -30,33 +30,33 @@ const fields: Field[] = [
   { name: "Long Ley", crop: "Grass ley", area: "35 ha", yield: "—" },
 ];
 
-const FieldTable = (args: React.ComponentProps<typeof Table>) => (
-  <Table {...args}>
-    <caption>Field register — 2026 season</caption>
-    <thead>
-      <tr>
-        <th scope="col">Field</th>
-        <th scope="col">Crop</th>
-        <th scope="col">Area</th>
-        <th scope="col">Yield</th>
-      </tr>
-    </thead>
-    <tbody>
+const FieldTable = (args: React.ComponentProps<typeof Table.Root>) => (
+  <Table.Root {...args}>
+    <Table.Caption>Field register — 2026 season</Table.Caption>
+    <Table.Thead>
+      <Table.Tr>
+        <Table.Th scope="col">Field</Table.Th>
+        <Table.Th scope="col">Crop</Table.Th>
+        <Table.Th scope="col">Area</Table.Th>
+        <Table.Th scope="col">Yield</Table.Th>
+      </Table.Tr>
+    </Table.Thead>
+    <Table.Tbody>
       {fields.map((field) => (
-        <tr key={field.name}>
-          <th scope="row">{field.name}</th>
-          <td>{field.crop}</td>
-          <td>{field.area}</td>
-          <td>{field.yield}</td>
-        </tr>
+        <Table.Tr key={field.name}>
+          <Table.Th scope="row">{field.name}</Table.Th>
+          <Table.Td>{field.crop}</Table.Td>
+          <Table.Td>{field.area}</Table.Td>
+          <Table.Td>{field.yield}</Table.Td>
+        </Table.Tr>
       ))}
-    </tbody>
-  </Table>
+    </Table.Tbody>
+  </Table.Root>
 );
 
 const meta = {
   title: "Data display/Table",
-  component: Table,
+  component: Table.Root,
   tags: ["autodocs"],
   parameters: {
     docs: {
@@ -79,7 +79,7 @@ const meta = {
     stickyHeader: { control: "boolean" },
   },
   render: (args) => <FieldTable {...args} />,
-} satisfies Meta<typeof Table>;
+} satisfies Meta<typeof Table.Root>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -102,31 +102,31 @@ export const WithColumnBorders: Story = {
 export const StickyHeader: Story = {
   args: { stickyHeader: true },
   render: (args) => (
-    <Table {...args} style={{ "--loam-table-block-size": "12rem" } as React.CSSProperties}>
-      <caption>Field register — every season on record</caption>
-      <thead>
-        <tr>
-          <th scope="col">Field</th>
-          <th scope="col">Crop</th>
-          <th scope="col">Area</th>
-          <th scope="col">Yield</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table.Root {...args} style={{ "--loam-table-block-size": "12rem" } as React.CSSProperties}>
+      <Table.Caption>Field register — every season on record</Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th scope="col">Field</Table.Th>
+          <Table.Th scope="col">Crop</Table.Th>
+          <Table.Th scope="col">Area</Table.Th>
+          <Table.Th scope="col">Yield</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
         {[2020, 2021, 2022, 2023, 2024, 2025, 2026].flatMap((year) =>
           fields.map((field) => (
-            <tr key={`${year}-${field.name}`}>
-              <th scope="row">
+            <Table.Tr key={`${year}-${field.name}`}>
+              <Table.Th scope="row">
                 {field.name} ({year})
-              </th>
-              <td>{field.crop}</td>
-              <td>{field.area}</td>
-              <td>{field.yield}</td>
-            </tr>
+              </Table.Th>
+              <Table.Td>{field.crop}</Table.Td>
+              <Table.Td>{field.area}</Table.Td>
+              <Table.Td>{field.yield}</Table.Td>
+            </Table.Tr>
           )),
         )}
-      </tbody>
-    </Table>
+      </Table.Tbody>
+    </Table.Root>
   ),
 };
 
@@ -145,37 +145,37 @@ export const CaptionBottom: Story = {
 export const OverflowScroll: Story = {
   render: (args) => (
     <div style={{ maxWidth: "24rem" }}>
-      <Table {...args}>
-        <caption>Field register — full agronomy record</caption>
-        <thead>
-          <tr>
-            <th scope="col">Field</th>
-            <th scope="col">Crop</th>
-            <th scope="col">Variety</th>
-            <th scope="col">Area</th>
-            <th scope="col">Drilled</th>
-            <th scope="col">Harvested</th>
-            <th scope="col">Yield</th>
-            <th scope="col">Soil type</th>
-            <th scope="col">Agronomist</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table.Root {...args}>
+        <Table.Caption>Field register — full agronomy record</Table.Caption>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th scope="col">Field</Table.Th>
+            <Table.Th scope="col">Crop</Table.Th>
+            <Table.Th scope="col">Variety</Table.Th>
+            <Table.Th scope="col">Area</Table.Th>
+            <Table.Th scope="col">Drilled</Table.Th>
+            <Table.Th scope="col">Harvested</Table.Th>
+            <Table.Th scope="col">Yield</Table.Th>
+            <Table.Th scope="col">Soil type</Table.Th>
+            <Table.Th scope="col">Agronomist</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {fields.map((field) => (
-            <tr key={field.name}>
-              <th scope="row">{field.name}</th>
-              <td>{field.crop}</td>
-              <td>Group 3 milling</td>
-              <td>{field.area}</td>
-              <td>12 Oct 2025</td>
-              <td>04 Aug 2026</td>
-              <td>{field.yield}</td>
-              <td>Clay loam</td>
-              <td>J. Alderton</td>
-            </tr>
+            <Table.Tr key={field.name}>
+              <Table.Th scope="row">{field.name}</Table.Th>
+              <Table.Td>{field.crop}</Table.Td>
+              <Table.Td>Group 3 milling</Table.Td>
+              <Table.Td>{field.area}</Table.Td>
+              <Table.Td>12 Oct 2025</Table.Td>
+              <Table.Td>04 Aug 2026</Table.Td>
+              <Table.Td>{field.yield}</Table.Td>
+              <Table.Td>Clay loam</Table.Td>
+              <Table.Td>J. Alderton</Table.Td>
+            </Table.Tr>
           ))}
-        </tbody>
-      </Table>
+        </Table.Tbody>
+      </Table.Root>
     </div>
   ),
 };

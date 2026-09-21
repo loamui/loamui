@@ -13,7 +13,7 @@ export const meta: ExampleMeta = {
       "Each checkbox is named by its title alone through aria-labelledby and described by the detail through aria-describedby, so a screen reader hears the option and then what it costs; the option that cannot be chosen says why in its description rather than vanishing.",
   },
   composition:
-    "Card is rendered as each label through render and Checkbox.Control is the bare control a Field would otherwise wire; the example puts the three parts on a two-column grid and adds the checked edge, nothing of the Card's own.",
+    "Card is rendered as each label through render and a Checkbox with no label of its own is the bare control a Field would otherwise wire; the example puts the three parts on a two-column grid and adds the checked edge, nothing of the Card's own.",
   tags: ["add-ons", "extras", "checkbox cards", "options", "membership"],
   order: 10,
 };

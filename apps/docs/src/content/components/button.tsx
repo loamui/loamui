@@ -2,6 +2,7 @@ import { Button, Checkbox, Loader, VisuallyHidden, Field } from "@loamui/core";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
 import { Example } from "@/renderer/Example";
+import { IconCheck } from "@tabler/icons-react";
 
 const doc: ComponentContent = {
   slug: "button",
@@ -138,61 +139,34 @@ const doc: ComponentContent = {
       description:
         "There are no leftSection or rightSection props. An svg child is detected via :has() and gets flex layout, a gap and 1em sizing. Icon-only is detected from the accessible name: the aria-label (or aria-labelledby) an icon-only button needs anyway, or a VisuallyHidden child beside the icon, and it becomes square.",
       code: `<Button>
-  <svg viewBox="0 -0.5 25 25" fill="none" aria-hidden>
-    <path d="M5.5 12.5L10.167 17L19.5 8" stroke="currentColor"
-      strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
+  <IconCheck aria-hidden />
   Approve
 </Button>
 
 <Button aria-label="Approve">
-  <svg>…</svg>
+  <IconCheck aria-hidden />
 </Button>
 
 <Button>
-  <svg>…</svg>
+  <IconCheck aria-hidden />
   <VisuallyHidden>Approve</VisuallyHidden>
 </Button>`,
       render: () => (
         <div style={{ display: "flex", gap: "var(--loam-space-l)", flexWrap: "wrap" }}>
           <Example label="With a label">
             <Button>
-              <svg viewBox="0 -0.5 25 25" fill="none" aria-hidden>
-                <path
-                  d="M5.5 12.5L10.167 17L19.5 8"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <IconCheck aria-hidden />
               Approve
             </Button>
           </Example>
           <Example label="Icon-only: squares from its aria-label">
             <Button aria-label="Approve">
-              <svg viewBox="0 -0.5 25 25" fill="none" aria-hidden>
-                <path
-                  d="M5.5 12.5L10.167 17L19.5 8"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <IconCheck aria-hidden />
             </Button>
           </Example>
           <Example label="Icon-only: named by hidden text">
             <Button>
-              <svg viewBox="0 -0.5 25 25" fill="none" aria-hidden>
-                <path
-                  d="M5.5 12.5L10.167 17L19.5 8"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <IconCheck aria-hidden />
               <VisuallyHidden>Approve</VisuallyHidden>
             </Button>
           </Example>

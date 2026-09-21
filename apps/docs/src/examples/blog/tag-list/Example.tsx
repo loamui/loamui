@@ -5,26 +5,54 @@ export default function Example() {
   return (
     <ul className="tag-list" role="list" aria-label="Tags">
       <li>
-        <Badge size="lg" render={<a href="/tags/broad-beans">Broad beans</a>} />
-      </li>
-      <li>
-        <Badge
+        <Badge.Root
           size="lg"
           render={
-            <a href="/tags/autumn-sowing" aria-current="page">
-              Autumn sowing
+            <a href="/tags/broad-beans">
+              <Badge.Text>Broad beans</Badge.Text>
             </a>
           }
         />
       </li>
       <li>
-        <Badge size="lg" render={<a href="/tags/legumes">Legumes</a>} />
+        <Badge.Root
+          size="lg"
+          render={
+            <a href="/tags/autumn-sowing" aria-current="page">
+              <Badge.Text>Autumn sowing</Badge.Text>
+            </a>
+          }
+        />
       </li>
       <li>
-        <Badge size="lg" render={<a href="/tags/overwintering">Overwintering</a>} />
+        <Badge.Root
+          size="lg"
+          render={
+            <a href="/tags/legumes">
+              <Badge.Text>Legumes</Badge.Text>
+            </a>
+          }
+        />
       </li>
       <li>
-        <Badge size="lg" render={<a href="/tags/pigeons">Pigeons</a>} />
+        <Badge.Root
+          size="lg"
+          render={
+            <a href="/tags/overwintering">
+              <Badge.Text>Overwintering</Badge.Text>
+            </a>
+          }
+        />
+      </li>
+      <li>
+        <Badge.Root
+          size="lg"
+          render={
+            <a href="/tags/pigeons">
+              <Badge.Text>Pigeons</Badge.Text>
+            </a>
+          }
+        />
       </li>
     </ul>
   );

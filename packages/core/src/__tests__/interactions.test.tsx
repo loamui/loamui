@@ -1312,19 +1312,19 @@ describe("Card", () => {
 
 describe("Table", () => {
   const table = (
-    <Table>
-      <caption>Invoices</caption>
-      <thead>
-        <tr>
-          <th>Invoice</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>INV-1</td>
-        </tr>
-      </tbody>
-    </Table>
+    <Table.Root>
+      <Table.Caption>Invoices</Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Invoice</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        <Table.Tr>
+          <Table.Td>INV-1</Table.Td>
+        </Table.Tr>
+      </Table.Tbody>
+    </Table.Root>
   );
 
   it("adds no tab stop while the table fits its container", async () => {
@@ -1344,9 +1344,14 @@ describe("Table", () => {
     const ref = { current: null as HTMLDivElement | null };
     const tableRef = { current: null as HTMLTableElement | null };
     const { container } = render(
-      <Table ref={ref} className="mine" data-testid="wrap" tableProps={{ ref: tableRef, id: "t" }}>
-        <caption>Invoices</caption>
-      </Table>,
+      <Table.Root
+        ref={ref}
+        className="mine"
+        data-testid="wrap"
+        tableProps={{ ref: tableRef, id: "t" }}
+      >
+        <Table.Caption>Invoices</Table.Caption>
+      </Table.Root>,
     );
     const wrap = container.querySelector(".loam-Table");
     expect(wrap).toHaveClass("mine");
@@ -1360,13 +1365,13 @@ describe("Table", () => {
     const clientWidth = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(400);
     try {
       render(
-        <Table labels={{ scrollable: "Tabelle" }}>
-          <tbody>
-            <tr>
-              <td>INV-1</td>
-            </tr>
-          </tbody>
-        </Table>,
+        <Table.Root labels={{ scrollable: "Tabelle" }}>
+          <Table.Tbody>
+            <Table.Tr>
+              <Table.Td>INV-1</Table.Td>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table.Root>,
       );
       expect(await screen.findByRole("region", { name: "Tabelle" })).toBeInTheDocument();
     } finally {

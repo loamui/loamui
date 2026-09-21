@@ -27,18 +27,18 @@ export default function Example() {
           <Input className="currency-amount" name="amount" inputMode="decimal" autoComplete="off" />
         </div>
         <Field.Root id={currencyId}>
-          <Select
+          <Select.Root
             name="currency"
             aria-label="Currency"
             value={currency}
             onChange={(e) => setCurrency(e.currentTarget.value)}
           >
             {CURRENCIES.map((c) => (
-              <option key={c.code} value={c.code}>
+              <Select.Option key={c.code} value={c.code}>
                 {c.code}
-              </option>
+              </Select.Option>
             ))}
-          </Select>
+          </Select.Root>
         </Field.Root>
       </div>
     </Field.Root>

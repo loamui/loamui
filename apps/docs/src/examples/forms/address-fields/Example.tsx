@@ -45,16 +45,20 @@ export default function Example() {
         </div>
         <Field.Root>
           <Field.Label>Country</Field.Label>
-          <Select name="country" autoComplete="section-delivery shipping country-name" required>
-            <option value="" disabled>
+          <Select.Root
+            name="country"
+            autoComplete="section-delivery shipping country-name"
+            required
+          >
+            <Select.Option value="" disabled>
               Choose a country
-            </option>
+            </Select.Option>
             {COUNTRIES.map((country) => (
-              <option key={country} value={country}>
+              <Select.Option key={country} value={country}>
                 {country}
-              </option>
+              </Select.Option>
             ))}
-          </Select>
+          </Select.Root>
         </Field.Root>
       </div>
     </Fieldset.Root>

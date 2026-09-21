@@ -43,14 +43,11 @@ No leftSection prop: an svg child is detected via :has(svg) and gets a gap and l
 <Tabs.Root defaultValue="files">
   <Tabs.List>
     <Tabs.Tab value="files">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-        <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0
-          2-2V8l-6-6H6Zm7 1.5L18.5 9H13V3.5Z" />
-      </svg>
+      <IconFile aria-hidden />
       Files
     </Tabs.Tab>
-    <Tabs.Tab value="team"><svg>…</svg> Team</Tabs.Tab>
-    <Tabs.Tab value="settings"><svg>…</svg> Settings</Tabs.Tab>
+    <Tabs.Tab value="team"><IconFile aria-hidden /> Team</Tabs.Tab>
+    <Tabs.Tab value="settings"><IconFile aria-hidden /> Settings</Tabs.Tab>
   </Tabs.List>
   <Tabs.Panel value="files">All your documents in one place.</Tabs.Panel>
   <Tabs.Panel value="team">Invite teammates and manage roles.</Tabs.Panel>
@@ -99,7 +96,7 @@ Many users never open a second tab, so nothing that everyone must see can live i
 
 ### View state stays out of the URL
 
-Switching a tab updates React state, not the URL; reloading returns to defaultValue and the back button ignores tab changes. When a view should be linkable, use the controlled form (value/onChange) and mirror the value in the query string yourself; if every view deserves its own URL, you want pages with links, not tabs.
+Switching a tab updates React state, not the URL; reloading returns to defaultValue and the back button ignores tab changes. When a view should be linkable, use the controlled form (value/onValueChange) and mirror the value in the query string yourself; if every view deserves its own URL, you want pages with links, not tabs.
 
 ## Accessibility
 
@@ -119,7 +116,7 @@ Owns the active value (controlled or uncontrolled) and renders the wrapper; all 
 | --- | --- | --- | --- |
 | `defaultValue` | `string` | — | Required initial tab value for uncontrolled usage. Omit only when value is supplied. |
 | `value` | `string` | — | Controlled active tab value. Required when defaultValue is omitted. |
-| `onChange` | `(value: string) => void` | — | Called with the new value when the active tab changes. |
+| `onValueChange` | `(value: string) => void` | — | Called with the new value when the active tab changes. |
 
 ### Tabs.List
 

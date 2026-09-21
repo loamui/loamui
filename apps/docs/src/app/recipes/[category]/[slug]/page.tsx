@@ -123,9 +123,13 @@ export default async function ExamplePage({
                 return (
                   <li key={name}>
                     {href ? (
-                      <Badge render={<Link href={href} />}>{name}</Badge>
+                      <Badge.Root render={<Link href={href} />}>
+                        <Badge.Text>{name}</Badge.Text>
+                      </Badge.Root>
                     ) : (
-                      <Badge>{name}</Badge>
+                      <Badge.Root>
+                        <Badge.Text>{name}</Badge.Text>
+                      </Badge.Root>
                     )}
                   </li>
                 );

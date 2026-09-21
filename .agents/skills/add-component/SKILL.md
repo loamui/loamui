@@ -35,7 +35,11 @@ component is the last resort, not the first.
    consumer's wrapper, not a library component.
 2. **Is it a native element the element-styles layer already dresses?** Then a
    scoped rule on a semantic element (see the Typography guide's "components are
-   yours to name"), not a React wrapper.
+   yours to name"), not a React wrapper. The exception is an element _inside a
+   component's own anatomy_: every element a component's scope styles has to be
+   reachable as a part, so `Table.Td` and `Select.Option` exist even though they
+   are pass-throughs. `pnpm check:anatomy` enforces this — see the
+   **Anatomy completeness** rule below.
 3. **Is it a value?** Then a token, not a component.
 4. **Does it genuinely need a new primitive** (a token or an element style)?
    That is the highest bar and needs a recorded ruling — components adapt to
@@ -100,6 +104,14 @@ Non-negotiables (full reasons in the README Standards section):
   Root, Image and Fallback with explicit child content. Field validation is
   explicit through Root invalid; message IDs register after hydration, with
   explicit ARIA links for initial server associations.
+- **Anatomy completeness.** Every element a component's scope CSS styles is
+  either content the consumer composes (an icon, detected with `:has(svg)`) or
+  a part the component exposes. Nothing in between: a namespace that styles
+  `td` while exposing only `Th` reads as a component for half a table. Mantine
+  names the same set through `stylesNames`/`classNames`; we have no config
+  props, so a part is how we expose it. `pnpm check:anatomy` fails on any
+  styled element that is neither, and records deliberate internals in its
+  `INTERNAL` map.
 - **Scope, don't BEM.** One `loam-` class on each scope root; parts are type
   selectors or short classes. **Add the donut** (`@scope (root) to
 ([class*="loam-"])`) whenever the scope hosts foreign content (children, a

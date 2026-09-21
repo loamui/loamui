@@ -71,19 +71,16 @@ There are no leftSection or rightSection props. An svg child is detected via :ha
 
 ```tsx
 <Button>
-  <svg viewBox="0 -0.5 25 25" fill="none" aria-hidden>
-    <path d="M5.5 12.5L10.167 17L19.5 8" stroke="currentColor"
-      strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
+  <IconCheck aria-hidden />
   Approve
 </Button>
 
 <Button aria-label="Approve">
-  <svg>…</svg>
+  <IconCheck aria-hidden />
 </Button>
 
 <Button>
-  <svg>…</svg>
+  <IconCheck aria-hidden />
   <VisuallyHidden>Approve</VisuallyHidden>
 </Button>
 ```

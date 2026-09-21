@@ -9,7 +9,7 @@ export function RangeFieldDemo() {
       <Field.Root>
         <Field.Label>Volume</Field.Label>
         <Field.Description>Applies to alerts only.</Field.Description>
-        <Range defaultValue={70} />
+        <Range.Control defaultValue={70} />
       </Field.Root>
     </div>
   );
@@ -20,7 +20,7 @@ export function RangeStepsDemo() {
     <div style={{ maxInlineSize: "22rem", inlineSize: "100%" }}>
       <Field.Root>
         <Field.Label>Fertiliser (kg)</Field.Label>
-        <Range min={0} max={100} step={10} defaultValue={30} />
+        <Range.Control min={0} max={100} step={10} defaultValue={30} />
       </Field.Root>
     </div>
   );
@@ -31,7 +31,7 @@ export function RangeDisabledDemo() {
     <div style={{ maxInlineSize: "22rem", inlineSize: "100%" }}>
       <Field.Root>
         <Field.Label>Locked</Field.Label>
-        <Range defaultValue={50} disabled />
+        <Range.Control defaultValue={50} disabled />
       </Field.Root>
     </div>
   );
@@ -43,7 +43,7 @@ export function RangeValueDemo() {
     <div style={{ maxInlineSize: "22rem", inlineSize: "100%" }}>
       <Field.Root>
         <Field.Label>Volume: {volume}</Field.Label>
-        <Range value={volume} onChange={(e) => setVolume(e.target.valueAsNumber)} />
+        <Range.Control value={volume} onChange={(e) => setVolume(e.target.valueAsNumber)} />
       </Field.Root>
     </div>
   );
@@ -54,7 +54,7 @@ export function RangeMarksDemo() {
     <div style={{ maxInlineSize: "22rem", inlineSize: "100%" }}>
       <Field.Root>
         <Field.Label>Zoom</Field.Label>
-        <Range
+        <Range.Control
           min={0}
           max={100}
           defaultValue={50}
@@ -70,7 +70,7 @@ export function RangeMarkLabelsDemo() {
     <div style={{ maxInlineSize: "22rem", inlineSize: "100%" }}>
       <Field.Root>
         <Field.Label>Fertiliser</Field.Label>
-        <Range
+        <Range.Control
           min={0}
           max={100}
           step={25}
@@ -92,7 +92,7 @@ export function RangeOutputDemo() {
       <Field.Root>
         <Field.Label>Volume</Field.Label>
         <Range.Root>
-          <Range defaultValue={70} />
+          <Range.Control defaultValue={70} />
           <Range.Output labels={{ value: (n) => `${n}%` }} />
         </Range.Root>
       </Field.Root>
@@ -106,7 +106,7 @@ export function RangeBoundsDemo() {
       <Field.Root>
         <Field.Label>Year</Field.Label>
         <Range.Root>
-          <Range
+          <Range.Control
             min={1990}
             max={2030}
             step={5}
