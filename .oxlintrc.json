@@ -59,7 +59,7 @@
     {
       "files": [
         "**/apps/ui/src/content/*.tsx",
-        "**/apps/docs/src/content/components/*.tsx",
+        "**/apps/docs/src/content/components/**/*.tsx",
         "**/apps/docs/src/examples/**/Example.tsx"
       ],
       "rules": {
@@ -116,7 +116,7 @@
     // The modal example demonstrates initial-focus placement, which is
     // what autofocus is for inside a just-opened dialog.
     {
-      "files": ["**/modal.examples.tsx"],
+      "files": ["**/content/components/modal/examples.tsx"],
       "rules": {
         "jsx-a11y/no-autofocus": "off"
       }

@@ -434,7 +434,7 @@ const contentDir = join(ROOT, "src", "content", "components");
 let componentTwins = 0;
 try {
   for (const meta of COMPONENTS) {
-    const mod = await import(join(contentDir, `${meta.slug}.tsx`));
+    const mod = await import(join(contentDir, meta.slug, "index.tsx"));
     writeComponentTwin(
       meta.slug,
       componentMarkdown(mod.default as ComponentContent, meta.name, meta.description),
