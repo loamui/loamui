@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { Avatar, Badge, Button, Card, Checkbox, Field, Input, Select } from "@loamui/core";
 import "./home-demo.css";
+import { IconBell, IconBellOff } from "@tabler/icons-react";
 
 /** Interactive "settings" card that shows real LoamUI components in the hero. */
 export function HeroShowcase() {
@@ -90,10 +91,7 @@ export function HeroShowcase() {
             }
           >
             <Badge.Root>
-              {" "}
-              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-                <circle cx="8" cy="8" r="4" />
-              </svg>
+              {saved.notify ? <IconBell aria-hidden /> : <IconBellOff aria-hidden />}
               <Badge.Text>{saved.notify ? "Notifications on" : "Muted"}</Badge.Text>
             </Badge.Root>
           </span>

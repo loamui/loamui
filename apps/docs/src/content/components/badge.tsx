@@ -1,8 +1,42 @@
-import { Badge } from "@loamui/core";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
-import { BadgeDotDemo } from "./badge.client";
-import { IconCheck } from "@tabler/icons-react";
+import { Badge } from "@loamui/core";
+import {
+  IconCheck,
+  IconCircleCheck,
+  IconCircleX,
+  IconClock,
+  IconPencil,
+} from "@tabler/icons-react";
+
+export function BadgeStatusIconDemo() {
+  return (
+    <>
+      <span style={{ "--loam-context": "success" } as CSSProperties}>
+        <Badge.Root>
+          <IconCircleCheck aria-hidden />
+          <Badge.Text>Live</Badge.Text>
+        </Badge.Root>
+      </span>
+      <span style={{ "--loam-context": "warning" } as CSSProperties}>
+        <Badge.Root>
+          <IconClock aria-hidden />
+          <Badge.Text>Pending</Badge.Text>
+        </Badge.Root>
+      </span>
+      <span style={{ "--loam-context": "danger" } as CSSProperties}>
+        <Badge.Root>
+          <IconCircleX aria-hidden />
+          <Badge.Text>Offline</Badge.Text>
+        </Badge.Root>
+      </span>
+      <Badge.Root>
+        <IconPencil aria-hidden />
+        <Badge.Text>Draft</Badge.Text>
+      </Badge.Root>
+    </>
+  );
+}
 
 const doc: ComponentContent = {
   slug: "badge",
@@ -74,28 +108,32 @@ const doc: ComponentContent = {
       ),
     },
     {
-      title: "Status dot",
+      title: "Status icons",
       description:
-        "Compose a small svg circle before the label to show a status dot. It inherits the pill's text colour, so it reads against the tint in both schemes. Draft has no context, so its dot stays neutral: the dot still shows without one.",
+        "An icon before the label takes the region's colour along with the pill, so a status reads before the word does. It is aria-hidden decoration: the word carries the state, and Draft has no context, so it stays neutral.",
       code: `<span style={{ "--loam-context": "success" }}>
   <Badge.Root>
-    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden><circle cx="8" cy="8" r="4" /></svg>
-    <Badge.Text>Live</Badge.Text></Badge.Root>
+    <IconCircleCheck aria-hidden />
+    <Badge.Text>Live</Badge.Text>
+  </Badge.Root>
 </span>
 <span style={{ "--loam-context": "warning" }}>
   <Badge.Root>
-    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden><circle cx="8" cy="8" r="4" /></svg>
-    <Badge.Text>Pending</Badge.Text></Badge.Root>
+    <IconClock aria-hidden />
+    <Badge.Text>Pending</Badge.Text>
+  </Badge.Root>
 </span>
 <span style={{ "--loam-context": "danger" }}>
   <Badge.Root>
-    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden><circle cx="8" cy="8" r="4" /></svg>
-    <Badge.Text>Offline</Badge.Text></Badge.Root>
+    <IconCircleX aria-hidden />
+    <Badge.Text>Offline</Badge.Text>
+  </Badge.Root>
 </span>
 <Badge.Root>
-    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden><circle cx="8" cy="8" r="4" /></svg>
-    <Badge.Text>Draft</Badge.Text></Badge.Root>`,
-      render: () => <BadgeDotDemo />,
+  <IconPencil aria-hidden />
+  <Badge.Text>Draft</Badge.Text>
+</Badge.Root>`,
+      render: () => <BadgeStatusIconDemo />,
     },
     {
       title: "As a link",
@@ -134,7 +172,7 @@ const doc: ComponentContent = {
   whenToUse: [
     "To label a record with its status or category at a glance: one or two words sitting next to the thing they describe, readable without reading the row.",
     "For small counts and metadata (unread messages, item totals) where a full sentence would drown the signal.",
-    "With a status dot for presence and liveness (“Live”, “Offline”): the dot carries the raw status colour so the state reads even before the word.",
+    "With an icon for presence and liveness (“Live”, “Offline”): the icon takes the region's colour along with the pill, so the state reads even before the word.",
   ],
   whenNotToUse: [
     "As a click target for an action. Badge renders a plain <span> with no role, focus or keyboard handling. A tag that navigates is render={<a href />}; a status that triggers something is a Button beside it.",
@@ -152,7 +190,7 @@ const doc: ComponentContent = {
   ],
   accessibility: [
     "Renders a plain <span> with no role and no focus behaviour: screen readers announce it as ordinary inline text, exactly what a label should be.",
-    "A status dot is aria-hidden decoration, so the visible word must carry the state on its own (“Live”, not a bare green dot). It is drawn in currentColor, which system colours replace, so it survives forced-colours mode where background paint is stripped.",
+    "A status icon is aria-hidden decoration, so the visible word must carry the state on its own (“Live”, not a bare green glyph). It is drawn in currentColor, which system colours replace, so it survives forced-colours mode where background paint is stripped.",
     "The context colours the pill but is never announced. Assistive tech hears only the text, so never let colour be the only difference between two badges.",
     "The label is not the raw status colour: it is mixed toward black (light scheme) or white (dark) so it keeps contrast on the pill's own tint in both schemes.",
   ],

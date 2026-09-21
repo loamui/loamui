@@ -5,6 +5,15 @@ import Link from "next/link";
 import { VisuallyHidden } from "@loamui/core";
 import { useSiteScheme } from "./examples-scheme";
 import "./examples-stage.css";
+import {
+  IconSun,
+  IconMoon,
+  IconDeviceMobile,
+  IconDeviceTablet,
+  IconDeviceDesktop,
+  IconMaximize,
+  IconExternalLink,
+} from "@tabler/icons-react";
 
 type Scheme = "light" | "dark";
 type Width = "narrow" | "medium" | "wide" | "full";
@@ -53,75 +62,30 @@ function save(state: StageState) {
   }
 }
 
-const icon = {
-  width: 16,
-  height: 16,
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-  "aria-hidden": true,
-};
-
 function SunIcon() {
-  return (
-    <svg {...icon}>
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-    </svg>
-  );
+  return <IconSun size={16} aria-hidden />;
 }
 
 function MoonIcon() {
-  return (
-    <svg {...icon}>
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-    </svg>
-  );
+  return <IconMoon size={16} aria-hidden />;
 }
 
 /** Four devices, so the presets read apart at a glance. */
 function WidthIcon({ value }: { value: Width }) {
   switch (value) {
     case "narrow":
-      return (
-        <svg {...icon}>
-          <rect x="7" y="2" width="10" height="20" rx="2" />
-          <path d="M11 18h2" />
-        </svg>
-      );
+      return <IconDeviceMobile size={16} aria-hidden />;
     case "medium":
-      return (
-        <svg {...icon}>
-          <rect x="4" y="2" width="16" height="20" rx="2" />
-          <path d="M11 18h2" />
-        </svg>
-      );
+      return <IconDeviceTablet size={16} aria-hidden />;
     case "wide":
-      return (
-        <svg {...icon}>
-          <rect x="3" y="4" width="18" height="12" rx="2" />
-          <path d="M1 20h22" />
-        </svg>
-      );
+      return <IconDeviceDesktop size={16} aria-hidden />;
     default:
-      return (
-        <svg {...icon}>
-          <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3" />
-        </svg>
-      );
+      return <IconMaximize size={16} aria-hidden />;
   }
 }
 
 function OpenIcon() {
-  return (
-    <svg {...icon}>
-      <path d="M14 4h6v6M20 4l-9 9" />
-      <path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
-    </svg>
-  );
+  return <IconExternalLink size={16} aria-hidden />;
 }
 
 /**
