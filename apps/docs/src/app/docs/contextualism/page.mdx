@@ -288,10 +288,8 @@ asking you to repeat it as a prop. An icon inside a button is detected (no
 `startSection` prop):
 
 <div className="block">
-  <Button>
-    <CheckIcon />
-    Approve
-  </Button>
+  {/* Text on the tag's own line: on a line by itself MDX makes it a paragraph. */}
+  <Button><CheckIcon /> Approve</Button>
 </div>
 
 ```css

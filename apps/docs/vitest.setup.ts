@@ -25,3 +25,9 @@ if (
     this.dispatchEvent(new Event("close"));
   };
 }
+
+// jsdom implements no layout, so it has no scrollIntoView. The command menu
+// keeps its highlighted option in view with it; here it is a no-op.
+if (typeof Element !== "undefined" && typeof Element.prototype.scrollIntoView !== "function") {
+  Element.prototype.scrollIntoView = function scrollIntoView() {};
+}

@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { bypassesScale, checkedFiles, spacingFindings } from "./check-spacing.mjs";
-import { nakedScopes, proseBoundaryFindings } from "./check-scope.mjs";
+import loamScope, { nakedScopes, proseBoundaryFindings } from "./stylelint/loam-scope.mjs";
 import { extractSiteProse } from "./check-site-prose.mjs";
 
 test("spacing catches nested CSS, column gaps and var fallbacks", () => {
@@ -54,6 +54,28 @@ test("site prose includes rendered copy and joins inline markup, excluding code"
     extractSiteProse('const demo = { code: "This is a code example" };'),
     /code example/,
   );
+});
+
+test("the scope rule reports a dead donut rule through Stylelint", async () => {
+  const { default: stylelint } = await import("stylelint");
+  const { mkdtemp, writeFile, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const dir = await mkdtemp(join(tmpdir(), "loam-scope-rule-"));
+  try {
+    // The sibling .tsx gives <li> a loam- class, so `li` inside the donut is dead.
+    await writeFile(join(dir, "Crumbs.tsx"), 'export const C = () => <li className="loam-Crumbs-item" />;');
+    const css = '@scope (.loam-Crumbs) to ([class*="loam-"]) { li { color: red; } }';
+    await writeFile(join(dir, "Crumbs.css"), css);
+    const out = await stylelint.lint({
+      code: css,
+      codeFilename: join(dir, "Crumbs.css"),
+      config: { plugins: [loamScope], rules: { "loamui/scope": true } },
+    });
+    assert.ok(out.results[0].warnings.some((w) => w.rule === "loamui/scope"), "reports through Stylelint");
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
 });
 
 test("article styles protect embedded recipes as well as core roots", () => {

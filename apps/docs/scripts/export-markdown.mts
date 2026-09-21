@@ -53,12 +53,29 @@ const SETUP_ASSETS = [
   "spacing-rules.mjs",
 ];
 
+/**
+ * The site search reads this: one entry per twin, with the twin's full prose,
+ * so a phrase in a page's body finds the page. Title-only matching never did.
+ */
+const searchIndex: { url: string; title: string; description: string; text: string }[] = [];
+
 /** Write the same markdown to public/ (served) and the skill references (committed). */
 function writeBoth(publicFile: string, refFile: string, md: string) {
   mkdirSync(dirname(publicFile), { recursive: true });
   writeFileSync(publicFile, md);
   mkdirSync(dirname(refFile), { recursive: true });
   writeFileSync(refFile, md);
+  // Every twin opens with the same two frontmatter lines; the body follows
+  // the preamble. Fences are indexed as-is: a prop or class name in a code
+  // sample is exactly what a reader searches for.
+  const front = /^---\ntitle: (.*)\ndescription: (.*)\n---\n/.exec(md);
+  const url = "/" + relative(PUBLIC, publicFile).split("\\").join("/").replace(/\.md$/, "");
+  searchIndex.push({
+    url: url === "/docs" ? "/docs" : url,
+    title: front?.[1] ?? "",
+    description: front?.[2] ?? "",
+    text: md.slice(front?.[0].length ?? 0).replace(/^> .*\n/gm, "").replace(/\s+/g, " ").trim(),
+  });
 }
 
 const PREAMBLE = [
@@ -338,10 +355,6 @@ for (const file of mdxFiles(APP)) {
   writeGuideTwin(route, md);
   guides.push({ route, title, description });
 }
-
-// Old agents and bookmarks still receive the maintained guide at its former URL.
-// Only the new route is advertised in llms.txt and the skill's index.
-copyFileSync(join(PUBLIC, "recipes", "guide.md"), join(PUBLIC, "docs", "composing.md"));
 
 // ---- component pages: registry data → markdown -------------------------
 
@@ -633,6 +646,7 @@ for (const category of RECIPE_CATEGORIES) {
     );
 }
 writeFileSync(join(PUBLIC, "llms.txt"), lines.join("\n") + "\n");
+writeFileSync(join(PUBLIC, "search-index.json"), JSON.stringify(searchIndex));
 
 // Publish the same setup assets that ship with the skill.
 const agentAssets = join(PUBLIC, "agent-assets");
@@ -685,5 +699,5 @@ for (const category of RECIPE_CATEGORIES) {
 writeFileSync(join(SKILL_REFS, "index.md"), idx.join("\n") + "\n");
 
 console.log(
-  `markdown export: ${guides.length} guide twins (mdx-derived), ${COMPONENTS.length} component twins (data-derived), ${RECIPE_META.length} example twins (folder-derived), llms.txt + recipe prompts → public/, references → skills/loamui/references/`,
+  `markdown export: ${guides.length} guide twins (mdx-derived), ${COMPONENTS.length} component twins (data-derived), ${RECIPE_META.length} example twins (folder-derived), llms.txt + search index + recipe prompts → public/, references → skills/loamui/references/`,
 );

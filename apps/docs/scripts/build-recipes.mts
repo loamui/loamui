@@ -32,6 +32,7 @@ import {
   readdirSync,
   statSync,
   writeFileSync,
+  rmSync,
 } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
@@ -198,6 +199,11 @@ for (const { slug: category } of RECIPE_CATEGORIES) {
   ];
 }
 mkdirSync(join(DIR, "generated"), { recursive: true });
+// A category that loses its last published recipe would otherwise leave its
+// preview module behind, orphaned but still linted and typechecked.
+for (const stale of readdirSync(join(DIR, "generated")))
+  if (stale.startsWith("preview-") && !(`generated/${stale}` in files))
+    rmSync(join(DIR, "generated", stale));
 for (const [name, lines] of Object.entries(files)) writeFileSync(join(DIR, name), lines.join("\n"));
 // The repo's format gate covers generated files too.
 execFileSync("npx", ["oxfmt", ...Object.keys(files).map((name) => join(DIR, name))], {

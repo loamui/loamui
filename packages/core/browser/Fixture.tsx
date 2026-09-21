@@ -7,6 +7,7 @@ import {
   DateInput,
   PasswordInput,
   Radio,
+  Select,
   RadioGroup,
   Switch,
   Field,
@@ -15,7 +16,38 @@ import {
   QuantityInput,
   Tabs,
 } from "../src/index.js";
-import CurrencyRecipe from "../../../apps/docs/src/recipes/forms/number-with-currency/Recipe.js";
+
+/**
+ * A composed control the contracts drive end to end: a label that focuses
+ * its input, a select the symbol follows, and a value that survives it. It
+ * lives here rather than in a docs recipe so the browser suite depends on
+ * nothing outside this package.
+ */
+function CurrencySpecimen() {
+  const [currency, setCurrency] = useState("GBP");
+  const symbol = { GBP: "£", EUR: "€", USD: "$" }[currency];
+  return (
+    <Field.Root>
+      <Field.Label>Amount</Field.Label>
+      <div>
+        <span className="amount" aria-hidden="true">
+          {symbol}
+        </span>
+        <Input name="amount" inputMode="decimal" autoComplete="off" />
+      </div>
+      <Select.Root
+        name="currency"
+        aria-label="Currency"
+        value={currency}
+        onChange={(e) => setCurrency(e.currentTarget.value)}
+      >
+        <Select.Option value="GBP">GBP</Select.Option>
+        <Select.Option value="EUR">EUR</Select.Option>
+        <Select.Option value="USD">USD</Select.Option>
+      </Select.Root>
+    </Field.Root>
+  );
+}
 
 function Help() {
   return <Field.Description id="email-help">Use your work email.</Field.Description>;
@@ -129,7 +161,7 @@ export function Fixture() {
             </Combobox.List>
           </Combobox.Root>
         </Field.Root>
-        <CurrencyRecipe />
+        <CurrencySpecimen />
       </section>
     </main>
   );

@@ -13,6 +13,45 @@ interface Result {
   href: string;
 }
 
+/** One twin's worth of searchable text, as export-markdown writes it. */
+interface Entry {
+  url: string;
+  title: string;
+  description: string;
+  text: string;
+}
+
+// The exported index is a static file, so it sits under the deployment's base
+// path the same as every other asset.
+const INDEX_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/search-index.json`;
+
+/** Which part of the site a URL belongs to, for the row's hint. */
+function sectionOf(url: string): string {
+  if (url.startsWith("/docs/components/")) return "Component";
+  if (url.startsWith("/recipes/")) return "Recipe";
+  return "Guide";
+}
+
+/**
+ * Rank a page for a query: every word must appear somewhere; a word in the
+ * title outranks one in the description, which outranks one in the body.
+ * Plain substring matching over the twins' prose — no engine, no index
+ * build, and it finds a phrase that only appears in a page's body.
+ */
+function score(entry: Entry, words: string[]): number {
+  const title = entry.title.toLowerCase();
+  const description = entry.description.toLowerCase();
+  const text = entry.text.toLowerCase();
+  let total = 0;
+  for (const word of words) {
+    if (title.includes(word)) total += 8;
+    else if (description.includes(word)) total += 3;
+    else if (text.includes(word)) total += 1;
+    else return 0;
+  }
+  return total;
+}
+
 const ALL: Result[] = [
   ...[...GETTING_STARTED.flatMap((g) => [g, ...(g.children ?? [])]), ...GUIDES].map((g) => ({
     label: g.name,
@@ -60,11 +99,39 @@ export function CommandMenu() {
   const optionId = (i: number) => `${baseId}-option-${i}`;
   const router = useRouter();
 
-  const results = useMemo(() => {
-    const term = q.trim().toLowerCase();
-    if (!term) return ALL;
-    return ALL.filter((r) => r.label.toLowerCase().includes(term));
-  }, [q]);
+  // The index is fetched once, the first time the palette opens, so the
+  // page never pays for it and a visitor who never searches never loads it.
+  const [index, setIndex] = useState<Entry[] | null>(null);
+  useEffect(() => {
+    if (!open || index) return;
+    let live = true;
+    fetch(INDEX_URL)
+      .then((response) => (response.ok ? response.json() : []))
+      .then((entries: Entry[]) => live && setIndex(entries))
+      .catch(() => live && setIndex([]));
+    return () => {
+      live = false;
+    };
+  }, [open, index]);
+
+  const results = useMemo<Result[]>(() => {
+    const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    // With no query there is nothing to rank, so the curated list stands in
+    // and the palette still works as a way to browse.
+    if (!words.length) return ALL;
+    // Until the index arrives (or if it never does), titles still match.
+    if (!index) return ALL.filter((r) => words.every((w) => r.label.toLowerCase().includes(w)));
+    return index
+      .map((entry) => ({ entry, rank: score(entry, words) }))
+      .filter(({ rank }) => rank > 0)
+      .sort((a, b) => b.rank - a.rank || a.entry.title.localeCompare(b.entry.title))
+      .slice(0, 20)
+      .map(({ entry }) => ({
+        label: entry.title,
+        hint: sectionOf(entry.url),
+        href: entry.url,
+      }));
+  }, [q, index]);
 
   // Stable (only state setters inside), so the window keydown listener can
   // depend on it without re-subscribing per render.

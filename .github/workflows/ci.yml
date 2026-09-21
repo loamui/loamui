@@ -18,25 +18,13 @@ jobs:
       - run: pnpm -r build
         env:
           PAGES: "true"
-      - run: pnpm check:skill
-      - run: pnpm check:prompts
-      - run: pnpm check:strings
-      - run: pnpm test:checks
-      - run: pnpm check:scope
-      - run: pnpm check:spacing
-      - run: pnpm check:anatomy
-      - run: pnpm check:recipes
-      - run: pnpm -r lint
-      - run: pnpm lint:md
-      - run: pnpm lint:prose
-      - run: pnpm format:check
-      - run: pnpm --filter @loamui/core exec tsc --noEmit
-      - run: npx tsc --noEmit
-        working-directory: apps/docs
+      # The doctrine gates, as one step: `pnpm check` is the same command a
+      # contributor runs locally, so CI and a laptop cannot disagree.
+      - run: pnpm check
+      - run: pnpm -r lint && pnpm lint:md && pnpm lint:prose && pnpm format:check
+      - run: pnpm -r exec tsc --noEmit
       - run: pnpm --filter @loamui/core audit:contrast
-      - run: pnpm --filter @loamui/core test
-      - run: pnpm --filter @loamui/core test:package
-      - run: pnpm --filter @loamui/docs test
+      - run: pnpm -r test && pnpm --filter @loamui/core test:package
       - run: pnpm --filter @loamui/core exec playwright install --with-deps chromium firefox webkit
       - run: pnpm --filter @loamui/core test:browser
       - uses: actions/upload-artifact@v4
