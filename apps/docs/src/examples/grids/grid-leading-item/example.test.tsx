@@ -14,7 +14,7 @@ describe("grid-leading-item", () => {
     expect(items).toHaveLength(5);
     expect(items[0]).toHaveClass("lead");
     expect(items[0]).toContainElement(screen.getByText("Start here"));
-    expect(screen.getByText("Start here")).toHaveClass("loam-Badge");
+    expect(screen.getByText("Start here").closest(".loam-Badge")).toBeInTheDocument();
     const articles = screen.getAllByRole("article");
     expect(articles).toHaveLength(5);
     for (const article of articles) {

@@ -21,7 +21,7 @@ describe("task-list", () => {
       "Completed",
     );
     expect(screen.queryByRole("link", { name: "Pay the membership fee" })).toBeNull();
-    expect(screen.getByText("Completed")).toHaveClass("loam-Badge");
+    expect(screen.getByText("Completed").closest(".loam-Badge")).toBeInTheDocument();
     expect(await axe(container, axeOptions)).toHaveNoViolations();
   });
 });

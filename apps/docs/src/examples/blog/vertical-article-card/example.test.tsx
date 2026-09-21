@@ -14,7 +14,7 @@ describe("vertical-article-card", () => {
     expect(
       screen.getByRole("link", { name: "Colour ideas for summer containers" }),
     ).toHaveAttribute("href", "/journal/summer-container-colours");
-    expect(screen.getByText("Summer planting")).toHaveClass("loam-Badge");
+    expect(screen.getByText("Summer planting").closest(".loam-Badge")).toBeInTheDocument();
     expect(article.querySelector('address a[rel="author"]')).toHaveTextContent("Amara Okonkwo");
     expect(article.querySelector("time")).toHaveAttribute("datetime", "2026-05-20");
     expect(article.querySelector(".loam-Avatar")).toHaveAttribute("aria-hidden", "true");

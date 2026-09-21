@@ -17,7 +17,7 @@ describe("card-icon-features", () => {
     expect(price).toHaveAttribute("value", "18.5");
     expect(price).toHaveTextContent("£18.50per bowl");
     expect(screen.getByRole("link", { name: "View succulent bowl" })).toBeInTheDocument();
-    expect(screen.getByText("Gift idea")).toHaveClass("loam-Badge");
+    expect(screen.getByText("Gift idea").closest(".loam-Badge")).toBeInTheDocument();
     expect(await axe(container, axeOptions)).toHaveNoViolations();
   });
 });

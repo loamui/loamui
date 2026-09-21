@@ -49,7 +49,7 @@ describe("banner-with-image", () => {
       "banner-with-image",
     );
     expect(screen.getByRole("img").getAttribute("alt")).toMatch(/raspberries/);
-    expect(screen.getByText("Offer")).toHaveClass("loam-Badge");
+    expect(screen.getByText("Offer").closest(".loam-Badge")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "See the fruit list" })).toHaveAttribute(
       "href",
       "/catalogue/fruit",

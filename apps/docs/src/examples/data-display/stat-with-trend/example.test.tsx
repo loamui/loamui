@@ -13,7 +13,7 @@ describe("stat-with-trend", () => {
     expect(tile).toHaveClass("stat-with-trend");
     expect(screen.getByText("Orders posted this week").tagName).toBe("DT");
     expect(screen.getByText("3,904").tagName).toBe("DD");
-    expect(screen.getByText("Up 18% on last week")).toHaveClass("loam-Badge");
+    expect(screen.getByText("Up 18% on last week").closest(".loam-Badge")).toBeInTheDocument();
     const sparkline = screen.getByRole("img", { name: /eight weeks/ });
     expect(sparkline.tagName).toBe("svg");
     expect(sparkline).toHaveAccessibleName(/Rising/);
