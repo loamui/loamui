@@ -2,7 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useId } from "react";
-import { cx, type LoamUISize, type PartProps } from "../../utils.js";
+import { cx } from "../../utils/cx.js";
+import type { LoamUISize, PartProps } from "../../utils/props.js";
 
 /** The words a Progress speaks. */
 export interface ProgressLabels {

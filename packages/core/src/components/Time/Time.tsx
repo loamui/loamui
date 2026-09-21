@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { cx } from "../../utils.js";
-import type { PartProps } from "../../utils.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 export type TimeStyle = "full" | "long" | "medium" | "short";
 

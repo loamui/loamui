@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 import { Button } from "../Button/Button.js";
 import { Input } from "../Input/Input.js";
 import type { InputProps } from "../Input/Input.js";
-import { cx } from "../../utils.js";
-import type { PartProps } from "../../utils.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 /** The words the field says on its own, each with an English default. */
 export interface PasswordInputLabels {

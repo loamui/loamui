@@ -1,18 +1,11 @@
-export * as Table from "./Table.parts.js";
-export type {
-  TableProps,
-  TableProps as TableRootProps,
-  TableLabels,
-  TableThProps,
-  TableSortButtonProps,
-  TableSortButtonLabels,
-  TableSortDirection,
-} from "./Table.js";
-export type {
-  TableCaptionProps,
-  TableTheadProps,
-  TableTbodyProps,
-  TableTfootProps,
-  TableTrProps,
-  TableTdProps,
-} from "./TableStructure.js";
+export * as Table from "./index.parts.js";
+export type { TableProps, TableProps as TableRootProps, TableLabels } from "./root/TableRoot.js";
+export type { TableThProps } from "./th/TableTh.js";
+export type { TableSortDirection } from "./root/TableRootContext.js";
+export type { TableSortButtonProps, TableSortButtonLabels } from "./sort-button/TableSortButton.js";
+export type { TableCaptionProps } from "./caption/TableCaption.js";
+export type { TableTheadProps } from "./thead/TableThead.js";
+export type { TableTbodyProps } from "./tbody/TableTbody.js";
+export type { TableTfootProps } from "./tfoot/TableTfoot.js";
+export type { TableTrProps } from "./tr/TableTr.js";
+export type { TableTdProps } from "./td/TableTd.js";

@@ -92,7 +92,7 @@
     // aria-checked through the host language; the rule can't see that
     // mapping and would demand a redundant (and drift-prone) attribute.
     {
-      "files": ["**/Switch/Switch.tsx"],
+      "files": ["**/Switch/control/SwitchControl.tsx"],
       "rules": {
         "jsx-a11y/role-has-required-aria-props": "off"
       }
@@ -100,7 +100,7 @@
     // Roving tabindex: the tablist element carries the keydown handler but
     // is never itself a tab stop — the tabs inside it are.
     {
-      "files": ["**/Tabs/Tabs.tsx", "**/renderer/Preview.tsx"],
+      "files": ["**/Tabs/list/TabsList.tsx", "**/renderer/Preview.tsx"],
       "rules": {
         "jsx-a11y/interactive-supports-focus": "off"
       }
@@ -108,7 +108,7 @@
     // The toast region listens for hover/focus to pause dismissal timers —
     // a convenience on a live region, not an interactive control.
     {
-      "files": ["**/Toast/Toast.tsx"],
+      "files": ["**/Toast/viewport/ToastViewport.tsx"],
       "rules": {
         "jsx-a11y/no-noninteractive-element-interactions": "off"
       }

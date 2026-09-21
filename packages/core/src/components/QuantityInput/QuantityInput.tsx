@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import { Button } from "../Button/Button.js";
-import { useFieldControlProps } from "../Field/Field.js";
-import { useFormReset } from "../../use-form-reset.js";
-import { useUserInvalid } from "../../use-user-invalid.js";
-import { composeRefs } from "../../render.js";
-import { cx } from "../../utils.js";
-import type { PartProps } from "../../utils.js";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
+import { useFormReset } from "../../hooks/use-form-reset.js";
+import { useUserInvalid } from "../../hooks/use-user-invalid.js";
+import { composeRefs } from "../../utils/render.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 /** The words the buttons say, each with an English default. */
 export interface QuantityInputLabels {

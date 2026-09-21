@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { cx } from "../../utils.js";
-import type { PartProps } from "../../utils.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 export interface PriceProps extends Omit<PartProps<"data">, "children"> {
   /** The amount in the currency's major unit: 24 for £24, 9.5 for £9.50. */

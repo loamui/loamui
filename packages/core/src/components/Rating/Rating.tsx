@@ -2,9 +2,10 @@
 
 import { useId } from "react";
 import type { ChangeEvent, Ref } from "react";
-import { cx } from "../../utils.js";
-import type { PartProps } from "../../utils.js";
-import { FieldsetRoot, FieldsetLegend } from "../Fieldset/Fieldset.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
+import { FieldsetRoot } from "../Fieldset/root/FieldsetRoot.js";
+import { FieldsetLegend } from "../Fieldset/legend/FieldsetLegend.js";
 
 /** The words the stars speak. */
 export interface RatingLabels {

@@ -2,11 +2,11 @@
 
 import { useMemo } from "react";
 import type { ReactNode } from "react";
-import { useFieldControlProps } from "../Field/Field.js";
-import { useUserInvalid } from "../../use-user-invalid.js";
-import { composeRefs } from "../../render.js";
-import { cx } from "../../utils.js";
-import type { PartProps } from "../../utils.js";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
+import { useUserInvalid } from "../../hooks/use-user-invalid.js";
+import { composeRefs } from "../../utils/render.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 export interface InputProps extends PartProps<"input"> {
   /**

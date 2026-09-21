@@ -4,7 +4,7 @@ import { renderToString } from "react-dom/server";
 import { createContext, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
 
-import { useNamedRoot, useNamePart, useOptionalSlot } from "../naming.js";
+import { useNamedRoot, useNamePart, useOptionalSlot } from "../hooks/use-naming.js";
 
 afterEach(cleanup);
 

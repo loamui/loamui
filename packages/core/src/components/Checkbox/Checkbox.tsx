@@ -2,11 +2,11 @@
 
 import { useEffect, useId, useMemo, useRef } from "react";
 import type { ReactNode } from "react";
-import { cx } from "../../utils.js";
-import type { PartProps } from "../../utils.js";
-import { composeRefs, idList } from "../../render.js";
-import { useFieldControlProps } from "../Field/Field.js";
-import { useUserInvalid } from "../../use-user-invalid.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
+import { composeRefs, idList } from "../../utils/render.js";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
+import { useUserInvalid } from "../../hooks/use-user-invalid.js";
 
 export interface CheckboxProps extends Omit<PartProps<"input">, "size" | "type"> {
   /** Label rendered next to the checkbox. */

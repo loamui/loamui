@@ -129,17 +129,17 @@ test("static modules stay server-compatible and interactive modules keep client 
     "index",
     "components/Separator/Separator",
     "components/Button/Button",
-    "components/Alert/Alert",
-    "components/Details/Details",
+    "components/Alert/root/AlertRoot",
+    "components/Details/root/DetailsRoot",
   ]) {
     const source = await readFile(join(root, `dist/${file}.js`), "utf8");
     assert.doesNotMatch(source, /^["']use client["']/);
   }
   for (const file of [
-    "components/Modal/Modal",
-    "components/Field/Field",
-    "components/Alert/AlertClose",
-    "naming",
+    "components/Modal/root/ModalRoot",
+    "components/Field/root/FieldRootContext",
+    "components/Alert/close/AlertClose",
+    "hooks/use-naming",
   ]) {
     const source = await readFile(join(root, `dist/${file}.js`), "utf8");
     assert.match(source, /^["']use client["']/);

@@ -1,3 +1,5 @@
-export * as Switch from "./Switch.parts.js";
-export type { SwitchControlProps } from "./Switch.js";
-export type { SwitchRootProps, SwitchTrackProps, SwitchThumbProps } from "./SwitchStructure.js";
+export * as Switch from "./index.parts.js";
+export type { SwitchRootProps } from "./root/SwitchRoot.js";
+export type { SwitchControlProps } from "./control/SwitchControl.js";
+export type { SwitchTrackProps } from "./track/SwitchTrack.js";
+export type { SwitchThumbProps } from "./thumb/SwitchThumb.js";

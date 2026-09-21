@@ -2,10 +2,10 @@
 
 import { use, useId } from "react";
 import type { ChangeEvent, ReactNode } from "react";
-import { cx } from "../../utils.js";
-import type { PartProps } from "../../utils.js";
-import { idList } from "../../render.js";
-import { useFieldControlProps } from "../Field/Field.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
+import { idList } from "../../utils/render.js";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
 import { RadioGroupContext } from "./group-context.js";
 
 export interface RadioProps extends Omit<PartProps<"input">, "size" | "type"> {

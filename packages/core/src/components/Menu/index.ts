@@ -1,15 +1,13 @@
-export * as Menu from "./Menu.parts.js";
-export type {
-  MenuRootProps,
-  MenuTriggerProps,
-  MenuTriggerRenderProps,
-  MenuPopupProps,
-  MenuItemProps,
-  MenuItemRenderProps,
-  MenuCheckboxItemProps,
-  MenuRadioGroupProps,
-  MenuRadioItemProps,
-  MenuGroupProps,
-  MenuGroupLabelProps,
-  MenuSeparatorProps,
-} from "./Menu.js";
+export * as Menu from "./index.parts.js";
+export type { MenuItemEntry } from "./root/MenuRootContext.js";
+export type { MenuRootProps } from "./root/MenuRoot.js";
+export type { MenuTriggerProps, MenuTriggerRenderProps } from "./trigger/MenuTrigger.js";
+export type { MenuPopupProps } from "./popup/MenuPopup.js";
+export type { MenuItemRenderProps } from "./utils/MenuItemBase.js";
+export type { MenuItemProps } from "./utils/MenuItemBase.js";
+export type { MenuCheckboxItemProps } from "./checkbox-item/MenuCheckboxItem.js";
+export type { MenuRadioGroupProps } from "./radio-group/MenuRadioGroup.js";
+export type { MenuRadioItemProps } from "./radio-item/MenuRadioItem.js";
+export type { MenuGroupProps } from "./group/MenuGroup.js";
+export type { MenuGroupLabelProps } from "./group-label/MenuGroupLabel.js";
+export type { MenuSeparatorProps } from "./separator/MenuSeparator.js";

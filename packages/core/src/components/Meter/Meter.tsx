@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { cx, type LoamUISize, type PartProps } from "../../utils.js";
+import { cx } from "../../utils/cx.js";
+import type { LoamUISize, PartProps } from "../../utils/props.js";
 
 export interface MeterProps extends Omit<
   PartProps<"meter">,

@@ -3,7 +3,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 
-import { composeRefs, mergeProps, renderWithProps } from "../render.js";
+import { composeRefs, mergeProps, renderWithProps } from "../utils/render.js";
 
 afterEach(cleanup);
 

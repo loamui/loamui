@@ -1,0 +1,9 @@
+export { TableRoot as Root } from "./root/TableRoot.js";
+export { TableCaption as Caption } from "./caption/TableCaption.js";
+export { TableThead as Thead } from "./thead/TableThead.js";
+export { TableTbody as Tbody } from "./tbody/TableTbody.js";
+export { TableTfoot as Tfoot } from "./tfoot/TableTfoot.js";
+export { TableTr as Tr } from "./tr/TableTr.js";
+export { TableTh as Th } from "./th/TableTh.js";
+export { TableTd as Td } from "./td/TableTd.js";
+export { TableSortButton as SortButton } from "./sort-button/TableSortButton.js";

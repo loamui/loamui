@@ -1,15 +1,15 @@
 // LoamUI — public API barrel.
 
-export { cx } from "./utils.js";
-export type { LoamUISize, PartProps } from "./utils.js";
+export { cx } from "./utils/cx.js";
+export type { LoamUISize, PartProps } from "./utils/props.js";
 
 // Composition plumbing: the `render` contract every compound part honours,
 // exported so a composition built on core can offer the same prop.
-export { renderWithProps } from "./render.js";
-export type { RenderProp } from "./render.js";
+export { renderWithProps } from "./utils/render.js";
+export type { RenderProp } from "./utils/render.js";
 // Server-safe naming: a Root named by one of its parts emits the reference
 // in the first render, so landmarks are named before hydration.
-export { useNamedRoot, useNamePart, useOptionalSlot } from "./naming.js";
+export { useNamedRoot, useNamePart, useOptionalSlot } from "./hooks/use-naming.js";
 
 // Inputs
 export * from "./components/Field/index.js";
@@ -68,8 +68,8 @@ export * from "./components/VisuallyHidden/index.js";
 export * from "./components/Breadcrumbs/index.js";
 export * from "./components/Pagination/index.js";
 export * from "./components/Nav/index.js";
-export { useScrollSpy } from "./use-scroll-spy.js";
-export type { UseScrollSpyOptions } from "./use-scroll-spy.js";
+export { useScrollSpy } from "./hooks/use-scroll-spy.js";
+export type { UseScrollSpyOptions } from "./hooks/use-scroll-spy.js";
 
 // Layout is not a LoamUI concern: compose native CSS layout modules (flow,
 // grid, flex, multicol) with the space tokens inside your own components.
