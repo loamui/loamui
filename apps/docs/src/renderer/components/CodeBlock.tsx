@@ -102,9 +102,9 @@ export function CodeBlock({
     >
       <Highlight code={code.trim()} language={language} theme={THEME}>
         {({ tokens, getLineProps, getTokenProps }) => (
-          <pre className="pre" {...scroll}>
+          <pre {...scroll}>
             {tokens.map((line, i) => (
-              <span key={i} {...getLineProps({ line })} className="line">
+              <span key={i} {...getLineProps({ line })}>
                 {line.map((token, key) => (
                   <span key={key} {...getTokenProps({ token })} />
                 ))}

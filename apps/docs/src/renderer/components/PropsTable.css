@@ -13,7 +13,7 @@
     }
   }
 
-  .table {
+  table {
     border-collapse: collapse;
     font-size: var(--loam-text-sm);
     inline-size: 100%;
@@ -73,7 +73,8 @@
     white-space: nowrap;
   }
 
-  .dim {
+  /* The placeholder where a prop has no default. */
+  td > span {
     color: var(--loam-color-fg-dim);
   }
 }

@@ -1,6 +1,6 @@
 @layer loamui.components {
   @scope (.site-CodeBlock) to ([class*="loam-"]) {
-    .pre {
+    pre {
       background: transparent;
       font-size: var(--loam-text-sm);
       line-height: 1.6;
@@ -16,7 +16,8 @@
       }
     }
 
-    .line {
+    /* One rendered line; the tokens nest inside it. */
+    pre > span {
       display: block flow;
     }
   }

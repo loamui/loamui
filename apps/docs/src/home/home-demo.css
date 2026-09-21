@@ -30,11 +30,12 @@
       gap: var(--loam-space-xs);
       justify-content: space-between;
       padding-block-start: var(--loam-space-s);
-    }
 
-    .label {
-      color: var(--loam-color-fg-muted);
-      font-size: var(--loam-text-sm);
+      /* A row's own label, beside the control. */
+      > span {
+        color: var(--loam-color-fg-muted);
+        font-size: var(--loam-text-sm);
+      }
     }
 
     footer {

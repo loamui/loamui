@@ -41,7 +41,7 @@ export function AgentShowcase({
               Build with the skill
             </SignpostLink>
           </p>
-          <p className="label">
+          <p>
             New project? <Link href="/docs/installation">Install LoamUI</Link>. For setup help,
             follow <Link href="/docs/agent-workflow">Build with the skill</Link>.
           </p>

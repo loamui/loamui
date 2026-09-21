@@ -20,7 +20,8 @@
       padding: var(--loam-space-3xs) var(--loam-space-xs);
     }
 
-    .label {
+    /* The bar's title; the copy action beside it styles itself. */
+    .bar > span {
       align-items: center;
       display: inline flex;
       gap: var(--loam-space-2xs);
@@ -31,7 +32,7 @@
       }
     }
 
-    .prompt {
+    p {
       font-size: var(--loam-text-md);
       margin: 0;
       overflow-wrap: anywhere;

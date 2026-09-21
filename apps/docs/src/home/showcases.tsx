@@ -82,7 +82,7 @@ export function HeroShowcase() {
           </Field.Item>
         </div>
         <div className="row">
-          <span className="label">Notifications</span>
+          <span>Notifications</span>
           <span
             style={
               {

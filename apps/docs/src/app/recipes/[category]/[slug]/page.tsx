@@ -58,7 +58,7 @@ export default async function RecipePage({
   return (
     <div className="site-RecipePage">
       <article className="single">
-        <header className="singleHead">
+        <header>
           <div className="crumbRow">
             <RecipeCrumbs category={category} title={recipe.meta.title} />
             <a
@@ -69,7 +69,7 @@ export default async function RecipePage({
               View as Markdown
             </a>
           </div>
-          <h1 className="title">{recipe.meta.title}</h1>
+          <h1>{recipe.meta.title}</h1>
           <p className="lead">{recipe.meta.description}</p>
           {recipe.meta.whenToUse && <p className="sectionNote">{recipe.meta.whenToUse}</p>}
         </header>
@@ -91,10 +91,8 @@ export default async function RecipePage({
           <recipe.Recipe />
         </RecipePlayground>
 
-        <section className="section" aria-labelledby="code">
-          <h2 id="code" className="h2">
-            Use this recipe
-          </h2>
+        <section aria-labelledby="code">
+          <h2 id="code">Use this recipe</h2>
           <p className="sectionNote">
             Copy <code>Recipe.tsx</code> and <code>recipe.css</code> side by side into a React 19
             project. Install <code>@loamui/core</code> and load the core stylesheet at your
@@ -108,10 +106,8 @@ export default async function RecipePage({
           </p>
         </section>
 
-        <section className="section" aria-labelledby="uses">
-          <h2 id="uses" className="h2">
-            Uses
-          </h2>
+        <section aria-labelledby="uses">
+          <h2 id="uses">Uses</h2>
           {recipe.meta.uses.length > 0 ? (
             <ul className="uses">
               {recipe.meta.uses.map((name) => {
@@ -139,10 +135,8 @@ export default async function RecipePage({
           )}
         </section>
 
-        <section className="section" aria-labelledby="pillars">
-          <h2 id="pillars" className="h2">
-            Design decisions
-          </h2>
+        <section aria-labelledby="pillars">
+          <h2 id="pillars">Design decisions</h2>
           <p className="sectionNote">
             How this recipe answers the <Link href="/docs">two pillars</Link>, and how it composes
             the primitives. These notes explain the design. The included tests cover structure and

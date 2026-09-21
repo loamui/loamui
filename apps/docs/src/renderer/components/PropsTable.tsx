@@ -16,7 +16,7 @@ export function PropsTable({
 }) {
   return (
     <ScrollRegion className="site-PropsTable" label={label ?? `${nameLabel} table`}>
-      <table className="table">
+      <table>
         <thead>
           <tr>
             <th scope="col">{nameLabel}</th>
@@ -38,9 +38,7 @@ export function PropsTable({
                 {r.default ? (
                   <code className="default">{r.default}</code>
                 ) : (
-                  <span className="dim" aria-label="none">
-                    —
-                  </span>
+                  <span aria-label="none">—</span>
                 )}
               </td>
               <td>{r.description}</td>

@@ -18,7 +18,8 @@
       padding: var(--loam-space-2xs) var(--loam-space-2xs);
     }
 
-    .open {
+    /* The link out to the recipe's own page. */
+    .toolbar a {
       border: 1px solid transparent;
       border-radius: var(--loam-radius-md);
       color: var(--loam-color-fg-muted);
@@ -35,14 +36,14 @@
       }
     }
 
-    .widths,
+    fieldset,
     .options {
       align-items: center;
       display: block flex;
       gap: var(--loam-space-3xs);
     }
 
-    .widths {
+    fieldset {
       border: 0;
       margin: 0;
       min-inline-size: 0;

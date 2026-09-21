@@ -24,7 +24,7 @@
       font-size: var(--loam-text-lg);
     }
 
-    .label {
+    p {
       color: var(--loam-color-fg-muted);
       font-size: var(--loam-text-sm);
       margin-block: var(--loam-space-l) var(--loam-space-2xs);

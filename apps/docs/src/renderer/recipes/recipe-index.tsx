@@ -68,12 +68,9 @@ export function RecipesIndex() {
           />
         </Search.Root>
         <div className="usesGroup">
-          <label className="usesLabel" htmlFor={usesId}>
-            Uses
-          </label>
+          <label htmlFor={usesId}>Uses</label>
           <Select.Root
             id={usesId}
-            className="uses"
             wrapperProps={{ className: "usesField" }}
             value={uses}
             onChange={(e) => setUses(e.target.value)}
@@ -86,21 +83,17 @@ export function RecipesIndex() {
             ))}
           </Select.Root>
         </div>
-        <p className="status" role="status">
-          {filtered ? `${shown} matching` : ""}
-        </p>
+        <p role="status">{filtered ? `${shown} matching` : ""}</p>
       </div>
 
       {groups.length === 0 && (
         <div className="empty">
-          <p className="emptyTitle">No recipe matches.</p>
-          <p className="emptyText">
+          <p>No recipe matches.</p>
+          <p>
             Try a shorter word, or build it from the <Link href="/docs/components">primitives</Link>{" "}
             yourself.
           </p>
-          <Button className="emptyClear" onClick={clear}>
-            Clear the search
-          </Button>
+          <Button onClick={clear}>Clear the search</Button>
         </div>
       )}
 
@@ -111,17 +104,15 @@ export function RecipesIndex() {
           className="group"
           aria-labelledby={`${category.slug}-heading`}
         >
-          <div className="groupHead">
-            <h2 id={`${category.slug}-heading`} className="groupTitle">
-              {category.title}
-            </h2>
-            <Link href={`/recipes/${category.slug}`} className="groupLink" prefetch={false}>
+          <header>
+            <h2 id={`${category.slug}-heading`}>{category.title}</h2>
+            <Link href={`/recipes/${category.slug}`} prefetch={false}>
               View all
               <VisuallyHidden> in {category.title}</VisuallyHidden>
               <span aria-hidden> →</span>
             </Link>
-          </div>
-          <ul className="grid">
+          </header>
+          <ul>
             {items.map((e) => {
               const Preview = RECIPE_PREVIEWS[e.slug]!;
               return (
@@ -143,7 +134,7 @@ export function RecipesIndex() {
                       {e.meta.title}
                     </Link>
                     {e.meta.uses.length > 0 && (
-                      <ul className="cardUses" aria-label="Uses">
+                      <ul aria-label="Uses">
                         {e.meta.uses.map((name) => (
                           <li key={name}>
                             <Badge.Root size="sm">

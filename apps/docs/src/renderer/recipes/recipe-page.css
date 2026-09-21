@@ -1,9 +1,13 @@
 @layer loamui.ui {
+  /* Shared layout for the recipe index, category and single pages. Parts
+     are the elements themselves where the page makes them unambiguous — the
+     one h1, the aside, the plain sections and their h2s — and structural
+     where two of a kind sit in different parents: the page's own header
+     against a single recipe's, an entry's h2 against a section's. A class
+     stays only for a box with no element of its own, or to tell siblings
+     apart. The `examples` container is what the rail and the pillar rows
+     query, so they answer the page's column rather than the viewport. */
   @scope (.site-RecipePage) to ([class*="loam-"], [class*="site-"]) {
-    /* Shared layout for the three example pages. The `examples` container
-     is what the rail and the pillar rows query, so they answer the page's
-     column rather than the viewport. */
-
     :scope {
       --_gutter: 1.25rem;
 
@@ -13,14 +17,15 @@
       padding-block: var(--loam-space-2xl) var(--loam-space-3xl);
     }
 
-    .hero {
+    /* The hero on the index and category pages. */
+    :scope > header {
       display: block grid;
       gap: var(--loam-space-xs);
       margin-block-end: var(--loam-space-2xl);
       max-inline-size: var(--site-column);
     }
 
-    .title {
+    h1 {
       font-size: var(--site-h1);
       font-weight: 800;
       text-wrap: balance;
@@ -44,7 +49,7 @@
       gap: var(--loam-space-2xl);
     }
 
-    .aside {
+    aside {
       min-inline-size: 0;
     }
 
@@ -55,69 +60,22 @@
       min-inline-size: 0;
     }
 
-    /* One example on a category page: a heading with its own anchor, the
-     stage full-bleed to the column, the code collapsed beneath. */
-    .entry {
-      display: block grid;
-      gap: var(--loam-space-s);
-      scroll-margin-block-start: 5rem;
-    }
-
-    .entryHead {
-      display: block grid;
-      gap: var(--loam-space-3xs);
-    }
-
-    .entryTitle {
-      align-items: baseline;
-      display: block flex;
-      font-size: var(--loam-text-xl);
-      font-weight: 700;
-      gap: var(--loam-space-2xs);
-
-      a {
-        color: inherit;
-      }
-    }
-
-    .anchor {
-      color: var(--loam-color-fg-dim);
-      font-weight: 500;
-      opacity: 0;
-      text-decoration: none;
-
-      &:focus-visible,
-      .entryTitle:hover & {
-        opacity: 1;
-      }
-
-      @media (prefers-reduced-motion: no-preference) {
-        transition: opacity var(--loam-duration-md) var(--loam-ease);
-      }
-    }
-
-    .entryDesc {
-      color: var(--loam-color-fg-muted);
-      font-size: var(--loam-text-sm);
-      text-wrap: pretty;
-    }
-
-    /* The single example page. */
+    /* The single recipe page, and its own header. */
     .single {
       display: block grid;
       gap: var(--loam-space-l);
       margin-inline: auto;
       max-inline-size: 64rem;
       min-inline-size: 0;
-    }
 
-    .singleHead {
-      display: block flow;
-      min-inline-size: 0;
+      > header {
+        display: block flow;
+        min-inline-size: 0;
+      }
     }
 
     /* The trail on the start side, the markdown twin on the end side, on one
-     line above the title; the link keeps the docs pages' own style. */
+       line above the title; the link keeps the docs pages' own style. */
     .crumbRow {
       align-items: baseline;
       display: block flex;
@@ -137,17 +95,17 @@
     }
 
     /* A zero minimum, so a wide stage or a long code line scrolls inside its
-     own box instead of widening the page. */
-    .section {
+       own box instead of widening the page. */
+    section {
       display: block grid;
       gap: var(--loam-space-s);
       min-inline-size: 0;
       scroll-margin-block-start: 5rem;
-    }
 
-    .h2 {
-      font-size: var(--loam-text-xl);
-      font-weight: 700;
+      > h2 {
+        font-size: var(--loam-text-xl);
+        font-weight: 700;
+      }
     }
 
     .sectionNote {
@@ -174,12 +132,64 @@
       font-size: var(--loam-text-sm);
     }
 
+    /* One recipe on a category page: a heading with its own anchor, the
+       stage full-bleed to the column, the code collapsed beneath. The
+       entry's header is its title and description; the stage and the code
+       are content, and hosted scopes besides. */
+    .entry {
+      display: block grid;
+      gap: var(--loam-space-s);
+      scroll-margin-block-start: 5rem;
+
+      > header {
+        display: block grid;
+        gap: var(--loam-space-3xs);
+
+        > h2 {
+          align-items: baseline;
+          display: block flex;
+          font-size: var(--loam-text-xl);
+          font-weight: 700;
+          gap: var(--loam-space-2xs);
+
+          a {
+            color: inherit;
+          }
+
+          .anchor {
+            color: var(--loam-color-fg-dim);
+            font-weight: 500;
+            opacity: 0;
+            text-decoration: none;
+
+            &:focus-visible {
+              opacity: 1;
+            }
+
+            @media (prefers-reduced-motion: no-preference) {
+              transition: opacity var(--loam-duration-md) var(--loam-ease);
+            }
+          }
+
+          &:hover .anchor {
+            opacity: 1;
+          }
+        }
+
+        > p {
+          color: var(--loam-color-fg-muted);
+          font-size: var(--loam-text-sm);
+          text-wrap: pretty;
+        }
+      }
+    }
+
     @container examples (inline-size >= 60rem) {
       .shell {
         grid-template-columns: 14rem minmax(0, 1fr);
       }
 
-      .aside {
+      aside {
         grid-column: 1;
         grid-row: 1;
         inset-block-start: calc(var(--site-nav-h) + 1.5rem);

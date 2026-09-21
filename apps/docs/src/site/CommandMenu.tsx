@@ -221,10 +221,8 @@ export function CommandMenu() {
         aria-keyshortcuts="Meta+K Control+K"
       >
         <SearchIcon width={16} height={16} />
-        <span className="triggerLabel">Search…</span>
-        <kbd className="kbd" aria-hidden>
-          ⌘K
-        </kbd>
+        <span>Search…</span>
+        <kbd aria-hidden>⌘K</kbd>
       </button>
 
       <dialog
@@ -238,7 +236,6 @@ export function CommandMenu() {
           <SearchIcon width={18} height={18} />
           <input
             ref={inputRef}
-            className="input"
             type="text"
             role="combobox"
             aria-label="Search components, guides and recipes"
@@ -258,20 +255,12 @@ export function CommandMenu() {
           />
         </div>
         {results.length === 0 && (
-          <p className="empty" role="status">
-            No results for “{q}”. Try a component name, a guide or an example.
-          </p>
+          <p role="status">No results for “{q}”. Try a component name, a guide or an example.</p>
         )}
         {/* APG combobox: the options are never focused (the box keeps focus
             and points at one with aria-activedescendant), so they carry no
             tabindex and no key handler of their own. */}
-        <ul
-          id={listId}
-          className="results"
-          aria-label="Results"
-          hidden={results.length === 0}
-          {...{ role: "listbox" }}
-        >
+        <ul id={listId} aria-label="Results" hidden={results.length === 0} {...{ role: "listbox" }}>
           {results.map((r, i) => {
             const option = {
               id: optionId(i),
@@ -283,9 +272,9 @@ export function CommandMenu() {
               onClick: () => go(r.href),
             };
             return (
-              <li key={r.href} className="result" {...option}>
+              <li key={r.href} {...option}>
                 <span>{r.label}</span>
-                <span className="hint">{r.hint}</span>
+                <span>{r.hint}</span>
               </li>
             );
           })}

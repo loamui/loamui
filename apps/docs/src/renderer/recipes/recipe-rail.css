@@ -1,9 +1,10 @@
+/* The rail is one list of links; the count beside a link is its named part. */
 @scope (.site-RecipesRail) {
   :scope {
     padding-block: var(--loam-space-3xs);
   }
 
-  .list {
+  ul {
     display: block flex;
     flex-direction: column;
     gap: var(--loam-space-4xs);
@@ -14,7 +15,7 @@
 
   /* Set in the sidebar's type, so the rail reads as the same navigation
      family as the docs. */
-  .link {
+  a {
     align-items: center;
     border-radius: var(--loam-radius-sm);
     color: var(--loam-color-fg-muted);
@@ -76,13 +77,13 @@
       scrollbar-width: none;
     }
 
-    .list {
+    ul {
       flex-direction: row;
       gap: var(--loam-space-3xs);
       inline-size: max-content;
     }
 
-    .link {
+    a {
       border: 1px solid var(--loam-color-line);
       border-radius: var(--loam-radius-full);
       gap: var(--loam-space-2xs);

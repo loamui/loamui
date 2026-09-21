@@ -1,4 +1,7 @@
-@scope (.site-Preview) {
+/* The tab list and its tabs are selected by role — the semantics are the
+   part — and the panel hosts any demo, so the donut keeps these rules off
+   what it shows. */
+@scope (.site-Preview) to ([class*="loam-"], [class*="site-"]) {
   :scope {
     background: var(--loam-color-surface);
     border: 1px solid var(--loam-color-line);
@@ -6,7 +9,7 @@
     overflow: hidden;
   }
 
-  .tabs {
+  [role="tablist"] {
     background: var(--loam-color-bg-subtle);
     border-block-end: 1px solid var(--loam-color-line);
     display: block flex;
@@ -14,7 +17,7 @@
     padding: var(--loam-space-2xs) var(--loam-space-2xs);
   }
 
-  .tab {
+  [role="tab"] {
     background: transparent;
     border: none;
     border-radius: var(--loam-radius-sm);

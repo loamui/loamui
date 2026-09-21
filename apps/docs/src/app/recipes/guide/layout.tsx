@@ -6,7 +6,7 @@ export default function RecipeGuideLayout({ children }: { children: React.ReactN
   return (
     <div className="site-RecipePage">
       <div className="shell">
-        <aside className="aside">
+        <aside>
           <RecipesRail current="guide" />
         </aside>
         <article className="content">

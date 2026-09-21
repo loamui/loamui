@@ -25,17 +25,17 @@ export function RecipePager({
   return (
     <nav className="site-RecipePager" aria-label={`Previous and next ${label}`}>
       {previous ? (
-        <Link href={previous.href} className="link" rel="prev">
-          <span className="eyebrow">Previous {label}</span>
-          <span className="title">{previous.title}</span>
+        <Link href={previous.href} rel="prev">
+          <span>Previous {label}</span>
+          <span>{previous.title}</span>
         </Link>
       ) : (
         <span />
       )}
       {next && (
-        <Link href={next.href} className="link" data-next rel="next">
-          <span className="eyebrow">Next {label}</span>
-          <span className="title">{next.title}</span>
+        <Link href={next.href} data-next rel="next">
+          <span>Next {label}</span>
+          <span>{next.title}</span>
         </Link>
       )}
     </nav>

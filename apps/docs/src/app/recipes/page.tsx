@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function RecipesPage() {
   return (
     <div className="site-RecipePage">
-      <header className="hero">
+      <header>
         <span className="eyebrow">Example recipes</span>
-        <h1 className="title">Recipes we built for our own products.</h1>
+        <h1>Recipes we built for our own products.</h1>
         <p className="lead">
           Explore product-specific compositions of LoamUI’s tokens, element styles and React
           components. Inspect the preview and source, then adapt a recipe to your own content.
@@ -27,7 +27,7 @@ export default function RecipesPage() {
         </p>
       </header>
       <div className="shell">
-        <aside className="aside">
+        <aside>
           <RecipesRail />
         </aside>
         <div className="content">

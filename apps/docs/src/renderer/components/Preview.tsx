@@ -47,13 +47,7 @@ export function Preview({
     <div className="site-Preview">
       {/* interactive-supports-focus is off for this file (.oxlintrc):
           focus roves between the tabs; the list is never a stop */}
-      <div
-        className="tabs"
-        role="tablist"
-        aria-label="Example view"
-        ref={listRef}
-        onKeyDown={onKeyDown}
-      >
+      <div role="tablist" aria-label="Example view" ref={listRef} onKeyDown={onKeyDown}>
         {tabs.map((t) => (
           <button
             key={t}
@@ -62,7 +56,6 @@ export function Preview({
             aria-selected={tab === t}
             aria-controls={`${baseId}-panel-${t}`}
             tabIndex={tab === t ? 0 : -1}
-            className="tab"
             onClick={() => setTab(t)}
             type="button"
           >

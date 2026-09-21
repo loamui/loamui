@@ -1,21 +1,28 @@
-@scope (.site-DocPage) {
+/* Parts are the elements themselves where the scope makes them unambiguous:
+   the one header, its h1, the sections and their h2s. A class stays only
+   where it names a part with no element of its own (a guidance card, a
+   demo block) or tells two same-type siblings apart. The donut keeps these
+   bare selectors out of the previews, tables and code blocks the page
+   hosts, which style themselves. */
+@scope (.site-DocPage) to ([class*="loam-"], [class*="site-"]) {
   :scope {
     max-inline-size: var(--site-column);
   }
 
-  .header {
+  header {
     border-block-end: 1px solid var(--loam-color-line);
     margin-block-end: var(--loam-space-xl);
     padding-block-end: var(--loam-space-l);
+
+    /* The category sits above the title; the lead below it. */
+    > p:first-child {
+      color: var(--loam-color-primary);
+      font-size: var(--loam-text-sm);
+      font-weight: 600;
+    }
   }
 
-  .category {
-    color: var(--loam-color-primary);
-    font-size: var(--loam-text-sm);
-    font-weight: 600;
-  }
-
-  .title {
+  h1 {
     font-size: var(--site-h1);
     font-weight: 800;
     margin-block: var(--loam-space-3xs) var(--loam-space-xs);
@@ -30,19 +37,19 @@
     text-wrap: pretty;
   }
 
-  .section {
+  section {
     margin-block-end: var(--loam-space-2xl);
     scroll-margin-block-start: 5rem;
   }
 
-  .h2 {
+  h2 {
     font-size: var(--loam-text-xl);
     font-weight: 700;
     margin-block-end: var(--loam-space-s);
     scroll-margin-block-start: 5rem;
   }
 
-  .h3 {
+  h3 {
     font-size: var(--loam-text-md);
     font-weight: 650;
     margin-block-end: var(--loam-space-3xs);
@@ -77,47 +84,43 @@
     border: 1px solid var(--loam-color-line);
     border-radius: var(--loam-radius-lg);
     padding: var(--loam-space-s) var(--loam-space-m);
-  }
 
-  /* A card heading set as a label: small caps, not the h3 scale. */
-  .guidanceHeading {
-    align-items: center;
-    display: block flex;
-    font-size: var(--loam-text-sm);
-    font-weight: 700;
-    gap: var(--loam-space-2xs);
-    letter-spacing: 0.03em;
-    line-height: 1.4;
-    margin-block-end: var(--loam-space-2xs);
-    text-transform: uppercase;
-  }
+    /* A card heading set as a label: small caps, not the h3 scale. */
+    h3 {
+      align-items: center;
+      display: block flex;
+      font-size: var(--loam-text-sm);
+      font-weight: 700;
+      gap: var(--loam-space-2xs);
+      letter-spacing: 0.03em;
+      line-height: 1.4;
+      margin-block-end: var(--loam-space-2xs);
+      text-transform: uppercase;
+    }
 
-  .guidanceYes {
-    color: var(--loam-color-primary);
-  }
+    ul {
+      color: var(--loam-color-fg-muted);
+      display: block flex;
+      flex-direction: column;
+      font-size: var(--loam-text-sm);
+      gap: var(--loam-space-2xs);
+      margin: 0;
+      padding-inline-start: var(--loam-space-s);
+    }
 
-  .guidanceNo {
-    color: var(--loam-color-danger);
-  }
+    /* The two verdicts differ in colour; the accessibility card's list is
+       the page's own guarantees, read at full strength. */
+    &.guidanceYes h3 {
+      color: var(--loam-color-primary);
+    }
 
-  .guidanceList {
-    color: var(--loam-color-fg-muted);
-    display: block flex;
-    flex-direction: column;
-    font-size: var(--loam-text-sm);
-    gap: var(--loam-space-2xs);
-    margin: 0;
-    padding-inline-start: var(--loam-space-s);
-  }
+    &.guidanceNo h3 {
+      color: var(--loam-color-danger);
+    }
 
-  .a11yList {
-    color: var(--loam-color-fg);
-    display: block flex;
-    flex-direction: column;
-    font-size: var(--loam-text-sm);
-    gap: var(--loam-space-2xs);
-    margin: 0;
-    padding-inline-start: var(--loam-space-s);
+    &.a11y ul {
+      color: var(--loam-color-fg);
+    }
   }
 
   .demos {

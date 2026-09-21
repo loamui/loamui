@@ -47,7 +47,7 @@ export function CopyPanel({
   return (
     <div className={`site-CopyPanel ${className}`}>
       <div className="bar">
-        <span className="label">
+        <span>
           {icon}
           {label}
         </span>
@@ -69,7 +69,7 @@ export function PromptBlock({
 }) {
   return (
     <CopyPanel value={prompt} label={label} icon={<MessageIcon />} copyLabel={copyLabel}>
-      <p className="prompt">{prompt}</p>
+      <p>{prompt}</p>
     </CopyPanel>
   );
 }

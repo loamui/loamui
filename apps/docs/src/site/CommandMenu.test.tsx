@@ -49,9 +49,7 @@ describe("the command menu", () => {
     expect(box).toHaveFocus();
     const list = screen.getByRole("listbox", { name: "Results" });
     expect(box).toHaveAttribute("aria-controls", list.id);
-    expect(box.getAttribute("aria-activedescendant")).toBe(
-      screen.getAllByRole("option")[0]!.id,
-    );
+    expect(box.getAttribute("aria-activedescendant")).toBe(screen.getAllByRole("option")[0]!.id);
     expect(await axe(container, axeOptions)).toHaveNoViolations();
   });
 
@@ -79,7 +77,9 @@ describe("the command menu", () => {
     setup();
     const box = screen.getByRole("combobox");
     fireEvent.change(box, { target: { value: "forced-colors" } });
-    await waitFor(() => expect(screen.getByRole("option", { name: /Accessibility/ })).toBeVisible());
+    await waitFor(() =>
+      expect(screen.getByRole("option", { name: /Accessibility/ })).toBeVisible(),
+    );
     fireEvent.keyDown(box, { key: "Enter" });
     expect(push).toHaveBeenCalledWith("/docs/accessibility");
   });

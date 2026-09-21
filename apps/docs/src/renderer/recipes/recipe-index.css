@@ -1,4 +1,9 @@
 @layer loamui.ui {
+  /* Parts are the elements themselves where the box makes them unambiguous —
+     the one label in the filter group, a category's h2 and link inside its
+     header, the list of cards — and a class stays for a box with no element
+     of its own, or for the card's named parts. Order ascends by specificity
+     where two rules end on the same element. */
   @scope (.site-RecipesIndex) to ([class*="loam-"], [class*="site-"], .thumbInner > *) {
     /* Explicit columns here, on .group and on the page's .content avoid
      repeated intrinsic sizing through nested grids as previews mount or resize. */
@@ -15,6 +20,15 @@
       display: block flex;
       flex-wrap: wrap;
       gap: var(--loam-space-2xs) var(--loam-space-xs);
+
+      /* The match count, at the end of the row. */
+      > p {
+        color: var(--loam-color-fg-dim);
+        font-size: var(--loam-text-sm);
+        font-variant-numeric: tabular-nums;
+        margin-inline-start: auto;
+        white-space: nowrap;
+      }
     }
 
     /* The label and its select travel as one unit when the row wraps. */
@@ -24,88 +38,53 @@
       flex: 0 1 16rem;
       gap: var(--loam-space-2xs);
       min-inline-size: 12rem;
-    }
 
-    .usesLabel {
-      color: var(--loam-color-fg-muted);
-      font-size: var(--loam-text-sm);
-      font-weight: 550;
-    }
-
-    .status {
-      color: var(--loam-color-fg-dim);
-      font-size: var(--loam-text-sm);
-      font-variant-numeric: tabular-nums;
-      margin-inline-start: auto;
-      white-space: nowrap;
-    }
-
-    /* Nothing matched: a quiet panel where the grid would be, with the two
-     ways on. */
-    .empty {
-      background: var(--loam-color-bg-subtle);
-      border: 1px dashed var(--loam-color-line-strong);
-      border-radius: var(--loam-radius-lg);
-      display: block grid;
-      gap: var(--loam-space-2xs);
-      justify-items: center;
-      padding: var(--loam-space-xl) var(--loam-space-l);
-      text-align: center;
-    }
-
-    .emptyTitle {
-      color: var(--loam-color-fg-strong);
-      font-size: var(--loam-text-lg);
-      font-weight: 650;
-    }
-
-    .emptyText {
-      color: var(--loam-color-fg-muted);
-      max-inline-size: 32rem;
-
-      a {
-        color: var(--loam-color-link);
-        text-decoration: underline;
+      > label {
+        color: var(--loam-color-fg-muted);
+        font-size: var(--loam-text-sm);
+        font-weight: 550;
       }
     }
 
+    /* A category: its header holds the title and the link to the whole
+     category; the list of cards follows. */
     .group {
       display: block grid;
       gap: var(--loam-space-s);
       grid-template-columns: minmax(0, 1fr);
       scroll-margin-block-start: 5rem;
-    }
 
-    .groupHead {
-      align-items: baseline;
-      display: block flex;
-      gap: var(--loam-space-s);
-      justify-content: space-between;
-    }
+      > header {
+        align-items: baseline;
+        display: block flex;
+        gap: var(--loam-space-s);
+        justify-content: space-between;
 
-    .groupTitle {
-      font-size: var(--loam-text-xl);
-      font-weight: 700;
-    }
+        > h2 {
+          font-size: var(--loam-text-xl);
+          font-weight: 700;
+        }
 
-    .groupLink {
-      color: var(--loam-color-fg-muted);
-      font-size: var(--loam-text-sm);
-      font-weight: 550;
-      white-space: nowrap;
+        > a {
+          color: var(--loam-color-fg-muted);
+          font-size: var(--loam-text-sm);
+          font-weight: 550;
+          white-space: nowrap;
 
-      &:hover {
-        color: var(--loam-color-fg);
+          &:hover {
+            color: var(--loam-color-fg);
+          }
+        }
       }
-    }
 
-    .grid {
-      display: block grid;
-      gap: var(--loam-space-m);
-      grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
-      list-style: none;
-      margin: 0;
-      padding: 0;
+      > ul {
+        display: block grid;
+        gap: var(--loam-space-m);
+        grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
     }
 
     /* A card: the preview above, the title and its parts below. The whole
@@ -174,6 +153,20 @@
       display: block grid;
       gap: var(--loam-space-2xs);
       padding: var(--loam-space-xs) var(--loam-space-s) var(--loam-space-s);
+
+      /* The parts a recipe uses, as badges. */
+      > ul {
+        display: block flex;
+        flex-wrap: wrap;
+        gap: var(--loam-space-3xs);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          margin: 0;
+        }
+      }
     }
 
     /* The title is the link; its ::after stretches the hit area over the card. */
@@ -192,16 +185,32 @@
       }
     }
 
-    .cardUses {
-      display: block flex;
-      flex-wrap: wrap;
-      gap: var(--loam-space-3xs);
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    /* Nothing matched: a quiet panel where the grid would be, with the two
+     ways on. Its title, then its explanation. */
+    .empty {
+      background: var(--loam-color-bg-subtle);
+      border: 1px dashed var(--loam-color-line-strong);
+      border-radius: var(--loam-radius-lg);
+      display: block grid;
+      gap: var(--loam-space-2xs);
+      justify-items: center;
+      padding: var(--loam-space-xl) var(--loam-space-l);
+      text-align: center;
 
-      li {
-        margin: 0;
+      > p + p {
+        color: var(--loam-color-fg-muted);
+        max-inline-size: 32rem;
+
+        a {
+          color: var(--loam-color-link);
+          text-decoration: underline;
+        }
+      }
+
+      > p:first-child {
+        color: var(--loam-color-fg-strong);
+        font-size: var(--loam-text-lg);
+        font-weight: 650;
       }
     }
   }

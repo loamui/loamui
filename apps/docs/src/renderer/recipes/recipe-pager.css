@@ -1,3 +1,6 @@
+/* Two links, previous and next. Each is the direction above the
+   destination's title; the spans are read by position, so there is no
+   class for the site's global eyebrow style to collide with. */
 @scope (.site-RecipePager) {
   :scope {
     border-block-start: 1px solid var(--loam-color-line);
@@ -11,12 +14,25 @@
     }
   }
 
-  .link {
+  a {
     border: 1px solid var(--loam-color-line);
     border-radius: var(--loam-radius-lg);
     display: block grid;
     gap: var(--loam-space-3xs);
     padding: var(--loam-space-xs) var(--loam-space-s);
+
+    > span + span {
+      color: var(--loam-color-fg-strong);
+      font-weight: 600;
+    }
+
+    > span:first-child {
+      color: var(--loam-color-fg-dim);
+      font-size: var(--loam-text-xs);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
 
     &[data-next] {
       text-align: end;
@@ -32,18 +48,5 @@
         background var(--loam-duration-md) var(--loam-ease),
         border-color var(--loam-duration-md) var(--loam-ease);
     }
-  }
-
-  .eyebrow {
-    color: var(--loam-color-fg-dim);
-    font-size: var(--loam-text-xs);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .title {
-    color: var(--loam-color-fg-strong);
-    font-weight: 600;
   }
 }

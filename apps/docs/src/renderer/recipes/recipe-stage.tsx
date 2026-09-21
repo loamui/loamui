@@ -138,7 +138,7 @@ export function RecipeStage({
   return (
     <div className="site-RecipeStage">
       <div className="toolbar" role="group" aria-label={`Preview controls for ${title}`}>
-        <fieldset className="widths">
+        <fieldset>
           <VisuallyHidden render={<legend />}>Preview width</VisuallyHidden>
           {WIDTHS.map((w) => (
             <label key={w.value} title={w.label}>
@@ -174,7 +174,7 @@ export function RecipeStage({
           </button>
         </div>
         {href && (
-          <Link href={href} className="open" title="Open on its own page">
+          <Link href={href} title="Open on its own page">
             <OpenIcon />
             <VisuallyHidden>Open {title} on its own page</VisuallyHidden>
           </Link>

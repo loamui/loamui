@@ -46,15 +46,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
   return (
     <div className="site-RecipePage">
-      <header className="hero">
+      <header>
         <RecipeCrumbs category={category} />
-        <h1 className="title">{category.title}</h1>
+        <h1>{category.title}</h1>
         <p className="lead">
           {category.blurb} {items.length} {items.length === 1 ? "recipe" : "recipes"}.
         </p>
       </header>
       <div className="shell">
-        <aside className="aside">
+        <aside>
           <RecipesRail current={category.slug} />
         </aside>
         <div className="content">
@@ -62,8 +62,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             const source = RECIPE_SOURCE[e.slug];
             return (
               <article key={e.slug} id={e.slug} className="entry">
-                <div className="entryHead">
-                  <h2 className="entryTitle">
+                <header>
+                  <h2>
                     <Link href={recipeHref(e)}>{e.meta.title}</Link>
                     <a
                       href={`#${e.slug}`}
@@ -73,8 +73,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                       #
                     </a>
                   </h2>
-                  <p className="entryDesc">{e.meta.description}</p>
-                </div>
+                  <p>{e.meta.description}</p>
+                </header>
                 <RecipeStage title={e.meta.title} href={recipeHref(e)}>
                   <e.Recipe />
                 </RecipeStage>
