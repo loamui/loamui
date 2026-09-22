@@ -120,8 +120,9 @@ export const NavigatesPages: Story = {
     await expect(page1).not.toHaveAttribute("aria-current");
 
     await userEvent.click(canvas.getByRole("link", { name: "Page 4" }));
-    const page4 = canvas.getByRole("link", { name: "Page 4" });
-    await expect(page4).toHaveAttribute("aria-current", "page");
-    await expect(page2).not.toHaveAttribute("aria-current");
+    // The window has moved on and page 2 has left it; only page 4 is current.
+    await expect(canvas.queryByRole("link", { name: "Page 2" })).toBeNull();
+    const current = canvas.getAllByRole("link").filter((link) => link.hasAttribute("aria-current"));
+    await expect(current).toEqual([canvas.getByRole("link", { name: "Page 4" })]);
   },
 };

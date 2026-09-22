@@ -71,7 +71,7 @@ describe("Progress", () => {
     );
     const root = container.querySelector(".loam-Progress")!;
     expect(root).toHaveClass("mine");
-    expect(root).toHaveStyle({ order: 2 });
+    expect(root).toHaveStyle({ order: "2" });
     expect(ref.current?.tagName).toBe("PROGRESS");
     expect(ref.current).toHaveAttribute("id", "p1");
   });

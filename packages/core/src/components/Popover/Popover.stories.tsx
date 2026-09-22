@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { userEvent as browser } from "@vitest/browser/context";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Popover } from "../../index.js";
 
@@ -155,14 +156,18 @@ export const TogglesAndDismisses: Story = {
     await userEvent.click(trigger);
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
     const popup = await within(document.body).findByRole("dialog");
-    await expect(popup).toBeVisible();
+    // The panel fades in from opacity 0.
+    await waitFor(() => expect(popup).toBeVisible());
 
-    await userEvent.click(document.body);
+    // Light dismiss (a click outside, Escape) is the popover's own; synthetic
+    // events never reach it, so the real pointer and keyboard are Playwright's
+    // under Vitest.
+    await browser.click(document.body);
     await waitFor(() => expect(trigger).toHaveAttribute("aria-expanded", "false"));
 
     await userEvent.click(trigger);
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
-    await userEvent.keyboard("{Escape}");
+    await browser.keyboard("{Escape}");
     await waitFor(() => expect(trigger).toHaveAttribute("aria-expanded", "false"));
   },
 };

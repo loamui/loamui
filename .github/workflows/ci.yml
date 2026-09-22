@@ -26,6 +26,8 @@ jobs:
       - run: pnpm --filter @loamui/core audit:contrast
       - run: pnpm -r test && pnpm --filter @loamui/core test:package
       - run: pnpm --filter @loamui/core exec playwright install --with-deps chromium firefox webkit
+      # Every story rendered in Chromium, its play function run, axe applied.
+      - run: pnpm --filter @loamui/core test:stories
       - run: pnpm --filter @loamui/core test:browser
       - uses: actions/upload-artifact@v4
         if: failure()

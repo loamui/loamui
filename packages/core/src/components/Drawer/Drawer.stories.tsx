@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
+import { userEvent as browser } from "@vitest/browser/context";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Drawer } from "../../index.js";
 import type { DrawerSide } from "../../index.js";
@@ -167,7 +168,9 @@ export const OpensAndDismisses: Story = {
     await expect(dialog.open).toBe(true);
     await expect(trigger).toHaveAttribute("data-popup-open", "true");
 
-    await userEvent.keyboard("{Escape}");
+    // A native <dialog> closes on the browser's own Escape, which a synthetic
+    // key event never reaches; the real keyboard is Playwright's under Vitest.
+    await browser.keyboard("{Escape}");
     await waitFor(() => expect(dialog.open).toBe(false));
     await waitFor(() => expect(trigger).not.toHaveAttribute("data-popup-open"));
     await expect(trigger).toHaveFocus();

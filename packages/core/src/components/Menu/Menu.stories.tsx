@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
+import { userEvent as browser } from "@vitest/browser/context";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Menu } from "../../index.js";
 
@@ -229,7 +230,9 @@ export const OpensNavigatesAndDismisses: Story = {
     });
     await expect(duplicate).toHaveFocus();
 
-    await userEvent.keyboard("{Escape}");
+    // Escape is the popover's own light dismiss, which a synthetic key event
+    // never reaches; the real keyboard is Playwright's under Vitest.
+    await browser.keyboard("{Escape}");
     await waitFor(() => expect(trigger).toHaveAttribute("aria-expanded", "false"));
     await expect(trigger).toHaveFocus();
   },

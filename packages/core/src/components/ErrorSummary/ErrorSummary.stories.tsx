@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Button, ErrorSummary, Field, Input } from "../../index.js";
 
 const meta = {
@@ -64,8 +64,14 @@ export const FocusesOnAppear: Story = {
       <ErrorSummary.Root>
         <ErrorSummary.Title />
         <ErrorSummary.List>
-          <ErrorSummary.Item href="#esf-email">Enter your email address</ErrorSummary.Item>
-          <ErrorSummary.Item href="#esf-name">Enter your full name</ErrorSummary.Item>
+          {/* The fragment navigation is stopped so the test frame stays put;
+              the item moves focus to the field regardless. */}
+          <ErrorSummary.Item href="#esf-email" onClick={(event) => event.preventDefault()}>
+            Enter your email address
+          </ErrorSummary.Item>
+          <ErrorSummary.Item href="#esf-name" onClick={(event) => event.preventDefault()}>
+            Enter your full name
+          </ErrorSummary.Item>
         </ErrorSummary.List>
       </ErrorSummary.Root>
       <Field.Root invalid id="esf-name">
@@ -88,6 +94,9 @@ export const FocusesOnAppear: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole("group", { name: "There is a problem" })).toHaveFocus();
     await userEvent.click(canvas.getByRole("link", { name: "Enter your email address" }));
-    await expect(canvas.getByRole("textbox", { name: "Email address" })).toHaveFocus();
+    // Focus moves on the next frame, after the fragment navigation would have scrolled.
+    await waitFor(() =>
+      expect(canvas.getByRole("textbox", { name: "Email address" })).toHaveFocus(),
+    );
   },
 };

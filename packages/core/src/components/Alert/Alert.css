@@ -69,14 +69,11 @@
     margin: 0;
   }
 
-  /* The description carries full-strength text; next to a title it recedes
-     to muted so the accent-coloured heading leads. */
+  /* The description carries full-strength text even next to a title: the
+     bold, channel-coloured title leads on its own, and muted text on the
+     neutral tint falls short of 4.5:1 (the audit checks this pair). */
   div.description {
     color: var(--loam-color-fg);
-
-    :scope:has(> div.body > .title) > div.body > & {
-      color: var(--loam-color-fg-muted);
-    }
   }
 
   /* Context: within a status region — the channel takes the status colour.
