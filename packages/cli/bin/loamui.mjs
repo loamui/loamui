@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { create } from "../src/commands/create.mjs";
 import { doctor } from "../src/commands/doctor.mjs";
 import { init } from "../src/commands/init.mjs";
+import { SCAFFOLDS } from "../src/frameworks.mjs";
 import { ui } from "../src/ui.mjs";
 import { PACKAGE_MANAGERS, detectPackageManager } from "../src/util.mjs";
 
@@ -15,13 +16,16 @@ const HELP = `loamui — set up LoamUI in a project, or create one
 Usage:
   loamui init [options]          Set up LoamUI in the current project
   loamui doctor [options]        Check the setup and report what is missing
-  loamui create [dir] [options]  Create a Next.js app with LoamUI set up
+  loamui create [dir] [options]  Create an app with LoamUI set up
 
 Options:
   --dry-run                      init: show what would change without changing it
-  --agent <claude-code|codex|none>
+  --json                         doctor: print the report as JSON
+  --framework <${SCAFFOLDS.join("|")}>
+                                 create: the framework to scaffold (default: next)
+  --agent <${AGENTS.join("|")}>
                                  Agent to install the skills for (default: claude-code)
-  --pm <pnpm|npm|yarn|bun>       Package manager (default: the one that ran this)
+  --pm <${PACKAGE_MANAGERS.join("|")}>       Package manager (default: the one that ran this)
   -y, --yes                      Accept defaults without prompting
   -h, --help                     Show this help
   -v, --version                  Show the version
@@ -32,11 +36,13 @@ function parse(argv) {
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "--dry-run") opts.dryRun = true;
+    else if (arg === "--json") opts.json = true;
     else if (arg === "-y" || arg === "--yes") opts.yes = true;
     else if (arg === "-h" || arg === "--help") opts.help = true;
     else if (arg === "-v" || arg === "--version") opts.version = true;
     else if (arg === "--agent") opts.agent = argv[++i];
     else if (arg === "--pm") opts.pm = argv[++i];
+    else if (arg === "--framework") opts.framework = argv[++i];
     else if (arg.startsWith("-")) {
       ui.fail(`Unknown option: ${arg}`);
       ui.info(HELP);
@@ -73,6 +79,7 @@ async function main() {
   }
   oneOf("agent", opts.agent, AGENTS);
   oneOf("pm", opts.pm, PACKAGE_MANAGERS);
+  oneOf("framework", opts.framework, SCAFFOLDS);
 
   const [command, ...rest] = opts._;
   const interactive = process.stdin.isTTY && !opts.yes;
@@ -95,11 +102,11 @@ async function main() {
       process.exitCode = init({ cwd, pm, agent, dryRun: Boolean(opts.dryRun) });
       return;
     case "doctor":
-      process.exitCode = doctor({ cwd, pm, agent });
+      process.exitCode = doctor({ cwd, pm, agent, json: Boolean(opts.json) });
       return;
     case "create": {
       const dir = rest[0] ?? (interactive ? await ask("Project directory?", "my-app") : "my-app");
-      process.exitCode = create({ dir, pm, agent });
+      process.exitCode = create({ dir, pm, agent, framework: opts.framework ?? "next" });
       return;
     }
     case undefined:

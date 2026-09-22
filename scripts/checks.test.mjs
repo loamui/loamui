@@ -277,7 +277,12 @@ test("the install guides link the stylesheet for the version of core in this rep
   const root = fileURLToPath(new URL("..", import.meta.url));
   const { version } = JSON.parse(readFileSync(`${root}packages/core/package.json`, "utf8"));
   const pattern = /cdn\.jsdelivr\.net\/npm\/@loamui\/core@([^/]+)\/dist\/styles\.css/g;
-  for (const page of ["installation", "installation/nextjs", "installation/tanstack-start"]) {
+  for (const page of [
+    "installation",
+    "installation/nextjs",
+    "installation/tanstack-start",
+    "installation/vite",
+  ]) {
     const source = readFileSync(`${root}apps/docs/src/app/docs/${page}/page.mdx`, "utf8");
     const versions = [...source.matchAll(pattern)].map((m) => m[1]);
     assert.ok(versions.length, `${page} links the stylesheet`);

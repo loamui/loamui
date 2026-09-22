@@ -1,10 +1,17 @@
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+
+/** Package-manager binaries are .cmd shims on Windows; spawn cannot find them by bare name. */
+export function binary(command, platform = process.platform) {
+  return platform === "win32" && ["npm", "npx", "pnpm", "yarn"].includes(command)
+    ? `${command}.cmd`
+    : command;
+}
 
 /** Run a command with the caller's stdio unless `quiet`; never through a shell. */
 export function run(command, args, options = {}) {
-  const result = spawnSync(command, args, {
+  const result = spawnSync(binary(command), args, {
     stdio: options.quiet ? "pipe" : "inherit",
     encoding: "utf8",
     ...options,
@@ -66,6 +73,21 @@ export function dependencies(cwd) {
   return { ...pkg.dependencies, ...pkg.devDependencies };
 }
 
+/**
+ * Where a package is installed, looking up from `cwd` the way Node resolves,
+ * so a workspace with hoisted dependencies is found. Null when it is not.
+ */
+export function installedPath(cwd, name) {
+  let dir = cwd;
+  for (;;) {
+    const candidate = join(dir, "node_modules", name);
+    if (existsSync(join(candidate, "package.json"))) return candidate;
+    const parent = dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
+}
+
 export function hasDependency(cwd, name) {
-  return Boolean(dependencies(cwd)[name]) || existsSync(join(cwd, "node_modules", name));
+  return Boolean(dependencies(cwd)[name]) || installedPath(cwd, name) !== null;
 }

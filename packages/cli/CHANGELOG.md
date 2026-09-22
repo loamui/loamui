@@ -3,7 +3,30 @@
 Notable changes to `loamui`, the setup command. It is versioned independently
 of `@loamui/core`; release tags use the `loamui-vMAJOR.MINOR.PATCH` form.
 
-## 0.1.0 — unreleased
+## 0.1.1 — unreleased
+
+### Added
+
+- TanStack Start is wired directly: the layer order goes into
+  `src/styles.css` and the stylesheet link goes first in the `links` of
+  `head()` in the root route. `create --framework tanstack-start` scaffolds
+  with `@tanstack/cli` and then runs `init`.
+- `create --framework vite` scaffolds with `create vite` (React and
+  TypeScript), replaces the template's reset stylesheet with the layer
+  order, and then runs `init`.
+- `doctor --json` prints the report as data, for CI and agents.
+- `doctor` reports a project copy of the Stylelint configuration, the
+  checker or the Oxlint and Oxfmt configs that differs from what this
+  version ships. Reported, never overwritten.
+
+### Fixed
+
+- Package-manager binaries resolve on Windows (`npm.cmd`, `npx.cmd`).
+- The installed core version is found up the tree, so a workspace with
+  hoisted dependencies gets the right stylesheet link.
+- The `skills` installer is pinned to a version and bumped on purpose.
+
+## 0.1.0 — 2026-09-22
 
 ### Added
 

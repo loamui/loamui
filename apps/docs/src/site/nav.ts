@@ -27,6 +27,7 @@ export const GETTING_STARTED: GuideLink[] = [
     children: [
       { name: "Next.js", href: "/docs/installation/nextjs" },
       { name: "TanStack Start", href: "/docs/installation/tanstack-start" },
+      { name: "Vite", href: "/docs/installation/vite" },
     ],
   },
   { name: "Build with the skill", href: "/docs/agent-workflow" },

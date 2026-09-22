@@ -10,47 +10,35 @@ description: Set up LoamUI with Next.js App Router and native CSS.
 
 Use Next.js App Router. Follow [Next.js’s current system requirements](https://nextjs.org/docs/app/getting-started/installation) for your Node.js runtime.
 
-## 1. Create the application
-
-For a new project, create an empty application without Tailwind:
+## 1. Create the application with LoamUI
 
 **pnpm**
 
 ```bash
-pnpm create next-app@latest my-app \
-  --ts --app --empty --no-tailwind --no-src-dir --use-pnpm --yes
-cd my-app
+pnpm dlx loamui@latest create
 ```
 
 **npm**
 
 ```bash
-npx create-next-app@latest my-app \
-  --ts --app --empty --no-tailwind --no-src-dir --use-npm --yes
-cd my-app
+npx loamui@latest create
 ```
 
 **yarn**
 
 ```bash
-yarn create next-app my-app \
-  --ts --app --empty --no-tailwind --no-src-dir --use-yarn --yes
-cd my-app
+yarn dlx loamui@latest create
 ```
 
 **bun**
 
 ```bash
-bun create next-app@latest my-app \
-  --ts --app --empty --no-tailwind --no-src-dir --use-bun --yes
-cd my-app
+bunx loamui@latest create
 ```
 
-Already have an application? Keep its routes and configuration and go to step 2. Check the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing its styling foundation.
+This runs `create-next-app` — TypeScript, App Router, empty, without Tailwind or a `src` directory — installs `@loamui/core`, writes a layout that links the stylesheet for that version, a welcome page and its stylesheet, and then runs `init`: the layer order in `app/globals.css`, Stylelint, Oxlint and Oxfmt with the composition checker and a `check` script, a LoamUI section in `AGENTS.md`, and the agent skills. Give the directory after `create`, or answer the prompt.
 
-## 2. Set up LoamUI
-
-Run this in the application:
+**Already have an application?** Keep its routes and configuration and run `init` in it instead:
 
 **pnpm**
 
@@ -76,11 +64,11 @@ yarn dlx loamui@latest init
 bunx loamui@latest init
 ```
 
-`init` installs `@loamui/core`, links the stylesheet for that version in `app/layout.tsx`, creates `app/globals.css` with the layer order as its first line and imports it from the layout, adds Stylelint, Oxlint and Oxfmt with the composition checker and a `check` script, writes a LoamUI section into `AGENTS.md`, and installs the agent skills. It only adds, and running it again changes nothing; `--dry-run` shows the plan. A project with a `src` directory is detected and wired under `src/app/`.
+`init` only adds — nothing you have is replaced — and running it again changes nothing; `--dry-run` shows the plan. It links the stylesheet in `app/layout.tsx`, creates `app/globals.css` with the layer order and imports it, and adds the checks, scripts and skills. A project with a `src` directory is detected and wired under `src/app/`. Check the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing its styling foundation.
 
-## 3. Check your first interface
+## 2. Check your first interface
 
-Copy the [foundation example](/docs/installation#2-check-the-foundation) into `app/page.tsx` and put its CSS alongside it. It starts with `"use client"`: the package is one client module, so compound parts such as `Field.Root` are undefined in a server component and the page fails at prerender. Keep components that render LoamUI parts on the client; the root layout stays a server component.
+`create` wrote the foundation page at `app/page.tsx` with `welcome.css` beside it; in an existing application, copy the [foundation example](/docs/installation#2-check-the-foundation) there. It starts with `"use client"`: the package is one client module, so compound parts such as `Field.Root` are undefined in a server component and the page fails at prerender. Keep components that render LoamUI parts on the client; the root layout stays a server component.
 
 **pnpm**
 
@@ -139,6 +127,40 @@ bun run start
 Next: [build with the skill](/docs/agent-workflow).
 
 ## The same setup by hand
+
+Create an empty application without Tailwind:
+
+**pnpm**
+
+```bash
+pnpm create next-app@latest my-app \
+  --ts --app --empty --no-tailwind --no-src-dir --use-pnpm --yes
+cd my-app
+```
+
+**npm**
+
+```bash
+npx create-next-app@latest my-app \
+  --ts --app --empty --no-tailwind --no-src-dir --use-npm --yes
+cd my-app
+```
+
+**yarn**
+
+```bash
+yarn create next-app my-app \
+  --ts --app --empty --no-tailwind --no-src-dir --use-yarn --yes
+cd my-app
+```
+
+**bun**
+
+```bash
+bun create next-app@latest my-app \
+  --ts --app --empty --no-tailwind --no-src-dir --use-bun --yes
+cd my-app
+```
 
 Install the package:
 

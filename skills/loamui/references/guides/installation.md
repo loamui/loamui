@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Set up LoamUI in one command, or by hand in Next.js or TanStack Start, check your first interface, then build with the agent skill.
+description: Set up LoamUI in one command, or by hand in Next.js, TanStack Start or Vite, check your first interface, then build with the agent skill.
 ---
 
 > LoamUI documentation, generated from the same source as the live page —
@@ -42,7 +42,7 @@ bunx loamui@latest init
 
 `init` installs `@loamui/core`, links the stylesheet for the installed version, writes the layer order, adds Stylelint, Oxlint and Oxfmt with the composition checker, their scripts and one `check` that runs them all, writes a LoamUI section into `AGENTS.md` so your agent knows the setup and the checks, and installs the LoamUI skill and its companions for your agent. It only adds; nothing you have is replaced, and running it again changes nothing. `--dry-run` shows the plan first.
 
-Starting from nothing? For Next.js there is a shortcut that runs `create-next-app` and then `init`; for another framework, use its own scaffolder and then `init`:
+Starting from nothing? `create` runs the framework's own scaffolder and then `init`: `create-next-app` by default, `@tanstack/cli` with `--framework tanstack-start`, or `create vite` with `--framework vite`. Each framework guide shows its command; for any other framework, use its scaffolder and then `init`.
 
 **pnpm**
 
@@ -104,6 +104,7 @@ Use a working framework application before adding LoamUI. These guides cover a f
 
 - **[Next.js App Router](/docs/installation/nextjs)** — routing, server rendering and React Server Components.
 - **[TanStack Start](/docs/installation/tanstack-start)** — a full-stack React framework with routing, server rendering and server functions.
+- **[Vite](/docs/installation/vite)** — a client-only React application with no routing or server rendering.
 
 The beta setup uses LoamUI as the styling foundation, without Tailwind or another global reset. [React recommends starting new applications with a framework](https://react.dev/learn/creating-a-react-app).
 

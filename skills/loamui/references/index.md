@@ -7,7 +7,7 @@
 ## Guides
 
 - [Introduction](guides/introduction.md) — Modern UI primitives for agent-assisted developers: contextual tokens, element styles and React components built on Google's Modern Web Guidance. · [live](https://loamui.com/docs.md)
-- [Installation](guides/installation.md) — Set up LoamUI in one command, or by hand in Next.js or TanStack Start, check your first interface, then build with the agent skill. · [live](https://loamui.com/docs/installation.md)
+- [Installation](guides/installation.md) — Set up LoamUI in one command, or by hand in Next.js, TanStack Start or Vite, check your first interface, then build with the agent skill. · [live](https://loamui.com/docs/installation.md)
 - [Build with the skill](guides/agent-workflow.md) — Install the LoamUI skill, give your agent a first prompt, and review the interface it builds. · [live](https://loamui.com/docs/agent-workflow.md)
 - [Tokens](guides/tokens.md) — The token primitive: a handful of semantic decisions, everything else derived, and the theming that falls out of it. · [live](https://loamui.com/docs/tokens.md)
 - [Element styles](guides/element-styles.md) — The element-styles primitive: enhanced default styles for native HTML, page-wide. Plain markup is already styled before any component appears. · [live](https://loamui.com/docs/element-styles.md)
@@ -19,6 +19,7 @@
 - [Accessibility](guides/accessibility.md) — What LoamUI guarantees: platform semantics, APG keyboard patterns, engineered WCAG specifics, and user preferences as the baseline. · [live](https://loamui.com/docs/accessibility.md)
 - [Install with Next.js](guides/nextjs.md) — Set up LoamUI with Next.js App Router and native CSS. · [live](https://loamui.com/docs/installation/nextjs.md)
 - [Install with TanStack Start](guides/tanstack-start.md) — Set up LoamUI with TanStack Start and native CSS, without Tailwind or a UI kit. · [live](https://loamui.com/docs/installation/tanstack-start.md)
+- [Install with Vite](guides/vite.md) — Set up LoamUI in a client-only React application built with Vite, with native CSS. · [live](https://loamui.com/docs/installation/vite.md)
 
 ## Components: Inputs
 
