@@ -72,3 +72,16 @@ function installTooling(dir) {
     writeFileSync(join(dir, "node_modules", name, "package.json"), JSON.stringify({ name }));
   }
 }
+
+test("doctor --json prints the report as data", () => {
+  const dir = nextProject();
+  const result = loamui(dir, "doctor", "--json");
+  assert.equal(result.status, 1);
+  const report = JSON.parse(result.stdout);
+  assert.equal(report.complete, false);
+  assert.equal(report.framework.id, "next");
+  assert.deepEqual(report.conflicts, []);
+  assert.equal(report.checks.find((c) => c.id === "core").ok, false);
+  assert.ok(report.checks.some((c) => c.manual !== null) === false, "next has no by-hand steps");
+  assert.deepEqual(report.drift, []);
+});

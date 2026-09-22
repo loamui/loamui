@@ -1,6 +1,6 @@
 {
   "name": "loamui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Set up LoamUI in a project, or create one, and check that the setup is complete.",
   "keywords": ["loamui", "cli", "init", "setup"],
   "homepage": "https://loamui.com/",

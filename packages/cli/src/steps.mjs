@@ -1,7 +1,7 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { addArgs, addDevArgs, dlx, hasDependency, readJson, run } from "./util.mjs";
+import { addArgs, addDevArgs, dlx, hasDependency, installedPath, readJson, run } from "./util.mjs";
 
 export const ASSETS = join(dirname(fileURLToPath(import.meta.url)), "..", "assets");
 
@@ -24,6 +24,20 @@ export const CHECKER_DEPS = [
 ];
 export const OXLINT_CONFIG = ".oxlintrc.json";
 export const OXFMT_CONFIG = ".oxfmtrc.json";
+
+/** Project-owned copies of packaged assets, keyed by where init puts them. */
+export const OWNED_COPIES = {
+  "stylelint-base.mjs": "stylelint-base.mjs",
+  "stylelint.config.mjs": "stylelint.config.mjs",
+  "scripts/loamui/check-composition.mjs": "check-composition.mjs",
+  "scripts/loamui/scope-rules.mjs": "scope-rules.mjs",
+  "scripts/loamui/spacing-rules.mjs": "spacing-rules.mjs",
+  [OXLINT_CONFIG]: OXLINT_CONFIG,
+  [OXFMT_CONFIG]: OXFMT_CONFIG,
+};
+
+/** Pinned, and bumped on purpose: the installer runs with the user's permissions. */
+export const SKILLS_INSTALLER = "skills@1.7.0";
 export const COMPANIONS = [
   { repo: "moderncss/skills", skill: "modern-css" },
   { repo: "GoogleChrome/modern-web-guidance", skill: "modern-web-guidance" },
@@ -38,7 +52,8 @@ const STYLESHEET_PATTERN =
  * Null until core is installed: the version is read, never guessed.
  */
 export function coreStylesheet(cwd) {
-  const version = readJson(join(cwd, "node_modules", "@loamui", "core", "package.json"))?.version;
+  const core = installedPath(cwd, "@loamui/core");
+  const version = core && readJson(join(core, "package.json"))?.version;
   return version ? `https://cdn.jsdelivr.net/npm/@loamui/core@${version}/dist/styles.css` : null;
 }
 
@@ -58,6 +73,16 @@ export function declaresLayerOrder(source) {
 
 const read = (cwd, file) =>
   existsSync(join(cwd, file)) ? readFileSync(join(cwd, file), "utf8") : null;
+
+/** Project copies that differ from what this version of loamui ships. Reported, never overwritten. */
+export function driftedCopies(cwd) {
+  return Object.entries(OWNED_COPIES)
+    .filter(([file, asset]) => {
+      const own = read(cwd, file);
+      return own !== null && own !== readFileSync(join(ASSETS, asset), "utf8");
+    })
+    .map(([file]) => file);
+}
 
 function upsertScript(cwd, name, command) {
   const path = join(cwd, "package.json");
@@ -87,7 +112,7 @@ function skillPresent(cwd, name) {
 
 function installSkill(cwd, pm, repo, skill, agent) {
   const [bin, args] = dlx(pm, [
-    "skills@latest",
+    SKILLS_INSTALLER,
     "add",
     repo,
     "--skill",
@@ -129,17 +154,27 @@ function layerStep(fw) {
 
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-/** The layer file only takes effect once the framework's entry imports it. */
+/**
+ * The layer file only takes effect once the framework's entry imports it. A
+ * bare side-effect import can be added; a URL import that head() links from
+ * is the starter's own shape, so its absence is reported instead.
+ */
 function layerImportStep(fw) {
-  const { file, specifier } = fw.layerImport;
-  const pattern = new RegExp(`import\\s+["']${escapeRegExp(specifier)}["']`);
-  return {
+  const { file, specifier, bare } = fw.layerImport;
+  const pattern = new RegExp(`import\\b[^;]*?["']${escapeRegExp(specifier)}["']`);
+  const step = {
     id: "layer-import",
     wiring: true,
     title: `${file} imports ${specifier}`,
     check: (cwd) => pattern.test(read(cwd, file) ?? ""),
     describe: () => `add import "${specifier}"; to ${file}`,
-    fix: (cwd) => {
+    manual: () =>
+      bare
+        ? `Add import "${specifier}"; to ${file} so the layer declaration loads.`
+        : `Import ${specifier} in ${file} and link it from head(), as the starter does (see ${fw.stylesheet.docs}).`,
+  };
+  if (bare)
+    step.fix = (cwd) => {
       const source = read(cwd, file);
       if (source === null) return false;
       if (pattern.test(source)) return true;
@@ -151,9 +186,8 @@ function layerImportStep(fw) {
         directive ? directive[1] + line + source.slice(directive[1].length) : line + source,
       );
       return true;
-    },
-    manual: () => `Add import "${specifier}"; to ${file} so the layer declaration loads.`,
-  };
+    };
+  return step;
 }
 
 function stylesheetStep(fw) {
@@ -162,52 +196,69 @@ function stylesheetStep(fw) {
   const linked = (cwd) => STYLESHEET_PATTERN.test(source(cwd));
   const legacy = (cwd) => source(cwd).includes(LEGACY_STYLESHEET);
   const bundled = (cwd) => source(cwd).includes("@loamui/core/styles.css");
-  const link = (cwd) =>
-    `<link rel="stylesheet" href="${coreStylesheet(cwd) ?? "<the URL init prints>"}" />`;
+  const url = (cwd) => coreStylesheet(cwd) ?? "<the URL init prints>";
+  const link = (cwd) => `<link rel="stylesheet" href="${url(cwd)}" />`;
+  const entry = (cwd) => `{ rel: "stylesheet", href: "${url(cwd)}" }`;
+  const where = (cwd) =>
+    mode === "links"
+      ? `${entry(cwd)} first in the links array of head() in ${file}`
+      : `${link(cwd)} inside <head>${file ? ` in ${file}` : ""}`;
   const manual = (cwd) =>
     legacy(cwd)
-      ? `Replace the unversioned ${LEGACY_STYLESHEET} link in ${file} with ${link(cwd)}.`
+      ? `Replace the unversioned ${LEGACY_STYLESHEET} link in ${file} with ${url(cwd)}.`
       : bundled(cwd)
-        ? `Remove the @loamui/core/styles.css import in ${file} and add ${link(cwd)} inside <head>.`
-        : `Add ${link(cwd)} inside <head>${file ? ` in ${file}` : ""} (see ${docs}).`;
+        ? `Remove the @loamui/core/styles.css import in ${file} and add ${where(cwd)}.`
+        : `Add ${where(cwd)} (see ${docs}).`;
   const step = {
     id: "stylesheet",
     wiring: true,
     title: file ? `${file} links the core stylesheet` : "the core stylesheet is linked",
     check: (cwd) => linked(cwd) && !bundled(cwd),
-    describe: (cwd) => `add ${link(cwd)} to <head> in ${file}`,
+    describe: (cwd) => `add ${where(cwd)}`,
     manual,
   };
-  if (mode === "html" || mode === "code")
-    step.fix = (cwd) => {
-      const src = read(cwd, file);
-      const url = coreStylesheet(cwd);
-      if (src === null || !url || bundled(cwd)) return false;
-      if (STYLESHEET_PATTERN.test(src)) return true;
-      if (legacy(cwd)) {
-        writeFileSync(join(cwd, file), src.replaceAll(LEGACY_STYLESHEET, url));
-        return true;
-      }
-      const tag = `<link rel="stylesheet" href="${url}" />`;
-      const closing = src.search(/<\/head>/i);
-      if (closing !== -1) {
-        const indent = /[^\S\n]*$/.exec(src.slice(0, closing))[0];
-        writeFileSync(
-          join(cwd, file),
-          `${src.slice(0, closing)}  ${tag}\n${indent}${src.slice(closing)}`,
-        );
-        return true;
-      }
-      // A layout with a body and no head: give it one. Anything else is theirs to edit.
-      const body = src.search(/<body[\s>]/i);
-      if (mode !== "code" || body === -1 || /<head[\s>]/i.test(src)) return false;
-      const indent = /[^\S\n]*$/.exec(src.slice(0, body))[0];
+  if (mode === "manual") return step;
+
+  step.fix = (cwd) => {
+    const src = read(cwd, file);
+    const href = coreStylesheet(cwd);
+    if (src === null || !href || bundled(cwd)) return false;
+    if (STYLESHEET_PATTERN.test(src)) return true;
+    if (legacy(cwd)) {
+      writeFileSync(join(cwd, file), src.replaceAll(LEGACY_STYLESHEET, href));
+      return true;
+    }
+    if (mode === "links") {
+      // First in the links array of head(), in the file's own quote style and indentation.
+      const links = /links:\s*\[\n?([^\S\n]*)/.exec(src);
+      if (!links) return false;
+      const quote = /rel:\s*'/.test(src) ? "'" : '"';
+      const indent = links[1];
+      const at = links.index + links[0].length - indent.length;
+      const line = `${indent}{ rel: ${quote}stylesheet${quote}, href: ${quote}${href}${quote} },\n`;
+      writeFileSync(join(cwd, file), src.slice(0, at) + line + src.slice(at));
+      return true;
+    }
+    const tag = `<link rel="stylesheet" href="${href}" />`;
+    const closing = src.search(/<\/head>/i);
+    if (closing !== -1) {
+      const indent = /[^\S\n]*$/.exec(src.slice(0, closing))[0];
       writeFileSync(
         join(cwd, file),
-        `${src.slice(0, body)}<head>\n${indent}  ${tag}\n${indent}</head>\n${indent}${src.slice(body)}`,
+        `${src.slice(0, closing)}  ${tag}\n${indent}${src.slice(closing)}`,
       );
       return true;
-    };
+    }
+    // A layout with a body and no head: give it one. Anything else is theirs to edit.
+    const body = src.search(/<body[\s>]/i);
+    if (mode !== "code" || body === -1 || /<head[\s>]/i.test(src)) return false;
+    const indent = /[^\S\n]*$/.exec(src.slice(0, body))[0];
+    writeFileSync(
+      join(cwd, file),
+      `${src.slice(0, body)}<head>\n${indent}  ${tag}\n${indent}</head>\n${indent}${src.slice(body)}`,
+    );
+    return true;
+  };
   return step;
 }
 

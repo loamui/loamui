@@ -21,11 +21,29 @@ export const PACKAGE_COMMANDS = {
     yarn: "yarn add @loamui/core",
     bun: "bun add @loamui/core",
   },
+  "vite-create": {
+    pnpm: "pnpm create vite@latest my-app --template react-ts\ncd my-app",
+    npm: "npm create vite@latest my-app -- --template react-ts\ncd my-app",
+    yarn: "yarn create vite my-app --template react-ts\ncd my-app",
+    bun: "bun create vite my-app --template react-ts\ncd my-app",
+  },
   "loamui-create": {
     pnpm: "pnpm dlx loamui@latest create",
     npm: "npx loamui@latest create",
     yarn: "yarn dlx loamui@latest create",
     bun: "bunx loamui@latest create",
+  },
+  "loamui-create-tanstack": {
+    pnpm: "pnpm dlx loamui@latest create --framework tanstack-start",
+    npm: "npx loamui@latest create --framework tanstack-start",
+    yarn: "yarn dlx loamui@latest create --framework tanstack-start",
+    bun: "bunx loamui@latest create --framework tanstack-start",
+  },
+  "loamui-create-vite": {
+    pnpm: "pnpm dlx loamui@latest create --framework vite",
+    npm: "npx loamui@latest create --framework vite",
+    yarn: "yarn dlx loamui@latest create --framework vite",
+    bun: "bunx loamui@latest create --framework vite",
   },
   "loamui-init": {
     pnpm: "pnpm dlx loamui@latest init",
@@ -52,6 +70,12 @@ export const PACKAGE_COMMANDS = {
     bun: "bun run build\nbun run start",
   },
   "tanstack-build": {
+    pnpm: "pnpm run build\npnpm run preview",
+    npm: "npm run build\nnpm run preview",
+    yarn: "yarn run build\nyarn run preview",
+    bun: "bun run build\nbun run preview",
+  },
+  "vite-build": {
     pnpm: "pnpm run build\npnpm run preview",
     npm: "npm run build\nnpm run preview",
     yarn: "yarn run build\nyarn run preview",

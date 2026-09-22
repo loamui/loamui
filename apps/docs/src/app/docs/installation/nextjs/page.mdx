@@ -9,25 +9,44 @@ export const metadata = {
 
 Use Next.js App Router. Follow [Next.js’s current system requirements](https://nextjs.org/docs/app/getting-started/installation) for your Node.js runtime.
 
-## Prepare the application
+## 1. Create the application with LoamUI
 
-For a new project, create an empty application without Tailwind:
+<PackageCommands name="loamui-create" />
+
+This runs `create-next-app` — TypeScript, App Router, empty, without Tailwind or a `src` directory — installs `@loamui/core`, writes a layout that links the stylesheet for that version, a welcome page and its stylesheet, and then runs `init`: the layer order in `app/globals.css`, Stylelint, Oxlint and Oxfmt with the composition checker and a `check` script, a LoamUI section in `AGENTS.md`, and the agent skills. Give the directory after `create`, or answer the prompt.
+
+**Already have an application?** Keep its routes and configuration and run `init` in it instead:
+
+<PackageCommands name="loamui-init" />
+
+`init` only adds — nothing you have is replaced — and running it again changes nothing; `--dry-run` shows the plan. It links the stylesheet in `app/layout.tsx`, creates `app/globals.css` with the layer order and imports it, and adds the checks, scripts and skills. A project with a `src` directory is detected and wired under `src/app/`. Check the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing its styling foundation.
+
+## 2. Check your first interface
+
+`create` wrote the foundation page at `app/page.tsx` with `welcome.css` beside it; in an existing application, copy the [foundation example](/docs/installation#2-check-the-foundation) there. It starts with `"use client"`: the package is one client module, so compound parts such as `Field.Root` are undefined in a server component and the page fails at prerender. Keep components that render LoamUI parts on the client; the root layout stays a server component.
+
+<PackageCommands name="dev" />
+
+Check the interface, then stop that server and run:
+
+<PackageCommands name="next-build" />
+
+Next: [build with the skill](/docs/agent-workflow).
+
+<details>
+<summary>What create and init did, by hand</summary>
+
+## The same setup by hand
+
+Create an empty application without Tailwind:
 
 <PackageCommands name="next-create" />
-
-This creates an empty application without Tailwind or a UI kit.
-
-Already have an application? Keep its routes and configuration. Check the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing its styling foundation.
-
-Every step below is what `npx loamui@latest init` does; run it instead to have them applied and checked.
-
-The paths below use `app/`; use `src/app/` instead if your project has a `src` directory.
 
 Install the package:
 
 <PackageCommands name="install" />
 
-## Load the stylesheet directly
+### Load the stylesheet directly
 
 Load the stylesheet with a `<link>` so it reaches the browser unchanged. This avoids a build-time parsing limitation in Lightning CSS, used by Next.js, which currently rejects some modern CSS syntax used by LoamUI.
 
@@ -52,6 +71,8 @@ The browser loads tokens, element styles and component styles without sending co
 
 The URL is pinned to the installed version of `@loamui/core`; keep the two in step when you update. See [stylesheet delivery](/docs/installation#stylesheet-delivery) for self-hosting.
 
+### Declare the layer order
+
 The `--empty` scaffold does not create `app/globals.css`. Create it with this layer order as its first line, before any imports or rules that create LoamUI layers:
 
 ```css
@@ -62,14 +83,6 @@ Next.js can emit bundled recipe styles before the manual stylesheet link. This d
 
 For a fresh application, this declaration is the whole file, and the layout above imports it. Preserve existing application styles when integrating into a working project. Import recipe styles alongside their components. Check the emitted stylesheet order on a direct page load and after client navigation.
 
-## Check your first interface
+The checks, scripts and skills are described in [Build with the skill](/docs/agent-workflow#project-setup).
 
-Copy the [foundation example](/docs/installation#2-check-the-foundation) into `app/page.tsx` and put its CSS alongside it. It starts with `"use client"`: the package is one client module, so compound parts such as `Field.Root` are undefined in a server component and the page fails at prerender. Keep components that render LoamUI parts on the client; the root layout stays a server component.
-
-<PackageCommands name="dev" />
-
-Check the interface, then stop that server and run:
-
-<PackageCommands name="next-build" />
-
-Next: [build with the skill](/docs/agent-workflow).
+</details>

@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: npm
     permissions:
-      contents: read
+      contents: write # the GitHub Release
       id-token: write # npm trusted publishing
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +35,7 @@ jobs:
             echo "Release tags must use vMAJOR.MINOR.PATCH. Prereleases need a separate npm dist-tag."
             exit 1
           fi
+          echo "PKG_VERSION=$PKG_VERSION" >> "$GITHUB_ENV"
           if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
             echo "Tag v$TAG_VERSION does not match @loamui/core version $PKG_VERSION — bump the package version before tagging."
             exit 1
@@ -43,5 +44,36 @@ jobs:
       - run: pnpm --filter @loamui/core build
       - run: npm pack --dry-run
         working-directory: packages/core
-      - run: npm publish --access public --provenance
+      # A tag can be pushed again, or created after a manual publish: skip the
+      # publish when the version is already on the registry, then release as usual.
+      - id: registry
+        env:
+          PKG_VERSION: ${{ env.PKG_VERSION }}
+        run: |
+          if npm view "@loamui/core@$PKG_VERSION" version >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "@loamui/core@$PKG_VERSION is already on npm; skipping publish."
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.registry.outputs.published != 'true'
+        run: npm publish --access public --provenance
         working-directory: packages/core
+      - name: Create the GitHub Release from the changelog
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PKG_VERSION: ${{ env.PKG_VERSION }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          node -e '
+            const fs = require("node:fs");
+            const [, version, file] = process.argv;
+            const md = fs.readFileSync(file, "utf8");
+            const start = md.indexOf(`## ${version}`);
+            if (start === -1) { console.error(`No "## ${version}" section in ${file}`); process.exit(1); }
+            const rest = md.slice(md.indexOf("\n", start) + 1);
+            const end = rest.search(/^## /m);
+            fs.writeFileSync("release-notes.md", (end === -1 ? rest : rest.slice(0, end)).trim() + "\n");
+          ' "$PKG_VERSION" packages/core/CHANGELOG.md
+          gh release view "$RELEASE_TAG" >/dev/null 2>&1 \
+            || gh release create "$RELEASE_TAG" --title "@loamui/core $PKG_VERSION" --notes-file release-notes.md

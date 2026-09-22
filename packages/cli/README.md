@@ -6,7 +6,7 @@ complete.
 ```bash
 npx loamui@latest init            # set up LoamUI in the current project
 npx loamui@latest doctor          # check the setup and report what is missing
-npx loamui@latest create          # create a Next.js app with LoamUI set up
+npx loamui@latest create          # create an app with LoamUI set up
 ```
 
 With pnpm use `pnpm dlx loamui@latest …`, with Yarn `yarn dlx loamui@latest …`,
@@ -26,9 +26,10 @@ Claude Code) so an agent knows the setup and the checks, and installs the
 Every change is additive: nothing that exists is replaced, and running `init`
 again changes nothing. `--dry-run` prints what it would do and touches nothing.
 
-Next.js and Vite are wired directly, including the stylesheet link in the
-layout or `index.html`. TanStack Start and Remix get the matching guide for
-the link, and the rest of the setup still applies.
+Next.js, TanStack Start and Vite are wired directly, including the
+stylesheet link in the layout, the root route's `head()` or `index.html`.
+Remix gets the matching guide for the link, and the rest of the setup still
+applies. In a workspace, the installed core is found up the tree.
 
 ### Conflicts
 
@@ -51,14 +52,21 @@ wiring waits.
 ## doctor
 
 The same checks as `init`, without changes. Exit code 1 when anything is
-missing, so it can run in CI or from an agent.
+missing, so it can run in CI or from an agent; `--json` prints the report as
+data. It also says when a project copy of the Stylelint configuration, the
+checker or the Oxlint and Oxfmt configs differs from what this version of
+`loamui` ships — reported, never overwritten, because projects customise
+them.
 
 ## create
 
-`create [dir]` runs `create-next-app` with the flags the guides use (asking
-for the directory when none is given), installs
-core, writes a layout that links the versioned stylesheet, a welcome page and
-its stylesheet, then runs `init`. Pass `.` to create in the current, empty
+`create [dir]` runs the framework's own scaffolder (asking for the directory
+when none is given), installs core, writes the foundation — a welcome page,
+its stylesheet, and the layout or route that links the versioned stylesheet —
+then runs `init`. `--framework next` (the default) uses `create-next-app`
+with the flags the guides use; `--framework tanstack-start` uses
+`@tanstack/cli create --blank`; `--framework vite` uses `create vite` with the
+React and TypeScript template. Pass `.` to create in the current, empty
 folder.
 
 ## Options
@@ -67,7 +75,9 @@ folder.
   Default `claude-code`; `none` skips the skills.
 - `--pm <pnpm|npm|yarn|bun>` — the package manager. Default: the one that ran
   the command.
+- `--framework <next|tanstack-start|vite>` — `create` only. Default `next`.
 - `--dry-run` — `init` only.
+- `--json` — `doctor` only.
 - `-y`, `--yes` — accept defaults without prompting.
 
 ## The stylesheet

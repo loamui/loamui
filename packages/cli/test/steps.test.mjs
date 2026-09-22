@@ -1,11 +1,17 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { detectFramework } from "../src/frameworks.mjs";
-import { LAYER_DECLARATION, coreStylesheet, declaresLayerOrder, steps } from "../src/steps.mjs";
+import {
+  LAYER_DECLARATION,
+  coreStylesheet,
+  declaresLayerOrder,
+  driftedCopies,
+  steps,
+} from "../src/steps.mjs";
 import { TAILWIND4_LAYER_ORDER } from "../src/conflicts.mjs";
-import { installCore, nextProject, step, viteProject } from "./fixtures.mjs";
+import { installCore, nextProject, project, step, tmp, viteProject } from "./fixtures.mjs";
 
 const read = (dir, file) => readFileSync(join(dir, file), "utf8");
 
@@ -118,7 +124,7 @@ test("a Next layout with the unversioned hosted link has it replaced in place", 
   installCore(dir, "0.2.0");
   const link = step(dir, "stylesheet");
   assert.equal(link.check(dir), false);
-  assert.match(link.manual(dir), /Replace the unversioned .* with <link .*@loamui\/core@0.2.0/);
+  assert.match(link.manual(dir), /Replace the unversioned .* with https:.*@loamui\/core@0.2.0/);
   assert.equal(link.fix(dir), true);
   assert.equal(
     read(dir, "app/layout.tsx"),
@@ -249,4 +255,79 @@ test("the check script and the agent instructions are written once, in the packa
   assert.equal(read(dir, "CLAUDE.md"), "@AGENTS.md\n");
   agents.fix(dir);
   assert.equal(md, read(dir, "AGENTS.md"), "running again adds nothing");
+});
+
+test("TanStack Start: the layer order goes into styles.css and the link goes first in head()'s links", () => {
+  const root = [
+    "import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'",
+    "",
+    "import appCss from '../styles.css?url'",
+    "",
+    "export const Route = createRootRoute({",
+    "  head: () => ({",
+    "    meta: [{ charSet: 'utf-8' }],",
+    "    links: [",
+    "      {",
+    "        rel: 'stylesheet',",
+    "        href: appCss,",
+    "      },",
+    "    ],",
+    "  }),",
+    "})",
+    "",
+  ].join("\n");
+  const dir = project(
+    { "@tanstack/react-start": "1.0.0", react: "19.0.0", vite: "8.0.0" },
+    { files: { "src/routes/__root.tsx": root, "src/styles.css": "body { margin: 0 }\n" } },
+  );
+  installCore(dir, "0.2.0");
+  const fw = detectFramework(dir);
+  assert.equal(fw.id, "tanstack-start");
+  assert.equal(fw.autoWireLayer, true);
+
+  const imported = step(dir, "layer-import");
+  assert.equal(imported.check(dir), true, "the ?url import counts as importing the layer file");
+  assert.equal(imported.fix, undefined, "a missing URL import is reported, not written");
+
+  const link = step(dir, "stylesheet");
+  assert.equal(link.check(dir), false);
+  assert.equal(link.fix(dir), true);
+  const after = read(dir, "src/routes/__root.tsx");
+  assert.match(
+    after,
+    /links: \[\n {6}\{ rel: 'stylesheet', href: 'https:\/\/cdn\.jsdelivr\.net\/npm\/@loamui\/core@0\.2\.0\/dist\/styles\.css' \},\n {6}\{\n {8}rel: 'stylesheet',\n {8}href: appCss,/,
+    "inserted first, single-quoted, at the array's indentation",
+  );
+  assert.equal(link.check(dir), true);
+  link.fix(dir);
+  assert.equal(after, read(dir, "src/routes/__root.tsx"), "a second fix changes nothing");
+
+  step(dir, "layer").fix(dir);
+  assert.ok(read(dir, "src/styles.css").startsWith(LAYER_DECLARATION));
+  assert.ok(read(dir, "src/styles.css").includes("body { margin: 0 }"), "existing styles kept");
+});
+
+test("core is found up the tree in a workspace with hoisted dependencies", () => {
+  const workspace = tmp();
+  installCore(workspace, "0.4.0");
+  const pkg = join(workspace, "packages", "web");
+  mkdirSync(join(pkg, "app"), { recursive: true });
+  writeFileSync(
+    join(pkg, "package.json"),
+    JSON.stringify({ dependencies: { next: "16.0.0", react: "19.0.0" } }),
+  );
+  assert.equal(
+    coreStylesheet(pkg),
+    "https://cdn.jsdelivr.net/npm/@loamui/core@0.4.0/dist/styles.css",
+  );
+  assert.equal(step(pkg, "core").check(pkg), true);
+});
+
+test("a project copy that differs from the packaged asset is reported as drift", () => {
+  const dir = nextProject();
+  step(dir, "stylelint-files").fix(dir);
+  step(dir, "oxlint-config").fix(dir);
+  assert.deepEqual(driftedCopies(dir), []);
+  writeFileSync(join(dir, "stylelint.config.mjs"), "export default {};\n");
+  assert.deepEqual(driftedCopies(dir), ["stylelint.config.mjs"]);
 });

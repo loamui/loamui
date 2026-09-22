@@ -5,6 +5,14 @@ import { preflight } from "../src/preflight.mjs";
 import { detectPackageManager } from "../src/util.mjs";
 import { nextProject, project, tmp, viteProject } from "./fixtures.mjs";
 
+test("package-manager binaries get the .cmd suffix on Windows only", async () => {
+  const { binary } = await import("../src/util.mjs");
+  assert.equal(binary("npm", "win32"), "npm.cmd");
+  assert.equal(binary("npx", "win32"), "npx.cmd");
+  assert.equal(binary("bun", "win32"), "bun");
+  assert.equal(binary("npm", "darwin"), "npm");
+});
+
 test("the package manager is the one that invoked us", () => {
   const original = process.env.npm_config_user_agent;
   process.env.npm_config_user_agent = "pnpm/9.0.0 npm/? node/v20";
@@ -31,10 +39,7 @@ test("Next is wired through app/ or src/app/, Vite through index.html", () => {
   assert.equal(vite.layerImport.specifier, "./index.css");
 });
 
-test("TanStack Start, Remix and unknown projects are guided, not edited", () => {
-  const start = detectFramework(project({ "@tanstack/react-start": "1.0.0", react: "19.0.0" }));
-  assert.equal(start.id, "tanstack-start");
-  assert.equal(start.autoWireLayer, false);
+test("Remix and unknown projects are guided, not edited", () => {
   const remix = detectFramework(project({ "@remix-run/react": "2.0.0", react: "19.0.0" }));
   assert.equal(remix.stylesheet.file, "app/root.tsx");
   const unknown = detectFramework(project({ react: "19.0.0" }));
