@@ -89,7 +89,7 @@ Set invalid on Field.Root and compose Field.Error before the checkbox for its an
 
 ### Composed inside a Field
 
-The bare Checkbox carries no label prop: it reads its id, aria-describedby and aria-invalid from the surrounding Field, so the label lives on Field.Label and nothing wires them by hand.
+Without label or description props, Checkbox renders the bare input: it reads its id, aria-describedby and aria-invalid from the surrounding Field, so the label lives on Field.Label and nothing wires them by hand.
 
 ```tsx
 <Field.Root>
@@ -150,6 +150,8 @@ A pre-ticked box gets submitted by everyone who never read it, so the data recor
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `label / description` | `ReactNode` | — | Optional content for a complete labelled row. Omit both when composing the control inside Field.Label. |
+| `wrapperProps` | `Omit<PartProps<"div">, "children">` | — | Props for the row rendered with label or description. className, style and ref on the component target its native input. |
 | `indeterminate` | `boolean` | `false` | Sets the native partially checked state. |
 | `...others` | `InputHTMLAttributes` | — | Native input props except type and size, including ref. Compose labels and descriptions through Field. |
 

@@ -105,8 +105,6 @@ consequence still lives in the stylesheets:
 </section>
 ```
 
-</div>
-
 Notice the checkbox: `--loam-context` is not a button feature. Core's token rules
 remap semantic colours on descendants of the region. Native elements and components
 that consume those tokens use them for checked states, focus rings and carets.
@@ -189,8 +187,6 @@ export function BrandButton(props: ButtonProps) {
 }
 ```
 
-</div>
-
 ## The size of the space
 
 For local sizing, establish a measuring ancestor with `container-type: inline-size`.
@@ -206,9 +202,6 @@ these exceptions.
 Padding and font are fluid container-relative tokens, and in a
 container of 16rem or less a button takes the full width. The layout decides, per instance
 of the layout, not per instance of the button:
-
-  </div>
-</div>
 
 When the design wants stacked full-width actions in a wide container, that intent is still
 declared on the region, not the buttons. It is declared as actual layout: a grid (or
@@ -236,10 +229,10 @@ Form styling reads accessibility state. Set `Field.Root invalid` from the valida
 result and compose the message with `Field.Error`:
 
 ```css
-/* the native input reads its own accessibility state, which Field
-   receives from explicit validation state */
-.loam-Input[aria-invalid="true"] {
-  border-color: var(--loam-color-danger);
+@scope (.loam-Input-field) to ([class*="loam-"]) {
+  :scope:has(input[aria-invalid="true"]) {
+    border-color: var(--loam-color-danger);
+  }
 }
 ```
 

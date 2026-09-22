@@ -181,7 +181,7 @@ Owns the state (text, choice, open), the live status region and the hidden input
 
 ### Combobox.Input
 
-The box: the library's Input as the combobox (role="combobox", aria-autocomplete="list", aria-expanded, aria-controls, aria-activedescendant). Inside a Field.Root it is named, described and marked invalid by the Field. All Input props except value, defaultValue and type are forwarded: placeholder, disabled and every native <input> prop. The native input anchors the suggestions; compose adornments as siblings.
+The box: the library's Input as the combobox (role="combobox", aria-autocomplete="list", aria-expanded, aria-controls, aria-activedescendant). Inside a Field.Root it is named, described and marked invalid by the Field. All Input props except value, defaultValue and type are forwarded: placeholder, disabled and every native <input> prop. The native input anchors the suggestions. Input’s startSection, endSection and wrapperProps are also forwarded.
 
 ### Combobox.Trigger
 

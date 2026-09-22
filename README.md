@@ -46,9 +46,10 @@ Compound components are ES module namespaces: compose `Alert.Root`,
 Every compound component has an explicit `.Root`; the namespace itself is
 not a component. The package root also exports these namespaces.
 
-Individual exports such as `AlertRoot` and `AlertTitle` remain available for
-fine-grained tree shaking; some bundlers retain sibling parts when using a
-namespace. Prefer component entry points when controlling lazy-loaded chunks.
+Standalone components such as `Button` and `Input` are callable. Compound
+parts are accessed through their namespace, without parallel `AlertRoot` or
+`AlertTitle` value exports. Prefer component entry points when controlling
+lazy-loaded chunks.
 
 JavaScript ships as separate ES modules with client boundaries preserved.
 Static components can render on the server; interactive parts declare their
@@ -201,13 +202,14 @@ the authority for everything it covers: run it and believe it.
   specific to live here. Larger sections live as worked recipes on the docs
   site: product-specific compositions to study and adapt, built on core the
   way any consumer would, and held to the same pillars and gates.
-- **Composition.** Compound components expose parts; element swap goes through
-  `render`, and Button icons and loaders are children; Input is a single native
-  control with explicitly composed adornments. Avatar composes Root,
-  Image and Fallback; Switch exposes Root, Control, Track and Thumb.
-  Native controls self-wire from `Field`, including callable Checkbox and Radio.
-  Compose labels, descriptions and errors through Field, using `Field.Item` for
-  independent option associations. Set validation explicitly with Root `invalid`.
+- **Composition.** Simple components remain callable; compound components expose
+  parts where consumers need control, without making every internal element
+  public. Element swap goes through `render`, Button icons and loaders are
+  children, and Input accepts `startSection` and `endSection` content inside
+  its wrapper. Avatar composes Root, Image and Fallback; Switch exposes Root,
+  Control, Track and Thumb. Controls self-wire from Field; compose labels and
+  messages through Field, use its Item part for independent option associations,
+  and set validation explicitly with Root `invalid`.
 - **CSS.** Selectors are `@scope`d, not BEM: one `loam-` class per root, parts
   by element type or short class. A scope that hosts foreign content is fenced
   with a donut (`to ([class*="loam-"])`). Refer to elements directly, with no

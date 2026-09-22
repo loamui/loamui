@@ -46,7 +46,11 @@ component entry point such as `@loamui/core/field`. Compose `Field.Root`,
 `.Root`. Alert has no title, icon or dismissal props on its root: use
 `Alert.Title`, `Alert.Icon` and `Alert.Close`. Avatar uses `Avatar.Root`,
 `Avatar.Image` and `Avatar.Fallback`; fallback content is supplied as children.
-Individual exports such as `FieldRoot` remain available for fine-grained tree shaking.
+
+Parts are accessed through the namespace; prefixed names such as `FieldRoot`
+are implementation details, not public value exports. Simple components such as
+Button, Input, Checkbox and Radio remain callable. Internal markup does not
+require separate public parts.
 
 The package preserves module-level client boundaries. React Server Components
 can compose individual parts with serializable props; a composition needs
@@ -109,14 +113,15 @@ separately; passing a check proves only the behaviour it covers.
 4. **Compose, don't configure.** `Field.Root > Field.Label,
 Field.Description, Field.Error, Input` in that order.
 
-   - The controls self-wire: `Input`, `Select`, `Textarea`, `Range`,
+   - The controls self-wire: `Input`, `Select.Root`, `Textarea`, `Range.Control`,
      `QuantityInput`, `FileInput.Control`, `Search.Input`.
    - Overlays are `Modal.Root > Modal.Trigger + Modal.Popup`.
    - Swap the rendered element with `render={<a href="…" />}`.
 
 5. **Icons are children.** `<Button><Icon /> Save</Button>`; the component
-   detects the `svg`. Input renders a native input; compose adornments as siblings
-   in your own markup.
+   detects the `svg`. Input accepts `startSection` and `endSection` content
+   inside its bordered wrapper. Its native input receives `className`, `style`
+   and `ref`; use `wrapperProps` for the surrounding box.
 6. **Validation is explicit.** Set `Field.Root invalid={hasError}` and compose
    `<Field.Error>` for the message. Message IDs register after hydration; supply
    explicit `aria-describedby` links for initial server HTML. Write the message

@@ -21,7 +21,7 @@ Reach for a component when a native element needs structure it does not have on 
 
 ## Compose, don't configure
 
-Composition is the components' own concern, which is why it lives here rather than beside the pillars: tokens and element styles have nothing to compose. Compound components expose their parts, element substitution goes through the `render` prop, and Button icons and loaders are children. Input renders one native input; adornments are composed as siblings in caller-owned markup. Bespoke variants are compositions in your codebase, not configuration in the library.
+Simple components such as Button and Input remain callable. Compound components expose parts where consumers need to arrange structure or behaviour; an internal wrapper does not need to become a public part. Element substitution goes through the `render` prop where supported. Button icons and loaders are children; Input accepts `startSection` and `endSection` content inside its bordered wrapper. Bespoke variants are compositions in your codebase.
 
 ```tsx
 <Field.Root>
@@ -32,7 +32,7 @@ Composition is the components' own concern, which is why it lives here rather th
 </Field.Root>
 ```
 
-Three rules follow from it. Parts, not prop soup: `Modal.Root`, `Modal.Trigger`, `Modal.Popup`. `render` swaps the element and keeps the wiring. Form controls self-wire from the surrounding `Field`, so there are no `label` or `error` props to keep in step.
+Three rules follow from it. Parts, not prop soup: `Modal.Root`, `Modal.Trigger`, `Modal.Popup`. `render` swaps the element and keeps the wiring. Form controls self-wire from the surrounding `Field`. Checkbox and Radio also accept optional `label` and `description` props for a complete row; omit them when composing labels through Field.
 
 ## Finding your way
 
@@ -61,9 +61,8 @@ import { Alert } from "@loamui/core/alert";
 Compound components use an explicit `.Root`. Alert's heading, icon and dismiss
 button are children: `Alert.Title`, `Alert.Icon` and `Alert.Close`.
 
-Individual exports such as `AlertRoot` and `AlertTitle` are also available.
-They allow finer-grained tree shaking in bundlers that retain sibling parts
-when using a namespace. Use component entry points such as
+Parts are available through their namespace, without parallel `AlertRoot` or
+`AlertTitle` value exports. Use component entry points such as
 `@loamui/core/modal` to control lazy-loading boundaries.
 
 The build preserves module-level client directives. Static parts can render

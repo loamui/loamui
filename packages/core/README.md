@@ -43,9 +43,10 @@ Compound components are ES module namespaces: compose `Alert.Root`,
 Every compound component has an explicit `.Root`; the namespace itself is
 not a component. The package root also exports these namespaces.
 
-Individual exports such as `AlertRoot` and `AlertTitle` remain available for
-fine-grained tree shaking; some bundlers retain sibling parts when using a
-namespace. Prefer component entry points when controlling lazy-loaded chunks.
+Standalone components such as `Button` and `Input` are callable. Compound
+parts are accessed through their namespace, without parallel `AlertRoot` or
+`AlertTitle` value exports. Prefer component entry points when controlling
+lazy-loaded chunks.
 
 JavaScript ships as separate ES modules with client boundaries preserved.
 Static components can render on the server; interactive parts declare their

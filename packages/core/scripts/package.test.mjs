@@ -13,10 +13,7 @@ const pkg = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
 async function bundle(contents, options = {}) {
   return build({
     stdin: { contents, resolveDir: root, sourcefile: "consumer.js" },
-    // Pin esbuild's working directory so the metafile's relative output paths
-    // mean the same thing wherever the test is run from. Without it the paths
-    // resolve against process.cwd(), and running from the repo root instead of
-    // the package silently breaks the lookup below.
+    // Metafile paths must resolve independently of the test runner's cwd.
     absWorkingDir: root,
     bundle: true,
     format: "esm",
@@ -40,36 +37,66 @@ test("every public component entry point resolves to the root's named exports", 
     }
     await readFile(join(root, entry.types), "utf8");
   }
-  // Two shapes, and no hybrids.
-  //
-  // A component with parts is a namespace, and you build it from those parts:
-  // there is no one-invocation shortcut past them, because asking consumers to
-  // compose IS the composition model. Each part is its own module, so it keeps
-  // its own client reference and shakes on its own. A component with no parts
-  // worth exposing is a plain callable export, with no `.Root` standing between
-  // a consumer and a tag that says nothing more than the tag does.
-  //
-  // A part is worth exposing when it renders something you could not otherwise
-  // get. That is the whole test, and it is why Checkbox and Radio have none:
-  // with no label they already ARE the bare control, and the tick is painted in
-  // CSS, so there is no indicator element to hand out.
   const NAMESPACES = [
-    "Alert", "Avatar", "Badge", "Breadcrumbs", "Carousel", "Combobox", "DateInput",
-    "Details", "Drawer", "ErrorSummary", "Field", "Fieldset", "FileInput", "Menu",
-    "Modal", "Nav", "Pagination", "Popover", "RadioGroup", "Range", "Search",
-    "SegmentedControl", "Select", "Stepper", "Switch", "Table", "Tabs", "Toast", "Tooltip",
+    "Alert",
+    "Avatar",
+    "Badge",
+    "Breadcrumbs",
+    "Carousel",
+    "Combobox",
+    "DateInput",
+    "Details",
+    "Drawer",
+    "ErrorSummary",
+    "Field",
+    "Fieldset",
+    "FileInput",
+    "Menu",
+    "Modal",
+    "Nav",
+    "Pagination",
+    "Popover",
+    "RadioGroup",
+    "Range",
+    "Search",
+    "SegmentedControl",
+    "Select",
+    "Stepper",
+    "Switch",
+    "Table",
+    "Tabs",
+    "Toast",
+    "Tooltip",
   ];
   const CALLABLE = [
-    "Button", "Card", "Checkbox", "CopyButton", "Input", "Loader", "Meter",
-    "PasswordInput", "Price", "Progress", "QuantityInput", "Radio", "Rating",
-    "Separator", "SignpostLink", "Skeleton", "SkipLink", "Textarea",
-    "Time", "Toasts", "VisuallyHidden",
+    "Button",
+    "Card",
+    "Checkbox",
+    "CopyButton",
+    "Input",
+    "Loader",
+    "Meter",
+    "PasswordInput",
+    "Price",
+    "Progress",
+    "QuantityInput",
+    "Radio",
+    "Rating",
+    "Separator",
+    "SignpostLink",
+    "Skeleton",
+    "SkipLink",
+    "Textarea",
+    "Time",
+    "Toasts",
+    "VisuallyHidden",
   ];
 
-  // Every exported component is in exactly one bucket: the rule is the whole
-  // surface, not a sample of it.
   const components = Object.entries(main)
-    .filter(([k, v]) => /^[A-Z]/.test(k) && (typeof v === "function" || (v && typeof v === "object" && v.Root)))
+    .filter(
+      ([k, v]) =>
+        /^[A-Z]/.test(k) && (typeof v === "function" || (v && typeof v === "object" && v.Root)),
+    )
     .map(([k]) => k);
   assert.deepEqual(
     components.sort(),
@@ -88,16 +115,11 @@ test("every public component entry point resolves to the root's named exports", 
     assert.equal(main[name].Root, undefined, `${name} has no parts, so no Root`);
   }
 
-  // No part survives that only renamed what the component already renders.
   assert.equal(main.Checkbox.Control, undefined, "Checkbox with no label is the bare control");
   assert.equal(main.Radio.Control, undefined, "Radio with no label is the bare control");
   assert.equal(main.Badge.Dot, undefined, "a status dot is an icon child, not a part");
-  // Badge's label is a part, so what sits beside it is composed on one side.
   assert.equal(typeof main.Badge.Text, "function", "Badge.Text holds the label");
 
-  // Anatomy completeness: a namespace exposes every element its scope styles,
-  // so the library never ships a component for half a table. `check:anatomy`
-  // gates this against the stylesheets; these pin the two that were partial.
   for (const part of ["Caption", "Thead", "Tbody", "Tfoot", "Tr", "Th", "Td"]) {
     assert.equal(typeof main.Table[part], "function", `Table.${part} is a part`);
   }
@@ -105,7 +127,13 @@ test("every public component entry point resolves to the root's named exports", 
     assert.equal(typeof main.Select[part], "function", `Select.${part} is a part`);
   }
 
-  for (const name of ["ModalRoot", "TabsTab", "FieldDescription", "RadioGroupRoot", "RadioGroupLegend"]) {
+  for (const name of [
+    "ModalRoot",
+    "TabsTab",
+    "FieldDescription",
+    "RadioGroupRoot",
+    "RadioGroupLegend",
+  ]) {
     assert.equal(main[name], undefined, `${name} is not a second way to say ${name}`);
   }
 });
@@ -150,8 +178,6 @@ test("a single component import eliminates unrelated components", async () => {
   for (const [name, limit] of [
     ["Separator", 1024],
     ["Button", 4096],
-    // Callable Alert composes its own Close, which is a Button: the price of
-    // the one-tag form, and the reason the limit is not Separator's.
     ["Alert", 3584],
   ]) {
     const result = await bundle(`export { ${name} } from "@loamui/core";`);

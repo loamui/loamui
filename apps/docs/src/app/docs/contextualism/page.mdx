@@ -307,10 +307,10 @@ Form styling reads accessibility state. Set `Field.Root invalid` from the valida
 result and compose the message with `Field.Error`:
 
 ```css
-/* the native input reads its own accessibility state, which Field
-   receives from explicit validation state */
-.loam-Input[aria-invalid="true"] {
-  border-color: var(--loam-color-danger);
+@scope (.loam-Input-field) to ([class*="loam-"]) {
+  :scope:has(input[aria-invalid="true"]) {
+    border-color: var(--loam-color-danger);
+  }
 }
 ```
 

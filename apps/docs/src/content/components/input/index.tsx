@@ -92,37 +92,17 @@ const doc: ComponentContent = {
       render: () => <InputDisabledDemo />,
     },
     {
-      title: "Composed adornments",
+      title: "Prefixes and suffixes",
       description:
-        "Compose prefixes and suffixes beside Input in your own layout. Field.Label names the input; include any meaningful unit or suffix in the label or description.",
+        "Use startSection and endSection for content inside the bordered box. Field.Label names the input; include any meaningful unit or suffix in the label or description.",
       code: `<Field.Root>
   <Field.Label>Handle</Field.Label>
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "auto minmax(0, 1fr)",
-      alignItems: "center",
-      gap: "var(--loam-space-2xs)",
-    }}
-  >
-    <span aria-hidden="true">@</span>
-    <Input />
-  </div>
+  <Input startSection={<span aria-hidden="true">@</span>} />
 </Field.Root>
 
 <Field.Root>
   <Field.Label>Site name on .dev</Field.Label>
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "minmax(0, 1fr) auto",
-      alignItems: "center",
-      gap: "var(--loam-space-2xs)",
-    }}
-  >
-    <Input />
-    <span aria-hidden="true">.dev</span>
-  </div>
+  <Input endSection={<span aria-hidden="true">.dev</span>} />
 </Field.Root>`,
       render: () => <InputSectionsDemo />,
     },
@@ -203,11 +183,22 @@ const doc: ComponentContent = {
     "Inside a Field.Root the input reads its id from the field, so Field.Label is a real <label> tied to it: clicking the label focuses the field and screen readers announce it.",
     "Field.Description and Field.Error are linked via aria-describedby, and Field.Root invalid sets aria-invalid, announced together when the field gains focus.",
     'Field.Error uses role="alert" so the message is announced as it appears.',
-    "Compose adornments as siblings of the native Input. Mark visual content like currency symbols or icons aria-hidden, and carry the unit in the label or description so non-visual users get it too.",
+    "Mark decorative startSection and endSection content aria-hidden, and carry meaningful units in the label or description so non-visual users get them too.",
     "Under forced colours the danger border colour is dropped, so an invalid field carries its state as an outline in a system colour, with the focus ring offset further out.",
     "Mark optional fields in words (Field.Label's optional prop) rather than asterisking required ones: required lives on the control as the native required attribute, which drives validation after submission.",
   ],
   props: [
+    {
+      name: "startSection / endSection",
+      type: "ReactNode",
+      description: "Content inside the bordered box, before or after the input.",
+    },
+    {
+      name: "wrapperProps",
+      type: 'Omit<PartProps<"div">, "children">',
+      description:
+        "Props for the bordered wrapper. className, style, ref and other native input props on Input target the input itself.",
+    },
     {
       name: "size",
       type: "number",

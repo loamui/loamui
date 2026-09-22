@@ -115,7 +115,7 @@ For a fresh application, replace the starter styles with that declaration. Prese
 
 ## Check your first interface
 
-Copy the [foundation example](/docs/installation#2-check-the-foundation) into `app/page.tsx` and put its CSS alongside it. Individual exports such as `Field.Root` and `Field.Label` can be composed from a server component. Add `"use client"` only when your composition uses client hooks, event handlers or render callbacks; the root layout stays a server component.
+Copy the [foundation example](/docs/installation#2-check-the-foundation) into `app/page.tsx` and put its CSS alongside it. Namespace parts such as `Field.Root` and `Field.Label` can be composed from a server component. Add `"use client"` only when your composition uses client hooks, event handlers or render callbacks; the root layout stays a server component.
 
 **pnpm**
 

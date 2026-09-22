@@ -64,7 +64,10 @@ test("the scope rule reports a dead donut rule through Stylelint", async () => {
   const dir = await mkdtemp(join(tmpdir(), "loam-scope-rule-"));
   try {
     // The sibling .tsx gives <li> a loam- class, so `li` inside the donut is dead.
-    await writeFile(join(dir, "Crumbs.tsx"), 'export const C = () => <li className="loam-Crumbs-item" />;');
+    await writeFile(
+      join(dir, "Crumbs.tsx"),
+      'export const C = () => <li className="loam-Crumbs-item" />;',
+    );
     const css = '@scope (.loam-Crumbs) to ([class*="loam-"]) { li { color: red; } }';
     await writeFile(join(dir, "Crumbs.css"), css);
     const out = await stylelint.lint({
@@ -72,10 +75,46 @@ test("the scope rule reports a dead donut rule through Stylelint", async () => {
       codeFilename: join(dir, "Crumbs.css"),
       config: { plugins: [loamScope], rules: { "loamui/scope": true } },
     });
-    assert.ok(out.results[0].warnings.some((w) => w.rule === "loamui/scope"), "reports through Stylelint");
+    assert.ok(
+      out.results[0].warnings.some((w) => w.rule === "loamui/scope"),
+      "reports through Stylelint",
+    );
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
+});
+
+test("the scope rule inspects nested parts without including other components or examples", async (t) => {
+  const { default: stylelint } = await import("stylelint");
+  const { mkdtemp, mkdir, writeFile, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const dir = await mkdtemp(join(tmpdir(), "loam-scope-parts-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const component = join(dir, "components", "Crumbs");
+  await mkdir(join(component, "item"), { recursive: true });
+  await mkdir(join(dir, "components", "Other"));
+  await writeFile(
+    join(component, "item", "CrumbsItem.tsx"),
+    'export const Item = () => <li className="loam-Crumbs-item" />;',
+  );
+  await writeFile(join(component, "Crumbs.stories.tsx"), '<span className="loam-Example" />;');
+  await writeFile(
+    join(component, "item", "CrumbsItem.test.tsx"),
+    '<span className="loam-Test" />;',
+  );
+  await writeFile(
+    join(dir, "components", "Other", "Other.tsx"),
+    '<span className="loam-Other" />;',
+  );
+
+  const out = await stylelint.lint({
+    code: '@scope (.loam-Crumbs) to ([class*="loam-"]) { li { color: red; } span { color: red; } }',
+    codeFilename: join(component, "Crumbs.css"),
+    config: { plugins: [loamScope], rules: { "loamui/scope": true } },
+  });
+  assert.equal(out.results[0].warnings.length, 1);
+  assert.match(out.results[0].warnings[0].text, /the <li> it targets carries a loam- class/);
 });
 
 test("article styles protect embedded recipes as well as core roots", () => {
@@ -214,12 +253,20 @@ test("every interactive component has a Storybook interaction test", async () =>
   for (const component of readdirSync(root)) {
     const dir = join(root, component);
     if (!statSync(dir).isDirectory()) continue;
-    const source = walk(dir).map((f) => readFileSync(f, "utf8")).join("\n");
-    const interactive = /\bon(?:Change|Click|OpenChange|ValueChange|Toggle|Submit|Input|KeyDown)\b/.test(source) || /\buse(?:State|Controllable|Reducer)\(/.test(source);
+    const source = walk(dir)
+      .map((f) => readFileSync(f, "utf8"))
+      .join("\n");
+    const interactive =
+      /\bon(?:Change|Click|OpenChange|ValueChange|Toggle|Submit|Input|KeyDown)\b/.test(source) ||
+      /\buse(?:State|Controllable|Reducer)\(/.test(source);
     if (!interactive) continue;
     const stories = readdirSync(dir).filter((n) => n.endsWith(".stories.tsx"));
     const hasPlay = stories.some((n) => /^\s+play:/m.test(readFileSync(join(dir, n), "utf8")));
     if (!hasPlay) missing.push(component);
   }
-  assert.deepEqual(missing, [], `interactive components whose stories have no play test: ${missing.join(", ")}`);
+  assert.deepEqual(
+    missing,
+    [],
+    `interactive components whose stories have no play test: ${missing.join(", ")}`,
+  );
 });

@@ -133,7 +133,7 @@ const doc: ComponentContent = {
     {
       title: "Composed inside a Field",
       description:
-        "The bare Checkbox carries no label prop: it reads its id, aria-describedby and aria-invalid from the surrounding Field, so the label lives on Field.Label and nothing wires them by hand.",
+        "Without label or description props, Checkbox renders the bare input: it reads its id, aria-describedby and aria-invalid from the surrounding Field, so the label lives on Field.Label and nothing wires them by hand.",
       code: `<Field.Root>
   <Field.Label>
     <Checkbox /> Subscribe to the newsletter
@@ -194,6 +194,18 @@ const doc: ComponentContent = {
   ],
 
   props: [
+    {
+      name: "label / description",
+      type: "ReactNode",
+      description:
+        "Optional content for a complete labelled row. Omit both when composing the control inside Field.Label.",
+    },
+    {
+      name: "wrapperProps",
+      type: 'Omit<PartProps<"div">, "children">',
+      description:
+        "Props for the row rendered with label or description. className, style and ref on the component target its native input.",
+    },
     {
       name: "indeterminate",
       type: "boolean",

@@ -205,6 +205,8 @@ Compose the radio before its label text, keeping every control on the reading ed
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `label / description` | `ReactNode` | — | Optional content for a complete labelled row. Omit both when composing the control inside Field.Label. |
+| `wrapperProps` | `Omit<PartProps<"label">, "children" \| "htmlFor">` | — | Props for the row rendered with label or description. className, style and ref on the component target its native input. |
 | `...others` | `InputHTMLAttributes` | — | Native input props except type and size, including ref. Field.Item scopes each option’s label and description. |
 
 ## Parts

@@ -98,39 +98,19 @@ The disabled attribute forwards to the native input: the field is dimmed, skippe
 </Field.Root>
 ```
 
-### Composed adornments
+### Prefixes and suffixes
 
-Compose prefixes and suffixes beside Input in your own layout. Field.Label names the input; include any meaningful unit or suffix in the label or description.
+Use startSection and endSection for content inside the bordered box. Field.Label names the input; include any meaningful unit or suffix in the label or description.
 
 ```tsx
 <Field.Root>
   <Field.Label>Handle</Field.Label>
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "auto minmax(0, 1fr)",
-      alignItems: "center",
-      gap: "var(--loam-space-2xs)",
-    }}
-  >
-    <span aria-hidden="true">@</span>
-    <Input />
-  </div>
+  <Input startSection={<span aria-hidden="true">@</span>} />
 </Field.Root>
 
 <Field.Root>
   <Field.Label>Site name on .dev</Field.Label>
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "minmax(0, 1fr) auto",
-      alignItems: "center",
-      gap: "var(--loam-space-2xs)",
-    }}
-  >
-    <Input />
-    <span aria-hidden="true">.dev</span>
-  </div>
+  <Input endSection={<span aria-hidden="true">.dev</span>} />
 </Field.Root>
 ```
 
@@ -197,7 +177,7 @@ The field fills whatever it is placed in; there is no width prop. Width is infor
 - Inside a Field.Root the input reads its id from the field, so Field.Label is a real <label> tied to it: clicking the label focuses the field and screen readers announce it.
 - Field.Description and Field.Error are linked via aria-describedby, and Field.Root invalid sets aria-invalid, announced together when the field gains focus.
 - Field.Error uses role="alert" so the message is announced as it appears.
-- Compose adornments as siblings of the native Input. Mark visual content like currency symbols or icons aria-hidden, and carry the unit in the label or description so non-visual users get it too.
+- Mark decorative startSection and endSection content aria-hidden, and carry meaningful units in the label or description so non-visual users get them too.
 - Under forced colours the danger border colour is dropped, so an invalid field carries its state as an outline in a system colour, with the focus ring offset further out.
 - Mark optional fields in words (Field.Label's optional prop) rather than asterisking required ones: required lives on the control as the native required attribute, which drives validation after submission.
 
@@ -215,6 +195,8 @@ The field fills whatever it is placed in; there is no width prop. Width is infor
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `startSection / endSection` | `ReactNode` | — | Content inside the bordered box, before or after the input. |
+| `wrapperProps` | `Omit<PartProps<"div">, "children">` | — | Props for the bordered wrapper. className, style, ref and other native input props on Input target the input itself. |
 | `size` | `number` | — | The native size attribute, honoured: the input is as wide as that many characters and it keeps its intrinsic width. |
 | `...others` | `InputHTMLAttributes` | — | All native <input> props, and ref, are forwarded to the <input>. |
 

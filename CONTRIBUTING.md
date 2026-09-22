@@ -20,12 +20,13 @@ pnpm dev        # runs the docs site
 ## Project layout
 
 - `packages/core`: the `@loamui/core` component library. Each component lives in
-  `src/components/<Name>/` as a `.tsx` file plus a plain `.css` file inside
-  `@layer loamui.components`. Each scope root keeps one prefixed class
-  (`.loam-<Name>`, or a semantic root name like `.loam-Search` where a
-  component has several roots); parts inside the scope are type selectors or
-  short classes (`label`, `p.description`). The encapsulation is `@scope`'s
-  job, not the class name's.
+  `src/components/<Name>/`. Standalone components keep their implementation at
+  that root; compound components group implementations by part. Plain `.css`
+  files receive `loamui.components` from the stylesheet entry. Each scope root
+  keeps one prefixed class (`.loam-<Name>`, or a semantic root name like
+  `.loam-Search` where a component has several roots); parts inside the scope
+  are type selectors or short classes (`label`, `p.description`). `@scope`
+  provides encapsulation.
 - `apps/docs/src/recipes`: the copy-paste recipes at `/recipes`, one folder
   each, built from core alone and gated by `check:recipes`.
 - `apps/docs`: the Next.js marketing + documentation site. Every page of the
@@ -153,26 +154,32 @@ Button). The `render` prop exists only to _substitute_ that element
 (`render={<a href="…" />}`, or a function of the wiring props). If a part's
 common case needs `render`, the part has the wrong default element. The
 exception is `Field.Control`, whose entire purpose is wiring an arbitrary
-element into the field: the LoamUI controls (`Input`, `Select`, `Textarea`,
+element into the field: the LoamUI controls (`Input`, `Select.Root`, `Textarea`,
 `Range.Control`, `QuantityInput`, `FileInput.Control`, `Search.Input`) self-wire
 from Field context when rendered inside `Field.Root`, so they never go through it.
 
-**One merge contract** (`src/render.ts`, used by every part): event handlers
-chain (the element's own handler runs first, wiring second, both always run);
+**One merge contract** (`src/utils/render.ts`, used by parts supporting `render`):
+event handlers chain (the element's own handler runs first, wiring second,
+both always run);
 `className`s concatenate; `style` merges with wiring winning on conflicts
 (wiring styles such as `anchorName` are load-bearing); `aria-describedby` /
 `aria-labelledby` token-lists concatenate; refs compose. Never hand-roll
 `cloneElement` prop injection.
 
-**Compound components use ES module namespaces.** Implement parts as named
-exports such as `FieldRoot` and `FieldLabel`. Re-export them as `Root` and
-`Label` from `Field.parts.ts`, then use `export * as Field` in the component
-index. Consumers write `Field.Root`, `Field.Label` and `Alert.Title`. Keep the
-individual exports available too.
+**Choose the public shape by the consumer's composition needs.** Simple
+components such as Button, Input, Checkbox and Radio remain callable. Expose
+parts when consumers need to arrange meaningful structure or behaviour;
+internal wrappers and decorative elements alone do not require public parts.
+Content props such as Input's `startSection` and `endSection` are compatible
+with this rule. Use each component's documented contract.
 
-Do not attach parts to component functions
-or collect them in runtime objects. Compound components always have an explicit
-`.Root`; standalone components such as `Button` remain callable.
+**Compound components use ES module namespaces.** Implement parts as named
+exports such as `FieldRoot` and `FieldLabel` in their implementation modules.
+Re-export them as `Root` and `Label` from `index.parts.ts`, then use
+`export * as Field` in the component index. Consumers write `Field.Root`,
+`Field.Label` and `Alert.Title`; prefixed implementation names are not additional
+public value exports. Compound components use an explicit `.Root`.
+Do not attach parts to component functions or collect them in runtime objects.
 
 Consumers can import from `@loamui/core` or a component entry point such as
 `@loamui/core/alert` or `@loamui/core/date-input`. Both expose the same named
@@ -187,13 +194,18 @@ its own hooks, event handlers or render callbacks require a client boundary.
 Keep interactivity in the smallest practical module, as `Alert.Close` does.
 
 Form controls self-wire from Field context via `useFieldControlProps()`:
-`Input`, `Select`, `Textarea`, `Range.Control`, `QuantityInput`, `FileInput.Control`
-and `Search.Input` have no label/description/error props. Inline controls
-(`Checkbox`, `Switch`, `Radio`) expose their labelled component as `.Root`
-and their bare input as `.Control`. `Range.Control` is the range input;
-`Range.Root` supplies context for an optional `Range.Output`. Composites
-preserve the inner components' props and CSS boundaries and add only their
-own wiring.
+`Input`, `Select.Root`, `Textarea`, `Range.Control`, `QuantityInput`,
+`FileInput.Control` and `Search.Input` have no label/description/error props.
+Checkbox and Radio are callable controls with optional `label` and `description`
+props for a complete labelled row. Omit those props when composing with
+Field.Label, and use Field.Item for independent option associations. Switch
+exposes Root, Control, Track and Thumb.
+
+Input keeps its bordered wrapper;
+`className`, `style` and `ref` target the input, while `wrapperProps` targets
+that wrapper. `Range.Root` supplies context for an optional `Range.Output`.
+Composites preserve the inner components' props and CSS boundaries and add
+only their own wiring.
 
 Run `pnpm --filter @loamui/core build` and
 `pnpm --filter @loamui/core test:package` after changing exports or build
@@ -235,16 +247,15 @@ Style the control's `[aria-invalid="true"]`; do not duplicate it in `data-invali
 components inside it; never blur them:
 
 - **Contexts** (`--loam-context: primary | danger | success | warning | info`):
-  what the region _means_. A registered, inherited custom property declared
-  on any element (style attribute or the region's own CSS) and read via
-  container style queries (`@container (style(--loam-context: danger))`) in
-  the Contexts section of `tokens.css` and in component files. **Never a data
-  attribute.** Contexts remap **only** colour tokens: never spacing, sizing,
-  or layout. Components contain no context code; the nearest ancestor that
-  sets the property wins because the property inherits. Status components
-  (Alert, Badge, Loader, Progress) have no variant or colour props; they
-  consume the same context, typically as a one-element region declared on
-  the component itself.
+  what the region _means_. This inherited custom property is declared on a
+  region and read through container style queries in `tokens.css` and component
+  stylesheets, rather than through data attributes. Contexts remap only colour
+  tokens, never spacing, sizing or layout. Tokens remap semantic colours on
+  descendants; some components, including Button, also query context directly.
+  A style query reads an ancestor, never the element being styled. Declare
+  status on a surrounding region, including a wrapper for one component;
+  status components (Alert, Badge, Loader, Progress) consume that context
+  without variant or colour props.
 - **Layout**: how the region _arranges_ its contents. There is no layout
   attribute or hint: a grid or stacked-flex region stretches its buttons to
   full width natively, so arrangement is declared as actual layout.

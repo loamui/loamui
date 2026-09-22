@@ -139,31 +139,11 @@ export function InputSectionsDemo() {
     >
       <Field.Root>
         <Field.Label>Handle</Field.Label>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "auto minmax(0, 1fr)",
-            alignItems: "center",
-            gap: "var(--loam-space-2xs)",
-          }}
-        >
-          <span aria-hidden="true">@</span>
-          <Input />
-        </div>
+        <Input startSection={<span aria-hidden="true">@</span>} />
       </Field.Root>
       <Field.Root>
         <Field.Label>Site name on .dev</Field.Label>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0, 1fr) auto",
-            alignItems: "center",
-            gap: "var(--loam-space-2xs)",
-          }}
-        >
-          <Input />
-          <span aria-hidden="true">.dev</span>
-        </div>
+        <Input endSection={<span aria-hidden="true">.dev</span>} />
       </Field.Root>
     </div>
   );

@@ -314,6 +314,18 @@ const doc: ComponentContent = {
 
   props: [
     {
+      name: "label / description",
+      type: "ReactNode",
+      description:
+        "Optional content for a complete labelled row. Omit both when composing the control inside Field.Label.",
+    },
+    {
+      name: "wrapperProps",
+      type: 'Omit<PartProps<"label">, "children" | "htmlFor">',
+      description:
+        "Props for the row rendered with label or description. className, style and ref on the component target its native input.",
+    },
+    {
       name: "...others",
       type: "InputHTMLAttributes",
       description:

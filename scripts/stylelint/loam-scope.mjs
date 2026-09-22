@@ -1,15 +1,5 @@
-// Stylelint rule: no dead rules inside a donut scope.
-//
-// `@scope (.loam-X) to ([class*="loam-"])` fences core parts out of a
-// stylesheet, and the fence excludes the limit element itself. So a rule
-// inside the donut whose subject carries a `loam-` class never matches —
-// neither `.loam-X-item { … }` nor a bare `li { … }` when the component
-// renders `<li className="loam-X-item">`. Breadcrumbs shipped exactly that
-// and nothing noticed.
-//
-// The checks live in the skill's scope-rules module, shared with consuming
-// projects; this file only lets Stylelint run them, so a finding shows in
-// the editor and honours a per-line disable like any other rule.
+// Scope limits exclude the boundary element itself, making rules targeting it dead.
+// This adapter supplies local markup to the consumer skill's shared checks.
 import { readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import postcss from "postcss";
@@ -38,17 +28,11 @@ export function proseBoundaryFindings(css) {
   return findings;
 }
 
-/**
- * The sibling .tsx sources that render this stylesheet's markup. An editor
- * lints unsaved buffers and stdin, whose "directory" may not exist: with no
- * markup to compare against, the markup-dependent checks simply have
- * nothing to report.
- */
-function siblingSources(file) {
+function markupSources(file) {
   const dir = dirname(file);
   let names;
   try {
-    names = readdirSync(dir);
+    names = readdirSync(dir, { recursive: basename(dirname(dir)) === "components" });
   } catch {
     return [];
   }
@@ -76,7 +60,7 @@ const rule = (primary) => (root, result) => {
   if (basename(file) === "prose.css")
     for (const why of proseBoundaryFindings(css)) report(1, messages.prose(why));
 
-  const sources = siblingSources(file);
+  const sources = markupSources(file);
   const hostsCore =
     basename(file) === "prose.css" ||
     sources.some(
