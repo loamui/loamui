@@ -128,9 +128,7 @@ test("native Input composes in narrow layouts and keeps dependent controls worki
   const reference = section.getByRole("textbox", { name: "Reference", exact: true });
   await section.getByText("Reference", { exact: true }).click();
   await expect(reference).toBeFocused();
-  expect(
-    await reference.evaluate((input) => input.parentElement?.classList.contains("loam-Field")),
-  ).toBe(true);
+  expect(await reference.evaluate((input) => input.closest(".loam-Field") !== null)).toBe(true);
   const full = section.getByRole("textbox", { name: "Read-only input" });
   await full.focus();
   await full.press("A");
