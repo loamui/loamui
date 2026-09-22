@@ -59,9 +59,7 @@ When the message names a specific part, invalid on Root narrows the invalid styl
 <DateInput.Root invalid={["year"]} name="membership-start">
   <DateInput.Legend>When did your membership start?</DateInput.Legend>
   <DateInput.Description>For example, 27 3 2019</DateInput.Description>
-  <DateInput.Error >
-    Membership start date must include a year
-  </DateInput.Error>
+  <DateInput.Error>Membership start date must include a year</DateInput.Error>
   <DateInput.Fields>
     <DateInput.Day defaultValue="27" />
     <DateInput.Month defaultValue="3" />
@@ -130,9 +128,7 @@ Pass an id to the Root and the fields become {id}-day, {id}-month and {id}-year.
 <DateInput.Root invalid={["year"]} id="membership-start" name="membership-start">
   <DateInput.Legend>When did your membership start?</DateInput.Legend>
   <DateInput.Description>For example, 27 3 2019</DateInput.Description>
-  <DateInput.Error >
-    Membership start date must include a year
-  </DateInput.Error>
+  <DateInput.Error>Membership start date must include a year</DateInput.Error>
   <DateInput.Fields>
     <DateInput.Day defaultValue="27" />
     <DateInput.Month defaultValue="3" />

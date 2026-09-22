@@ -114,12 +114,8 @@ export default function Recipe() {
       z-index: -2;
     }
 
-    /* The copy beside the image: eyebrow, heading, lede and the actions. It is
-
-       the section\'s body, not its introduction, so it is a box rather than a
-
-       <header>. */
-
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
     .copy {
       align-content: end;
       display: block grid;

@@ -22,7 +22,9 @@ const doc: ComponentContent = {
       code: `<Loader size="sm" />
 <Loader size="md" />
 <Loader size="lg" />
-<span style={{ "--loam-loader-size": "3rem" }}><Loader /></span>`,
+<span style={{ "--loam-loader-size": "3rem" }}>
+  <Loader />
+</span>`,
       render: () => (
         <div
           style={{
@@ -54,11 +56,21 @@ const doc: ComponentContent = {
       description:
         "There is no colour prop. Declare --loam-context on a one-element wrapper region (see the Contextualism guide) and the status colours follow, or let it inherit from the region whose work it reports: a loader in a warning panel is already warning-coloured.",
       code: `<Loader />
-<span style={{ "--loam-context": "primary" }}><Loader /></span>
-<span style={{ "--loam-context": "success" }}><Loader /></span>
-<span style={{ "--loam-context": "warning" }}><Loader /></span>
-<span style={{ "--loam-context": "danger" }}><Loader /></span>
-<span style={{ "--loam-context": "info" }}><Loader /></span>`,
+<span style={{ "--loam-context": "primary" }}>
+  <Loader />
+</span>
+<span style={{ "--loam-context": "success" }}>
+  <Loader />
+</span>
+<span style={{ "--loam-context": "warning" }}>
+  <Loader />
+</span>
+<span style={{ "--loam-context": "danger" }}>
+  <Loader />
+</span>
+<span style={{ "--loam-context": "info" }}>
+  <Loader />
+</span>`,
       render: () => (
         <>
           <Loader />

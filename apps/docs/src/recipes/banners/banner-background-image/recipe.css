@@ -6,6 +6,8 @@
       border-radius: var(--loam-radius-xl);
       color: var(--loam-color-fg);
       container: banner-background-image / inline-size;
+      display: block grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
       isolation: isolate;
       position: relative;
 
@@ -16,10 +18,6 @@
         inset: 0;
         position: absolute;
         z-index: -1;
-      }
-
-      > div {
-        display: block grid;
       }
     }
 
@@ -33,12 +31,8 @@
       z-index: -2;
     }
 
-    /* The copy beside the image: eyebrow, heading, lede and the actions. It is
-
-       the section\'s body, not its introduction, so it is a box rather than a
-
-       <header>. */
-
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
     .copy {
       align-content: center;
       display: block grid;
@@ -79,14 +73,8 @@
     }
 
     @container banner-background-image (inline-size < 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    @container banner-background-image (inline-size >= 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      .copy {
+        grid-column: 1 / -1;
       }
     }
 

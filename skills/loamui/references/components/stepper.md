@@ -32,12 +32,16 @@ An order under way. The one attribute the consumer sets, aria-current="step" on 
   <Stepper.Step aria-current="step">
     <Stepper.Marker />
     <Stepper.Title>Being packed</Stepper.Title>
-    <Stepper.Description>Your items are being picked and packed at the warehouse.</Stepper.Description>
+    <Stepper.Description>
+      Your items are being picked and packed at the warehouse.
+    </Stepper.Description>
   </Stepper.Step>
   <Stepper.Step>
     <Stepper.Marker />
     <Stepper.Title>Dispatched</Stepper.Title>
-    <Stepper.Description>We will send the tracking number when the courier collects it.</Stepper.Description>
+    <Stepper.Description>
+      We will send the tracking number when the courier collects it.
+    </Stepper.Description>
   </Stepper.Step>
   <Stepper.Step>
     <Stepper.Marker />
@@ -76,7 +80,9 @@ With no current step there is nothing to detect and the list is a plain sequence
   <Stepper.Step>
     <Stepper.Marker />
     <Stepper.Title render={<h3 />}>Compose from parts</Stepper.Title>
-    <Stepper.Description>Semantic markup first; a component when the element needs more.</Stepper.Description>
+    <Stepper.Description>
+      Semantic markup first; a component when the element needs more.
+    </Stepper.Description>
   </Stepper.Step>
 </Stepper.Root>
 ```

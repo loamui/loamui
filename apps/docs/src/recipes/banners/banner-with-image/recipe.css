@@ -5,10 +5,8 @@
       border: 1px solid var(--loam-color-line);
       border-radius: var(--loam-radius-xl);
       container: banner-with-image / inline-size;
-
-      > div {
-        display: block grid;
-      }
+      display: block grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     }
 
     img {
@@ -16,12 +14,8 @@
       object-fit: cover;
     }
 
-    /* The copy beside the image: eyebrow, heading, lede and the actions. It is
-
-       the section\'s body, not its introduction, so it is a box rather than a
-
-       <header>. */
-
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
     .copy {
       align-content: center;
       display: block grid;
@@ -64,8 +58,9 @@
     }
 
     @container banner-with-image (inline-size < 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 1fr);
+      img,
+      .copy {
+        grid-column: 1 / -1;
       }
 
       img {
@@ -77,10 +72,6 @@
     }
 
     @container banner-with-image (inline-size >= 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-      }
-
       img {
         aspect-ratio: auto;
         block-size: 100%;

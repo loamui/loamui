@@ -28,7 +28,12 @@ const doc: ComponentContent = {
       title: "Basic usage",
       description:
         "A bare Switch named by aria-label, for a row where the words already sit beside it. Off by default: a setting the user has not turned on.",
-      code: `<Switch.Root><Switch.Control aria-label="Email notifications" /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root>`,
+      code: `<Switch.Root>
+  <Switch.Control aria-label="Email notifications" />
+  <Switch.Track>
+    <Switch.Thumb />
+  </Switch.Track>
+</Switch.Root>`,
       render: () => (
         <Switch.Root>
           <Switch.Control aria-label="Email notifications" />
@@ -41,7 +46,12 @@ const doc: ComponentContent = {
     {
       title: "Checked",
       description: "The track fills with the primary colour when on.",
-      code: `<Switch.Root><Switch.Control defaultChecked aria-label="Autosave" /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root>`,
+      code: `<Switch.Root>
+  <Switch.Control defaultChecked aria-label="Autosave" />
+  <Switch.Track>
+    <Switch.Thumb />
+  </Switch.Track>
+</Switch.Root>`,
       render: () => (
         <Switch.Root>
           <Switch.Control defaultChecked aria-label="Autosave" />
@@ -55,8 +65,28 @@ const doc: ComponentContent = {
       title: "Label position",
       description:
         "Place the text before or after Switch.Root inside Field.Label. DOM order sets the label position.",
-      code: `<Field.Item><Field.Label><Switch.Root><Switch.Control  /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root> Enable notifications</Field.Label></Field.Item>
-<Field.Item><Field.Label>Marketing emails <Switch.Root><Switch.Control  /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root></Field.Label></Field.Item>`,
+      code: `<Field.Item>
+  <Field.Label>
+    <Switch.Root>
+      <Switch.Control />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>{" "}
+    Enable notifications
+  </Field.Label>
+</Field.Item>
+<Field.Item>
+  <Field.Label>
+    Marketing emails{" "}
+    <Switch.Root>
+      <Switch.Control />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>
+  </Field.Label>
+</Field.Item>`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-xs)" }}>
           <Variant label="Label at the end (default)">
@@ -92,8 +122,28 @@ const doc: ComponentContent = {
       title: "Disabled",
       description:
         "disabled reaches the native input: the track is dimmed and the input is skipped by Tab, and a switch that is on and disabled shows a setting that is on and not the user's to change here. Disabled is detected on the input, never declared on the row.",
-      code: `<Field.Item><Field.Label><Switch.Root><Switch.Control disabled /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root> Usage analytics</Field.Label></Field.Item>
-<Field.Item><Field.Label><Switch.Root><Switch.Control defaultChecked disabled /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root> Security alerts</Field.Label></Field.Item>`,
+      code: `<Field.Item>
+  <Field.Label>
+    <Switch.Root>
+      <Switch.Control disabled />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>{" "}
+    Usage analytics
+  </Field.Label>
+</Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Switch.Root>
+      <Switch.Control defaultChecked disabled />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>{" "}
+    Security alerts
+  </Field.Label>
+</Field.Item>`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-xs)" }}>
           <Field.Item>
@@ -127,7 +177,13 @@ const doc: ComponentContent = {
         "The bare Switch.Control self-wires from Field context: label association and description linking come from the Field, the same composition contract every form control shares.",
       code: `<Field.Root>
   <Field.Label>
-    <Switch.Root><Switch.Control defaultChecked /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root> Email notifications
+    <Switch.Root>
+      <Switch.Control defaultChecked />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>{" "}
+    Email notifications
   </Field.Label>
   <Field.Description>Sent at most once a day.</Field.Description>
 </Field.Root>`,

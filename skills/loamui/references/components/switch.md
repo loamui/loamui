@@ -23,7 +23,12 @@ import { Field, Switch } from "@loamui/core";
 A bare Switch named by aria-label, for a row where the words already sit beside it. Off by default: a setting the user has not turned on.
 
 ```tsx
-<Switch.Root><Switch.Control aria-label="Email notifications" /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root>
+<Switch.Root>
+  <Switch.Control aria-label="Email notifications" />
+  <Switch.Track>
+    <Switch.Thumb />
+  </Switch.Track>
+</Switch.Root>
 ```
 
 ### Checked
@@ -31,7 +36,12 @@ A bare Switch named by aria-label, for a row where the words already sit beside 
 The track fills with the primary colour when on.
 
 ```tsx
-<Switch.Root><Switch.Control defaultChecked aria-label="Autosave" /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root>
+<Switch.Root>
+  <Switch.Control defaultChecked aria-label="Autosave" />
+  <Switch.Track>
+    <Switch.Thumb />
+  </Switch.Track>
+</Switch.Root>
 ```
 
 ### Label position
@@ -39,8 +49,28 @@ The track fills with the primary colour when on.
 Place the text before or after Switch.Root inside Field.Label. DOM order sets the label position.
 
 ```tsx
-<Field.Item><Field.Label><Switch.Root><Switch.Control  /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root> Enable notifications</Field.Label></Field.Item>
-<Field.Item><Field.Label>Marketing emails <Switch.Root><Switch.Control  /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root></Field.Label></Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Switch.Root>
+      <Switch.Control />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>{" "}
+    Enable notifications
+  </Field.Label>
+</Field.Item>
+<Field.Item>
+  <Field.Label>
+    Marketing emails{" "}
+    <Switch.Root>
+      <Switch.Control />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>
+  </Field.Label>
+</Field.Item>
 ```
 
 ### Disabled
@@ -48,8 +78,28 @@ Place the text before or after Switch.Root inside Field.Label. DOM order sets th
 disabled reaches the native input: the track is dimmed and the input is skipped by Tab, and a switch that is on and disabled shows a setting that is on and not the user's to change here. Disabled is detected on the input, never declared on the row.
 
 ```tsx
-<Field.Item><Field.Label><Switch.Root><Switch.Control disabled /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root> Usage analytics</Field.Label></Field.Item>
-<Field.Item><Field.Label><Switch.Root><Switch.Control defaultChecked disabled /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root> Security alerts</Field.Label></Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Switch.Root>
+      <Switch.Control disabled />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>{" "}
+    Usage analytics
+  </Field.Label>
+</Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Switch.Root>
+      <Switch.Control defaultChecked disabled />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>{" "}
+    Security alerts
+  </Field.Label>
+</Field.Item>
 ```
 
 ### Composed inside a Field
@@ -59,7 +109,13 @@ The bare Switch.Control self-wires from Field context: label association and des
 ```tsx
 <Field.Root>
   <Field.Label>
-    <Switch.Root><Switch.Control defaultChecked /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root> Email notifications
+    <Switch.Root>
+      <Switch.Control defaultChecked />
+      <Switch.Track>
+        <Switch.Thumb />
+      </Switch.Track>
+    </Switch.Root>{" "}
+    Email notifications
   </Field.Label>
   <Field.Description>Sent at most once a day.</Field.Description>
 </Field.Root>

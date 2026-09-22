@@ -57,9 +57,7 @@ const doc: ComponentContent = {
         "Field.Description is linked to the textarea through aria-describedby, so the hint is read with the field. State a length limit here, before the answer is written, rather than in an error after it.",
       code: `<Field.Root>
   <Field.Label>Bio</Field.Label>
-  <Field.Description>
-    A short description for your public profile.
-  </Field.Description>
+  <Field.Description>A short description for your public profile.</Field.Description>
   <Textarea required />
 </Field.Root>`,
       render: () => <TextareaDescriptionDemo />,

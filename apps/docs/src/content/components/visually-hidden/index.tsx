@@ -41,9 +41,7 @@ const doc: ComponentContent = {
       title: "Hiding a label the design leaves out",
       description:
         "A search box whose placeholder stands in for its label visually still needs a real label. `render` swaps the span for the element the slot requires.",
-      code: `<VisuallyHidden render={<label htmlFor="q" />}>
-  Search the catalogue
-</VisuallyHidden>
+      code: `<VisuallyHidden render={<label htmlFor="q" />}>Search the catalogue</VisuallyHidden>
 <Input id="q" type="search" placeholder="Search…" />`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-2xs)", inlineSize: "100%" }}>

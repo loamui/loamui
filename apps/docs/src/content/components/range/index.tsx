@@ -53,7 +53,12 @@ const doc: ComponentContent = {
         "marks are points on the track: they go to a <datalist> the input references, so the thumb snaps to them, and the stylesheet draws a tick under each.",
       code: `<Field.Root>
   <Field.Label>Zoom</Field.Label>
-  <Range.Control min={0} max={100} defaultValue={50} marks={[{ value: 0 }, { value: 25 }, { value: 50 }, { value: 75 }, { value: 100 }]} />
+  <Range.Control
+    min={0}
+    max={100}
+    defaultValue={50}
+    marks={[{ value: 0 }, { value: 25 }, { value: 50 }, { value: 75 }, { value: 100 }]}
+  />
 </Field.Root>`,
       render: () => <RangeMarksDemo />,
     },
@@ -97,7 +102,17 @@ const doc: ComponentContent = {
       code: `<Field.Root>
   <Field.Label>Year</Field.Label>
   <Range.Root>
-    <Range.Control min={1990} max={2030} step={5} defaultValue={2010} marks={[{ value: 1990, label: "1990" }, { value: 2010, label: "2010" }, { value: 2030, label: "2030" }]} />
+    <Range.Control
+      min={1990}
+      max={2030}
+      step={5}
+      defaultValue={2010}
+      marks={[
+        { value: 1990, label: "1990" },
+        { value: 2010, label: "2010" },
+        { value: 2030, label: "2030" },
+      ]}
+    />
     <Range.Output labels={{ value: String }} />
   </Range.Root>
 </Field.Root>`,

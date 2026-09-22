@@ -126,9 +126,7 @@ const doc: ComponentContent = {
       code: `<DateInput.Root invalid={["year"]} name="membership-start">
   <DateInput.Legend>When did your membership start?</DateInput.Legend>
   <DateInput.Description>For example, 27 3 2019</DateInput.Description>
-  <DateInput.Error >
-    Membership start date must include a year
-  </DateInput.Error>
+  <DateInput.Error>Membership start date must include a year</DateInput.Error>
   <DateInput.Fields>
     <DateInput.Day defaultValue="27" />
     <DateInput.Month defaultValue="3" />
@@ -192,9 +190,7 @@ const doc: ComponentContent = {
 <DateInput.Root invalid={["year"]} id="membership-start" name="membership-start">
   <DateInput.Legend>When did your membership start?</DateInput.Legend>
   <DateInput.Description>For example, 27 3 2019</DateInput.Description>
-  <DateInput.Error >
-    Membership start date must include a year
-  </DateInput.Error>
+  <DateInput.Error>Membership start date must include a year</DateInput.Error>
   <DateInput.Fields>
     <DateInput.Day defaultValue="27" />
     <DateInput.Month defaultValue="3" />

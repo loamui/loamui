@@ -74,10 +74,26 @@ const doc: ComponentContent = {
     </Table.Tr>
   </Table.Thead>
   <Table.Tbody>
-    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
-    <Table.Tr><Table.Td>INV-1025</Table.Td><Table.Td>Pending</Table.Td><Table.Td>$820.00</Table.Td></Table.Tr>
-    <Table.Tr><Table.Td>INV-1026</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$2,010.00</Table.Td></Table.Tr>
-    <Table.Tr><Table.Td>INV-1027</Table.Td><Table.Td>Overdue</Table.Td><Table.Td>$640.00</Table.Td></Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1024</Table.Td>
+      <Table.Td>Paid</Table.Td>
+      <Table.Td>$1,240.00</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1025</Table.Td>
+      <Table.Td>Pending</Table.Td>
+      <Table.Td>$820.00</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1026</Table.Td>
+      <Table.Td>Paid</Table.Td>
+      <Table.Td>$2,010.00</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1027</Table.Td>
+      <Table.Td>Overdue</Table.Td>
+      <Table.Td>$640.00</Table.Td>
+    </Table.Tr>
   </Table.Tbody>
 </Table.Root>`,
       render: () => (
@@ -108,9 +124,7 @@ const doc: ComponentContent = {
       title: "Striped",
       description:
         "Shade alternating body rows. Stripes help the eye hold a row across many columns; on a short, narrow table like this one they are noise, so reach for them when rows are long, not by default.",
-      code: `<Table.Root striped>
-  {/* caption / thead / tbody */}
-</Table.Root>`,
+      code: `<Table.Root striped>{/* caption / thead / tbody */}</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
           <Table.Root striped>
@@ -139,9 +153,7 @@ const doc: ComponentContent = {
       title: "Column borders",
       description:
         "Draw vertical borders between columns. Padding already separates columns of short values; borders earn their place when cells hold text that wraps, or numbers that would otherwise run into their neighbours.",
-      code: `<Table.Root withColumnBorders>
-  {/* caption / thead / tbody */}
-</Table.Root>`,
+      code: `<Table.Root withColumnBorders>{/* caption / thead / tbody */}</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
           <Table.Root withColumnBorders>
@@ -170,9 +182,7 @@ const doc: ComponentContent = {
       title: "Highlight on hover",
       description:
         "Shade the row under the pointer; the highlight appears on pointer hover, so it is not visible in a static screenshot.",
-      code: `<Table.Root highlightOnHover>
-  {/* caption / thead / tbody */}
-</Table.Root>`,
+      code: `<Table.Root highlightOnHover>{/* caption / thead / tbody */}</Table.Root>`,
       render: () => (
         <div style={{ inlineSize: "100%", maxInlineSize: "32rem" }}>
           <Table.Root highlightOnHover>
@@ -243,7 +253,15 @@ const doc: ComponentContent = {
     </Table.Tr>
   </Table.Thead>
   <Table.Tbody>
-    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1024</Table.Td>
+      <Table.Td>Paid</Table.Td>
+      <Table.Td>$310.00</Table.Td>
+      <Table.Td>$310.00</Table.Td>
+      <Table.Td>$310.00</Table.Td>
+      <Table.Td>$310.00</Table.Td>
+      <Table.Td>$1,240.00</Table.Td>
+    </Table.Tr>
     …
   </Table.Tbody>
 </Table.Root>`,
@@ -293,7 +311,11 @@ const doc: ComponentContent = {
     </Table.Tr>
   </Table.Thead>
   <Table.Tbody>
-    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1024</Table.Td>
+      <Table.Td>Paid</Table.Td>
+      <Table.Td>$1,240.00</Table.Td>
+    </Table.Tr>
     …
   </Table.Tbody>
 </Table.Root>`,

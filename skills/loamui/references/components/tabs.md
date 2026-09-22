@@ -46,8 +46,12 @@ No leftSection prop: an svg child is detected via :has(svg) and gets a gap and l
       <IconFile aria-hidden />
       Files
     </Tabs.Tab>
-    <Tabs.Tab value="team"><IconFile aria-hidden /> Team</Tabs.Tab>
-    <Tabs.Tab value="settings"><IconFile aria-hidden /> Settings</Tabs.Tab>
+    <Tabs.Tab value="team">
+      <IconFile aria-hidden /> Team
+    </Tabs.Tab>
+    <Tabs.Tab value="settings">
+      <IconFile aria-hidden /> Settings
+    </Tabs.Tab>
   </Tabs.List>
   <Tabs.Panel value="files">All your documents in one place.</Tabs.Panel>
   <Tabs.Panel value="team">Invite teammates and manage roles.</Tabs.Panel>
@@ -64,7 +68,9 @@ A disabled tab is skipped by keyboard navigation.
   <Tabs.List>
     <Tabs.Tab value="overview">Overview</Tabs.Tab>
     <Tabs.Tab value="reports">Reports</Tabs.Tab>
-    <Tabs.Tab value="billing" disabled>Billing</Tabs.Tab>
+    <Tabs.Tab value="billing" disabled>
+      Billing
+    </Tabs.Tab>
   </Tabs.List>
   <Tabs.Panel value="overview">Everything at a glance.</Tabs.Panel>
   <Tabs.Panel value="reports">Usage for the last month.</Tabs.Panel>

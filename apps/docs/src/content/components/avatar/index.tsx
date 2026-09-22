@@ -34,7 +34,11 @@ const doc: ComponentContent = {
       description:
         "Image owns the source and native loading attributes. Fallback holds the content shown while loading or after an error.",
       code: `<Avatar.Root role="img" aria-label="Ada Lovelace">
-  <Avatar.Image src="${IMG}" alt="" loading="lazy" />
+  <Avatar.Image
+    src="${IMG}"
+    alt=""
+    loading="lazy"
+  />
   <Avatar.Fallback>AL</Avatar.Fallback>
 </Avatar.Root>`,
       render: () => (
@@ -81,10 +85,18 @@ const doc: ComponentContent = {
       title: "Group",
       description: "Each child is a list item. Compose an additional avatar for an overflow count.",
       code: `<Avatar.Group aria-label="Participants">
-  <Avatar.Root role="img" aria-label="Jane Doe"><Avatar.Fallback>JD</Avatar.Fallback></Avatar.Root>
-  <Avatar.Root role="img" aria-label="Sam Reed"><Avatar.Fallback>SR</Avatar.Fallback></Avatar.Root>
-  <Avatar.Root role="img" aria-label="Amara Okafor"><Avatar.Fallback>AO</Avatar.Fallback></Avatar.Root>
-  <Avatar.Root role="img" aria-label="5 more people"><Avatar.Fallback>+5</Avatar.Fallback></Avatar.Root>
+  <Avatar.Root role="img" aria-label="Jane Doe">
+    <Avatar.Fallback>JD</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="Sam Reed">
+    <Avatar.Fallback>SR</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="Amara Okafor">
+    <Avatar.Fallback>AO</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="5 more people">
+    <Avatar.Fallback>+5</Avatar.Fallback>
+  </Avatar.Root>
 </Avatar.Group>`,
       render: () => <AvatarGroupDemo />,
     },

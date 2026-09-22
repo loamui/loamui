@@ -36,9 +36,7 @@ Field.Description is linked to the textarea through aria-describedby, so the hin
 ```tsx
 <Field.Root>
   <Field.Label>Bio</Field.Label>
-  <Field.Description>
-    A short description for your public profile.
-  </Field.Description>
+  <Field.Description>A short description for your public profile.</Field.Description>
   <Textarea required />
 </Field.Root>
 ```

@@ -21,8 +21,8 @@ describe("banner-with-image", () => {
     const ids = regions.map((region) => {
       const heading = within(region).getByRole("heading", { level: 2 });
       expect(region).toHaveAttribute("aria-labelledby", heading.id);
-      expect(region.querySelector("header")?.textContent).toBe(
-        regions[0]!.querySelector("header")?.textContent,
+      expect(region.querySelector(".copy")?.textContent).toBe(
+        regions[0]!.querySelector(".copy")?.textContent,
       );
       return heading.id;
     });

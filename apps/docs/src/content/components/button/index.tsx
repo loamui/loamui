@@ -46,7 +46,11 @@ const doc: ComponentContent = {
       description:
         "--loam-context isn't a button feature: everything in the region answers it. Here the checkbox's fill, the button's tint and the loader's stroke all take the danger colour, and focus rings inside follow. Intent is declared once on the container, not as a colour prop on each control.",
       code: `<div style={{ "--loam-context": "danger" }}>
-  <Field.Item><Field.Label><Checkbox defaultChecked /> Also delete backups</Field.Label></Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Checkbox defaultChecked /> Also delete backups
+    </Field.Label>
+  </Field.Item>
   <Button>Delete account</Button>
   <Loader label="Deleting" />
 </div>`,

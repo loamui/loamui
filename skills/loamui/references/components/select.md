@@ -41,7 +41,9 @@ An unanswered start is an option like any other: a first child with an empty val
 <Field.Root>
   <Field.Label>Country</Field.Label>
   <Select.Root>
-    <Select.Option value="" disabled>Pick a country</Select.Option>
+    <Select.Option value="" disabled>
+      Pick a country
+    </Select.Option>
     <Select.Option value="ca">Canada</Select.Option>
     <Select.Option value="uk">United Kingdom</Select.Option>
     <Select.Option value="us">United States</Select.Option>
@@ -93,7 +95,9 @@ A Field.Error before the control marks the field invalid and is announced: the m
   <Field.Label>Country</Field.Label>
   <Field.Error>Select a country</Field.Error>
   <Select.Root>
-    <Select.Option value="" disabled>Pick a country</Select.Option>
+    <Select.Option value="" disabled>
+      Pick a country
+    </Select.Option>
     <Select.Option>Canada</Select.Option>
     <Select.Option>United Kingdom</Select.Option>
     <Select.Option>United States</Select.Option>

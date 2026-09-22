@@ -49,7 +49,12 @@ const doc: ComponentContent = {
       description:
         "timeZone names the zone a moment is written in, a fact of the page like locale. Without it the server and the browser each use their own zone and can disagree on the hour, or on the day, which is a hydration error; with it both write the same words. Calendar dates ignore it, since 12 August is 12 August everywhere.",
       code: `<Time value="2026-08-12T14:30:00Z" locale="en-GB" timeStyle="short" timeZone="Europe/London" />
-<Time value="2026-08-12T14:30:00Z" locale="en-US" timeStyle="short" timeZone="America/Los_Angeles" />
+<Time
+  value="2026-08-12T14:30:00Z"
+  locale="en-US"
+  timeStyle="short"
+  timeZone="America/Los_Angeles"
+/>
 <Time value="2026-08-12T14:30:00Z" locale="en-GB" timeStyle="full" timeZone="Asia/Tokyo" />`,
       render: () => (
         <ul style={list}>

@@ -29,9 +29,7 @@ const doc: ComponentContent = {
         'Set invalid on Field.Root for the validation state. Field.Error supplies the message and is announced via role="alert".',
       code: `<Field.Root invalid>
   <Field.Label>Email</Field.Label>
-  <Field.Error>
-    Enter an email address in the correct format, like name@example.com
-  </Field.Error>
+  <Field.Error>Enter an email address in the correct format, like name@example.com</Field.Error>
   <Input defaultValue="not-an-email" />
 </Field.Root>`,
       render: () => <FieldErrorDemo />,
@@ -73,9 +71,7 @@ const doc: ComponentContent = {
       code: `<Field.Root>
   <Field.Label>Amount</Field.Label>
   <Field.Description>A bare native input, not a LoamUI control.</Field.Description>
-  <Field.Control
-    render={(props) => <input {...props} inputMode="decimal" />}
-  />
+  <Field.Control render={(props) => <input {...props} inputMode="decimal" />} />
 </Field.Root>`,
       render: () => <FieldCustomControlDemo />,
     },

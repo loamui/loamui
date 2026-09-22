@@ -1,24 +1,17 @@
 @scope (.hero-with-image) to ([class*="loam-"]) {
   @layer loamui.components {
     :scope {
+      align-items: center;
       container-type: inline-size;
-
-      > div {
-        align-items: center;
-        display: block grid;
-        font-size: var(--loam-text-md);
-        gap: var(--loam-space-l);
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-        padding-block: var(--loam-space-l);
-      }
+      display: block grid;
+      font-size: var(--loam-text-md);
+      gap: var(--loam-space-l);
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+      padding-block: var(--loam-space-l);
     }
 
-    /* The copy beside the image: eyebrow, heading, lede and the actions. It is
-
-       the section\'s body, not its introduction, so it is a box rather than a
-
-       <header>. */
-
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
     .copy {
       display: block grid;
       gap: var(--loam-space-s);

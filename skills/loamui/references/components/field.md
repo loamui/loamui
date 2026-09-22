@@ -37,9 +37,7 @@ Set invalid on Field.Root for the validation state. Field.Error supplies the mes
 ```tsx
 <Field.Root invalid>
   <Field.Label>Email</Field.Label>
-  <Field.Error>
-    Enter an email address in the correct format, like name@example.com
-  </Field.Error>
+  <Field.Error>Enter an email address in the correct format, like name@example.com</Field.Error>
   <Input defaultValue="not-an-email" />
 </Field.Root>
 ```
@@ -84,9 +82,7 @@ Field.Control wires the field's id, aria-describedby and aria-invalid onto any e
 <Field.Root>
   <Field.Label>Amount</Field.Label>
   <Field.Description>A bare native input, not a LoamUI control.</Field.Description>
-  <Field.Control
-    render={(props) => <input {...props} inputMode="decimal" />}
-  />
+  <Field.Control render={(props) => <input {...props} inputMode="decimal" />} />
 </Field.Root>
 ```
 

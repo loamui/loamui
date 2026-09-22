@@ -23,12 +23,34 @@ import { Badge } from "@loamui/core";
 Badges are neutral by default. There are no variant or colour props: declare --loam-context on a one-element wrapper region (see the Contextualism guide) and the status colours follow, or let it inherit from a larger region. Badge keeps a size prop because it sizes an intrinsic glyph, the one exception the library makes for display components (Badge, Loader, Progress).
 
 ```tsx
-<Badge.Root><Badge.Text>Neutral</Badge.Text></Badge.Root>
-<span style={{ "--loam-context": "primary" }}><Badge.Root><Badge.Text>Primary</Badge.Text></Badge.Root></span>
-<span style={{ "--loam-context": "success" }}><Badge.Root><Badge.Text>Success</Badge.Text></Badge.Root></span>
-<span style={{ "--loam-context": "warning" }}><Badge.Root><Badge.Text>Warning</Badge.Text></Badge.Root></span>
-<span style={{ "--loam-context": "danger" }}><Badge.Root><Badge.Text>Danger</Badge.Text></Badge.Root></span>
-<span style={{ "--loam-context": "info" }}><Badge.Root><Badge.Text>Info</Badge.Text></Badge.Root></span>
+<Badge.Root>
+  <Badge.Text>Neutral</Badge.Text>
+</Badge.Root>
+<span style={{ "--loam-context": "primary" }}>
+  <Badge.Root>
+    <Badge.Text>Primary</Badge.Text>
+  </Badge.Root>
+</span>
+<span style={{ "--loam-context": "success" }}>
+  <Badge.Root>
+    <Badge.Text>Success</Badge.Text>
+  </Badge.Root>
+</span>
+<span style={{ "--loam-context": "warning" }}>
+  <Badge.Root>
+    <Badge.Text>Warning</Badge.Text>
+  </Badge.Root>
+</span>
+<span style={{ "--loam-context": "danger" }}>
+  <Badge.Root>
+    <Badge.Text>Danger</Badge.Text>
+  </Badge.Root>
+</span>
+<span style={{ "--loam-context": "info" }}>
+  <Badge.Root>
+    <Badge.Text>Info</Badge.Text>
+  </Badge.Root>
+</span>
 ```
 
 ### Sizes
@@ -36,9 +58,15 @@ Badges are neutral by default. There are no variant or colour props: declare --l
 size is one of three tokens, emitted as data-size: the type step, with the pill's geometry in em on it. It is the one size prop the library keeps for display components, because a pill is an intrinsic glyph that no container can size.
 
 ```tsx
-<Badge.Root size="sm"><Badge.Text>Small</Badge.Text></Badge.Root>
-<Badge.Root size="md"><Badge.Text>Medium</Badge.Text></Badge.Root>
-<Badge.Root size="lg"><Badge.Text>Large</Badge.Text></Badge.Root>
+<Badge.Root size="sm">
+  <Badge.Text>Small</Badge.Text>
+</Badge.Root>
+<Badge.Root size="md">
+  <Badge.Text>Medium</Badge.Text>
+</Badge.Root>
+<Badge.Root size="lg">
+  <Badge.Text>Large</Badge.Text>
+</Badge.Root>
 ```
 
 ### Status icons
@@ -76,7 +104,9 @@ A badge is not a control, but a tag can be a link to everything tagged the same 
 
 ```tsx
 <span style={{ "--loam-context": "info" }}>
-  <Badge.Root render={<a href="#tag-design" />}><Badge.Text>design</Badge.Text></Badge.Root>
+  <Badge.Root render={<a href="#tag-design" />}>
+    <Badge.Text>design</Badge.Text>
+  </Badge.Root>
 </span>
 ```
 
@@ -88,7 +118,8 @@ No leftSection / rightSection props: an svg child is detected via :has(svg) and 
 <span style={{ "--loam-context": "success" }}>
   <Badge.Root>
     <IconCheck aria-hidden />
-    <Badge.Text>Verified</Badge.Text></Badge.Root>
+    <Badge.Text>Verified</Badge.Text>
+  </Badge.Root>
 </span>
 ```
 

@@ -15,22 +15,20 @@ export default function Recipe() {
         height="1200"
         loading="lazy"
       />
-      <div>
-        <div className="copy">
-          <p className="eyebrow">
-            <Badge.Root>
-              <Badge.Text>Offer</Badge.Text>
-            </Badge.Root>
-            <span>Until 30 November · bare-root season</span>
-          </p>
-          <h2 id={titleId}>Members save 20% on fruit plants</h2>
-          <p className="description">
-            Apples, pears, plums and soft fruit on local rootstocks, lifted the week they are
-            posted. Order before the end of November and the discount comes off at the basket.
-          </p>
-          <div className="actions">
-            <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
-          </div>
+      <div className="copy">
+        <p className="eyebrow">
+          <Badge.Root>
+            <Badge.Text>Offer</Badge.Text>
+          </Badge.Root>
+          <span>Until 30 November · bare-root season</span>
+        </p>
+        <h2 id={titleId}>Members save 20% on fruit plants</h2>
+        <p className="description">
+          Apples, pears, plums and soft fruit on local rootstocks, lifted the week they are posted.
+          Order before the end of November and the discount comes off at the basket.
+        </p>
+        <div className="actions">
+          <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
         </div>
       </div>
     </section>

@@ -11,7 +11,9 @@ const doc: ComponentContent = {
       description:
         "Price sizes nothing itself: it takes the font of whatever it sits in, here a paragraph set large and bold. What the amount covers is written as its children and set small beside it.",
       code: `<p style={{ fontSize: "var(--loam-text-2xl)", fontWeight: 700 }}>
-  <Price value={24} currency="GBP">per seat, per month</Price>
+  <Price value={24} currency="GBP">
+    per seat, per month
+  </Price>
 </p>`,
       render: () => (
         <p style={{ fontSize: "var(--loam-text-2xl)", fontWeight: 700, margin: 0 }}>
@@ -26,9 +28,15 @@ const doc: ComponentContent = {
       description:
         "Whole amounts drop their zeros and fractional ones keep them, so £24 and £9.50 sit together without either looking wrong. The figures are lining and tabular, so a column of them stays straight.",
       code: `<ul>
-  <li><Price value={9.5} currency="GBP" /></li>
-  <li><Price value={120} currency="GBP" /></li>
-  <li><Price value={1250.25} currency="GBP" /></li>
+  <li>
+    <Price value={9.5} currency="GBP" />
+  </li>
+  <li>
+    <Price value={120} currency="GBP" />
+  </li>
+  <li>
+    <Price value={1250.25} currency="GBP" />
+  </li>
 </ul>`,
       render: () => (
         <ul
@@ -87,9 +95,13 @@ const doc: ComponentContent = {
         "A summary of changes shows which way each one goes. signDisplay is Intl.NumberFormat's: exceptZero writes a sign on every non-zero amount, so a credit and a charge read apart at a glance.",
       code: `<dl>
   <dt>Prorated credit</dt>
-  <dd><Price value={2} currency="GBP" signDisplay="exceptZero" /></dd>
+  <dd>
+    <Price value={2} currency="GBP" signDisplay="exceptZero" />
+  </dd>
   <dt>New plan</dt>
-  <dd><Price value={-4.65} currency="GBP" signDisplay="exceptZero" /></dd>
+  <dd>
+    <Price value={-4.65} currency="GBP" signDisplay="exceptZero" />
+  </dd>
 </dl>`,
       render: () => (
         <dl

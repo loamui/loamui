@@ -37,8 +37,8 @@ autoComplete="new-password" tells a browser or password manager this is a passwo
 <Field.Root>
   <Field.Label>Choose a password</Field.Label>
   <Field.Description>
-    At least 12 characters. A few unrelated words are easier to remember
-    than one word with numbers in it.
+    At least 12 characters. A few unrelated words are easier to remember than one word with
+    numbers in it.
   </Field.Description>
   <PasswordInput name="new-password" autoComplete="new-password" />
 </Field.Root>

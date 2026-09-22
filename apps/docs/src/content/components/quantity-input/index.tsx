@@ -10,14 +10,14 @@ import {
 const doc: ComponentContent = {
   slug: "quantity-input",
   lead: "A count a person adjusts by one: items in a cart, guests, seats. Compose it inside a Field for its label, description and error.",
-  importLine: `import { Field, QuantityInput } from "@loamui/core";`,
+  importLine: `import { Field, QuantityInput, VisuallyHidden } from "@loamui/core";`,
   demos: [
     {
       title: "In a cart line",
       description:
-        "The input is a native number field with a name, so the form posts the count like any other value. The buttons step it and the row takes the type and height of the controls around it.",
+        "The input is a native number field with a name, so the form posts the count like any other value. The buttons step it and the row takes the type and height of the controls around it. In a cart line the product name already says what is counted, so the Field's label is hidden: still the control's name, not painted twice.",
       code: `<Field.Root>
-  <Field.Label>Quantity</Field.Label>
+  <VisuallyHidden render={<Field.Label />}>Quantity</VisuallyHidden>
   <QuantityInput name="quantity" defaultValue={1} min={1} />
 </Field.Root>`,
       render: () => <QuantityInputCartDemo />,

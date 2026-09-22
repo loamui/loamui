@@ -33,10 +33,26 @@ The whole table is composed from parts: Caption names it, Thead and Tbody group 
     </Table.Tr>
   </Table.Thead>
   <Table.Tbody>
-    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
-    <Table.Tr><Table.Td>INV-1025</Table.Td><Table.Td>Pending</Table.Td><Table.Td>$820.00</Table.Td></Table.Tr>
-    <Table.Tr><Table.Td>INV-1026</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$2,010.00</Table.Td></Table.Tr>
-    <Table.Tr><Table.Td>INV-1027</Table.Td><Table.Td>Overdue</Table.Td><Table.Td>$640.00</Table.Td></Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1024</Table.Td>
+      <Table.Td>Paid</Table.Td>
+      <Table.Td>$1,240.00</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1025</Table.Td>
+      <Table.Td>Pending</Table.Td>
+      <Table.Td>$820.00</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1026</Table.Td>
+      <Table.Td>Paid</Table.Td>
+      <Table.Td>$2,010.00</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1027</Table.Td>
+      <Table.Td>Overdue</Table.Td>
+      <Table.Td>$640.00</Table.Td>
+    </Table.Tr>
   </Table.Tbody>
 </Table.Root>
 ```
@@ -46,9 +62,7 @@ The whole table is composed from parts: Caption names it, Thead and Tbody group 
 Shade alternating body rows. Stripes help the eye hold a row across many columns; on a short, narrow table like this one they are noise, so reach for them when rows are long, not by default.
 
 ```tsx
-<Table.Root striped>
-  {/* caption / thead / tbody */}
-</Table.Root>
+<Table.Root striped>{/* caption / thead / tbody */}</Table.Root>
 ```
 
 ### Column borders
@@ -56,9 +70,7 @@ Shade alternating body rows. Stripes help the eye hold a row across many columns
 Draw vertical borders between columns. Padding already separates columns of short values; borders earn their place when cells hold text that wraps, or numbers that would otherwise run into their neighbours.
 
 ```tsx
-<Table.Root withColumnBorders>
-  {/* caption / thead / tbody */}
-</Table.Root>
+<Table.Root withColumnBorders>{/* caption / thead / tbody */}</Table.Root>
 ```
 
 ### Highlight on hover
@@ -66,9 +78,7 @@ Draw vertical borders between columns. Padding already separates columns of shor
 Shade the row under the pointer; the highlight appears on pointer hover, so it is not visible in a static screenshot.
 
 ```tsx
-<Table.Root highlightOnHover>
-  {/* caption / thead / tbody */}
-</Table.Root>
+<Table.Root highlightOnHover>{/* caption / thead / tbody */}</Table.Root>
 ```
 
 ### Search and sort
@@ -119,7 +129,15 @@ The table scrolls in place instead of stretching the page. Only once it overflow
     </Table.Tr>
   </Table.Thead>
   <Table.Tbody>
-    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$310.00</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1024</Table.Td>
+      <Table.Td>Paid</Table.Td>
+      <Table.Td>$310.00</Table.Td>
+      <Table.Td>$310.00</Table.Td>
+      <Table.Td>$310.00</Table.Td>
+      <Table.Td>$310.00</Table.Td>
+      <Table.Td>$1,240.00</Table.Td>
+    </Table.Tr>
     …
   </Table.Tbody>
 </Table.Root>
@@ -140,7 +158,11 @@ A long table capped in height scrolls in place, and stickyHeader keeps the colum
     </Table.Tr>
   </Table.Thead>
   <Table.Tbody>
-    <Table.Tr><Table.Td>INV-1024</Table.Td><Table.Td>Paid</Table.Td><Table.Td>$1,240.00</Table.Td></Table.Tr>
+    <Table.Tr>
+      <Table.Td>INV-1024</Table.Td>
+      <Table.Td>Paid</Table.Td>
+      <Table.Td>$1,240.00</Table.Td>
+    </Table.Tr>
     …
   </Table.Tbody>
 </Table.Root>

@@ -1,6 +1,8 @@
 /* The docs shell: the sidebar beside the content. The aside is the part;
-   its inner scroller is the div it holds. */
-@scope (.site-DocsShell) {
+   its inner scroller is the div it holds. The donut matters here more than
+   anywhere: the content column hosts every page, and its `.content` once
+   padded Details.Content, whose class is the same word. */
+@scope (.site-DocsShell) to ([class*="loam-"], [class*="site-"]) {
   :scope {
     align-items: start;
     display: block grid;

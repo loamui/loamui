@@ -96,8 +96,12 @@ const doc: ComponentContent = {
       <IconFile aria-hidden />
       Files
     </Tabs.Tab>
-    <Tabs.Tab value="team"><IconFile aria-hidden /> Team</Tabs.Tab>
-    <Tabs.Tab value="settings"><IconFile aria-hidden /> Settings</Tabs.Tab>
+    <Tabs.Tab value="team">
+      <IconFile aria-hidden /> Team
+    </Tabs.Tab>
+    <Tabs.Tab value="settings">
+      <IconFile aria-hidden /> Settings
+    </Tabs.Tab>
   </Tabs.List>
   <Tabs.Panel value="files">All your documents in one place.</Tabs.Panel>
   <Tabs.Panel value="team">Invite teammates and manage roles.</Tabs.Panel>
@@ -112,7 +116,9 @@ const doc: ComponentContent = {
   <Tabs.List>
     <Tabs.Tab value="overview">Overview</Tabs.Tab>
     <Tabs.Tab value="reports">Reports</Tabs.Tab>
-    <Tabs.Tab value="billing" disabled>Billing</Tabs.Tab>
+    <Tabs.Tab value="billing" disabled>
+      Billing
+    </Tabs.Tab>
   </Tabs.List>
   <Tabs.Panel value="overview">Everything at a glance.</Tabs.Panel>
   <Tabs.Panel value="reports">Usage for the last month.</Tabs.Panel>

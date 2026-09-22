@@ -34,7 +34,11 @@ const doc: ComponentContent = {
       title: "Basic usage",
       description:
         "One self-contained opt-in. The label is a complete statement of what ticking the box does, and the box starts unticked so every tick is a deliberate act.",
-      code: `<Field.Item><Field.Label><Checkbox /> Subscribe to the newsletter</Field.Label></Field.Item>`,
+      code: `<Field.Item>
+  <Field.Label>
+    <Checkbox /> Subscribe to the newsletter
+  </Field.Label>
+</Field.Item>`,
       render: () => (
         <Field.Item>
           <Field.Label>
@@ -47,7 +51,11 @@ const doc: ComponentContent = {
       title: "Checked",
       description:
         "defaultChecked starts the box ticked for a form the browser owns; checked with onChange holds it yourself. A ticked start is for a setting that is already on, never for consent.",
-      code: `<Field.Item><Field.Label><Checkbox defaultChecked /> Auto-renew</Field.Label></Field.Item>`,
+      code: `<Field.Item>
+  <Field.Label>
+    <Checkbox defaultChecked /> Auto-renew
+  </Field.Label>
+</Field.Item>`,
       render: () => (
         <Field.Item>
           <Field.Label>
@@ -60,7 +68,12 @@ const doc: ComponentContent = {
       title: "With description",
       description:
         "Field.Description is helper text under the label, joined to the box through aria-describedby, so the consequence of ticking is read with the choice.",
-      code: `<Field.Item><Field.Label><Checkbox /> Share anonymised usage data</Field.Label><Field.Description>Helps us improve the product. You can opt out anytime.</Field.Description></Field.Item>`,
+      code: `<Field.Item>
+  <Field.Label>
+    <Checkbox /> Share anonymised usage data
+  </Field.Label>
+  <Field.Description>Helps us improve the product. You can opt out anytime.</Field.Description>
+</Field.Item>`,
       render: () => (
         <div style={{ maxInlineSize: "24rem" }}>
           <Field.Item>
@@ -78,8 +91,16 @@ const doc: ComponentContent = {
       title: "Disabled",
       description:
         "disabled reaches the native input: the row is dimmed and skipped by Tab. A ticked, disabled box shows a setting that is on and not the user's to change here. Disabled is detected on the input (:has(input:disabled)), never declared on the row.",
-      code: `<Field.Item><Field.Label><Checkbox disabled /> Email receipts</Field.Label></Field.Item>
-<Field.Item><Field.Label><Checkbox defaultChecked disabled /> Two-factor authentication</Field.Label></Field.Item>`,
+      code: `<Field.Item>
+  <Field.Label>
+    <Checkbox disabled /> Email receipts
+  </Field.Label>
+</Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Checkbox defaultChecked disabled /> Two-factor authentication
+  </Field.Label>
+</Field.Item>`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-xs)" }}>
           <Field.Item>
@@ -101,7 +122,11 @@ const doc: ComponentContent = {
         "Set invalid on Field.Root and compose Field.Error before the checkbox for its announced message.",
       code: `<Field.Root invalid>
   <Field.Error>Accept the terms of service to continue</Field.Error>
-  <><Field.Label><Checkbox /> Accept the terms of service</Field.Label></>
+  <>
+    <Field.Label>
+      <Checkbox /> Accept the terms of service
+    </Field.Label>
+  </>
 </Field.Root>`,
       render: () => <CheckboxErrorDemo />,
     },

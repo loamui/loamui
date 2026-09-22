@@ -63,9 +63,7 @@ const doc: ComponentContent = {
         "Set invalid on Field.Root and compose Field.Error before the control for its announced message.",
       code: `<Field.Root invalid>
   <Field.Label>Email</Field.Label>
-  <Field.Error>
-    Enter an email address in the correct format, like name@example.com
-  </Field.Error>
+  <Field.Error>Enter an email address in the correct format, like name@example.com</Field.Error>
   <Input defaultValue="not-an-email" />
 </Field.Root>`,
       render: () => <InputErrorDemo />,
@@ -99,7 +97,14 @@ const doc: ComponentContent = {
         "Compose prefixes and suffixes beside Input in your own layout. Field.Label names the input; include any meaningful unit or suffix in the label or description.",
       code: `<Field.Root>
   <Field.Label>Handle</Field.Label>
-  <div style={{ display: "grid", gridTemplateColumns: "auto minmax(0, 1fr)", alignItems: "center", gap: "var(--loam-space-2xs)" }}>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "auto minmax(0, 1fr)",
+      alignItems: "center",
+      gap: "var(--loam-space-2xs)",
+    }}
+  >
     <span aria-hidden="true">@</span>
     <Input />
   </div>
@@ -107,7 +112,14 @@ const doc: ComponentContent = {
 
 <Field.Root>
   <Field.Label>Site name on .dev</Field.Label>
-  <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "center", gap: "var(--loam-space-2xs)" }}>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "minmax(0, 1fr) auto",
+      alignItems: "center",
+      gap: "var(--loam-space-2xs)",
+    }}
+  >
     <Input />
     <span aria-hidden="true">.dev</span>
   </div>

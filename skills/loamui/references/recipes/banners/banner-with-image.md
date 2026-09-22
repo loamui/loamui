@@ -52,31 +52,29 @@ export default function Recipe() {
   const titleId = useId();
   return (
     <section className="banner-with-image" aria-labelledby={titleId}>
-      <div>
-        <img
-          src="https://picsum.photos/id/429/800/600"
-          srcSet="https://picsum.photos/id/429/400/300 400w, https://picsum.photos/id/429/800/600 800w, https://picsum.photos/id/429/1600/1200 1600w"
-          sizes="auto, 100vw"
-          alt="A cup of freshly picked raspberries"
-          width="1600"
-          height="1200"
-          loading="lazy"
-        />
-        <div className="copy">
-          <p className="eyebrow">
-            <Badge.Root>
-              <Badge.Text>Offer</Badge.Text>
-            </Badge.Root>
-            <span>Until 30 November · bare-root season</span>
-          </p>
-          <h2 id={titleId}>Members save 20% on fruit plants</h2>
-          <p className="description">
-            Apples, pears, plums and soft fruit on local rootstocks, lifted the week they are
-            posted. Order before the end of November and the discount comes off at the basket.
-          </p>
-          <div className="actions">
-            <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
-          </div>
+      <img
+        src="https://picsum.photos/id/429/800/600"
+        srcSet="https://picsum.photos/id/429/400/300 400w, https://picsum.photos/id/429/800/600 800w, https://picsum.photos/id/429/1600/1200 1600w"
+        sizes="auto, 100vw"
+        alt="A cup of freshly picked raspberries"
+        width="1600"
+        height="1200"
+        loading="lazy"
+      />
+      <div className="copy">
+        <p className="eyebrow">
+          <Badge.Root>
+            <Badge.Text>Offer</Badge.Text>
+          </Badge.Root>
+          <span>Until 30 November · bare-root season</span>
+        </p>
+        <h2 id={titleId}>Members save 20% on fruit plants</h2>
+        <p className="description">
+          Apples, pears, plums and soft fruit on local rootstocks, lifted the week they are posted.
+          Order before the end of November and the discount comes off at the basket.
+        </p>
+        <div className="actions">
+          <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
         </div>
       </div>
     </section>
@@ -94,10 +92,8 @@ export default function Recipe() {
       border: 1px solid var(--loam-color-line);
       border-radius: var(--loam-radius-xl);
       container: banner-with-image / inline-size;
-
-      > div {
-        display: block grid;
-      }
+      display: block grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     }
 
     img {
@@ -105,12 +101,8 @@ export default function Recipe() {
       object-fit: cover;
     }
 
-    /* The copy beside the image: eyebrow, heading, lede and the actions. It is
-
-       the section\'s body, not its introduction, so it is a box rather than a
-
-       <header>. */
-
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
     .copy {
       align-content: center;
       display: block grid;
@@ -153,8 +145,9 @@ export default function Recipe() {
     }
 
     @container banner-with-image (inline-size < 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 1fr);
+      img,
+      .copy {
+        grid-column: 1 / -1;
       }
 
       img {
@@ -166,10 +159,6 @@ export default function Recipe() {
     }
 
     @container banner-with-image (inline-size >= 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-      }
-
       img {
         aspect-ratio: auto;
         block-size: 100%;

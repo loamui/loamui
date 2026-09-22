@@ -30,7 +30,14 @@ Compose the dialog from parts. The Popup is a native <dialog> opened with showMo
     <Modal.Description>
       They'll receive an email invitation to join your workspace.
     </Modal.Description>
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--loam-space-2xs)", alignItems: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "var(--loam-space-2xs)",
+        alignItems: "center",
+      }}
+    >
       <span style={{ "--loam-context": "primary" }}>
         <Modal.Close>Send invite</Modal.Close>
       </span>
@@ -54,7 +61,14 @@ alert renders role="alertdialog": the backdrop doesn't light-dismiss (closing on
     <Modal.Description>
       "report-final-v2.pdf" will be permanently deleted. This cannot be undone.
     </Modal.Description>
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--loam-space-2xs)", alignItems: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "var(--loam-space-2xs)",
+        alignItems: "center",
+      }}
+    >
       <Modal.Close autoFocus>Cancel</Modal.Close>
       <span style={{ "--loam-context": "danger" }}>
         <Modal.Close>Delete</Modal.Close>
@@ -83,8 +97,8 @@ The panel sizes to its content between a floor and a readable cap: a confirmatio
   <Modal.Popup style={{ "--loam-modal-size": "44rem" }}>
     <Modal.Title>Release notes</Modal.Title>
     <Modal.Description>
-      A wide panel for content that needs the room, set with one custom property where the
-      modal is used.
+      A wide panel for content that needs the room, set with one custom property where the modal
+      is used.
     </Modal.Description>
     <Modal.Close>Close</Modal.Close>
   </Modal.Popup>
@@ -99,7 +113,14 @@ A header row with an × is a composition pattern, not configuration: compose Mod
 <Modal.Root>
   <Modal.Trigger>Open settings</Modal.Trigger>
   <Modal.Popup>
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBlockEnd: "var(--loam-space-2xs)" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBlockEnd: "var(--loam-space-2xs)",
+      }}
+    >
       <Modal.Title style={{ margin: 0 }}>Settings</Modal.Title>
       <Modal.Close aria-label="Close">×</Modal.Close>
     </div>

@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Field, Price, QuantityInput } from "@loamui/core";
+import { Field, Price, QuantityInput, VisuallyHidden } from "@loamui/core";
 
 export function QuantityInputCartDemo() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "var(--loam-space-s)" }}>
-      <span>Field notebook</span>
+      <span>Seed tray, 40 cells</span>
       <Field.Root style={{ inlineSize: "auto" }}>
-        <Field.Label>Quantity</Field.Label>
+        <VisuallyHidden render={<Field.Label />}>Quantity</VisuallyHidden>
         <QuantityInput name="quantity" defaultValue={1} min={1} />
       </Field.Root>
       <Price value={12} currency="GBP" />

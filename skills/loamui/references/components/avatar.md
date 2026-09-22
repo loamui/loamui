@@ -24,7 +24,11 @@ Image owns the source and native loading attributes. Fallback holds the content 
 
 ```tsx
 <Avatar.Root role="img" aria-label="Ada Lovelace">
-  <Avatar.Image src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop&crop=faces" alt="" loading="lazy" />
+  <Avatar.Image
+    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop&crop=faces"
+    alt=""
+    loading="lazy"
+  />
   <Avatar.Fallback>AL</Avatar.Fallback>
 </Avatar.Root>
 ```
@@ -57,10 +61,18 @@ Each child is a list item. Compose an additional avatar for an overflow count.
 
 ```tsx
 <Avatar.Group aria-label="Participants">
-  <Avatar.Root role="img" aria-label="Jane Doe"><Avatar.Fallback>JD</Avatar.Fallback></Avatar.Root>
-  <Avatar.Root role="img" aria-label="Sam Reed"><Avatar.Fallback>SR</Avatar.Fallback></Avatar.Root>
-  <Avatar.Root role="img" aria-label="Amara Okafor"><Avatar.Fallback>AO</Avatar.Fallback></Avatar.Root>
-  <Avatar.Root role="img" aria-label="5 more people"><Avatar.Fallback>+5</Avatar.Fallback></Avatar.Root>
+  <Avatar.Root role="img" aria-label="Jane Doe">
+    <Avatar.Fallback>JD</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="Sam Reed">
+    <Avatar.Fallback>SR</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="Amara Okafor">
+    <Avatar.Fallback>AO</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="5 more people">
+    <Avatar.Fallback>+5</Avatar.Fallback>
+  </Avatar.Root>
 </Avatar.Group>
 ```
 

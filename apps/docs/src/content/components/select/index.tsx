@@ -116,7 +116,9 @@ const doc: ComponentContent = {
       code: `<Field.Root>
   <Field.Label>Country</Field.Label>
   <Select.Root>
-    <Select.Option value="" disabled>Pick a country</Select.Option>
+    <Select.Option value="" disabled>
+      Pick a country
+    </Select.Option>
     <Select.Option value="ca">Canada</Select.Option>
     <Select.Option value="uk">United Kingdom</Select.Option>
     <Select.Option value="us">United States</Select.Option>
@@ -165,7 +167,9 @@ const doc: ComponentContent = {
   <Field.Label>Country</Field.Label>
   <Field.Error>Select a country</Field.Error>
   <Select.Root>
-    <Select.Option value="" disabled>Pick a country</Select.Option>
+    <Select.Option value="" disabled>
+      Pick a country
+    </Select.Option>
     <Select.Option>Canada</Select.Option>
     <Select.Option>United Kingdom</Select.Option>
     <Select.Option>United States</Select.Option>

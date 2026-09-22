@@ -49,12 +49,16 @@ const doc: ComponentContent = {
         "The built-in trigger is a LoamUI Button. To use a different element, pass it via render; the wiring (popovertarget, aria-expanded, anchor name) merges onto it.",
       code: `<Popover.Root>
   <Popover.Trigger
-    render={<button type="button" aria-label="Filters">⚙</button>}
+    render={
+      <button type="button" aria-label="Filters">
+        ⚙
+      </button>
+    }
   />
   <Popover.Popup>
     <Popover.Description>
-      The Trigger's wiring merged onto your own button. It opens the popover and carries
-      the aria-expanded state.
+      The Trigger's wiring merged onto your own button. It opens the popover and carries the
+      aria-expanded state.
     </Popover.Description>
   </Popover.Popup>
 </Popover.Root>`,

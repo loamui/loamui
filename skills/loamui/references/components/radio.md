@@ -25,9 +25,21 @@ A RadioGroup.Root shares one name so only one option can be selected; RadioGroup
 ```tsx
 <RadioGroup.Root defaultValue="system">
   <RadioGroup.Legend>Theme</RadioGroup.Legend>
-  <Field.Item><Field.Label><Radio value="system" /> System</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Radio value="light" /> Light</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Radio value="dark" /> Dark</Field.Label></Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="system" /> System
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="light" /> Light
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="dark" /> Dark
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -38,8 +50,18 @@ Each option can carry helper text under its label.
 ```tsx
 <RadioGroup.Root>
   <RadioGroup.Legend>Delivery</RadioGroup.Legend>
-  <Field.Item><Field.Label><Radio value="standard" /> Standard</Field.Label><Field.Description>Arrives in 3-5 business days.</Field.Description></Field.Item>
-  <Field.Item><Field.Label><Radio value="express" /> Express</Field.Label><Field.Description>Guaranteed next-day delivery.</Field.Description></Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="standard" /> Standard
+    </Field.Label>
+    <Field.Description>Arrives in 3-5 business days.</Field.Description>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="express" /> Express
+    </Field.Label>
+    <Field.Description>Guaranteed next-day delivery.</Field.Description>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -50,8 +72,16 @@ Lay the options out in a row only when there are two, short options. More than t
 ```tsx
 <RadioGroup.Root orientation="horizontal">
   <RadioGroup.Legend>Contact preference</RadioGroup.Legend>
-  <Field.Item><Field.Label><Radio value="email" /> Email</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Radio value="phone" /> Phone</Field.Label></Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="email" /> Email
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="phone" /> Phone
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -62,9 +92,21 @@ Disable a single Radio to keep an unavailable option visible in the set. The res
 ```tsx
 <RadioGroup.Root>
   <RadioGroup.Legend>Plan</RadioGroup.Legend>
-  <Field.Item><Field.Label><Radio value="basic" /> Basic</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Radio value="pro" /> Pro</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Radio value="legacy" disabled /> Legacy</Field.Label></Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="basic" /> Basic
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="pro" /> Pro
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="legacy" disabled /> Legacy
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -77,9 +119,21 @@ RadioGroup.Description and RadioGroup.Error are joined to the group with aria-de
   <RadioGroup.Legend>Plan</RadioGroup.Legend>
   <RadioGroup.Description>You can change it later.</RadioGroup.Description>
   <RadioGroup.Error>Select a plan to continue</RadioGroup.Error>
-  <Field.Item><Field.Label><Radio value="basic" /> Basic</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Radio value="pro" /> Pro</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Radio value="legacy" /> Legacy</Field.Label></Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="basic" /> Basic
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="pro" /> Pro
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="legacy" /> Legacy
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -91,8 +145,16 @@ The group's own words, the optional marker after the legend and the hidden prefi
 <RadioGroup.Root invalid labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}>
   <RadioGroup.Legend optional>Formule</RadioGroup.Legend>
   <RadioGroup.Error>Choisissez une formule</RadioGroup.Error>
-  <Field.Item><Field.Label><Radio value="basic" /> Essentielle</Field.Label></Field.Item>
-  <Field.Item><Field.Label><Radio value="pro" /> Pro</Field.Label></Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="basic" /> Essentielle
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="pro" /> Pro
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 

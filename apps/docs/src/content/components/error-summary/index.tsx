@@ -15,9 +15,7 @@ const doc: ComponentContent = {
     <ErrorSummary.Root>
       <ErrorSummary.Title />
       <ErrorSummary.List>
-        <ErrorSummary.Item href="#demo-email">
-          Enter your email address
-        </ErrorSummary.Item>
+        <ErrorSummary.Item href="#demo-email">Enter your email address</ErrorSummary.Item>
       </ErrorSummary.List>
     </ErrorSummary.Root>
   )}

@@ -23,7 +23,11 @@ import { Checkbox, Field } from "@loamui/core";
 One self-contained opt-in. The label is a complete statement of what ticking the box does, and the box starts unticked so every tick is a deliberate act.
 
 ```tsx
-<Field.Item><Field.Label><Checkbox /> Subscribe to the newsletter</Field.Label></Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Checkbox /> Subscribe to the newsletter
+  </Field.Label>
+</Field.Item>
 ```
 
 ### Checked
@@ -31,7 +35,11 @@ One self-contained opt-in. The label is a complete statement of what ticking the
 defaultChecked starts the box ticked for a form the browser owns; checked with onChange holds it yourself. A ticked start is for a setting that is already on, never for consent.
 
 ```tsx
-<Field.Item><Field.Label><Checkbox defaultChecked /> Auto-renew</Field.Label></Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Checkbox defaultChecked /> Auto-renew
+  </Field.Label>
+</Field.Item>
 ```
 
 ### With description
@@ -39,7 +47,12 @@ defaultChecked starts the box ticked for a form the browser owns; checked with o
 Field.Description is helper text under the label, joined to the box through aria-describedby, so the consequence of ticking is read with the choice.
 
 ```tsx
-<Field.Item><Field.Label><Checkbox /> Share anonymised usage data</Field.Label><Field.Description>Helps us improve the product. You can opt out anytime.</Field.Description></Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Checkbox /> Share anonymised usage data
+  </Field.Label>
+  <Field.Description>Helps us improve the product. You can opt out anytime.</Field.Description>
+</Field.Item>
 ```
 
 ### Disabled
@@ -47,8 +60,16 @@ Field.Description is helper text under the label, joined to the box through aria
 disabled reaches the native input: the row is dimmed and skipped by Tab. A ticked, disabled box shows a setting that is on and not the user's to change here. Disabled is detected on the input (:has(input:disabled)), never declared on the row.
 
 ```tsx
-<Field.Item><Field.Label><Checkbox disabled /> Email receipts</Field.Label></Field.Item>
-<Field.Item><Field.Label><Checkbox defaultChecked disabled /> Two-factor authentication</Field.Label></Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Checkbox disabled /> Email receipts
+  </Field.Label>
+</Field.Item>
+<Field.Item>
+  <Field.Label>
+    <Checkbox defaultChecked disabled /> Two-factor authentication
+  </Field.Label>
+</Field.Item>
 ```
 
 ### Error state
@@ -58,7 +79,11 @@ Set invalid on Field.Root and compose Field.Error before the checkbox for its an
 ```tsx
 <Field.Root invalid>
   <Field.Error>Accept the terms of service to continue</Field.Error>
-  <><Field.Label><Checkbox /> Accept the terms of service</Field.Label></>
+  <>
+    <Field.Label>
+      <Checkbox /> Accept the terms of service
+    </Field.Label>
+  </>
 </Field.Root>
 ```
 
