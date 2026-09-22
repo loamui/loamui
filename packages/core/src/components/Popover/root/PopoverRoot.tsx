@@ -30,9 +30,7 @@ import type { PopoverContextValue } from "./PopoverRootContext.js";
  * ```
  */
 export interface PopoverRootProps extends PartProps<"span"> {
-  /** Controlled open state. */
   open?: boolean;
-  /** Initial open state when uncontrolled. */
   defaultOpen?: boolean;
   /** Called whenever the open state should change (either path). */
   onOpenChange?: (open: boolean) => void;

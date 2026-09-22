@@ -167,7 +167,6 @@ test("a single component import eliminates unrelated components", async () => {
 test("component entry points keep modal code out of eager chunks", async () => {
   const dir = await mkdtemp(join(tmpdir(), "loamui-package-"));
   try {
-    // The fixture resolves the workspace package through its public export map.
     const lazy = join(dir, "modal.js");
     await writeFile(
       lazy,

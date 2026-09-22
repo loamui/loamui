@@ -90,8 +90,7 @@ export function MenuPopup({
   };
 
   return (
-    // rest cannot override what follows: role, the roving tabIndex and
-    // the typeahead handlers are the menu pattern itself.
+    // The wiring below wins over rest (CONTRIBUTING: one merge contract).
     <div
       {...rest}
       {...popupProps(ctx, side, style)}

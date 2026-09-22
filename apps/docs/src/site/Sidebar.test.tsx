@@ -10,10 +10,6 @@ const axeOptions = { rules: { "color-contrast": { enabled: false } } };
 
 afterEach(cleanup);
 
-/**
- * The sidebar is a landmark with one current page. Every visitor to the docs
- * uses it, so it gets the same axe pass the recipes get.
- */
 describe("the documentation sidebar", () => {
   it("is a named navigation landmark marking exactly one current page", async () => {
     const { container } = render(<Sidebar />);

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Checkbox, Field } from "../../index.js";
 
 const meta = {
@@ -78,4 +79,18 @@ export const SelfWiringInField: Story = {
       <Checkbox />
     </Field.Root>
   ),
+};
+
+/** Interaction test: the label toggles the native control, and Space toggles it from the keyboard. */
+export const TogglesFromLabelAndKeyboard: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const box = canvas.getByRole("checkbox", { name: "I accept the terms and conditions" });
+    await expect(box).not.toBeChecked();
+    await userEvent.click(canvas.getByText("I accept the terms and conditions"));
+    await expect(box).toBeChecked();
+    box.focus();
+    await userEvent.keyboard(" ");
+    await expect(box).not.toBeChecked();
+  },
 };

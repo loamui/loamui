@@ -1,7 +1,3 @@
-// No "use client": a pass-through over the native option the Select's scope
-// already styles. It names the anatomy — every element the scope paints is
-// reachable as a part — over the platform's own picker, which is what a
-// native <select> buys on a phone.
 import type { PartProps } from "../../../utils/props.js";
 
 export interface SelectOptionProps extends PartProps<"option"> {}

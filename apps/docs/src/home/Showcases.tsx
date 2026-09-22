@@ -6,7 +6,6 @@ import { Avatar, Badge, Button, Card, Checkbox, Field, Input, Select } from "@lo
 import "@/home/home-demo.css";
 import { IconBell, IconBellOff } from "@tabler/icons-react";
 
-/** Interactive "settings" card that shows real LoamUI components in the hero. */
 export function HeroShowcase() {
   const [notify, setNotify] = useState(true);
   const [name, setName] = useState("jamie@acme.com");

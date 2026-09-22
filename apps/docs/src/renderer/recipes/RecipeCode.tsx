@@ -4,7 +4,7 @@ import { Tabs } from "@loamui/core";
 import { CodeBlock } from "../components/CodeBlock";
 import { CopyAction } from "../shared/CopyPanel";
 import type { RecipeSource } from "@/recipes/types";
-import "./recipe-code.css";
+import "./RecipeCode.css";
 
 /** Both files as one markdown pair, for a paste into a chat or a PR. */
 export function fencedPair(source: RecipeSource): string {

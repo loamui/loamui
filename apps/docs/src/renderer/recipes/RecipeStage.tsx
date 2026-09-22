@@ -3,8 +3,8 @@
 import { useEffect, useId, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { VisuallyHidden } from "@loamui/core";
-import { useSiteScheme } from "./recipe-scheme";
-import "./recipe-stage.css";
+import { useSiteScheme } from "./use-site-scheme";
+import "./RecipeStage.css";
 import {
   IconSun,
   IconMoon,
@@ -70,7 +70,6 @@ function MoonIcon() {
   return <IconMoon size={16} aria-hidden />;
 }
 
-/** Four devices, so the presets read apart at a glance. */
 function WidthIcon({ value }: { value: Width }) {
   switch (value) {
     case "narrow":

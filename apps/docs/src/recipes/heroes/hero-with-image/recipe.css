@@ -13,7 +13,13 @@
       }
     }
 
-    header {
+    /* The copy beside the image: eyebrow, heading, lede and the actions. It is
+
+       the section\'s body, not its introduction, so it is a box rather than a
+
+       <header>. */
+
+    .copy {
       display: block grid;
       gap: var(--loam-space-s);
       grid-template-columns: minmax(0, 1fr);

@@ -13,15 +13,12 @@
       grid-template-columns: minmax(0, 1fr);
     }
 
-    /* One row: the search, the component filter and the count. Wraps as a
-     row of controls where the column is narrow. */
     .filters {
       align-items: center;
       display: block flex;
       flex-wrap: wrap;
       gap: var(--loam-space-2xs) var(--loam-space-xs);
 
-      /* The match count, at the end of the row. */
       > p {
         color: var(--loam-color-fg-dim);
         font-size: var(--loam-text-sm);
@@ -46,8 +43,6 @@
       }
     }
 
-    /* A category: its header holds the title and the link to the whole
-     category; the list of cards follows. */
     .group {
       display: block grid;
       gap: var(--loam-space-s);
@@ -86,10 +81,6 @@
         padding: 0;
       }
     }
-
-    /* A card: the preview above, the title and its parts below. The whole
-     card is the link's hit area (see .cardLink); hover lifts it, keyboard
-     focus rings it. */
 
     /* LazyThumb defers the preview. Keep the card laid out so its observer
      can detect approaching previews and its placeholder stays the same size. */
@@ -154,7 +145,6 @@
       gap: var(--loam-space-2xs);
       padding: var(--loam-space-xs) var(--loam-space-s) var(--loam-space-s);
 
-      /* The parts a recipe uses, as badges. */
       > ul {
         display: block flex;
         flex-wrap: wrap;
@@ -185,8 +175,6 @@
       }
     }
 
-    /* Nothing matched: a quiet panel where the grid would be, with the two
-     ways on. Its title, then its explanation. */
     .empty {
       background: var(--loam-color-bg-subtle);
       border: 1px dashed var(--loam-color-line-strong);

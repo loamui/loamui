@@ -1,6 +1,6 @@
-import { RecipesRail } from "@/renderer/recipes/recipe-rail";
+import { RecipesRail } from "@/renderer/recipes/RecipesRail";
 import { MarkdownLink } from "@/site/MarkdownLink";
-import "@/renderer/recipes/recipe-page.css";
+import "@/renderer/recipes/RecipePage.css";
 
 export default function RecipeGuideLayout({ children }: { children: React.ReactNode }) {
   return (

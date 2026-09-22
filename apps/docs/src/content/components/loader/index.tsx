@@ -1,7 +1,7 @@
 import { Loader } from "@loamui/core";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/components/Example";
+import { Variant } from "@/renderer/components/Variant";
 
 const doc: ComponentContent = {
   slug: "loader",
@@ -32,20 +32,20 @@ const doc: ComponentContent = {
             alignItems: "end",
           }}
         >
-          <Example label="Small">
+          <Variant label="Small">
             <Loader size="sm" />
-          </Example>
-          <Example label="Medium">
+          </Variant>
+          <Variant label="Medium">
             <Loader size="md" />
-          </Example>
-          <Example label="Large">
+          </Variant>
+          <Variant label="Large">
             <Loader size="lg" />
-          </Example>
-          <Example label="From a region: --loam-loader-size">
+          </Variant>
+          <Variant label="From a region: --loam-loader-size">
             <span style={{ "--loam-loader-size": "3rem" } as CSSProperties}>
               <Loader />
             </span>
-          </Example>
+          </Variant>
         </div>
       ),
     },

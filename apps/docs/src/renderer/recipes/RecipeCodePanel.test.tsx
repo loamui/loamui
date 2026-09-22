@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
-import { RecipeCodePanel } from "./recipe-code-panel";
+import { RecipeCodePanel } from "./RecipeCodePanel";
 
 const { loadCode } = vi.hoisted(() => ({ loadCode: vi.fn() }));
-vi.mock("./recipe-code", () => {
+vi.mock("./RecipeCode", () => {
   loadCode();
   return { RecipeCode: () => <input aria-label="Code state" defaultValue="initial" /> };
 });

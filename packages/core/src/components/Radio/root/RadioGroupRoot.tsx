@@ -22,9 +22,7 @@ export interface RadioGroupRootProps extends Omit<
    * mutual-exclusivity). Auto-generated when omitted.
    */
   name?: string;
-  /** Controlled selected value. Pair with `onChange`. */
   value?: string;
-  /** Initial selected value for uncontrolled usage. */
   defaultValue?: string;
   /** Fires with the newly selected value when a radio is chosen. */
   onChange?: (value: string) => void;

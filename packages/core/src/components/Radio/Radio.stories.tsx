@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Radio, RadioGroup, Field } from "../../index.js";
 
 const cropOptions = (
@@ -124,4 +125,19 @@ export const InAnotherLanguage: Story = {
       </Field.Item>
     </RadioGroup.Root>
   ),
+};
+
+/** Interaction test: one radiogroup named by its Legend; clicking a label selects it, and ArrowDown moves the selection. */
+export const SelectsByLabelAndArrowKeys: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const group = canvas.getByRole("radiogroup", { name: "Crop" });
+    const wheat = within(group).getByRole("radio", { name: "Wheat" });
+    const barley = within(group).getByRole("radio", { name: "Barley" });
+    await expect(wheat).toBeChecked();
+    await userEvent.click(within(group).getByText("Barley"));
+    await expect(barley).toBeChecked();
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(within(group).getByRole("radio", { name: "Oats" })).toBeChecked();
+  },
 };

@@ -2,7 +2,6 @@
 
 import { Field, Input } from "@loamui/core";
 
-/** A field whose explicit invalid state is exposed through aria-invalid. */
 export function DetectedErrorDemo() {
   return (
     <div style={{ maxInlineSize: "22rem" }}>

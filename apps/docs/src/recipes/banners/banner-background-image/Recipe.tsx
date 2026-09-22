@@ -16,7 +16,7 @@ export default function Recipe() {
         loading="lazy"
       />
       <div>
-        <header>
+        <div className="copy">
           <p className="eyebrow">
             <Badge.Root>
               <Badge.Text>Offer</Badge.Text>
@@ -31,7 +31,7 @@ export default function Recipe() {
           <div className="actions">
             <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
           </div>
-        </header>
+        </div>
       </div>
     </section>
   );

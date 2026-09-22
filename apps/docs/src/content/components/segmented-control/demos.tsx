@@ -80,7 +80,6 @@ export function SegmentedControlSchemeDemo() {
   );
 }
 
-/** Controlled: the view follows the value. */
 export function SegmentedControlViewDemo() {
   const [view, setView] = useState("list");
   return (
@@ -101,7 +100,6 @@ export function SegmentedControlViewDemo() {
   );
 }
 
-/** A form control: the radios submit under `name`. */
 export function SegmentedControlFormDemo() {
   const [submitted, setSubmitted] = useState<string | null>(null);
   return (
@@ -126,7 +124,6 @@ export function SegmentedControlFormDemo() {
   );
 }
 
-/** A disabled segment stays in the row, out of the choice; a disabled Root takes the whole group out. */
 export function SegmentedControlDisabledDemo() {
   return (
     <div style={frame}>

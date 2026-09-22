@@ -31,7 +31,6 @@
       justify-content: space-between;
       padding-block-start: var(--loam-space-s);
 
-      /* A row's own label, beside the control. */
       > span {
         color: var(--loam-color-fg-muted);
         font-size: var(--loam-text-sm);

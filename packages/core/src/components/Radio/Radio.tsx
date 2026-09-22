@@ -9,7 +9,6 @@ import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
 import { RadioGroupContext } from "./group-context.js";
 
 export interface RadioProps extends Omit<PartProps<"input">, "size" | "type"> {
-  /** Label rendered next to the control. */
   label?: ReactNode;
   /** Helper text rendered under the label. */
   description?: ReactNode;

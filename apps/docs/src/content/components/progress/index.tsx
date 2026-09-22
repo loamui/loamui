@@ -2,7 +2,7 @@ import { Progress } from "@loamui/core";
 import { ProgressValueLabelDemo } from "./demos";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/components/Example";
+import { Variant } from "@/renderer/components/Variant";
 
 const doc: ComponentContent = {
   slug: "progress",
@@ -17,12 +17,12 @@ const doc: ComponentContent = {
 <Progress value={72} aria-label="Uploading photos" />`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-s)", inlineSize: "100%" }}>
-          <Example label="Labelled by its children" style={{ justifyItems: "stretch" }}>
+          <Variant label="Labelled by its children" style={{ justifyItems: "stretch" }}>
             <Progress value={72}>Uploading photos</Progress>
-          </Example>
-          <Example label="Named by aria-label" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Named by aria-label" style={{ justifyItems: "stretch" }}>
             <Progress value={72} aria-label="Uploading photos" />
-          </Example>
+          </Variant>
         </div>
       ),
     },
@@ -54,15 +54,15 @@ const doc: ComponentContent = {
 <Progress value={60} size="lg" aria-label="Large" />`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-s)", inlineSize: "100%" }}>
-          <Example label="Small" style={{ justifyItems: "stretch" }}>
+          <Variant label="Small" style={{ justifyItems: "stretch" }}>
             <Progress value={60} size="sm" aria-label="Small" />
-          </Example>
-          <Example label="Medium" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Medium" style={{ justifyItems: "stretch" }}>
             <Progress value={60} size="md" aria-label="Medium" />
-          </Example>
-          <Example label="Large" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Large" style={{ justifyItems: "stretch" }}>
             <Progress value={60} size="lg" aria-label="Large" />
-          </Example>
+          </Variant>
         </div>
       ),
     },
@@ -103,12 +103,12 @@ const doc: ComponentContent = {
 <Progress value={65} animated aria-label="Animated" />`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-s)", inlineSize: "100%" }}>
-          <Example label="Striped" style={{ justifyItems: "stretch" }}>
+          <Variant label="Striped" style={{ justifyItems: "stretch" }}>
             <Progress value={65} striped aria-label="Striped" />
-          </Example>
-          <Example label="Striped + animated" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Striped + animated" style={{ justifyItems: "stretch" }}>
             <Progress value={65} animated aria-label="Animated" />
-          </Example>
+          </Variant>
         </div>
       ),
     },

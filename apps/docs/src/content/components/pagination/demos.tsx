@@ -7,7 +7,6 @@ import Link from "next/link";
 
 const pageHref = (page: number) => `?page=${page}`;
 
-/** Basic pagination: the sequential core from Pagination.Pages. */
 export function PaginationDemo() {
   const [page, setPage] = useState(1);
   return (
@@ -27,7 +26,6 @@ export function PaginationDemo() {
   );
 }
 
-/** First/last links composed as the consumer's own Items around Pages. */
 export function PaginationEdgesDemo() {
   const [page, setPage] = useState(10);
   const count = 20;
@@ -72,7 +70,6 @@ export function PaginationEdgesDemo() {
   );
 }
 
-/** Router links through render, and the words in another language. */
 export function PaginationRenderDemo() {
   const pages = [1, 2, 3];
   const current = 2;

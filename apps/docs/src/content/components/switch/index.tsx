@@ -1,5 +1,5 @@
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/components/Example";
+import { Variant } from "@/renderer/components/Variant";
 import { Field, Switch } from "@loamui/core";
 
 export function SwitchFieldDemo() {
@@ -59,7 +59,7 @@ const doc: ComponentContent = {
 <Field.Item><Field.Label>Marketing emails <Switch.Root><Switch.Control  /><Switch.Track><Switch.Thumb /></Switch.Track></Switch.Root></Field.Label></Field.Item>`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-xs)" }}>
-          <Example label="Label at the end (default)">
+          <Variant label="Label at the end (default)">
             <Field.Item>
               <Field.Label>
                 <Switch.Root>
@@ -71,8 +71,8 @@ const doc: ComponentContent = {
                 Enable notifications
               </Field.Label>
             </Field.Item>
-          </Example>
-          <Example label="Label at the start">
+          </Variant>
+          <Variant label="Label at the start">
             <Field.Item>
               <Field.Label>
                 Marketing emails{" "}
@@ -84,7 +84,7 @@ const doc: ComponentContent = {
                 </Switch.Root>
               </Field.Label>
             </Field.Item>
-          </Example>
+          </Variant>
         </div>
       ),
     },

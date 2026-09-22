@@ -18,17 +18,16 @@
       gap: var(--loam-space-xs);
       justify-content: space-between;
       padding: var(--loam-space-3xs) var(--loam-space-xs);
-    }
 
-    /* The bar's title; the copy action beside it styles itself. */
-    .bar > span {
-      align-items: center;
-      display: inline flex;
-      gap: var(--loam-space-2xs);
-      min-inline-size: 0;
+      > span {
+        align-items: center;
+        display: inline flex;
+        gap: var(--loam-space-2xs);
+        min-inline-size: 0;
 
-      svg {
-        flex-shrink: 0;
+        svg {
+          flex-shrink: 0;
+        }
       }
     }
 

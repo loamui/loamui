@@ -8,9 +8,7 @@ import { cx } from "../../../utils/cx.js";
 import type { PartProps } from "../../../utils/props.js";
 
 export interface NavGroupProps extends Omit<PartProps<"details">, "open"> {
-  /** Controlled open state. Pair with `onOpenChange`. */
   open?: boolean;
-  /** Open at first render, for uncontrolled usage. */
   defaultOpen?: boolean;
   /** Fires with the new state when the reader opens or closes the group. */
   onOpenChange?: (open: boolean) => void;

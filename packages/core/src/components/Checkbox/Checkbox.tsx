@@ -9,7 +9,6 @@ import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
 import { useUserInvalid } from "../../hooks/use-user-invalid.js";
 
 export interface CheckboxProps extends Omit<PartProps<"input">, "size" | "type"> {
-  /** Label rendered next to the checkbox. */
   label?: ReactNode;
   /** Helper text rendered below the label. */
   description?: ReactNode;

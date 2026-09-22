@@ -43,9 +43,7 @@ export function TooltipPopup({
   }, [enhanced, hideNow]);
 
   return (
-    // rest cannot override what follows: the hover/focus tracking and
-    // aria-describedby are the 1.4.13 contract; pointer handlers chain
-    // consumer handlers rather than replacing them.
+    // The wiring below wins over rest (CONTRIBUTING: one merge contract).
     <span
       {...rest}
       ref={composedRef}

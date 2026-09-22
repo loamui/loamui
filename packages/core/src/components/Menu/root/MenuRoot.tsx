@@ -41,9 +41,7 @@ import type { MenuContextValue, MenuItemEntry } from "./MenuRootContext.js";
  * ```
  */
 export interface MenuRootProps extends PartProps<"span"> {
-  /** Controlled open state. */
   open?: boolean;
-  /** Initial open state when uncontrolled. */
   defaultOpen?: boolean;
   /** Called whenever the open state should change. */
   onOpenChange?: (open: boolean) => void;

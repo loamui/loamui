@@ -39,11 +39,9 @@ export const GUIDES: GuideLink[] = [
   { name: "Accessibility", href: "/docs/accessibility" },
 ];
 
-// The two style primitives sit at the head of the Primitives section, above
-// the three primitives, in reading order. Moved out of Getting started so the
-// sidebar reads tokens → element styles → components, primitive to primitive.
-// Components is a peer destination (its own overview page); the component
-// categories nest beneath it in the sidebar.
+// The sidebar reads tokens → element styles → components, primitive to
+// primitive. Components is a peer destination (its own overview page); the
+// component categories nest beneath it.
 export const PRIMITIVES: { name: string; href: string }[] = [
   { name: "Tokens", href: "/docs/tokens" },
   { name: "Element styles", href: "/docs/element-styles" },
@@ -70,7 +68,6 @@ export const CATEGORY_ORDER = [
 ] as const;
 
 export const COMPONENTS: NavItem[] = [
-  // Inputs
   {
     name: "Field",
     slug: "field",
@@ -191,7 +188,6 @@ export const COMPONENTS: NavItem[] = [
     category: "Inputs",
     description: "Copy a value and say so.",
   },
-  // Data display
   {
     name: "Badge",
     slug: "badge",
@@ -246,7 +242,6 @@ export const COMPONENTS: NavItem[] = [
     category: "Data display",
     description: "Where a sequence has got to, detected from the current step.",
   },
-  // Feedback
   {
     name: "Alert",
     slug: "alert",
@@ -283,7 +278,6 @@ export const COMPONENTS: NavItem[] = [
     category: "Feedback",
     description: "Transient notifications.",
   },
-  // Disclosures
   {
     name: "Details",
     slug: "details",
@@ -320,7 +314,6 @@ export const COMPONENTS: NavItem[] = [
     category: "Disclosures",
     description: "A list of actions opened from a trigger.",
   },
-  // Navigation
   {
     name: "Tabs",
     slug: "tabs",
@@ -357,7 +350,6 @@ export const COMPONENTS: NavItem[] = [
     category: "Navigation",
     description: "Lists of links with the current one marked.",
   },
-  // Utilities
   {
     name: "VisuallyHidden",
     slug: "visually-hidden",
@@ -373,7 +365,6 @@ export function componentsByCategory() {
   })).filter((g) => g.items.length > 0);
 }
 
-/** Resolve a named part to the component family that documents it. */
 export function componentForExport(name: string): NavItem | undefined {
   return (
     COMPONENTS.find((component) => component.name === name) ??

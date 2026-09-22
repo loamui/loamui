@@ -15,7 +15,7 @@ export default function Recipe() {
         height="900"
         fetchPriority="high"
       />
-      <header>
+      <div className="copy">
         <h1 id={titleId}>A field of seed, saved by the people who sow it.</h1>
         <p className="lede">
           Hedgerow grows open-pollinated vegetables, herbs and flowers on member plots across
@@ -30,7 +30,7 @@ export default function Recipe() {
             Watch the harvest
           </a>
         </div>
-      </header>
+      </div>
     </section>
   );
 }

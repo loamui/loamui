@@ -5,9 +5,7 @@ import type { ReactNode } from "react";
 import { useRequiredContext } from "../../../hooks/use-required-context.js";
 
 export interface ToastOptions {
-  /** Short heading. */
   title?: ReactNode;
-  /** The message body. */
   description?: ReactNode;
   /** Optional action rendered as a button, e.g. Undo. */
   action?: { label: ReactNode; onClick: () => void };

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Field, Textarea } from "../../index.js";
 
 const meta = {
@@ -67,4 +68,16 @@ export const Required: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
+};
+
+/** Interaction test: the Field label names the area and focuses it; typing reaches the native value. */
+export const LabelFocusesAndTypes: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const area = canvas.getByRole("textbox", { name: "Message" });
+    await userEvent.click(canvas.getByText("Message"));
+    await expect(area).toHaveFocus();
+    await userEvent.type(area, "Two rows of oats, one of barley.");
+    await expect(area).toHaveValue("Two rows of oats, one of barley.");
+  },
 };

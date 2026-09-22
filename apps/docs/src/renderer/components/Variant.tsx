@@ -1,13 +1,13 @@
 import type { CSSProperties, ReactNode } from "react";
 
 /**
- * A captioned example inside a Preview panel. The caption is preview-only
+ * A captioned variant inside a Preview panel. The caption is preview-only
  * stage dressing — it labels what a variant demonstrates so a human can read
- * a multi-example panel at a glance, and it is never mirrored in the Code
+ * a multi-variant panel at a glance, and it is never mirrored in the Code
  * tab (which shows the real component usage). Use it only when a panel holds
- * more than one example, or when the point isn't visible in a static shot.
+ * more than one variant, or when the point isn't visible in a static shot.
  */
-export function Example({
+export function Variant({
   label,
   children,
   style,

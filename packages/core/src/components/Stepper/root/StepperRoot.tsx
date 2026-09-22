@@ -43,7 +43,6 @@ import {
  * ```
  */
 export interface StepperRootProps extends PartProps<"ol"> {
-  /** The default strings, each overridable. */
   labels?: StepperLabels;
 }
 

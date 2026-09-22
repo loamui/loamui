@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Field, Select } from "../../index.js";
 
 const frameworkOptions = (
@@ -95,4 +96,15 @@ export const Required: Story = {
 
 export const Disabled: Story = {
   args: { defaultValue: "react", disabled: true },
+};
+
+/** Interaction test: the Field label names the select, and choosing an option sets the native value. */
+export const ChoosesAnOption: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const select = canvas.getByRole("combobox", { name: "Framework" });
+    await userEvent.selectOptions(select, "vue");
+    await expect(select).toHaveValue("vue");
+    await expect(canvas.getByRole("option", { name: "Vue" })).toHaveProperty("selected", true);
+  },
 };

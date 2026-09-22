@@ -18,7 +18,6 @@ const componentsDir = join(src, "components");
 const header = `/*!\n * LoamUI — @loamui/core\n * The complete, static stylesheet. Import once at your app root:\n *   import "@loamui/core/styles.css";\n * Nothing runs at runtime — no CSS-in-JS.\n */\n\n`;
 const layerOrder = "@layer loamui.tokens, loamui.elements, loamui.components;\n";
 
-/** Assemble dist/styles.css from tokens, elements and every component. */
 function buildCss() {
   let out = header + layerOrder;
   for (const base of ["tokens.css", "elements.css"]) {

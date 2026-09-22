@@ -5,9 +5,7 @@ import { ItemBase } from "../utils/MenuItemBase.js";
 import type { ItemBaseProps } from "../utils/MenuItemBase.js";
 
 export interface MenuCheckboxItemProps extends ItemBaseProps {
-  /** Controlled checked state. */
   checked?: boolean;
-  /** Initial checked state when uncontrolled. */
   defaultChecked?: boolean;
   /** Fires with the next checked state on activation. */
   onCheckedChange?: (checked: boolean) => void;

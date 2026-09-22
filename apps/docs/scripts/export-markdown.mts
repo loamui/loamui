@@ -17,6 +17,7 @@ import {
   statSync,
   mkdirSync,
   rmSync,
+  renameSync,
   copyFileSync,
 } from "node:fs";
 import { join, relative, dirname } from "node:path";
@@ -44,7 +45,12 @@ const ORIGIN = process.env.SITE_ORIGIN ?? "https://loamui.com";
 // The published `loamui` agent skill carries the same twins as offline
 // references (skills/loamui/references/), regenerated here so they can't
 // drift from the site. `check:skill` fails CI if the committed copy is stale.
-const SKILL_REFS = join(ROOT, "..", "..", "skills", "loamui", "references");
+const SKILL_REFS_FINAL = join(ROOT, "..", "..", "skills", "loamui", "references");
+// Every twin is written to a staging directory and swapped in at the end,
+// so a failure part-way leaves the committed references untouched instead
+// of half-deleted. (A swallowed error once removed all 48 and reported
+// success.)
+const SKILL_REFS = SKILL_REFS_FINAL + ".staging";
 const SETUP_ASSETS = [
   "stylelint-base.mjs",
   "stylelint.config.mjs",
@@ -59,7 +65,6 @@ const SETUP_ASSETS = [
  */
 const searchIndex: { url: string; title: string; description: string; text: string }[] = [];
 
-/** Write the same markdown to public/ (served) and the skill references (committed). */
 function writeBoth(publicFile: string, refFile: string, md: string) {
   mkdirSync(dirname(publicFile), { recursive: true });
   writeFileSync(publicFile, md);
@@ -107,7 +112,6 @@ function propsTable(
   );
 }
 
-/** Every `--loam-*` declaration in the :root band of tokens.css, as a table. */
 function tokenTable(): string {
   const css = readFileSync(join(ROOT, "..", "..", "packages", "core", "src", "tokens.css"), "utf8");
   const end = css.indexOf("[data-theme=");
@@ -119,7 +123,6 @@ function tokenTable(): string {
   return table(["Token", "Value"], rows);
 }
 
-/** Guide twin: /docs/tokens → public/docs/tokens.md + references/guides/tokens.md. */
 function writeGuideTwin(route: string, md: string) {
   const file = route === "/" ? join(PUBLIC, "index.md") : join(PUBLIC, route.slice(1) + ".md");
   const slug =
@@ -127,7 +130,6 @@ function writeGuideTwin(route: string, md: string) {
   writeBoth(file, join(SKILL_REFS, "guides", `${slug}.md`), md);
 }
 
-/** Component twin: public/docs/components/<slug>.md + references/components/<slug>.md. */
 function writeComponentTwin(slug: string, md: string) {
   writeBoth(
     join(PUBLIC, "docs", "components", `${slug}.md`),
@@ -136,18 +138,14 @@ function writeComponentTwin(slug: string, md: string) {
   );
 }
 
-// Start the skill references from empty so removed pages don't linger.
+// Start the staging directory from empty so removed pages don't linger.
 rmSync(SKILL_REFS, { recursive: true, force: true });
 // Generated recipe twins must disappear when their catalog entries are disabled.
 for (const directory of ["examples", "recipes"])
   rmSync(join(PUBLIC, directory), { recursive: true, force: true });
 
-// Remove the retired standalone setup twin; its content is in agent-workflow.
-rmSync(join(PUBLIC, "docs", "project-setup.md"), { force: true });
-
 // ---- guides: page.mdx source → markdown --------------------------------
 
-/** Strip JSX tags to their markdown-ish text content. */
 function jsxToText(s: string): string {
   return s
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, "")
@@ -176,7 +174,6 @@ function moduleSource(src: string): string {
     .join("\n");
 }
 
-/** Serialize an .mdx source file to plain markdown. */
 function mdxToMarkdown(src: string): { md: string; title: string; description: string } {
   const meta = moduleSource(src).match(
     /export const metadata = \{[\s\S]*?title: "([^"]+)"[\s\S]*?description:\s*\n?\s*"([^"]+)"/,
@@ -204,7 +201,6 @@ function mdxToMarkdown(src: string): { md: string; title: string; description: s
     k = s.indexOf(";", k) + 1;
     s = s.slice(0, mi) + s.slice(k);
   }
-  // Other top-level exports (helper components/styles) — drop line blocks.
   // Other top-level exports (helper components, icons): drop each one by
   // scanning to the bracket that closes it, whatever bracket opened it.
   for (
@@ -456,8 +452,12 @@ try {
   }
 } catch (err) {
   // Content files import @loamui/core; during parallel dev startup its
-  // dist/ may be mid-rebuild. Keep the previous twins and let dev start —
-  // the next build regenerates them.
+  // dist/ may be mid-rebuild. That one case keeps the previous twins and
+  // lets dev start — the next build regenerates them. Anything else is a
+  // broken content file, and must fail the build rather than silently
+  // ship fewer twins.
+  const message = (err as Error).message ?? "";
+  if (!/@loamui\/core|ERR_MODULE_NOT_FOUND|Cannot find (module|package)/.test(message)) throw err;
   console.warn(
     `markdown export: skipped component twins (${componentTwins}/${COMPONENTS.length} written) — ` +
       `@loamui/core not resolvable yet: ${(err as Error).message.split("\n")[0]}`,
@@ -468,7 +468,6 @@ try {
 
 const RECIPES_DIR = join(ROOT, "src", "recipes");
 
-/** An example's twin: its meta, the pillar notes, then both files in fences. */
 function exampleMarkdown(entry: (typeof RECIPE_META)[number]): string {
   const { slug, category, meta } = entry;
   const dir = join(RECIPES_DIR, category, slug);
@@ -658,8 +657,6 @@ for (const file of SETUP_ASSETS) {
 // ---- AGENTS.md: the package's one-page summary, served at /AGENTS.md too ---
 copyFileSync(join(ROOT, "..", "..", "packages", "core", "AGENTS.md"), join(PUBLIC, "AGENTS.md"));
 
-// Retire the old aggregate; focused twins and the offline skill retain every example.
-rmSync(join(PUBLIC, "llms-full.txt"), { force: true });
 const guideSlug = (route: string) =>
   route === "/" ? "index" : route === "/docs" ? "introduction" : route.split("/").at(-1)!;
 
@@ -697,6 +694,10 @@ for (const category of RECIPE_CATEGORIES) {
     );
 }
 writeFileSync(join(SKILL_REFS, "index.md"), idx.join("\n") + "\n");
+
+// Complete: replace the committed references with the staged set.
+rmSync(SKILL_REFS_FINAL, { recursive: true, force: true });
+renameSync(SKILL_REFS, SKILL_REFS_FINAL);
 
 console.log(
   `markdown export: ${guides.length} guide twins (mdx-derived), ${COMPONENTS.length} component twins (data-derived), ${RECIPE_META.length} example twins (folder-derived), llms.txt + search index + recipe prompts → public/, references → skills/loamui/references/`,

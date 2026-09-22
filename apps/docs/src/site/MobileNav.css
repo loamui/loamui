@@ -37,12 +37,11 @@
 @scope (.site-MobileNav-panel) to ([class*="loam-"]) {
   :scope {
     --loam-drawer-size: 18rem;
-  }
 
-  /* The nav the drawer holds. */
-  :scope > div {
-    display: block flex;
-    flex-direction: column;
-    gap: var(--loam-space-l);
+    > div {
+      display: block flex;
+      flex-direction: column;
+      gap: var(--loam-space-l);
+    }
   }
 }

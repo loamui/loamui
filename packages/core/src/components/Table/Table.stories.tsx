@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 import { Table } from "../../index.js";
 
 type Field = {
@@ -178,4 +179,16 @@ export const OverflowScroll: Story = {
       </Table.Root>
     </div>
   ),
+};
+
+/** Interaction test: every data row is headed by its row header, so a cell is announced with its field's name. */
+export const RowsAreHeaded: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const table = canvas.getByRole("table");
+    const rowHeaders = within(table).getAllByRole("rowheader");
+    const bodyRows = within(table).getAllByRole("row").slice(1);
+    await expect(rowHeaders).toHaveLength(bodyRows.length);
+    await expect(within(table).getAllByRole("columnheader").length).toBeGreaterThanOrEqual(4);
+  },
 };

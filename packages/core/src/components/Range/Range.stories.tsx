@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Field, Range } from "../../index.js";
 
 const meta = {
@@ -68,4 +69,18 @@ export const WithError: Story = {
       <Range.Control {...args} />
     </Field.Root>
   ),
+};
+
+/** Interaction test: the Field label names the slider; the arrow keys step its value. */
+export const StepsWithArrowKeys: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const slider = canvas.getByRole("slider", { name: "Irrigation level" });
+    await expect(slider).toHaveValue("40");
+    slider.focus();
+    await userEvent.keyboard("{ArrowRight}{ArrowRight}");
+    await expect(slider).toHaveValue("42");
+    await userEvent.keyboard("{Home}");
+    await expect(slider).toHaveValue("0");
+  },
 };

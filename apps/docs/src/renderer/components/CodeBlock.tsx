@@ -3,7 +3,7 @@
 import { Highlight, Prism, type PrismTheme } from "prism-react-renderer";
 import { CopyPanel } from "../shared/CopyPanel";
 import { TerminalIcon } from "@/site/Icons";
-import { useScrollable } from "../shared/scrollable";
+import { useScrollable } from "../shared/use-scrollable";
 import "./CodeBlock.css";
 
 // The bundled Prism languages omit shell. These rules cover our command listings.

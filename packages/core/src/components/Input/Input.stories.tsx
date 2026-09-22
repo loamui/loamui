@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Field, Input } from "../../index.js";
 
 const meta = {
@@ -124,4 +125,16 @@ export const Sized: Story = {
       <Input inputMode="numeric" size={4} />
     </Field.Root>
   ),
+};
+
+/** Interaction test: the Field label names the box and focuses it; typing reaches the native value. */
+export const LabelFocusesAndTypes: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const box = canvas.getByRole("textbox", { name: "Email" });
+    await userEvent.click(canvas.getByText("Email"));
+    await expect(box).toHaveFocus();
+    await userEvent.type(box, "grower@example.com");
+    await expect(box).toHaveValue("grower@example.com");
+  },
 };

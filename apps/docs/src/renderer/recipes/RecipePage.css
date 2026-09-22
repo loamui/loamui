@@ -1,12 +1,4 @@
 @layer loamui.ui {
-  /* Shared layout for the recipe index, category and single pages. Parts
-     are the elements themselves where the page makes them unambiguous — the
-     one h1, the aside, the plain sections and their h2s — and structural
-     where two of a kind sit in different parents: the page's own header
-     against a single recipe's, an entry's h2 against a section's. A class
-     stays only for a box with no element of its own, or to tell siblings
-     apart. The `examples` container is what the rail and the pillar rows
-     query, so they answer the page's column rather than the viewport. */
   @scope (.site-RecipePage) to ([class*="loam-"], [class*="site-"]) {
     :scope {
       --_gutter: 1.25rem;
@@ -15,14 +7,13 @@
       inline-size: min(100% - 2 * var(--_gutter), 82rem);
       margin-inline: auto;
       padding-block: var(--loam-space-2xl) var(--loam-space-3xl);
-    }
 
-    /* The hero on the index and category pages. */
-    :scope > header {
-      display: block grid;
-      gap: var(--loam-space-xs);
-      margin-block-end: var(--loam-space-2xl);
-      max-inline-size: var(--site-column);
+      > header {
+        display: block grid;
+        gap: var(--loam-space-xs);
+        margin-block-end: var(--loam-space-2xl);
+        max-inline-size: var(--site-column);
+      }
     }
 
     h1 {
@@ -60,7 +51,6 @@
       min-inline-size: 0;
     }
 
-    /* The single recipe page, and its own header. */
     .single {
       display: block grid;
       gap: var(--loam-space-l);

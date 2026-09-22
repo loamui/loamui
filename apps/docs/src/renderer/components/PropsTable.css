@@ -73,7 +73,6 @@
     white-space: nowrap;
   }
 
-  /* The placeholder where a prop has no default. */
   td > span {
     color: var(--loam-color-fg-dim);
   }

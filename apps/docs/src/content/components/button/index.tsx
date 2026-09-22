@@ -1,7 +1,7 @@
 import { Button, Checkbox, Loader, VisuallyHidden, Field } from "@loamui/core";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/components/Example";
+import { Variant } from "@/renderer/components/Variant";
 import { IconCheck } from "@tabler/icons-react";
 
 const doc: ComponentContent = {
@@ -90,7 +90,7 @@ const doc: ComponentContent = {
 </div>`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-m)", inlineSize: "100%" }}>
-          <Example label="Container of 16rem or less: the button spans it">
+          <Variant label="Container of 16rem or less: the button spans it">
             <div
               style={{
                 containerType: "inline-size",
@@ -102,8 +102,8 @@ const doc: ComponentContent = {
             >
               <Button>Save changes</Button>
             </div>
-          </Example>
-          <Example label="Room to spare: natural width">
+          </Variant>
+          <Variant label="Room to spare: natural width">
             <div
               style={{
                 containerType: "inline-size",
@@ -115,8 +115,8 @@ const doc: ComponentContent = {
             >
               <Button>Save changes</Button>
             </div>
-          </Example>
-          <Example
+          </Variant>
+          <Variant
             label="A stacked region stretches its buttons"
             style={{ justifyItems: "stretch" }}
           >
@@ -130,7 +130,7 @@ const doc: ComponentContent = {
               <Button>Save changes</Button>
               <Button>Cancel</Button>
             </div>
-          </Example>
+          </Variant>
         </div>
       ),
     },
@@ -153,23 +153,23 @@ const doc: ComponentContent = {
 </Button>`,
       render: () => (
         <div style={{ display: "flex", gap: "var(--loam-space-l)", flexWrap: "wrap" }}>
-          <Example label="With a label">
+          <Variant label="With a label">
             <Button>
               <IconCheck aria-hidden />
               Approve
             </Button>
-          </Example>
-          <Example label="Icon-only: squares from its aria-label">
+          </Variant>
+          <Variant label="Icon-only: squares from its aria-label">
             <Button aria-label="Approve">
               <IconCheck aria-hidden />
             </Button>
-          </Example>
-          <Example label="Icon-only: named by hidden text">
+          </Variant>
+          <Variant label="Icon-only: named by hidden text">
             <Button>
               <IconCheck aria-hidden />
               <VisuallyHidden>Approve</VisuallyHidden>
             </Button>
-          </Example>
+          </Variant>
         </div>
       ),
     },

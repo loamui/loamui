@@ -21,7 +21,6 @@ const columns: Array<{ key: Column; label: string }> = [
   { key: "joined", label: "Joined" },
 ];
 
-/** Search and sort: the consumer holds the state and sorts the rows. */
 export function TableSortDemo() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<Sort>({ column: "name", direction: "ascending" });

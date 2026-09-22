@@ -38,9 +38,7 @@ export interface SegmentedControlRootProps extends Omit<
    * under. Auto-generated when omitted.
    */
   name?: string;
-  /** Controlled chosen value. Pair with `onValueChange`. */
   value?: string;
-  /** Initial chosen value for uncontrolled usage. */
   defaultValue?: string;
   /** Fires with the newly chosen value when a segment is picked. */
   onValueChange?: (value: string) => void;

@@ -11,7 +11,6 @@ export interface BreadcrumbsItemRenderProps {
 }
 
 export interface BreadcrumbsItemProps extends PartProps<"li"> {
-  /** Renders the crumb as a link. */
   href?: string;
   /** Marks this item as the current page (`aria-current="page"`). */
   current?: boolean;

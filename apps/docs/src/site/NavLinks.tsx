@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { type GuideLink, GETTING_STARTED, GUIDES, PRIMITIVES, componentsByCategory } from "./nav";
 import "./NavLinks.css";
 
-/** Shared by the desktop sidebar and mobile drawer. */
 export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname().replace(/\/$/, "") || "/";
   const groups = componentsByCategory();

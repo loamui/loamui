@@ -1,7 +1,7 @@
 import { Meter } from "@loamui/core";
 import type { CSSProperties } from "react";
 import type { ComponentContent } from "@/renderer/types";
-import { Example } from "@/renderer/components/Example";
+import { Variant } from "@/renderer/components/Variant";
 
 const doc: ComponentContent = {
   slug: "meter",
@@ -16,12 +16,12 @@ const doc: ComponentContent = {
 <Meter value={60} max={100} label="Storage used" />`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-s)", inlineSize: "100%" }}>
-          <Example label="Fraction of 1" style={{ justifyItems: "stretch" }}>
+          <Variant label="Fraction of 1" style={{ justifyItems: "stretch" }}>
             <Meter value={0.6} label="Storage used" />
-          </Example>
-          <Example label="Percentage of 100" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Percentage of 100" style={{ justifyItems: "stretch" }}>
             <Meter value={60} max={100} label="Storage used" />
-          </Example>
+          </Variant>
         </div>
       ),
     },
@@ -34,15 +34,15 @@ const doc: ComponentContent = {
 <Meter value={90} max={100} low={40} high={75} optimum={100} label="Strong password" />`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-s)", inlineSize: "100%" }}>
-          <Example label="Weak: below low" style={{ justifyItems: "stretch" }}>
+          <Variant label="Weak: below low" style={{ justifyItems: "stretch" }}>
             <Meter value={25} max={100} low={40} high={75} optimum={100} label="Weak password" />
-          </Example>
-          <Example label="Fair: between low and high" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Fair: between low and high" style={{ justifyItems: "stretch" }}>
             <Meter value={55} max={100} low={40} high={75} optimum={100} label="Fair password" />
-          </Example>
-          <Example label="Strong: above high, where optimum is" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Strong: above high, where optimum is" style={{ justifyItems: "stretch" }}>
             <Meter value={90} max={100} low={40} high={75} optimum={100} label="Strong password" />
-          </Example>
+          </Variant>
         </div>
       ),
     },
@@ -54,15 +54,15 @@ const doc: ComponentContent = {
 <Meter value={0.6} size="lg" label="Large" />`,
       render: () => (
         <div style={{ display: "grid", gap: "var(--loam-space-s)", inlineSize: "100%" }}>
-          <Example label="Small" style={{ justifyItems: "stretch" }}>
+          <Variant label="Small" style={{ justifyItems: "stretch" }}>
             <Meter value={0.6} size="sm" label="Small" />
-          </Example>
-          <Example label="Medium" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Medium" style={{ justifyItems: "stretch" }}>
             <Meter value={0.6} size="md" label="Medium" />
-          </Example>
-          <Example label="Large" style={{ justifyItems: "stretch" }}>
+          </Variant>
+          <Variant label="Large" style={{ justifyItems: "stretch" }}>
             <Meter value={0.6} size="lg" label="Large" />
-          </Example>
+          </Variant>
         </div>
       ),
     },

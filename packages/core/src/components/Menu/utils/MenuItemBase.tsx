@@ -22,7 +22,6 @@ export interface MenuItemRenderProps {
 export interface ItemBaseProps extends Omit<PartProps<"button">, "onClick" | "role"> {
   /** The action. Runs before the menu closes. */
   onClick?: (e: ReactMouseEvent<Element>) => void;
-  /** Close the menu when the item is activated. */
   closeOnClick?: boolean;
   /** Disable without removing from the accessibility tree. */
   disabled?: boolean;

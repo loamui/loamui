@@ -1,4 +1,3 @@
-/* A definition list: each row a name and its note. */
 @scope (.site-RecipePillars) {
   :scope {
     border-block-start: 1px solid var(--loam-color-line);

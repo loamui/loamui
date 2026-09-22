@@ -8,7 +8,6 @@ export const metadata: Metadata = {
   description: "There is no page at this address.",
 };
 
-/** The 404: what is missing, and the two ways on. */
 export default function NotFound() {
   return (
     <section className="container site-NotFound" data-no-hyphens>

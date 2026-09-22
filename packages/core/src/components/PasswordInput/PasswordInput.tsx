@@ -23,7 +23,6 @@ const DEFAULT_LABELS: Required<PasswordInputLabels> = {
 };
 
 export interface PasswordInputProps extends Omit<InputProps, "type"> {
-  /** The field's own words. */
   labels?: PasswordInputLabels;
   /**
    * Props for the row that holds the box and the toggle

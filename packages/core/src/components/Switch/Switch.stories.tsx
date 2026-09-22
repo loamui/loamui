@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Field, Switch } from "../../index.js";
 
 const meta = {
@@ -168,4 +169,18 @@ export const States: Story = {
       </Field.Item>
     </div>
   ),
+};
+
+/** Interaction test: the control is a switch, its label toggles it, and Space toggles it from the keyboard. */
+export const TogglesFromLabelAndKeyboard: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const control = canvas.getByRole("switch", { name: "Enable irrigation" });
+    await expect(control).not.toBeChecked();
+    await userEvent.click(canvas.getByText("Enable irrigation"));
+    await expect(control).toBeChecked();
+    control.focus();
+    await userEvent.keyboard(" ");
+    await expect(control).not.toBeChecked();
+  },
 };

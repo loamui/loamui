@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
 import { expect, userEvent, within } from "storybook/test";
 import { Card } from "../Card/Card.js";
-// Until the barrel exports Carousel: import from the part, not ../../index.
 import { Carousel } from "../../index.js";
 
 const GUIDES = [

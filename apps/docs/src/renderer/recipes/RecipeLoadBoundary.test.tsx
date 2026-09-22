@@ -1,7 +1,7 @@
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { lazy, Suspense } from "react";
-import { ExampleLoadBoundary } from "./recipe-load-boundary";
+import { RecipeLoadBoundary } from "./RecipeLoadBoundary";
 
 afterEach(() => {
   cleanup();
@@ -13,11 +13,11 @@ it("keeps navigation available when an optional example chunk fails to load", as
   const FailedPreview = lazy(() => Promise.reject(new Error("Preview chunk unavailable")));
   render(
     <>
-      <ExampleLoadBoundary fallback={<p>Preview unavailable</p>}>
+      <RecipeLoadBoundary fallback={<p>Preview unavailable</p>}>
         <Suspense fallback={null}>
           <FailedPreview />
         </Suspense>
-      </ExampleLoadBoundary>
+      </RecipeLoadBoundary>
       <a href="/recipes/forms/sign-in">Sign in example</a>
     </>,
   );

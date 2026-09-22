@@ -64,9 +64,7 @@ function isFocusVisible(el: Element): boolean {
 export interface TooltipRootProps extends PartProps<"span"> {
   /** Hover delay in ms; overrides the Provider. @default 600 */
   delay?: number;
-  /** Controlled open state. */
   open?: boolean;
-  /** Initial open state when uncontrolled. */
   defaultOpen?: boolean;
   /** Called whenever the open state should change. */
   onOpenChange?: (open: boolean) => void;

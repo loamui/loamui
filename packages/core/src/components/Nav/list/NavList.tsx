@@ -5,7 +5,6 @@ import type { PartProps } from "../../../utils/props.js";
 import { useNav } from "../root/NavRootContext.js";
 
 export interface NavListProps extends PartProps<"ul"> {
-  /** Items. */
   children?: ReactNode;
 }
 

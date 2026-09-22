@@ -49,7 +49,6 @@ import type { NavContextValue, NavLabels } from "./NavRootContext.js";
 
 /** The words a Nav says on its own, each with an English default. */
 export interface NavRootProps extends PartProps<"nav"> {
-  /** The landmark's own words. */
   labels?: NavLabels;
   /** A Title, then Lists. */
   children?: ReactNode;

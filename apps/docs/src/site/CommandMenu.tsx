@@ -25,7 +25,6 @@ interface Entry {
 // path the same as every other asset.
 const INDEX_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/search-index.json`;
 
-/** Which part of the site a URL belongs to, for the row's hint. */
 function sectionOf(url: string): string {
   if (url.startsWith("/docs/components/")) return "Component";
   if (url.startsWith("/recipes/")) return "Recipe";

@@ -20,7 +20,6 @@ function PeopleIcon() {
   return <IconUsers aria-hidden />;
 }
 
-/** A side nav for an application, named by its Title, with icons. */
 export function NavBasicDemo() {
   return (
     <div style={rail}>
@@ -51,7 +50,6 @@ export function NavBasicDemo() {
   );
 }
 
-/** A List nested in an Item indents a level. */
 export function NavNestedDemo() {
   return (
     <div style={rail}>
@@ -86,7 +84,6 @@ export function NavNestedDemo() {
   );
 }
 
-/** Groups fold related links; one shared name keeps one open at a time. */
 export function NavGroupedDemo() {
   const [open, setOpen] = useState("reports");
   return (
@@ -136,7 +133,6 @@ export function NavGroupedDemo() {
   );
 }
 
-/** Router links through render; the wiring merges on. */
 export function NavRenderDemo() {
   return (
     <div style={rail}>
@@ -159,7 +155,6 @@ export function NavRenderDemo() {
   );
 }
 
-/** A sidebar with several titled sections is one Root per section, stacked. */
 export function NavSectionsDemo() {
   return (
     <div style={rail}>
@@ -346,7 +341,6 @@ const SECTIONS = [
 const filler =
   "Loam is a soil of sand, silt and clay in roughly equal measure, which holds water without waterlogging and drains without drying out. It warms early in spring and is easy to work in most seasons. ";
 
-/** A table of contents that follows the reader, with useScrollSpy. */
 export function NavScrollSpyDemo() {
   const active = useScrollSpy(SECTIONS.map((s) => s.id));
   return (

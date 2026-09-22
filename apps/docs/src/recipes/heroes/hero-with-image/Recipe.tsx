@@ -7,7 +7,7 @@ export default function Recipe() {
   return (
     <section className="hero-with-image" aria-labelledby={titleId}>
       <div>
-        <header>
+        <div className="copy">
           <p className="eyebrow">
             <Badge.Root>
               <Badge.Text>Catalogue</Badge.Text>
@@ -28,7 +28,7 @@ export default function Recipe() {
               Watch how we save seed
             </a>
           </div>
-        </header>
+        </div>
         <img
           src="https://picsum.photos/id/785/1200/900"
           srcSet="https://picsum.photos/id/785/600/450 600w, https://picsum.photos/id/785/900/675 900w, https://picsum.photos/id/785/1200/900 1200w"

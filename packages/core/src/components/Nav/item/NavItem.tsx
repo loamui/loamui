@@ -13,7 +13,6 @@ export interface NavItemProps extends PartProps<"li"> {
 
 export const NavItemContext = createContext(false);
 
-/** One entry. */
 export function NavItem({ className, children, ref, ...rest }: NavItemProps) {
   useNav("Nav.Item");
   return (

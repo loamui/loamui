@@ -6,9 +6,9 @@ import { Badge, Button, Search, Select, VisuallyHidden } from "@loamui/core";
 import { componentsUsed, recipeHref, recipesByCategory } from "@/recipes/catalog";
 import { RECIPE_PREVIEWS } from "@/recipes/generated/previews";
 import type { RecipeMetaEntry } from "@/recipes/types";
-import "./recipe-index.css";
-import { LazyThumb } from "./recipe-thumb";
-import { ExampleLoadBoundary } from "./recipe-load-boundary";
+import "./RecipesIndex.css";
+import { LazyThumb } from "./LazyThumb";
+import { RecipeLoadBoundary } from "./RecipeLoadBoundary";
 
 function matches(e: RecipeMetaEntry, term: string, uses: string): boolean {
   if (uses && !e.meta.uses.includes(uses)) return false;
@@ -122,11 +122,11 @@ export function RecipesIndex() {
                     inside it; the link's ::after covers the whole card. */}
                   <LazyThumb className="thumb">
                     <div className="thumbInner">
-                      <ExampleLoadBoundary fallback={<p>Preview unavailable</p>}>
+                      <RecipeLoadBoundary fallback={<p>Preview unavailable</p>}>
                         <Suspense fallback={null}>
                           <Preview />
                         </Suspense>
-                      </ExampleLoadBoundary>
+                      </RecipeLoadBoundary>
                     </div>
                   </LazyThumb>
                   <div className="cardBody">

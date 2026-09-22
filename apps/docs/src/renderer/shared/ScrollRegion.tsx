@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useScrollable } from "./scrollable";
+import { useScrollable } from "./use-scrollable";
 
 /** A box whose content scrolls inline; focusable and named only once it does. */
 export function ScrollRegion({

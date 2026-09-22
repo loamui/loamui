@@ -1,5 +1,5 @@
 import Link from "next/link";
-import "./recipe-pager.css";
+import "./RecipePager.css";
 
 export interface PagerLink {
   href: string;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Badge, Card, SignpostLink } from "@loamui/core";
-import { HeroShowcase, ContextShowcase } from "@/home/showcases";
+import { HeroShowcase, ContextShowcase } from "@/home/Showcases";
 import { AgentShowcase } from "@/home/AgentShowcase";
 import { RestaurantMenu } from "@/home/agent-demo/menu";
 import { menu } from "@/home/agent-demo/generated";

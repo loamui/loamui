@@ -27,9 +27,7 @@ export function PopoverPopup({
   usePopup(ctx);
 
   return (
-    // rest cannot override what follows: the popover/anchor wiring is
-    // what makes the panel a popover at all. The id lists follow the merge
-    // contract: the Title and Description first, then the consumer's.
+    // The wiring below wins over rest (CONTRIBUTING: one merge contract).
     <div
       {...rest}
       {...popupProps(ctx, side, style)}

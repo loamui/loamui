@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useId, useState } from "react";
-import { usePresence } from "./use-presence.js";
 import { useHydrated } from "./use-support.js";
 
 /**
@@ -60,18 +59,4 @@ export function useNamePart(
     return register(id);
   }, [register, id]);
   return id;
-}
-
-/**
- * Server-safe `aria-describedby` for a part that may or may not be present:
- * the owner mints the id and references it in the first render; the part
- * renders the id and registers; once hydrated, the reference stands only
- * while a part is registered.
- */
-export function useOptionalSlot() {
-  const id = useId();
-  const [registered, register] = usePresence();
-  const hydrated = useHydrated();
-  const present = registered || !hydrated;
-  return { id, present, register, ref: present ? id : undefined };
 }

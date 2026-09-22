@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 import { Tabs } from "@loamui/core";
 import type { RecipeSource } from "@/recipes/types";
 import { CodeBlock } from "../components/CodeBlock";
-import { RecipeStage } from "./recipe-stage";
-import "./recipe-playground.css";
+import { RecipeStage } from "./RecipeStage";
+import "./RecipePlayground.css";
 
 export function RecipePlayground({
   title,

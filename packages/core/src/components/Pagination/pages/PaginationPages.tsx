@@ -68,7 +68,6 @@ export interface PaginationPagesLabels {
 export interface PaginationPagesProps {
   /** The active page (1-based). */
   page: number;
-  /** Total number of pages. */
   count: number;
   /** Sibling pages shown on each side of the active page. @default 1 */
   siblings?: number;

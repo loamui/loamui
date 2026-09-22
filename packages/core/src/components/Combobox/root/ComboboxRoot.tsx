@@ -44,27 +44,21 @@ import type {
  * ```
  */
 export interface ComboboxRootProps extends Omit<PartProps<"div">, "defaultValue"> {
-  /** Controlled committed value: the chosen option's `value`, or null. */
   value?: string | null;
-  /** Initial committed value when uncontrolled. */
   defaultValue?: string | null;
   /** Called when an option is chosen (its value) or the choice is cleared (null). */
   onValueChange?: (value: string | null) => void;
-  /** Controlled text in the box. */
   inputValue?: string;
-  /** Initial text when uncontrolled. */
   defaultInputValue?: string;
   /** Called whenever the text should change: typing, choosing, clearing. */
   onInputValueChange?: (inputValue: string) => void;
   /** Controlled open state of the list. */
   open?: boolean;
-  /** Initial open state when uncontrolled. */
   defaultOpen?: boolean;
   /** Called whenever the open state should change. */
   onOpenChange?: (open: boolean) => void;
   /** Submit the committed value under this name, as a hidden input. */
   name?: string;
-  /** The default strings, each overridable. */
   labels?: ComboboxLabels;
 }
 

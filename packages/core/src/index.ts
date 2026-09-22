@@ -9,7 +9,7 @@ export { renderWithProps } from "./utils/render.js";
 export type { RenderProp } from "./utils/render.js";
 // Server-safe naming: a Root named by one of its parts emits the reference
 // in the first render, so landmarks are named before hydration.
-export { useNamedRoot, useNamePart, useOptionalSlot } from "./hooks/use-naming.js";
+export { useNamedRoot, useNamePart } from "./hooks/use-naming.js";
 
 // Inputs
 export * from "./components/Field/index.js";

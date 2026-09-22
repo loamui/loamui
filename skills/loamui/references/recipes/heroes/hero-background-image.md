@@ -60,7 +60,7 @@ export default function Recipe() {
         height="900"
         fetchPriority="high"
       />
-      <header>
+      <div className="copy">
         <h1 id={titleId}>A field of seed, saved by the people who sow it.</h1>
         <p className="lede">
           Hedgerow grows open-pollinated vegetables, herbs and flowers on member plots across
@@ -75,7 +75,7 @@ export default function Recipe() {
             Watch the harvest
           </a>
         </div>
-      </header>
+      </div>
     </section>
   );
 }
@@ -114,7 +114,13 @@ export default function Recipe() {
       z-index: -2;
     }
 
-    header {
+    /* The copy beside the image: eyebrow, heading, lede and the actions. It is
+
+       the section\'s body, not its introduction, so it is a box rather than a
+
+       <header>. */
+
+    .copy {
       align-content: end;
       display: block grid;
       font-size: var(--loam-text-md);

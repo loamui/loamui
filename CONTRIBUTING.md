@@ -405,14 +405,15 @@ checks the contrast ratio of every token pair the components use, and
 
 ### What the additional checks cover
 
-- `pnpm check:scope` detects excluded selectors, nested type rules without core
-  boundaries in directly associated stylesheets, and the documentation preview
-  boundary. It does not prove the rendered cascade; check embedded recipes in
+- Stylelint's `loamui/scope` rule detects excluded selectors, nested type
+  rules without core boundaries, and article scopes missing the prose
+  boundary; `loamui/spacing` flags literal spacing in CSS. Both run with
+  `pnpm lint`, so a finding shows in the editor and honours a per-line
+  disable. Neither proves the rendered cascade; check embedded recipes in
   a browser against the same recipe outside the article.
-- `pnpm check:spacing` reads CSS and literal React style objects in core, the
-  site and published recipes. It inspects function fallbacks. Fluid `calc()` /
-  `clamp()` ramps, `em` geometry and `-1px` overlap remain deliberate exceptions;
-  computed properties and runtime values require review.
+- `pnpm check:spacing` reads the literal React style objects in core, the
+  site and published recipes — the `.tsx` half Stylelint cannot see. Fluid
+  `calc()`/`clamp()` ramps and `em` geometry are deliberate exceptions.
 - `pnpm lint:prose` checks the top-level Markdown and the generated documentation
   references, plus literal TSX copy on the site. Run the documentation export
   first (`pnpm check:skill` also verifies it). The site pass normalises quotation

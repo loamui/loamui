@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
-import { HeroShowcase } from "@/home/showcases";
+import { HeroShowcase } from "@/home/Showcases";
 import { RestaurantMenu } from "@/home/agent-demo/menu";
-import { RecipeStage } from "../recipes/recipe-stage";
+import { RecipeStage } from "../recipes/RecipeStage";
 
 afterEach(() => {
   cleanup();

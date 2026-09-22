@@ -4,7 +4,7 @@ import { renderToString } from "react-dom/server";
 import { createContext, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
 
-import { useNamedRoot, useNamePart, useOptionalSlot } from "../hooks/use-naming.js";
+import { useNamedRoot, useNamePart } from "../hooks/use-naming.js";
 
 afterEach(cleanup);
 
@@ -90,48 +90,5 @@ describe("useNamedRoot / useNamePart", () => {
     expect(labelled).not.toHaveAttribute("aria-labelledby");
     expect(referenced).toHaveAttribute("aria-labelledby", "elsewhere");
     expect(own).toHaveAttribute("aria-labelledby", "my-title");
-  });
-});
-
-const Slot = createContext<{ id: string; register: () => () => void } | null>(null);
-
-function Owner({ children }: { children?: ReactNode }) {
-  const slot = useOptionalSlot();
-  return (
-    <Slot value={slot}>
-      <button type="button" aria-describedby={slot.ref}>
-        Save
-      </button>
-      {children}
-    </Slot>
-  );
-}
-
-function Hint({ children }: { children: ReactNode }) {
-  const slot = useContext(Slot)!;
-  useNamePart({ nameId: slot.id, register: () => slot.register() });
-  return <p id={slot.id}>{children}</p>;
-}
-
-describe("useOptionalSlot", () => {
-  it("references the slot in the first render and keeps it once the part registers", () => {
-    const html = renderToString(
-      <Owner>
-        <Hint>Saves a draft</Hint>
-      </Owner>,
-    );
-    expect(html).toMatch(/aria-describedby="[^"]+"/);
-
-    render(
-      <Owner>
-        <Hint>Saves a draft</Hint>
-      </Owner>,
-    );
-    expect(screen.getByRole("button")).toHaveAccessibleDescription("Saves a draft");
-  });
-
-  it("drops the reference after mount when nothing registers", () => {
-    render(<Owner />);
-    expect(screen.getByRole("button")).not.toHaveAttribute("aria-describedby");
   });
 });

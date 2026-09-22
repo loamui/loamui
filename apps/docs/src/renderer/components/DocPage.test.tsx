@@ -16,10 +16,8 @@ const axeOptions = { rules: { "color-contrast": { enabled: false } } };
 afterEach(cleanup);
 
 /**
- * The page's parts are its elements — the one header, its h1, the sections
- * and their h2s — and the guidance cards carry the only classes. A class
- * string that was once a broken template put `$"…"` into the DOM on every
- * component page and nothing noticed; these pin the structure the CSS now
+ * A class string that was once a broken template put `$"…"` into the DOM on
+ * every component page and nothing noticed; these pin the structure the CSS
  * selects.
  */
 describe("a component page", () => {

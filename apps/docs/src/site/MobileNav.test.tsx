@@ -10,11 +10,6 @@ const axeOptions = { rules: { "color-contrast": { enabled: false } } };
 
 afterEach(cleanup);
 
-/**
- * The hamburger opens the whole documentation nav in a Drawer. The Drawer
- * brings focus containment and Escape; these check what the site adds — a
- * named trigger, a named panel, and the same links the sidebar has.
- */
 describe("the mobile navigation", () => {
   it("has a named trigger and opens a named panel holding the nav", async () => {
     const { container } = render(<MobileNav />);

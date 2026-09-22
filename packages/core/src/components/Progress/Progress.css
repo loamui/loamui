@@ -34,16 +34,12 @@
     overflow: clip;
   }
 
-  /* ---- Track ---- */
-
   /* Chromium and WebKit paint their own track box once appearance is none;
      make it the same surface as the element. */
   progress::-webkit-progress-bar {
     background: var(--loam-color-bg-subtle);
     border-radius: inherit;
   }
-
-  /* ---- Fill ---- */
 
   /* The fill IS the primary token — a `--loam-context` region re-answers
      it (see the Contexts section of tokens.css), so status needs no
@@ -61,8 +57,6 @@
     background: var(--loam-color-primary-strong);
     border-radius: inherit;
   }
-
-  /* ---- Indeterminate ---- */
 
   /* No value: a band of the fill colour on the track. It sweeps where
      motion is welcome; otherwise it stands still, and the label says the

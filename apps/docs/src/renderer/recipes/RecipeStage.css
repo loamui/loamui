@@ -16,23 +16,22 @@
       gap: var(--loam-space-xs);
       justify-content: space-between;
       padding: var(--loam-space-2xs) var(--loam-space-2xs);
-    }
 
-    /* The link out to the recipe's own page. */
-    .toolbar a {
-      border: 1px solid transparent;
-      border-radius: var(--loam-radius-md);
-      color: var(--loam-color-fg-muted);
-      display: inline grid;
-      padding: var(--loam-space-2xs);
-      place-items: center;
+      a {
+        border: 1px solid transparent;
+        border-radius: var(--loam-radius-md);
+        color: var(--loam-color-fg-muted);
+        display: inline grid;
+        padding: var(--loam-space-2xs);
+        place-items: center;
 
-      &:hover {
-        color: var(--loam-color-fg);
-      }
+        &:hover {
+          color: var(--loam-color-fg);
+        }
 
-      @media (prefers-reduced-motion: no-preference) {
-        transition: color var(--loam-duration-md) var(--loam-ease);
+        @media (prefers-reduced-motion: no-preference) {
+          transition: color var(--loam-duration-md) var(--loam-ease);
+        }
       }
     }
 

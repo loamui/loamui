@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { RECIPE_META, recipesByCategory } from "@/recipes/catalog";
-import "./recipe-rail.css";
+import "./RecipesRail.css";
 
 /**
  * The category rail: every category with its count, the current one

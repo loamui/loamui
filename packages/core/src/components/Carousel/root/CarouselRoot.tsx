@@ -47,7 +47,6 @@ import type { CarouselContextValue, CarouselLabels, Position } from "./CarouselR
 export interface CarouselRootProps extends PartProps<"section"> {
   /** At either end, Previous and Next wrap around instead of disabling. */
   loop?: boolean;
-  /** The default strings, each overridable. */
   labels?: CarouselLabels;
 }
 

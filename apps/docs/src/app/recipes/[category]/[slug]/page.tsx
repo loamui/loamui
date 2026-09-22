@@ -5,14 +5,14 @@ import { Badge } from "@loamui/core";
 import { RECIPES, recipeHref, recipesIn, getCategory, getRecipe } from "@/recipes";
 import { RECIPE_SOURCE } from "@/recipes/generated/source";
 import { componentForExport } from "@/site/nav";
-import { RecipePlayground } from "@/renderer/recipes/recipe-playground";
+import { RecipePlayground } from "@/renderer/recipes/RecipePlayground";
 import { linkedRecipePrompt } from "@/recipes/recipe-prompt";
 import { PromptBlock } from "@/renderer/shared/CopyPanel";
-import "@/renderer/recipes/recipe-prompt-button.css";
-import { RecipePillars } from "@/renderer/recipes/recipe-pillars";
-import { RecipeCrumbs } from "@/renderer/recipes/recipe-crumbs";
-import { RecipePager } from "@/renderer/recipes/recipe-pager";
-import "@/renderer/recipes/recipe-page.css";
+import "@/renderer/recipes/RecipePrompt.css";
+import { RecipePillars } from "@/renderer/recipes/RecipePillars";
+import { RecipeCrumbs } from "@/renderer/recipes/RecipeCrumbs";
+import { RecipePager } from "@/renderer/recipes/RecipePager";
+import "@/renderer/recipes/RecipePage.css";
 import "@/site/MarkdownLink.css";
 
 export function generateStaticParams() {
@@ -30,7 +30,6 @@ export async function generateMetadata({
   return { title: `${recipe.meta.title} recipe`, description: recipe.meta.description };
 }
 
-/** The docs page for a core component, by its export name. */
 function docHref(name: string): string | undefined {
   const item = componentForExport(name);
   return item ? `/docs/components/${item.slug}` : undefined;
@@ -49,7 +48,6 @@ export default async function RecipePage({
   const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const prompt = linkedRecipePrompt(recipe);
 
-  // Previous and next within the category, in its display order.
   const siblings = recipesIn(categorySlug);
   const at = siblings.findIndex((e) => e.slug === slug);
   const toLink = (e?: (typeof siblings)[number]) =>

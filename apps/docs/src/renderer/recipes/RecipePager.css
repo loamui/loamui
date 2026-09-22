@@ -1,6 +1,5 @@
-/* Two links, previous and next. Each is the direction above the
-   destination's title; the spans are read by position, so there is no
-   class for the site's global eyebrow style to collide with. */
+/* The spans are read by position: a class would collide with the site's global
+   .eyebrow utility. */
 @scope (.site-RecipePager) {
   :scope {
     border-block-start: 1px solid var(--loam-color-line);

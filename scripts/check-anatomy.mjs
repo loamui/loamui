@@ -32,10 +32,6 @@ const COMPONENTS = join(ROOT, "packages/core/src/components");
  */
 const COMPOSED = new Set(["svg"]);
 
-/**
- * Elements a component renders inside a part of its own, so the scope styles
- * them but a consumer never writes one. Each entry is a deliberate ruling.
- */
 const INTERNAL = {
   // Each entry is a ruling: the component renders this element inside a part
   // of its own, so a consumer never writes one and there is nothing to expose.

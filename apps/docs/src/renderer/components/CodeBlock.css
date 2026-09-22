@@ -14,11 +14,10 @@
         outline: var(--loam-ring-width) solid var(--loam-color-ring);
         outline-offset: -2px;
       }
-    }
 
-    /* One rendered line; the tokens nest inside it. */
-    pre > span {
-      display: block flow;
+      > span {
+        display: block flow;
+      }
     }
   }
 }

@@ -9,12 +9,12 @@ import {
   recipesByCategory,
 } from "@/recipes";
 import { RECIPE_SOURCE } from "@/recipes/generated/source";
-import { RecipesRail } from "@/renderer/recipes/recipe-rail";
-import { RecipeStage } from "@/renderer/recipes/recipe-stage";
-import { RecipeCodePanel } from "@/renderer/recipes/recipe-code-panel";
-import { RecipeCrumbs } from "@/renderer/recipes/recipe-crumbs";
-import { RecipePager } from "@/renderer/recipes/recipe-pager";
-import "@/renderer/recipes/recipe-page.css";
+import { RecipesRail } from "@/renderer/recipes/RecipesRail";
+import { RecipeStage } from "@/renderer/recipes/RecipeStage";
+import { RecipeCodePanel } from "@/renderer/recipes/RecipeCodePanel";
+import { RecipeCrumbs } from "@/renderer/recipes/RecipeCrumbs";
+import { RecipePager } from "@/renderer/recipes/RecipePager";
+import "@/renderer/recipes/RecipePage.css";
 
 export function generateStaticParams() {
   return recipesByCategory().map(({ category }) => ({ category: category.slug }));
@@ -37,7 +37,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const items = recipesIn(category.slug);
   if (!items.length) notFound();
 
-  // Previous and next among the categories that have recipes, in the
   // rail's order.
   const listed = RECIPE_CATEGORIES.filter((cat) => recipesIn(cat.slug).length > 0);
   const at = listed.findIndex((cat) => cat.slug === category.slug);

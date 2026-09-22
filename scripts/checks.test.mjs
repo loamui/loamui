@@ -194,3 +194,32 @@ test("consumer checker uses its compiler API independently of the application's 
   assert.equal(failure.status, 1);
   assert.match(failure.stderr, /gap: 12px bypasses spacing tokens/);
 });
+
+test("every interactive component has a Storybook interaction test", async () => {
+  // The add-component skill requires a `play` test. A rule only a skill
+  // states gets applied to about half the components; this makes it a gate.
+  // "Interactive" is decided from the source: a handler prop or local state.
+  const { readdirSync, readFileSync, statSync } = await import("node:fs");
+  const { join } = await import("node:path");
+  const root = new URL("../packages/core/src/components", import.meta.url).pathname;
+  const walk = (dir, out = []) => {
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) walk(full, out);
+      else if (/\.tsx?$/.test(name) && !/\.(stories|test)\.tsx?$/.test(name)) out.push(full);
+    }
+    return out;
+  };
+  const missing = [];
+  for (const component of readdirSync(root)) {
+    const dir = join(root, component);
+    if (!statSync(dir).isDirectory()) continue;
+    const source = walk(dir).map((f) => readFileSync(f, "utf8")).join("\n");
+    const interactive = /\bon(?:Change|Click|OpenChange|ValueChange|Toggle|Submit|Input|KeyDown)\b/.test(source) || /\buse(?:State|Controllable|Reducer)\(/.test(source);
+    if (!interactive) continue;
+    const stories = readdirSync(dir).filter((n) => n.endsWith(".stories.tsx"));
+    const hasPlay = stories.some((n) => /^\s+play:/m.test(readFileSync(join(dir, n), "utf8")));
+    if (!hasPlay) missing.push(component);
+  }
+  assert.deepEqual(missing, [], `interactive components whose stories have no play test: ${missing.join(", ")}`);
+});

@@ -1,5 +1,5 @@
 import { PILLARS, type RecipeMeta } from "@/recipes/types";
-import "./recipe-pillars.css";
+import "./RecipePillars.css";
 
 /** Only report the example's own rationale, never fill gaps with a claim of verification. */
 export function RecipePillars({

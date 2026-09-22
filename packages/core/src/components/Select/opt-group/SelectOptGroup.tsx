@@ -1,5 +1,3 @@
-// No "use client": a pass-through over the native optgroup, for the same
-// reason as SelectOption.
 import type { PartProps } from "../../../utils/props.js";
 
 export interface SelectOptGroupProps extends PartProps<"optgroup"> {}

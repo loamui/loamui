@@ -15,9 +15,7 @@ import { useSupports } from "./use-support.js";
  */
 
 export interface OpenStateOptions {
-  /** Controlled open state. */
   open?: boolean;
-  /** Initial open state when uncontrolled. */
   defaultOpen?: boolean;
   /** Called whenever the open state should change (either path). */
   onOpenChange?: (open: boolean) => void;
@@ -41,7 +39,6 @@ export interface PopupState {
   setOpen: (open: boolean) => void;
   /** The Trigger's element, for focus restoration on close. */
   triggerRef: RefObject<HTMLButtonElement | null>;
-  /** The Popup's element. */
   popupRef: RefObject<HTMLDivElement | null>;
   popupId: string;
   /** Per-instance anchor-name shared by Trigger and Popup via custom property. */

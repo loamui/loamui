@@ -29,9 +29,7 @@ import { COMPONENT } from "./DrawerRootContext.js";
  * ```
  */
 export interface DrawerRootProps {
-  /** Controlled open state. */
   open?: boolean;
-  /** Initial open state when uncontrolled. */
   defaultOpen?: boolean;
   /** Called whenever the open state should change (either path). */
   onOpenChange?: (open: boolean) => void;

@@ -34,8 +34,7 @@ export function NavDropdownPanel({
   const composedRef = useMemo(() => composeRefs(refProp, ctx.popupRef), [refProp, ctx.popupRef]);
   usePopup(ctx, { focusOnOpen: false });
   return (
-    // rest cannot override what follows: the id, popover and anchor wiring
-    // are what make the panel a popover at all.
+    // The wiring below wins over rest (CONTRIBUTING: one merge contract).
     <div
       {...rest}
       id={ctx.popupId}

@@ -128,13 +128,12 @@
         color: SelectedItemText;
       }
     }
-  }
 
-  /* The section a result belongs to, after its name. */
-  li > span + span {
-    color: var(--loam-color-fg-dim);
-    font-size: var(--loam-text-xs);
-    white-space: nowrap;
+    > span + span {
+      color: var(--loam-color-fg-dim);
+      font-size: var(--loam-text-xs);
+      white-space: nowrap;
+    }
   }
 
   p {

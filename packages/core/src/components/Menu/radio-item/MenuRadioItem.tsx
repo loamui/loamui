@@ -6,7 +6,6 @@ import type { ItemBaseProps } from "../utils/MenuItemBase.js";
 import { MenuRadioGroupContext } from "../group/MenuGroupContext.js";
 
 export interface MenuRadioItemProps extends ItemBaseProps {
-  /** The value this item selects. */
   value: string;
   /**
    * Close the menu when the item is activated. Off by default, as for

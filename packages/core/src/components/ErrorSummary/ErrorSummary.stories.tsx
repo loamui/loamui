@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { Button, ErrorSummary, Field, Input } from "../../index.js";
 
 const meta = {
@@ -82,4 +83,11 @@ export const FocusesOnAppear: Story = {
       </div>
     </div>
   ),
+  /** Interaction test: the summary takes focus on appearance; an item's link moves focus to its field. */
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole("group", { name: "There is a problem" })).toHaveFocus();
+    await userEvent.click(canvas.getByRole("link", { name: "Enter your email address" }));
+    await expect(canvas.getByRole("textbox", { name: "Email address" })).toHaveFocus();
+  },
 };

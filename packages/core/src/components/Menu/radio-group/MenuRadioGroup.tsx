@@ -11,9 +11,7 @@ import {
 } from "../group/MenuGroupContext.js";
 
 export interface MenuRadioGroupProps extends PartProps<"div"> {
-  /** Controlled selected value. */
   value?: string;
-  /** Initial selected value when uncontrolled. */
   defaultValue?: string;
   /** Fires with the value of the item activated. */
   onValueChange?: (value: string) => void;

@@ -31,8 +31,7 @@ export function DrawerPopup({
   });
 
   return (
-    // rest cannot override what follows: the dialog wiring (id, open
-    // reconciliation, closedby) must win.
+    // The wiring below wins over rest (CONTRIBUTING: one merge contract).
     <dialog
       {...rest}
       {...dialogProps}

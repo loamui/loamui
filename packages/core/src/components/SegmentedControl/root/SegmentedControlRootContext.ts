@@ -6,7 +6,6 @@ import { useRequiredContext } from "../../../hooks/use-required-context.js";
 
 export interface SegmentedControlContextValue {
   name: string;
-  /** Controlled value (undefined = uncontrolled group). */
   value?: string;
   defaultValue?: string;
   select: (value: string) => void;

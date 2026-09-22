@@ -62,7 +62,7 @@ export default function Recipe() {
           height="1200"
           loading="lazy"
         />
-        <header>
+        <div className="copy">
           <p className="eyebrow">
             <Badge.Root>
               <Badge.Text>Offer</Badge.Text>
@@ -77,7 +77,7 @@ export default function Recipe() {
           <div className="actions">
             <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
           </div>
-        </header>
+        </div>
       </div>
     </section>
   );
@@ -105,7 +105,13 @@ export default function Recipe() {
       object-fit: cover;
     }
 
-    header {
+    /* The copy beside the image: eyebrow, heading, lede and the actions. It is
+
+       the section\'s body, not its introduction, so it is a box rather than a
+
+       <header>. */
+
+    .copy {
       align-content: center;
       display: block grid;
       font-size: var(--loam-text-md);

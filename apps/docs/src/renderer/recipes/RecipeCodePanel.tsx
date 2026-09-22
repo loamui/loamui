@@ -3,11 +3,11 @@
 import { Details } from "@loamui/core";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ExampleLoadBoundary } from "./recipe-load-boundary";
+import { RecipeLoadBoundary } from "./RecipeLoadBoundary";
 import type { RecipeSource } from "@/recipes/types";
-import "./recipe-code-panel.css";
+import "./RecipeCodePanel.css";
 
-const RecipeCode = lazy(() => import("./recipe-code").then((m) => ({ default: m.RecipeCode })));
+const RecipeCode = lazy(() => import("./RecipeCode").then((m) => ({ default: m.RecipeCode })));
 
 /**
  * The code, collapsed under a native disclosure, so a category page reads
@@ -41,7 +41,7 @@ export function RecipeCodePanel({ source, href }: { source: RecipeSource; href: 
       <Details.Summary>Code</Details.Summary>
       <Details.Content className="content">
         {requested ? (
-          <ExampleLoadBoundary fallback={sourceLink}>
+          <RecipeLoadBoundary fallback={sourceLink}>
             <Suspense
               fallback={
                 <p className="message" role="status">
@@ -51,7 +51,7 @@ export function RecipeCodePanel({ source, href }: { source: RecipeSource; href: 
             >
               <RecipeCode source={source} />
             </Suspense>
-          </ExampleLoadBoundary>
+          </RecipeLoadBoundary>
         ) : (
           sourceLink
         )}
