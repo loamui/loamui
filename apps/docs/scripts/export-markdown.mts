@@ -458,11 +458,11 @@ for (const category of RECIPE_CATEGORIES) {
 writeFileSync(join(PUBLIC, "llms.txt"), lines.join("\n") + "\n");
 writeFileSync(join(PUBLIC, "search-index.json"), JSON.stringify(searchIndex));
 
-// Publish the same setup assets that ship with the skill.
+// Publish the setup assets `loamui init` installs, for the by-hand guide.
 const agentAssets = join(PUBLIC, "agent-assets");
 mkdirSync(agentAssets, { recursive: true });
 for (const file of SETUP_ASSETS) {
-  copyFileSync(join(ROOT, "..", "..", "skills", "loamui", "assets", file), join(agentAssets, file));
+  copyFileSync(join(ROOT, "..", "..", "packages", "cli", "assets", file), join(agentAssets, file));
 }
 
 // ---- AGENTS.md: the package's one-page summary, served at /AGENTS.md too ---

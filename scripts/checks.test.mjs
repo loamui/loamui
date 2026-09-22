@@ -154,7 +154,7 @@ test("consumer Stylelint config resolves installed tokens and rejects CSS regres
     await symlink(directory, join(project, "node_modules", name), "dir");
   }
   for (const name of ["stylelint-base.mjs", "stylelint.config.mjs"])
-    await copyFile(join(root, "skills/loamui/assets", name), join(project, name));
+    await copyFile(join(root, "packages/cli/assets", name), join(project, name));
 
   const lint = (declarations) =>
     stylelint.lint({
@@ -215,7 +215,7 @@ test("consumer checker uses its compiler API independently of the application's 
   }
   for (const name of ["check-composition.mjs", "scope-rules.mjs", "spacing-rules.mjs"])
     await copyFile(
-      new URL(`../skills/loamui/assets/${name}`, import.meta.url),
+      new URL(`../packages/cli/assets/${name}`, import.meta.url),
       join(project, name),
     );
   const run = () =>
@@ -269,4 +269,18 @@ test("every interactive component has a Storybook interaction test", async () =>
     [],
     `interactive components whose stories have no play test: ${missing.join(", ")}`,
   );
+});
+
+test("the install guides link the stylesheet for the version of core in this repo", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  const root = fileURLToPath(new URL("..", import.meta.url));
+  const { version } = JSON.parse(readFileSync(`${root}packages/core/package.json`, "utf8"));
+  const pattern = /cdn\.jsdelivr\.net\/npm\/@loamui\/core@([^/]+)\/dist\/styles\.css/g;
+  for (const page of ["installation", "installation/nextjs", "installation/tanstack-start"]) {
+    const source = readFileSync(`${root}apps/docs/src/app/docs/${page}/page.mdx`, "utf8");
+    const versions = [...source.matchAll(pattern)].map((m) => m[1]);
+    assert.ok(versions.length, `${page} links the stylesheet`);
+    for (const linked of versions) assert.equal(linked, version, `${page} pins the current core version`);
+  }
 });

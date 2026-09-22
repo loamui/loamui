@@ -4,10 +4,10 @@ type Commands = Record<PackageManager, string>;
 
 export const PACKAGE_COMMANDS = {
   "next-create": {
-    pnpm: "pnpm create next-app@latest my-app \\\n  --ts --app --empty --no-tailwind --use-pnpm --yes\ncd my-app",
-    npm: "npx create-next-app@latest my-app \\\n  --ts --app --empty --no-tailwind --use-npm --yes\ncd my-app",
-    yarn: "yarn create next-app my-app \\\n  --ts --app --empty --no-tailwind --use-yarn --yes\ncd my-app",
-    bun: "bun create next-app@latest my-app \\\n  --ts --app --empty --no-tailwind --use-bun --yes\ncd my-app",
+    pnpm: "pnpm create next-app@latest my-app \\\n  --ts --app --empty --no-tailwind --no-src-dir --use-pnpm --yes\ncd my-app",
+    npm: "npx create-next-app@latest my-app \\\n  --ts --app --empty --no-tailwind --no-src-dir --use-npm --yes\ncd my-app",
+    yarn: "yarn create next-app my-app \\\n  --ts --app --empty --no-tailwind --no-src-dir --use-yarn --yes\ncd my-app",
+    bun: "bun create next-app@latest my-app \\\n  --ts --app --empty --no-tailwind --no-src-dir --use-bun --yes\ncd my-app",
   },
   "tanstack-create": {
     pnpm: "pnpm dlx @tanstack/cli@latest create my-app \\\n  --blank --framework React --package-manager pnpm -y\ncd my-app",
@@ -20,6 +20,24 @@ export const PACKAGE_COMMANDS = {
     npm: "npm install @loamui/core",
     yarn: "yarn add @loamui/core",
     bun: "bun add @loamui/core",
+  },
+  "loamui-create": {
+    pnpm: "pnpm dlx loamui@latest create",
+    npm: "npx loamui@latest create",
+    yarn: "yarn dlx loamui@latest create",
+    bun: "bunx loamui@latest create",
+  },
+  "loamui-init": {
+    pnpm: "pnpm dlx loamui@latest init",
+    npm: "npx loamui@latest init",
+    yarn: "yarn dlx loamui@latest init",
+    bun: "bunx loamui@latest init",
+  },
+  "loamui-doctor": {
+    pnpm: "pnpm dlx loamui@latest doctor",
+    npm: "npx loamui@latest doctor",
+    yarn: "yarn dlx loamui@latest doctor",
+    bun: "bunx loamui@latest doctor",
   },
   dev: {
     pnpm: "pnpm run dev",

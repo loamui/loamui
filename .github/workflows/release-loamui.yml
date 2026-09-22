@@ -1,0 +1,47 @@
+name: Release loamui
+on:
+  push:
+    tags: ["loamui-v*"]
+permissions:
+  contents: read
+concurrency:
+  group: release-loamui-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+  publish:
+    needs: checks
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm install --global npm@11
+      - name: Verify tag matches package version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          TAG_VERSION="${RELEASE_TAG#loamui-v}"
+          PKG_VERSION="$(node -p "require('./packages/cli/package.json').version")"
+          if [[ ! "$TAG_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Release tags must use loamui-vMAJOR.MINOR.PATCH. Prereleases need a separate npm dist-tag."
+            exit 1
+          fi
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "Tag loamui-v$TAG_VERSION does not match loamui version $PKG_VERSION — bump the package version before tagging."
+            exit 1
+          fi
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter loamui test
+      - run: npm pack --dry-run
+        working-directory: packages/cli
+      - run: npm publish --access public --provenance
+        working-directory: packages/cli

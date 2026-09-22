@@ -34,14 +34,14 @@ import appCss from "../styles.css?url";
 
 // Inside the existing root route's head() result:
 links: [
-  { rel: "stylesheet", href: "https://loamui.com/loamui-core.css" },
+  { rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/@loamui/core@0.2.0/dist/styles.css" },
   { rel: "stylesheet", href: appCss },
 ],
 ```
 
 Keep the existing route, metadata, other links and `HeadContent` rendering. The browser loads tokens, element styles and component styles without sending core CSS through Vite. Do not add a JavaScript import or CSS `@import` of `@loamui/core/styles.css`. No provider is needed.
 
-**Hosted stylesheet:** the URL follows the documentation deployment rather than your installed package version. See [stylesheet delivery](/docs/installation#stylesheet-delivery-during-the-beta) for versioning and self-hosting guidance.
+The URL is pinned to the installed version of `@loamui/core`; keep the two in step when you update. See [stylesheet delivery](/docs/installation#stylesheet-delivery) for self-hosting.
 
 Start `src/styles.css` with the layer order, before any imports or rules that create LoamUI layers:
 

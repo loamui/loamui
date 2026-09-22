@@ -7,7 +7,7 @@
 // Stylelint run it on CSS. Literal React style objects are .tsx, which
 // Stylelint never sees, so those stay with scripts/check-spacing.mjs.
 import stylelint from "stylelint";
-import { spacingFindings } from "../../skills/loamui/assets/spacing-rules.mjs";
+import { spacingFindings } from "../../packages/cli/assets/spacing-rules.mjs";
 
 const ruleName = "loamui/spacing";
 const messages = stylelint.utils.ruleMessages(ruleName, {

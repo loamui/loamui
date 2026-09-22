@@ -33,6 +33,10 @@ pnpm dev        # runs the docs site
   docs site has a markdown twin at the same URL with `.md` appended, and
   `/llms.txt` indexes them; the export is generated from source by
   `apps/docs/scripts/export-markdown.mts`.
+- `packages/cli`: the `loamui` command (`init`, `doctor`, `create`),
+  published independently of core. Its `assets/` are the Stylelint
+  configuration and composition checker that `init` installs into a project;
+  the repository's own Stylelint config and gates import the same files.
 
 ## Framing
 
@@ -432,6 +436,8 @@ checks the contrast ratio of every token pair the components use, and
   fragment and paragraph-length heuristics: these misclassify UI terms and API
   names. Dynamic runtime copy still needs editorial review.
 - `pnpm test:checks` exercises these scanners against known failure cases.
+- `pnpm --filter loamui test` covers the setup command's detection,
+  conflict handling and wiring without network access.
 
 Please use
 [Conventional Commits](https://www.conventionalcommits.org/) for commit messages
@@ -472,9 +478,9 @@ built on container queries and modern colour:
 
 ## Releasing
 
-The public package is `@loamui/core`; the monorepo root and docs app are private.
-Use Node.js 24 and pnpm 11 for releases. Maintainers publish from `main` after
-the full CI suite passes.
+The public packages are `@loamui/core` and `loamui`; the monorepo root
+and docs app are private. Use Node.js 24 and pnpm 11 for releases. Maintainers
+publish from `main` after the full CI suite passes.
 
 ### First publication
 

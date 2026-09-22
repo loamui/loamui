@@ -1,11 +1,11 @@
-import loamui from "./skills/loamui/assets/stylelint-base.mjs";
+import loamui from "./packages/cli/assets/stylelint-base.mjs";
 
 /** @type {import("stylelint").Config} */
 export default {
   ...loamui,
   // The repo's own doctrine, as rules rather than standalone scripts, so a
   // finding shows in the editor and honours a per-line disable. Consumers
-  // get the same checks through the skill's check-composition.mjs.
+  // get the same checks through the files `loamui init` installs.
   plugins: [...loamui.plugins, "./scripts/stylelint/loam-scope.mjs", "./scripts/stylelint/loam-spacing.mjs"],
   rules: { ...loamui.rules, "loamui/scope": true, "loamui/spacing": true },
   referenceFiles: ["packages/core/src/tokens.css"],

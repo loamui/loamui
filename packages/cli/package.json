@@ -1,0 +1,32 @@
+{
+  "name": "loamui",
+  "version": "0.1.0",
+  "description": "Set up LoamUI in a project, or create one, and check that the setup is complete.",
+  "keywords": ["loamui", "cli", "init", "setup"],
+  "homepage": "https://loamui.com/",
+  "bugs": {
+    "url": "https://github.com/loamui/loamui/issues"
+  },
+  "license": "MIT",
+  "author": "Danger Farms",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loamui/loamui.git",
+    "directory": "packages/cli"
+  },
+  "type": "module",
+  "bin": {
+    "loamui": "bin/loamui.mjs"
+  },
+  "files": ["bin", "src", "assets", "README.md"],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "lint": "oxlint --config ../../.oxlintrc.json bin src test",
+    "test": "node --test \"test/**/*.test.mjs\""
+  }
+}

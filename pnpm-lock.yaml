@@ -145,6 +145,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(vitest@3.2.6(@types/debug@4.1.13)(@types/node@22.12.0)(jsdom@25.0.1)(tsx@4.23.12))
 
+  packages/cli: {}
+
   packages/core:
     devDependencies:
       '@axe-core/playwright':
