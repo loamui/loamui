@@ -8,7 +8,7 @@ import { useState } from "react";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Nav } from "../components/Nav/index";
+import { Nav } from "../components/Nav/index.js";
 
 afterEach(cleanup);
 

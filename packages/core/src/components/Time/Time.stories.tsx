@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { Time } from "./Time";
+import { Time } from "./Time.js";
 
 const list = { display: "grid", gap: "0.25rem", listStyle: "none", margin: 0, padding: 0 };
 

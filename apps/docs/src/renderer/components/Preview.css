@@ -1,0 +1,67 @@
+/* The tab list and its tabs are selected by role — the semantics are the
+   part — and the panel hosts any demo, so the donut keeps these rules off
+   what it shows. */
+@scope (.site-Preview) to ([class*="loam-"], [class*="site-"]) {
+  :scope {
+    background: var(--loam-color-surface);
+    border: 1px solid var(--loam-color-line);
+    border-radius: var(--loam-radius-lg);
+    overflow: hidden;
+  }
+
+  [role="tablist"] {
+    background: var(--loam-color-bg-subtle);
+    border-block-end: 1px solid var(--loam-color-line);
+    display: block flex;
+    gap: var(--loam-space-3xs);
+    padding: var(--loam-space-2xs) var(--loam-space-2xs);
+  }
+
+  [role="tab"] {
+    background: transparent;
+    border: none;
+    border-radius: var(--loam-radius-sm);
+    box-shadow: none;
+    color: var(--loam-color-fg-muted);
+    cursor: pointer;
+    font-size: var(--loam-text-sm);
+    font-weight: 550;
+    padding: var(--loam-space-3xs) var(--loam-space-xs);
+
+    &:hover {
+      color: var(--loam-color-fg);
+    }
+
+    &[aria-selected="true"] {
+      background: var(--loam-color-surface);
+      box-shadow: var(--loam-shadow-sm);
+      color: var(--loam-color-fg);
+
+      @media (forced-colors: active) {
+        background: SelectedItem;
+        color: SelectedItemText;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        background var(--loam-duration-md) var(--loam-ease),
+        color var(--loam-duration-md) var(--loam-ease);
+    }
+  }
+
+  .stage {
+    align-items: center;
+    background: radial-gradient(circle at 1px 1px, var(--loam-color-line) 1px, transparent 0);
+    background-size: 1.25rem 1.25rem;
+    display: block flex;
+    flex-wrap: wrap;
+    gap: var(--loam-space-s);
+    padding: clamp(1.5rem, 1.071rem + 2.143vi, 3rem);
+  }
+
+  .code {
+    border: none;
+    border-radius: 0;
+  }
+}

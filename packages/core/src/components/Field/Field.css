@@ -10,7 +10,6 @@
     display: block flex;
     flex-direction: column;
     gap: var(--loam-space-3xs);
-    inline-size: 100%;
   }
 }
 
@@ -28,6 +27,15 @@
     font-size: var(--loam-text-sm);
     font-weight: 500;
     gap: var(--loam-space-2xs);
+
+    &:has(input:is([type="checkbox"], [type="radio"])) {
+      cursor: pointer;
+      min-block-size: 2.75rem;
+
+      &:has(input:disabled) {
+        cursor: not-allowed;
+      }
+    }
   }
 
   span.optional {

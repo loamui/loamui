@@ -1,13 +1,13 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { Field, Input } from "../index";
+import { Field, Input } from "../index.js";
 
 afterEach(cleanup);
 
 describe("Field composition wiring", () => {
   it("links the label to the control and gathers describedby ids", () => {
     render(
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>Email</Field.Label>
         <Field.Description>We'll never share it.</Field.Description>
         <Field.Control render={<input type="email" />} />
@@ -24,7 +24,7 @@ describe("Field composition wiring", () => {
     const describedBy = input.getAttribute("aria-describedby")?.split(" ") ?? [];
     expect(describedBy).toContain(description.id);
     expect(describedBy).toContain(error.id);
-    // Error presence flips the invalid state.
+    // Explicit validation state is forwarded independently of the error content.
     expect(input).toHaveAttribute("aria-invalid", "true");
     expect(error).toHaveAttribute("role", "alert");
   });
@@ -48,7 +48,7 @@ describe("Field composition wiring", () => {
     rerender(
       <>
         <p id="rules">Letters and digits only.</p>
-        <Field.Root>
+        <Field.Root invalid>
           <Field.Label>Username</Field.Label>
           <Field.Description>Shown on your profile.</Field.Description>
           <Field.Error>Enter a username</Field.Error>
@@ -152,7 +152,7 @@ describe("Field composition wiring", () => {
 describe("Field labels", () => {
   it("says its own words in the language the labels give it", () => {
     render(
-      <Field.Root labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}>
+      <Field.Root invalid labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}>
         <Field.Label optional>Société</Field.Label>
         <Field.Error>Saisissez le nom de votre société</Field.Error>
         <Input />
@@ -166,7 +166,7 @@ describe("Field labels", () => {
 
   it("prefixes an error with hidden words by default", () => {
     render(
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>Email</Field.Label>
         <Field.Error>Enter your email address</Field.Error>
         <Input />
@@ -180,34 +180,36 @@ describe("Field labels", () => {
 });
 
 describe("Input", () => {
-  it("lands className, style and ref on the input, wrapperProps on the box, and sections beside it", () => {
+  it("renders the field box around the native input, forwarding attributes, style and ref", () => {
     let node: HTMLInputElement | null = null;
     const { container } = render(
-      <Field.Root>
-        <Field.Label>Handle</Field.Label>
-        <Input
-          className="mine"
-          style={{ textAlign: "end" }}
-          ref={(el) => {
-            node = el;
-          }}
-          wrapperProps={{ className: "box", id: "box" }}
-          startSection="@"
-          endSection=".dev"
-        />
-      </Field.Root>,
+      <Input
+        aria-label="Handle"
+        className="mine"
+        name="handle"
+        autoComplete="username"
+        style={{ textAlign: "end" }}
+        ref={(el) => {
+          node = el;
+        }}
+      />,
     );
-    const input = screen.getByLabelText("Handle") as HTMLInputElement;
+    const input = screen.getByRole("textbox", { name: "Handle" });
+    // The box is the wrapper: it paints the surface, border and focus ring,
+    // and it is what an adornment sits beside. Textarea and Select render the
+    // same shape, so a field looks and aligns the same whichever it holds.
+    expect(container.children).toHaveLength(1);
+    const box = container.firstElementChild!;
+    expect(box).toHaveClass("loam-Input-field");
+    expect(box.firstElementChild).toBe(input);
+    expect(input.tagName).toBe("INPUT");
     expect(node).toBe(input);
+    // className lands on the control, not the box: a consumer styling "the
+    // input" means the input, and the box is the library's to paint.
     expect(input).toHaveClass("mine");
     expect(input.style.textAlign).toBe("end");
-    const box = container.querySelector("#box")!;
-    expect(box).toHaveClass("loam-Input-field", "box");
-    const sections = box.querySelectorAll("span.section");
-    expect(sections[0]).toHaveTextContent("@");
-    expect(sections[1]).toHaveTextContent(".dev");
-    expect(box.firstElementChild).toBe(sections[0]);
-    expect(box.lastElementChild).toBe(sections[1]);
+    expect(input).toHaveAttribute("autocomplete", "username");
+    expect(input).toHaveAttribute("name", "handle");
   });
 
   it("forwards the native size attribute", () => {

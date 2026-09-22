@@ -28,8 +28,6 @@ element inside the measuring container to give its body text the local scale.
 The [Tokens guide](/docs/tokens) shows the complete scoped pattern
 for locally responsive type and spacing.
 
-</div>
-
 The rhythm is not only horizontal. Leading is derived from each element's own size (`calc(0.5rem + 2ex)`), so larger type gets proportionally tighter line-height without a table of values. Vertical spacing is additive: every block carries a block-end margin, and the extra room before a heading comes from an adjacent-sibling rule, so nothing needs unsetting.
 
 ## Two families, and considered figures
@@ -66,4 +64,6 @@ limit, as shown in [Building your own recipes](/recipes/guide).
 }
 ```
 
-</div>
+> Reach for a scoped class on a semantic element, style it with tokens, and you have a typography
+> component that themes through the cascade and works outside React. The primitives do the reading
+> research; you supply the vocabulary.

@@ -1,6 +1,6 @@
 import "@/app/docs/prose.css";
-import HeroRecipe from "@/examples/heroes/hero-with-image/Example";
-import SubgridRecipe from "@/examples/grids/grid-subgrid/Example";
+import HeroRecipe from "@/recipes/heroes/hero-with-image/Recipe";
+import SubgridRecipe from "@/recipes/grids/grid-subgrid/Recipe";
 
 export const metadata = {
   title: "Building your own recipes",
@@ -65,7 +65,7 @@ When a Card supplies the surface, retain its padding, border and radius. A scope
 
 Declare status on the region that has that meaning: `--loam-context: warning` around an approaching deadline, for example. Do not repeat status props on individual controls. Ordinary content can remain neutral; adding a status region to every recipe would misrepresent its meaning.
 
-Use the component reference for exceptions. Badge, Loader, Progress and Meter have intrinsic `size` APIs; Input supports the native HTML `size` attribute and its documented `startSection` and `endSection` content. Button icons are children. These are different contracts, not interchangeable conventions.
+Use the component reference for exceptions. Badge, Loader, Progress and Meter have intrinsic `size` APIs; Input supports the native HTML `size` attribute and `startSection` / `endSection` content inside its bordered wrapper. Button icons are children. These are different contracts, not interchangeable conventions.
 
 ## A hero made from the primitives
 

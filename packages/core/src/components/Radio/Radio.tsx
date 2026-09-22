@@ -2,14 +2,13 @@
 
 import { use, useId } from "react";
 import type { ChangeEvent, ReactNode } from "react";
-import { cx } from "../../utils";
-import type { PartProps } from "../../utils";
-import { idList } from "../../render";
-import { useFieldControlProps } from "../Field/Field";
-import { RadioGroupContext } from "./group-context";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
+import { idList } from "../../utils/render.js";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
+import { RadioGroupContext } from "./group-context.js";
 
 export interface RadioProps extends Omit<PartProps<"input">, "size" | "type"> {
-  /** Label rendered next to the control. */
   label?: ReactNode;
   /** Helper text rendered under the label. */
   description?: ReactNode;
@@ -36,7 +35,7 @@ function RadioControl({
   ref,
   ...rest
 }: RadioControlProps) {
-  const field = useFieldControlProps(ariaDescribedby);
+  const field = useFieldControlProps(ariaDescribedby, id);
   const group = use(RadioGroupContext);
   // No aria-invalid here: ARIA allows it on the radiogroup, not the
   // individual radio, so the group's fieldset carries composed errors.
@@ -85,7 +84,7 @@ function RadioControl({
  * the bare input (it self-wires inside a `Field`). Usually lives inside a
  * {@link RadioGroup}.
  */
-function RadioLabelled({
+export function Radio({
   label,
   description,
   id,
@@ -124,8 +123,3 @@ function RadioLabelled({
     </label>
   );
 }
-
-export const Radio = Object.assign(RadioLabelled, {
-  /** The bare input, for composing inside a `Field.Label` of its own. */
-  Control: RadioControl,
-});

@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { ExamplesRail } from "@/renderer/examples-rail";
-import { ExamplesIndex } from "@/renderer/examples-index";
-import "@/renderer/examples-page.css";
+import { RecipesRail } from "@/renderer/recipes/RecipesRail";
+import { RecipesIndex } from "@/renderer/recipes/RecipesIndex";
+import "@/renderer/recipes/RecipePage.css";
 
 export const metadata: Metadata = {
-  title: "Example recipes",
+  title: "Recipes",
   description:
-    "Example recipes we built for our own products with LoamUI’s tokens, element styles and React components: worked references to take inspiration from.",
+    "Recipes we built for our own products with LoamUI’s tokens, element styles and React components: worked references to take inspiration from.",
 };
 
-export default function ExamplesPage() {
+export default function RecipesPage() {
   return (
     <div className="site-RecipePage">
-      <header className="hero">
-        <span className="eyebrow">Example recipes</span>
-        <h1 className="title">Recipes we built for our own products.</h1>
+      <header>
+        <span className="eyebrow">Recipes</span>
+        <h1>Recipes we built for our own products.</h1>
         <p className="lead">
           Explore product-specific compositions of LoamUI’s tokens, element styles and React
           components. Inspect the preview and source, then adapt a recipe to your own content.
@@ -27,11 +27,11 @@ export default function ExamplesPage() {
         </p>
       </header>
       <div className="shell">
-        <aside className="aside">
-          <ExamplesRail />
+        <aside>
+          <RecipesRail />
         </aside>
         <div className="content">
-          <ExamplesIndex />
+          <RecipesIndex />
         </div>
       </div>
     </div>

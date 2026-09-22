@@ -23,12 +23,34 @@ import { Badge } from "@loamui/core";
 Badges are neutral by default. There are no variant or colour props: declare --loam-context on a one-element wrapper region (see the Contextualism guide) and the status colours follow, or let it inherit from a larger region. Badge keeps a size prop because it sizes an intrinsic glyph, the one exception the library makes for display components (Badge, Loader, Progress).
 
 ```tsx
-<Badge>Neutral</Badge>
-<span style={{ "--loam-context": "primary" }}><Badge>Primary</Badge></span>
-<span style={{ "--loam-context": "success" }}><Badge>Success</Badge></span>
-<span style={{ "--loam-context": "warning" }}><Badge>Warning</Badge></span>
-<span style={{ "--loam-context": "danger" }}><Badge>Danger</Badge></span>
-<span style={{ "--loam-context": "info" }}><Badge>Info</Badge></span>
+<Badge.Root>
+  <Badge.Text>Neutral</Badge.Text>
+</Badge.Root>
+<span style={{ "--loam-context": "primary" }}>
+  <Badge.Root>
+    <Badge.Text>Primary</Badge.Text>
+  </Badge.Root>
+</span>
+<span style={{ "--loam-context": "success" }}>
+  <Badge.Root>
+    <Badge.Text>Success</Badge.Text>
+  </Badge.Root>
+</span>
+<span style={{ "--loam-context": "warning" }}>
+  <Badge.Root>
+    <Badge.Text>Warning</Badge.Text>
+  </Badge.Root>
+</span>
+<span style={{ "--loam-context": "danger" }}>
+  <Badge.Root>
+    <Badge.Text>Danger</Badge.Text>
+  </Badge.Root>
+</span>
+<span style={{ "--loam-context": "info" }}>
+  <Badge.Root>
+    <Badge.Text>Info</Badge.Text>
+  </Badge.Root>
+</span>
 ```
 
 ### Sizes
@@ -36,26 +58,44 @@ Badges are neutral by default. There are no variant or colour props: declare --l
 size is one of three tokens, emitted as data-size: the type step, with the pill's geometry in em on it. It is the one size prop the library keeps for display components, because a pill is an intrinsic glyph that no container can size.
 
 ```tsx
-<Badge size="sm">Small</Badge>
-<Badge size="md">Medium</Badge>
-<Badge size="lg">Large</Badge>
+<Badge.Root size="sm">
+  <Badge.Text>Small</Badge.Text>
+</Badge.Root>
+<Badge.Root size="md">
+  <Badge.Text>Medium</Badge.Text>
+</Badge.Root>
+<Badge.Root size="lg">
+  <Badge.Text>Large</Badge.Text>
+</Badge.Root>
 ```
 
-### Status dot
+### Status icons
 
-Compose a Badge.Dot before the label to show a status dot. It takes the context's colour, so the badge reads at a glance even before the text. Draft has no context, so its dot stays neutral: the dot still shows without one.
+An icon before the label takes the region's colour along with the pill, so a status reads before the word does. It is aria-hidden decoration: the word carries the state, and Draft has no context, so it stays neutral.
 
 ```tsx
 <span style={{ "--loam-context": "success" }}>
-  <Badge><Badge.Dot /> Live</Badge>
+  <Badge.Root>
+    <IconCircleCheck aria-hidden />
+    <Badge.Text>Live</Badge.Text>
+  </Badge.Root>
 </span>
 <span style={{ "--loam-context": "warning" }}>
-  <Badge><Badge.Dot /> Pending</Badge>
+  <Badge.Root>
+    <IconClock aria-hidden />
+    <Badge.Text>Pending</Badge.Text>
+  </Badge.Root>
 </span>
 <span style={{ "--loam-context": "danger" }}>
-  <Badge><Badge.Dot /> Offline</Badge>
+  <Badge.Root>
+    <IconCircleX aria-hidden />
+    <Badge.Text>Offline</Badge.Text>
+  </Badge.Root>
 </span>
-<Badge><Badge.Dot /> Draft</Badge>
+<Badge.Root>
+  <IconPencil aria-hidden />
+  <Badge.Text>Draft</Badge.Text>
+</Badge.Root>
 ```
 
 ### As a link
@@ -64,7 +104,9 @@ A badge is not a control, but a tag can be a link to everything tagged the same 
 
 ```tsx
 <span style={{ "--loam-context": "info" }}>
-  <Badge render={<a href="#tag-design" />}>design</Badge>
+  <Badge.Root render={<a href="#tag-design" />}>
+    <Badge.Text>design</Badge.Text>
+  </Badge.Root>
 </span>
 ```
 
@@ -74,13 +116,10 @@ No leftSection / rightSection props: an svg child is detected via :has(svg) and 
 
 ```tsx
 <span style={{ "--loam-context": "success" }}>
-  <Badge>
-    <svg viewBox="0 -0.5 25 25" fill="none" aria-hidden>
-      <path d="M5.5 12.5L10.167 17L19.5 8" stroke="currentColor"
-        strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-    Verified
-  </Badge>
+  <Badge.Root>
+    <IconCheck aria-hidden />
+    <Badge.Text>Verified</Badge.Text>
+  </Badge.Root>
 </span>
 ```
 
@@ -88,7 +127,7 @@ No leftSection / rightSection props: an svg child is detected via :has(svg) and 
 
 - To label a record with its status or category at a glance: one or two words sitting next to the thing they describe, readable without reading the row.
 - For small counts and metadata (unread messages, item totals) where a full sentence would drown the signal.
-- With Badge.Dot for presence and liveness (“Live”, “Offline”): the dot carries the raw status colour so the state reads even before the word.
+- With an icon for presence and liveness (“Live”, “Offline”): the icon takes the region's colour along with the pill, so the state reads even before the word.
 
 ## When not to
 
@@ -108,24 +147,24 @@ The rendered element is a span with no interactive semantics, and that is delibe
 ## Accessibility
 
 - Renders a plain <span> with no role and no focus behaviour: screen readers announce it as ordinary inline text, exactly what a label should be.
-- The status dot is aria-hidden decoration, so the visible word must carry the state on its own (“Live”, not a bare green dot). Under forced colours it keeps a border in the text colour, so it survives where background paint is stripped.
+- A status icon is aria-hidden decoration, so the visible word must carry the state on its own (“Live”, not a bare green glyph). It is drawn in currentColor, which system colours replace, so it survives forced-colours mode where background paint is stripped.
 - The context colours the pill but is never announced. Assistive tech hears only the text, so never let colour be the only difference between two badges.
 - The label is not the raw status colour: it is mixed toward black (light scheme) or white (dark) so it keeps contrast on the pill's own tint in both schemes.
 
-## Props
+## Parts
 
-Status is not a prop: it comes from the surrounding `--loam-context` region (see the Contextualism guide).
+### Badge.Root
+
+The pill. Holds a Badge.Text and, on either side of it, any icon children — the markup says which side.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Control size: the type step, with the pill's geometry in em on it. |
 | `render` | `element \| (props) => node` | — | Substitute the element (render={<a href=… />} for a tag that is a link); the Badge's class and attributes merge onto it. |
-| `children` | `ReactNode` | — | The badge content: label, and any composed icons. |
+| `children` | `ReactNode` | — | A Badge.Text, and any composed icons beside it. |
 | `...others` | `SpanHTMLAttributes` | — | All native <span> props are forwarded. |
 
-## Parts
+### Badge.Text
 
-### Badge.Dot
-
-A status dot composed before the label: an aria-hidden <span> carrying the raw context colour. Native <span> props are forwarded.
+The label. A real element rather than a bare text node, so the pill can let it shrink and truncate; bare text in the flex row is an anonymous item and can do neither. Native <span> props are forwarded.
 

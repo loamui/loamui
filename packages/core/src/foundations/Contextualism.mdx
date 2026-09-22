@@ -52,7 +52,11 @@ with every visual consequence still living in stylesheets.
 
 ```tsx
 <section style={{ "--loam-context": "danger" }}>
-  <Checkbox label="I understand this is permanent" />
+  <Field.Item>
+    <Field.Label>
+      <Checkbox /> I understand this is permanent
+    </Field.Label>
+  </Field.Item>
   <Button>Delete workspace</Button>
 </section>
 ```

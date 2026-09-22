@@ -39,7 +39,7 @@ import {
   Details,
   Breadcrumbs,
   Pagination,
-} from "../index";
+} from "../index.js";
 
 afterEach(cleanup);
 
@@ -66,13 +66,20 @@ const cases: Array<[string, ReactElement]> = [
     "Select",
     <Field.Root>
       <Field.Label>Country</Field.Label>
-      <Select>
-        <option>United States</option>
-        <option>Canada</option>
-      </Select>
+      <Select.Root>
+        <Select.Option>United States</Select.Option>
+        <Select.Option>Canada</Select.Option>
+      </Select.Root>
     </Field.Root>,
   ],
-  ["Checkbox", <Checkbox label="Accept the terms" />],
+  [
+    "Checkbox",
+    <Field.Item>
+      <Field.Label>
+        <Checkbox /> Accept the terms
+      </Field.Label>
+    </Field.Item>,
+  ],
   [
     "DateInput",
     <DateInput.Root name="date-of-birth" autoComplete="bday">
@@ -87,9 +94,9 @@ const cases: Array<[string, ReactElement]> = [
   ],
   [
     "DateInput (error)",
-    <DateInput.Root>
+    <DateInput.Root invalid={["year"]}>
       <DateInput.Legend>When did your membership start?</DateInput.Legend>
-      <DateInput.Error parts={["year"]}>Membership start date must include a year</DateInput.Error>
+      <DateInput.Error>Membership start date must include a year</DateInput.Error>
       <DateInput.Fields>
         <DateInput.Day />
         <DateInput.Month />
@@ -101,21 +108,52 @@ const cases: Array<[string, ReactElement]> = [
     "RadioGroup",
     <RadioGroup.Root defaultValue="pro">
       <RadioGroup.Legend>Plan</RadioGroup.Legend>
-      <Radio value="free" label="free" />
-      <Radio value="pro" label="pro" />
+      <Field.Item>
+        <Field.Label>
+          <Radio value="free" /> free
+        </Field.Label>
+      </Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Radio value="pro" /> pro
+        </Field.Label>
+      </Field.Item>
     </RadioGroup.Root>,
   ],
-  ["Switch", <Switch label="Email notifications" />],
+  [
+    "Switch",
+    <Field.Item>
+      <Field.Label>
+        <Switch.Root>
+          <Switch.Control />
+          <Switch.Track>
+            <Switch.Thumb />
+          </Switch.Track>
+        </Switch.Root>{" "}
+        Email notifications
+      </Field.Label>
+    </Field.Item>,
+  ],
   [
     "Range",
     <Field.Root>
       <Field.Label>Volume</Field.Label>
-      <Range defaultValue={50} />
+      <Range.Control defaultValue={50} />
     </Field.Root>,
   ],
-  ["Badge", <Badge>New</Badge>],
+  [
+    "Badge",
+    <Badge.Root>
+      <Badge.Text>New</Badge.Text>
+    </Badge.Root>,
+  ],
   ["Card", <Card>Card content</Card>],
-  ["Avatar", <Avatar name="Ada Lovelace" />],
+  [
+    "Avatar",
+    <Avatar.Root role="img" aria-label="Ada Lovelace">
+      <Avatar.Fallback>AL</Avatar.Fallback>
+    </Avatar.Root>,
+  ],
   [
     "Price",
     <p>
@@ -128,32 +166,45 @@ const cases: Array<[string, ReactElement]> = [
     "Fieldset",
     <Fieldset.Root>
       <Fieldset.Legend>Contact preferences</Fieldset.Legend>
-      <Checkbox label="Email" />
-      <Checkbox label="SMS" />
+      <Field.Item>
+        <Field.Label>
+          <Checkbox /> Email
+        </Field.Label>
+      </Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Checkbox /> SMS
+        </Field.Label>
+      </Field.Item>
     </Fieldset.Root>,
   ],
   [
     "Table",
-    <Table>
-      <caption>Users</caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Role</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Ada</td>
-          <td>Admin</td>
-        </tr>
-      </tbody>
-    </Table>,
+    <Table.Root>
+      <Table.Caption>Users</Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Name</Table.Th>
+          <Table.Th>Role</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        <Table.Tr>
+          <Table.Td>Ada</Table.Td>
+          <Table.Td>Admin</Table.Td>
+        </Table.Tr>
+      </Table.Tbody>
+    </Table.Root>,
   ],
   [
     "Alert",
     <div style={{ "--loam-context": "info" } as CSSProperties}>
-      <Alert title="Heads up">A new version is available.</Alert>
+      <Alert.Root>
+        <Alert.Body>
+          <Alert.Title>Heads up</Alert.Title>
+          <Alert.Description>A new version is available.</Alert.Description>
+        </Alert.Body>
+      </Alert.Root>
     </div>,
   ],
   [
@@ -319,20 +370,32 @@ describe("accessibility (axe)", () => {
 });
 
 describe("Avatar naming", () => {
-  it("is decorative when it has no name from any source", () => {
-    const { container } = render(<Avatar />);
+  it("honours an explicitly decorative root", () => {
+    const { container } = render(
+      <Avatar.Root aria-hidden>
+        <Avatar.Fallback>?</Avatar.Fallback>
+      </Avatar.Root>,
+    );
     const root = container.querySelector(".loam-Avatar");
     expect(root).toHaveAttribute("aria-hidden", "true");
     expect(root).not.toHaveAttribute("role");
   });
 
   it("is a named image when a name is given", () => {
-    render(<Avatar name="Ada Lovelace" />);
+    render(
+      <Avatar.Root role="img" aria-label="Ada Lovelace">
+        <Avatar.Fallback>AL</Avatar.Fallback>
+      </Avatar.Root>,
+    );
     expect(screen.getByRole("img", { name: "Ada Lovelace" })).toBeInTheDocument();
   });
 
   it("honours a consumer-supplied aria-label", () => {
-    render(<Avatar aria-label="Team member" />);
+    render(
+      <Avatar.Root role="img" aria-label="Team member">
+        <Avatar.Fallback>?</Avatar.Fallback>
+      </Avatar.Root>,
+    );
     expect(screen.getByRole("img", { name: "Team member" })).toBeInTheDocument();
   });
 });
@@ -378,11 +441,9 @@ describe("DateInput wiring", () => {
 
   it("narrows the invalid state to the parts the error names", () => {
     render(
-      <DateInput.Root>
+      <DateInput.Root invalid={["year"]}>
         <DateInput.Legend>When did your membership start?</DateInput.Legend>
-        <DateInput.Error parts={["year"]}>
-          Membership start date must include a year
-        </DateInput.Error>
+        <DateInput.Error>Membership start date must include a year</DateInput.Error>
         {threeFields}
       </DateInput.Root>,
     );
@@ -396,7 +457,7 @@ describe("DateInput wiring", () => {
 
   it("marks all parts invalid when the error names none", () => {
     render(
-      <DateInput.Root>
+      <DateInput.Root invalid>
         <DateInput.Legend>Date of birth</DateInput.Legend>
         <DateInput.Error>Enter your date of birth</DateInput.Error>
         {threeFields}

@@ -1,5 +1,0 @@
-@scope (.button-with-menu) to ([class*="loam-"]) {
-  :scope {
-    --loam-context: primary;
-  }
-}

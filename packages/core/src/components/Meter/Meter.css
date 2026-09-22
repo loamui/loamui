@@ -50,8 +50,6 @@
     }
   }
 
-  /* ---- Track ---- */
-
   /* Chromium and WebKit paint their own track box with a UA gradient once
      appearance is none; make it the same surface as the element. */
   :scope::-webkit-meter-bar {
@@ -61,7 +59,6 @@
     border-radius: var(--loam-radius-full);
   }
 
-  /* ---- Fill ---- */
   :scope::-webkit-meter-optimum-value {
     background: var(--_optimum);
     block-size: 100%;

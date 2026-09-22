@@ -19,12 +19,12 @@ tokens still inherit. Add layout to the region without restyling the controls in
 
 Each module answers a different question. Match it to what you are arranging, not to a breakpoint.
 
-| The content       | The module   | The core declaration                               |
-| ----------------- | ------------ | -------------------------------------------------- |
-| A page of prose   | Flow         | nothing; block layout is the default               |
-| A dense dashboard | Grid         | `display: block grid` with `subgrid` for alignment |
-| A row of controls | Flex         | `display: block flex`                              |
-| A long article    | Multi-column | `columns`                                          |
+| The content | The module | The core declaration |
+| - | - | - |
+| A page of prose | Flow | nothing; block layout is the default |
+| A dense dashboard | Grid | `display: block grid` with `subgrid` for alignment |
+| A row of controls | Flex | `display: block flex` |
+| A long article | Multi-column | `columns` |
 
 ### Flow, for a documentation page
 
@@ -45,8 +45,6 @@ Grid is the two-dimensional module: use it when rows and columns both matter. Pr
   }
 }
 ```
-
-</div>
 
 ### Flex, for a one-dimensional control row
 
@@ -92,3 +90,7 @@ gap: var(--loam-space-xs); /* 12px → 13.5px */
 gap: var(--loam-space-s); /* 16px → 18px   */
 gap: var(--loam-space-l); /* 24px → 27px   */
 ```
+
+> The same discipline the components use is available to your own layouts: a native module for
+> structure, a space token for every gap, and a container query where a piece needs to respond to
+> its own width rather than the viewport's.

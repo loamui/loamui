@@ -13,7 +13,7 @@ A text box with a list of suggestions under it: the ARIA Authoring Practices Gui
 ## Import
 
 ```tsx
-import { Combobox, Field } from "@loamui/core";
+import { Combobox, Field, Button } from "@loamui/core";
 ```
 
 ## Usage
@@ -86,7 +86,7 @@ A disabled Option stays in the list with aria-disabled: the keyboard skips it an
 The box is the library's Input, so Field.Description reaches it through aria-describedby and a rendered Field.Error marks it invalid: the message's presence is the state, exactly as for Input.
 
 ```tsx
-<Field.Root>
+<Field.Root invalid>
   <Field.Label>Country</Field.Label>
   <Field.Description>Where you are resident for tax.</Field.Description>
   <Field.Error>Choose a country from the list</Field.Error>
@@ -181,7 +181,7 @@ Owns the state (text, choice, open), the live status region and the hidden input
 
 ### Combobox.Input
 
-The box: the library's Input as the combobox (role="combobox", aria-autocomplete="list", aria-expanded, aria-controls, aria-activedescendant). Inside a Field.Root it is named, described and marked invalid by the Field. All Input props except value, defaultValue and type are forwarded: placeholder, startSection, endSection, wrapperProps, disabled and every native <input> prop.
+The box: the library's Input as the combobox (role="combobox", aria-autocomplete="list", aria-expanded, aria-controls, aria-activedescendant). Inside a Field.Root it is named, described and marked invalid by the Field. All Input props except value, defaultValue and type are forwarded: placeholder, disabled and every native <input> prop. The native input anchors the suggestions. Input’s startSection, endSection and wrapperProps are also forwarded.
 
 ### Combobox.Trigger
 

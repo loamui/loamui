@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DateInput } from "../../index";
+import { DateInput } from "../../index.js";
 
 const meta = {
   title: "Inputs/DateInput",
@@ -47,10 +47,10 @@ export const Default: Story = {
  */
 export const ErrorOnOnePart: Story = {
   render: () => (
-    <DateInput.Root name="membership-start">
+    <DateInput.Root invalid={["year"]} name="membership-start">
       <DateInput.Legend>When did your membership start?</DateInput.Legend>
       <DateInput.Description>For example, 27 3 2019</DateInput.Description>
-      <DateInput.Error parts={["year"]}>Membership start date must include a year</DateInput.Error>
+      <DateInput.Error>Membership start date must include a year</DateInput.Error>
       <DateInput.Fields>
         <DateInput.Day defaultValue="27" />
         <DateInput.Month defaultValue="3" />

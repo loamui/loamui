@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { Drawer } from "../../index";
-import type { DrawerSide } from "../../index";
+import { Drawer } from "../../index.js";
+import type { DrawerSide } from "../../index.js";
 
 const meta = {
   title: "Overlays/Drawer",

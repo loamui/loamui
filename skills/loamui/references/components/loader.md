@@ -34,7 +34,9 @@ size is one of three tokens, emitted as data-size and answered by the stylesheet
 <Loader size="sm" />
 <Loader size="md" />
 <Loader size="lg" />
-<span style={{ "--loam-loader-size": "3rem" }}><Loader /></span>
+<span style={{ "--loam-loader-size": "3rem" }}>
+  <Loader />
+</span>
 ```
 
 ### Contexts
@@ -43,11 +45,21 @@ There is no colour prop. Declare --loam-context on a one-element wrapper region 
 
 ```tsx
 <Loader />
-<span style={{ "--loam-context": "primary" }}><Loader /></span>
-<span style={{ "--loam-context": "success" }}><Loader /></span>
-<span style={{ "--loam-context": "warning" }}><Loader /></span>
-<span style={{ "--loam-context": "danger" }}><Loader /></span>
-<span style={{ "--loam-context": "info" }}><Loader /></span>
+<span style={{ "--loam-context": "primary" }}>
+  <Loader />
+</span>
+<span style={{ "--loam-context": "success" }}>
+  <Loader />
+</span>
+<span style={{ "--loam-context": "warning" }}>
+  <Loader />
+</span>
+<span style={{ "--loam-context": "danger" }}>
+  <Loader />
+</span>
+<span style={{ "--loam-context": "info" }}>
+  <Loader />
+</span>
 ```
 
 ## When to use it

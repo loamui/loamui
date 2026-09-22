@@ -37,8 +37,8 @@ autoComplete="new-password" tells a browser or password manager this is a passwo
 <Field.Root>
   <Field.Label>Choose a password</Field.Label>
   <Field.Description>
-    At least 12 characters. A few unrelated words are easier to remember
-    than one word with numbers in it.
+    At least 12 characters. A few unrelated words are easier to remember than one word with
+    numbers in it.
   </Field.Description>
   <PasswordInput name="new-password" autoComplete="new-password" />
 </Field.Root>
@@ -49,7 +49,7 @@ autoComplete="new-password" tells a browser or password manager this is a passwo
 A Field.Error before the control marks the box invalid and is announced, exactly as it does for Input.
 
 ```tsx
-<Field.Root>
+<Field.Root invalid>
   <Field.Label>Password</Field.Label>
   <Field.Error>Enter your password</Field.Error>
   <PasswordInput name="password" autoComplete="current-password" />
@@ -101,7 +101,7 @@ Pass the autofill purpose yourself: autoComplete="current-password" to sign in, 
 
 ## Accessibility
 
-- Inside a Field.Root the input reads its id from the field, so Field.Label is a real <label> tied to it, and Field.Description and Field.Error are linked via aria-describedby; a rendered error also sets aria-invalid.
+- Inside a Field.Root the input reads its id from the field, so Field.Label is a real <label> tied to it, and Field.Description and Field.Error are linked via aria-describedby; Field.Root invalid sets aria-invalid.
 - The toggle is a native <button type="button"> with a constant name and aria-pressed; pressing it swaps the input between type password and type text without moving focus or changing the value.
 - The box is the library's Input, so its focus ring, invalid state and forced-colours treatment are Input's own.
 
@@ -119,5 +119,5 @@ Pass the autofill purpose yourself: autoComplete="current-password" to sign in, 
 | --- | --- | --- | --- |
 | `labels` | `{ show?: ReactNode }` | `{ show: "Show password" }` | The toggle's name, for another language. It never changes with the state. |
 | `wrapperProps` | `PartProps<"div">` | — | Props for the row that holds the box and the toggle. className, style, ref and every other prop land on the <input> itself. |
-| `...others` | `InputProps` | — | All Input props are forwarded to the <input>, except type; startSection and endSection included. |
+| `...others` | `InputProps` | — | All native Input props except type are forwarded to the <input>. Compose any surrounding content explicitly. |
 

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Badge, Card, SignpostLink } from "@loamui/core";
-import { HeroShowcase, ContextShowcase } from "./home.client";
-import { AgentShowcase } from "./AgentShowcase.client";
-import { RestaurantMenu } from "./agent-demo/menu";
-import { menu } from "./agent-demo/generated";
-import "./home.css";
+import { HeroShowcase, ContextShowcase } from "@/home/Showcases";
+import { AgentShowcase } from "@/home/AgentShowcase";
+import { RestaurantMenu } from "@/home/agent-demo/menu";
+import { menu } from "@/home/agent-demo/generated";
+import "@/home/home.css";
 
 const primitives = [
   {
@@ -35,7 +35,9 @@ export default function HomePage() {
     <div className="site-Home" data-no-hyphens>
       <section className="hero">
         <div className="intro">
-          <Badge>v0.1 Beta</Badge>
+          <Badge.Root>
+            <Badge.Text>v0.1 Beta</Badge.Text>
+          </Badge.Root>
           <h1>
             Modern UI primitives for <span>agent-assisted developers.</span>
           </h1>

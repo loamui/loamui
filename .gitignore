@@ -19,3 +19,7 @@ test-results/
 /output/playwright/
 
 local/
+
+# Browser validation artifacts
+**/test-results/
+**/playwright-report/

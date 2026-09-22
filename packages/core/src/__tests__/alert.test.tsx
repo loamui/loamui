@@ -2,18 +2,22 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
-import { Alert } from "../components/Alert/index";
+import { Alert } from "../components/Alert/index.js";
 
 afterEach(cleanup);
 
 const axeOptions = { rules: { "color-contrast": { enabled: false } } };
 
 describe("Alert", () => {
-  it("renders the anatomy from the convenience props", () => {
+  it("composes its icon, title and description from parts", () => {
     render(
-      <Alert title="Saved" icon={<span>✓</span>}>
-        Your changes are stored.
-      </Alert>,
+      <Alert.Root>
+        <Alert.Icon>{<span>✓</span>}</Alert.Icon>
+        <Alert.Body>
+          <Alert.Title>Saved</Alert.Title>
+          <Alert.Description>Your changes are stored.</Alert.Description>
+        </Alert.Body>
+      </Alert.Root>,
     );
     const alert = screen.getByRole("status");
     expect(alert).toHaveClass("loam-Alert");
@@ -38,7 +42,14 @@ describe("Alert", () => {
   it("Alert.Close is a Button named Dismiss that reports through onClose", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-    render(<Alert title="Draft restored" onClose={onClose} />);
+    render(
+      <Alert.Root>
+        <Alert.Body>
+          <Alert.Title>Draft restored</Alert.Title>
+        </Alert.Body>
+        <Alert.Close onClose={onClose} />
+      </Alert.Root>,
+    );
     const button = screen.getByRole("button", { name: "Dismiss" });
     expect(button).toHaveClass("loam-Button");
     await user.click(button);
@@ -75,9 +86,12 @@ describe("Alert", () => {
 
   it("forwards role so an interrupting message can be an alert", () => {
     render(
-      <Alert role="alert" title="Payment declined">
-        Try another card.
-      </Alert>,
+      <Alert.Root role="alert">
+        <Alert.Body>
+          <Alert.Title>Payment declined</Alert.Title>
+          <Alert.Description>Try another card.</Alert.Description>
+        </Alert.Body>
+      </Alert.Root>,
     );
     expect(screen.getByRole("alert")).toHaveTextContent("Payment declined");
     expect(screen.queryByRole("status")).toBeNull();
@@ -85,9 +99,13 @@ describe("Alert", () => {
 
   it("has no axe violations with a close button", async () => {
     const { container } = render(
-      <Alert title="Heads up" onClose={() => {}}>
-        A new version is available.
-      </Alert>,
+      <Alert.Root>
+        <Alert.Body>
+          <Alert.Title>Heads up</Alert.Title>
+          <Alert.Description>A new version is available.</Alert.Description>
+        </Alert.Body>
+        <Alert.Close onClose={() => {}} />
+      </Alert.Root>,
     );
     expect(await axe(container, axeOptions)).toHaveNoViolations();
   });

@@ -2,11 +2,11 @@
 
 import { useMemo } from "react";
 import type { CSSProperties } from "react";
-import { useFieldControlProps } from "../Field/Field";
-import { useUserInvalid } from "../../use-user-invalid";
-import { composeRefs } from "../../render";
-import { cx } from "../../utils";
-import type { PartProps } from "../../utils";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
+import { useUserInvalid } from "../../hooks/use-user-invalid.js";
+import { composeRefs } from "../../utils/render.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 export interface TextareaProps extends PartProps<"textarea"> {
   /**
@@ -41,7 +41,7 @@ export function Textarea({
   ref,
   ...rest
 }: TextareaProps) {
-  const field = useFieldControlProps(ariaDescribedby);
+  const field = useFieldControlProps(ariaDescribedby, id);
   const { nativeInvalid, validationRef, checkOnInput, checkOnInvalid } =
     useUserInvalid<HTMLTextAreaElement>();
   const textareaRef = useMemo(() => composeRefs(ref, validationRef), [ref, validationRef]);
@@ -55,7 +55,7 @@ export function Textarea({
         // field-sizing: content ignores the rows attribute, so the
         // stylesheet reads the same number back as a floor in lh.
         style={{ "--_rows": rows, ...style } as CSSProperties}
-        id={id ?? field.id}
+        id={field.id ?? id}
         {...rest}
         aria-invalid={ariaInvalid ?? field["aria-invalid"] ?? (nativeInvalid || undefined)}
         aria-describedby={field["aria-describedby"]}

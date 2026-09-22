@@ -1,15 +1,4 @@
-/**
- * Markdown twins for every docs page, plus /llms.txt — all SOURCE-derived,
- * generated in one prebuild step into public/ so `next dev` and the static
- * export both serve raw text/markdown at the sibling URL
- * (/docs/tokens → /docs/tokens.md).
- *
- * Guides are authored as page.mdx: markdown IS their source, so the twin is
- * the same file with imports/JSX islands resolved (lead → paragraph,
- * callout → blockquote, live demos omitted — the fences and prose are the
- * document). Component pages render from the same registry data the page
- * renders. Nothing derives from built output, so nothing can drift.
- */
+// Generate public Markdown, offline skill references and search data from docs sources.
 import {
   readFileSync,
   writeFileSync,
@@ -17,23 +6,18 @@ import {
   statSync,
   mkdirSync,
   rmSync,
+  renameSync,
   copyFileSync,
 } from "node:fs";
 import { join, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { COMPONENTS, CATEGORY_ORDER } from "../src/site/nav.js";
+import { componentForExport, COMPONENTS, CATEGORY_ORDER } from "../src/site/nav.js";
 import type { ComponentContent } from "../src/renderer/types.js";
-import { EXAMPLE_CATEGORIES } from "../src/examples/categories.js";
-import { EXAMPLE_META } from "../src/examples/generated-meta.js";
-import { linkedRecipePrompt } from "../src/examples/recipe-prompt.js";
-import { PILLARS } from "../src/examples/types.js";
-import {
-  PACKAGE_COMMANDS,
-  SKILL_AGENTS,
-  packageCommand,
-  PACKAGE_MANAGERS,
-  type PackageCommandName,
-} from "../src/renderer/package-commands.js";
+import { RECIPE_CATEGORIES } from "../src/recipes/categories.js";
+import { RECIPE_META } from "../src/recipes/generated/meta.js";
+import { linkedRecipePrompt } from "../src/recipes/recipe-prompt.js";
+import { PILLARS } from "../src/recipes/types.js";
+import { mdxToMarkdown } from "./mdx-to-markdown.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const APP = join(ROOT, "src", "app");
@@ -44,7 +28,12 @@ const ORIGIN = process.env.SITE_ORIGIN ?? "https://loamui.com";
 // The published `loamui` agent skill carries the same twins as offline
 // references (skills/loamui/references/), regenerated here so they can't
 // drift from the site. `check:skill` fails CI if the committed copy is stale.
-const SKILL_REFS = join(ROOT, "..", "..", "skills", "loamui", "references");
+const SKILL_REFS_FINAL = join(ROOT, "..", "..", "skills", "loamui", "references");
+// Every twin is written to a staging directory and swapped in at the end,
+// so a failure part-way leaves the committed references untouched instead
+// of half-deleted. (A swallowed error once removed all 48 and reported
+// success.)
+const SKILL_REFS = SKILL_REFS_FINAL + ".staging";
 const SETUP_ASSETS = [
   "stylelint-base.mjs",
   "stylelint.config.mjs",
@@ -53,12 +42,32 @@ const SETUP_ASSETS = [
   "spacing-rules.mjs",
 ];
 
-/** Write the same markdown to public/ (served) and the skill references (committed). */
+/**
+ * The site search reads this: one entry per twin, with the twin's full prose,
+ * so a phrase in a page's body finds the page. Title-only matching never did.
+ */
+const searchIndex: { url: string; title: string; description: string; text: string }[] = [];
+
 function writeBoth(publicFile: string, refFile: string, md: string) {
   mkdirSync(dirname(publicFile), { recursive: true });
   writeFileSync(publicFile, md);
   mkdirSync(dirname(refFile), { recursive: true });
   writeFileSync(refFile, md);
+  // Every twin opens with the same two frontmatter lines; the body follows
+  // the preamble. Fences are indexed as-is: a prop or class name in a code
+  // sample is exactly what a reader searches for.
+  const front = /^---\ntitle: (.*)\ndescription: (.*)\n---\n/.exec(md);
+  const url = "/" + relative(PUBLIC, publicFile).split("\\").join("/").replace(/\.md$/, "");
+  searchIndex.push({
+    url: url === "/docs" ? "/docs" : url,
+    title: front?.[1] ?? "",
+    description: front?.[2] ?? "",
+    text: md
+      .slice(front?.[0].length ?? 0)
+      .replace(PREAMBLE, "")
+      .replace(/\s+/g, " ")
+      .trim(),
+  });
 }
 
 const PREAMBLE = [
@@ -90,7 +99,6 @@ function propsTable(
   );
 }
 
-/** Every `--loam-*` declaration in the :root band of tokens.css, as a table. */
 function tokenTable(): string {
   const css = readFileSync(join(ROOT, "..", "..", "packages", "core", "src", "tokens.css"), "utf8");
   const end = css.indexOf("[data-theme=");
@@ -102,7 +110,6 @@ function tokenTable(): string {
   return table(["Token", "Value"], rows);
 }
 
-/** Guide twin: /docs/tokens → public/docs/tokens.md + references/guides/tokens.md. */
 function writeGuideTwin(route: string, md: string) {
   const file = route === "/" ? join(PUBLIC, "index.md") : join(PUBLIC, route.slice(1) + ".md");
   const slug =
@@ -110,7 +117,6 @@ function writeGuideTwin(route: string, md: string) {
   writeBoth(file, join(SKILL_REFS, "guides", `${slug}.md`), md);
 }
 
-/** Component twin: public/docs/components/<slug>.md + references/components/<slug>.md. */
 function writeComponentTwin(slug: string, md: string) {
   writeBoth(
     join(PUBLIC, "docs", "components", `${slug}.md`),
@@ -119,208 +125,13 @@ function writeComponentTwin(slug: string, md: string) {
   );
 }
 
-// Start the skill references from empty so removed pages don't linger.
+// Start the staging directory from empty so removed pages don't linger.
 rmSync(SKILL_REFS, { recursive: true, force: true });
 // Generated recipe twins must disappear when their catalog entries are disabled.
 for (const directory of ["examples", "recipes"])
   rmSync(join(PUBLIC, directory), { recursive: true, force: true });
 
-// Remove the retired standalone setup twin; its content is in agent-workflow.
-rmSync(join(PUBLIC, "docs", "project-setup.md"), { force: true });
-
 // ---- guides: page.mdx source → markdown --------------------------------
-
-/** Strip JSX tags to their markdown-ish text content. */
-function jsxToText(s: string): string {
-  return s
-    .replace(/\{\/\*[\s\S]*?\*\/\}/g, "")
-    .replace(/\{"\s*"\}/g, " ")
-    .replace(/<\/?code>/g, "`")
-    .replace(/<\/?strong>/g, "**")
-    .replace(/<\/?em>/g, "_")
-    .replace(/<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, "[$2]($1)")
-    .replace(/<[^>]+>/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-/** Ignore fenced examples when locating MDX module exports. */
-function moduleSource(src: string): string {
-  let fence = false;
-  return src
-    .split("\n")
-    .map((line) => {
-      if (/^\s*```/.test(line)) {
-        fence = !fence;
-        return " ".repeat(line.length);
-      }
-      return fence ? " ".repeat(line.length) : line;
-    })
-    .join("\n");
-}
-
-/** Serialize an .mdx source file to plain markdown. */
-function mdxToMarkdown(src: string): { md: string; title: string; description: string } {
-  const meta = moduleSource(src).match(
-    /export const metadata = \{[\s\S]*?title: "([^"]+)"[\s\S]*?description:\s*\n?\s*"([^"]+)"/,
-  );
-  const title = meta?.[1] ?? "";
-  const description = meta?.[2] ?? "";
-
-  // Drop the metadata export (balanced-brace scan). MDX-level imports are
-  // dropped line by line in the walk below, where code fences are known —
-  // a multi-line regex here once swallowed everything between an `import`
-  // inside one fence and the next `from "…"` in another.
-  let s = src;
-  const mi = moduleSource(s).indexOf("export const metadata");
-  if (mi > -1) {
-    let depth = 0,
-      j = s.indexOf("{", mi),
-      k = j;
-    for (; ; k++) {
-      if (s[k] === "{") depth++;
-      else if (s[k] === "}") {
-        depth--;
-        if (depth === 0) break;
-      }
-    }
-    k = s.indexOf(";", k) + 1;
-    s = s.slice(0, mi) + s.slice(k);
-  }
-  // Other top-level exports (helper components/styles) — drop line blocks.
-  // Other top-level exports (helper components, icons): drop each one by
-  // scanning to the bracket that closes it, whatever bracket opened it.
-  for (
-    let ei = moduleSource(s).indexOf("\nexport const ");
-    ei > -1;
-    ei = moduleSource(s).indexOf("\nexport const ")
-  ) {
-    const start = ei + 1;
-    const open = s.slice(start).search(/[({[]/);
-    if (open === -1) break;
-    const pairs: Record<string, string> = { "(": ")", "{": "}", "[": "]" };
-    const stack: string[] = [];
-    let k = start + open;
-    for (; k < s.length; k++) {
-      const ch = s[k]!;
-      if (pairs[ch]) stack.push(pairs[ch]);
-      else if (ch === stack[stack.length - 1]) {
-        stack.pop();
-        if (stack.length === 0) {
-          // `() => (` … `)`: an arrow's parameter list closes first; carry
-          // on to the body it introduces.
-          const arrow = /^\s*=>\s*/.exec(s.slice(k + 1));
-          if (!arrow) break;
-          const next = s.slice(k + 1 + arrow[0].length).search(/[({[]/);
-          if (next === -1) break;
-          k = k + 1 + arrow[0].length + next - 1;
-        }
-      }
-    }
-    const lineEnd = s.indexOf("\n", k);
-    s = s.slice(0, start) + s.slice(lineEnd === -1 ? s.length : lineEnd + 1);
-  }
-  // Inline template expressions the page computes from the manifest.
-  s = s.replaceAll("{COMPONENTS.length}", String(COMPONENTS.length));
-
-  const out: string[] = [];
-  let i = 0;
-  let inFence = false;
-  const lines = s.split("\n");
-  while (i < lines.length) {
-    const line = lines[i]!;
-    // Code fences are verbatim: their JSX is documentation, not an island,
-    // and their imports are the example's own.
-    if (/^\s*```/.test(line)) {
-      inFence = !inFence;
-      out.push(line);
-      i++;
-      continue;
-    }
-    if (inFence) {
-      out.push(line);
-      i++;
-      continue;
-    }
-    if (/^import (?:.* from )?"[^"]+";\s*$/.test(line)) {
-      i++;
-      continue;
-    }
-    if (
-      /^\s*<\/?details(?:\s[^>]*)?>\s*$/.test(line) ||
-      /^\s*<summary\b.*<\/summary>\s*$/.test(line)
-    ) {
-      i++;
-      continue;
-    }
-    const command = /^<PackageCommands name="([^"]+)" \/>$/.exec(line);
-    if (command) {
-      const name = command[1] as PackageCommandName;
-      if (!Object.hasOwn(PACKAGE_COMMANDS, name)) throw new Error(`Unknown command: ${name}`);
-      const agents = name === "skill" ? SKILL_AGENTS : [SKILL_AGENTS[0]];
-      for (const agent of agents) {
-        if (name === "skill") out.push(`**${agent.label}**`, "");
-        for (const manager of PACKAGE_MANAGERS) {
-          out.push(
-            `**${manager}**`,
-            "",
-            "```bash",
-            packageCommand(name, manager, agent.value),
-            "```",
-            "",
-          );
-        }
-      }
-      i++;
-      continue;
-    }
-    if (/^\s*<\w/.test(line)) {
-      // A JSX island: consume until tags balance.
-      let block = "";
-      let depth = 0;
-      do {
-        const l = lines[i]!;
-        block += l + "\n";
-        depth += (l.match(/<[A-Za-z][^/>]*(?<!\/)>/g) ?? []).length; // opening tags
-        depth += (l.match(/<[A-Za-z][^>]*\/>/g) ?? []).length * 0; // self-closing: net 0
-        depth -= (l.match(/<\/[A-Za-z][^>]*>/g) ?? []).length; // closing tags
-        i++;
-      } while (i < lines.length && depth > 0);
-
-      if (/<PromptBlock\b/.test(block)) {
-        const prompt = /^\s*<PromptBlock\s+prompt="([^"]*)"\s*\/>\s*$/.exec(block);
-        if (!prompt)
-          throw new Error("MDX prompts must use a literal PromptBlock prompt attribute.");
-        out.push("> " + prompt[1]!.replace(/\s+/g, " ").trim(), "");
-      } else if (/className=\{prose\.callout\}/.test(block)) {
-        out.push("> " + jsxToText(block), "");
-      } else if (/<ComputedTokens/.test(block)) {
-        // The live table reads getComputedStyle; the twin gets the same
-        // names and their declared values, straight from tokens.css.
-        out.push(tokenTable(), "");
-      }
-      // other islands (live demos) are omitted — the prose + fences are the doc
-      continue;
-    }
-    out.push(line);
-    i++;
-  }
-
-  const body = out
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-  const front = [
-    "---",
-    `title: ${title}`,
-    `description: ${description}`,
-    "---",
-    "",
-    PREAMBLE,
-    "",
-  ].join("\n");
-  return { md: `${front}\n${body}\n`, title, description };
-}
 
 function* mdxFiles(dir: string): Generator<string> {
   for (const name of readdirSync(dir)) {
@@ -334,14 +145,23 @@ const guides: { route: string; title: string; description: string }[] = [];
 for (const file of mdxFiles(APP)) {
   const route0 = "/" + relative(APP, dirname(file)).split("\\").join("/");
   const route = route0 === "/." ? "/" : route0;
-  const { md, title, description } = mdxToMarkdown(readFileSync(file, "utf8"));
-  writeGuideTwin(route, md);
+  const { body, title, description } = mdxToMarkdown(readFileSync(file, "utf8"), {
+    path: file,
+    componentCount: COMPONENTS.length,
+    tokenTable,
+  });
+  const front = [
+    "---",
+    `title: ${title}`,
+    `description: ${description}`,
+    "---",
+    "",
+    PREAMBLE,
+    "",
+  ].join("\n");
+  writeGuideTwin(route, `${front}\n${body}`);
   guides.push({ route, title, description });
 }
-
-// Old agents and bookmarks still receive the maintained guide at its former URL.
-// Only the new route is advertised in llms.txt and the skill's index.
-copyFileSync(join(PUBLIC, "recipes", "guide.md"), join(PUBLIC, "docs", "composing.md"));
 
 // ---- component pages: registry data → markdown -------------------------
 
@@ -434,7 +254,7 @@ const contentDir = join(ROOT, "src", "content", "components");
 let componentTwins = 0;
 try {
   for (const meta of COMPONENTS) {
-    const mod = await import(join(contentDir, `${meta.slug}.tsx`));
+    const mod = await import(join(contentDir, meta.slug, "index.tsx"));
     writeComponentTwin(
       meta.slug,
       componentMarkdown(mod.default as ComponentContent, meta.name, meta.description),
@@ -443,8 +263,12 @@ try {
   }
 } catch (err) {
   // Content files import @loamui/core; during parallel dev startup its
-  // dist/ may be mid-rebuild. Keep the previous twins and let dev start —
-  // the next build regenerates them.
+  // dist/ may be mid-rebuild. That one case keeps the previous twins and
+  // lets dev start — the next build regenerates them. Anything else is a
+  // broken content file, and must fail the build rather than silently
+  // ship fewer twins.
+  const message = (err as Error).message ?? "";
+  if (!/@loamui\/core|ERR_MODULE_NOT_FOUND|Cannot find (module|package)/.test(message)) throw err;
   console.warn(
     `markdown export: skipped component twins (${componentTwins}/${COMPONENTS.length} written) — ` +
       `@loamui/core not resolvable yet: ${(err as Error).message.split("\n")[0]}`,
@@ -453,15 +277,14 @@ try {
 
 // ---- examples: the folder's own files → markdown ------------------------
 
-const EXAMPLES_DIR = join(ROOT, "src", "examples");
+const RECIPES_DIR = join(ROOT, "src", "recipes");
 
-/** An example's twin: its meta, the pillar notes, then both files in fences. */
-function exampleMarkdown(entry: (typeof EXAMPLE_META)[number]): string {
+function exampleMarkdown(entry: (typeof RECIPE_META)[number]): string {
   const { slug, category, meta } = entry;
-  const dir = join(EXAMPLES_DIR, category, slug);
-  const tsx = readFileSync(join(dir, "Example.tsx"), "utf8").trim();
-  const css = readFileSync(join(dir, "example.css"), "utf8").trim();
-  const categoryTitle = EXAMPLE_CATEGORIES.find((c) => c.slug === category)?.title ?? category;
+  const dir = join(RECIPES_DIR, category, slug);
+  const tsx = readFileSync(join(dir, "Recipe.tsx"), "utf8").trim();
+  const css = readFileSync(join(dir, "recipe.css"), "utf8").trim();
+  const categoryTitle = RECIPE_CATEGORIES.find((c) => c.slug === category)?.title ?? category;
   const out: string[] = [];
   out.push(
     "---",
@@ -515,17 +338,17 @@ function exampleMarkdown(entry: (typeof EXAMPLE_META)[number]): string {
     `- [Element styles](${ORIGIN}/docs/element-styles.md)`,
   );
   for (const name of meta.uses) {
-    const component = COMPONENTS.find((item) => item.name === name);
+    const component = componentForExport(name);
     if (!component) throw new Error(`Missing recipe reference for ${name}`);
     out.push(`- [${name}](${ORIGIN}/docs/components/${component.slug}.md)`);
   }
   out.push("");
-  out.push("## Example.tsx", "", "```tsx", tsx, "```", "");
-  out.push("## example.css", "", "```css", css, "```", "");
+  out.push("## Recipe.tsx", "", "```tsx", tsx, "```", "");
+  out.push("## recipe.css", "", "```css", css, "```", "");
   return out.join("\n").replace(/\n{3,}/g, "\n\n") + "\n";
 }
 
-for (const entry of EXAMPLE_META) {
+for (const entry of RECIPE_META) {
   writeBoth(
     join(PUBLIC, "recipes", entry.category, `${entry.slug}.md`),
     join(SKILL_REFS, "recipes", entry.category, `${entry.slug}.md`),
@@ -570,7 +393,7 @@ const absoluteLinks = (markdown: string) => markdown.replace(/\]\(\/(?!\/)/g, `]
 // Short prompts mirror the recipe pages; detailed references ship separately with the skill.
 const PROMPTS = join(PUBLIC, "recipe-prompts");
 rmSync(PROMPTS, { recursive: true, force: true });
-for (const entry of EXAMPLE_META) {
+for (const entry of RECIPE_META) {
   const file = join(PROMPTS, entry.category, `${entry.slug}.txt`);
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, linkedRecipePrompt(entry) + "\n");
@@ -623,8 +446,8 @@ lines.push(
   "> Recipes grouped by purpose, built from `@loamui/core` to copy and change: each twin",
   "> carries the component and its stylesheet in full.",
 );
-for (const category of EXAMPLE_CATEGORIES) {
-  const items = EXAMPLE_META.filter((e) => e.category === category.slug);
+for (const category of RECIPE_CATEGORIES) {
+  const items = RECIPE_META.filter((e) => e.category === category.slug);
   if (!items.length) continue;
   lines.push("", `### Recipes: ${category.title}`, "");
   for (const e of items)
@@ -633,6 +456,7 @@ for (const category of EXAMPLE_CATEGORIES) {
     );
 }
 writeFileSync(join(PUBLIC, "llms.txt"), lines.join("\n") + "\n");
+writeFileSync(join(PUBLIC, "search-index.json"), JSON.stringify(searchIndex));
 
 // Publish the same setup assets that ship with the skill.
 const agentAssets = join(PUBLIC, "agent-assets");
@@ -644,8 +468,6 @@ for (const file of SETUP_ASSETS) {
 // ---- AGENTS.md: the package's one-page summary, served at /AGENTS.md too ---
 copyFileSync(join(ROOT, "..", "..", "packages", "core", "AGENTS.md"), join(PUBLIC, "AGENTS.md"));
 
-// Retire the old aggregate; focused twins and the offline skill retain every example.
-rmSync(join(PUBLIC, "llms-full.txt"), { force: true });
 const guideSlug = (route: string) =>
   route === "/" ? "index" : route === "/docs" ? "introduction" : route.split("/").at(-1)!;
 
@@ -673,8 +495,8 @@ for (const category of CATEGORY_ORDER) {
       `- [${c.name}](components/${c.slug}.md) — ${c.description} · [live](${ORIGIN}/docs/components/${c.slug}.md)`,
     );
 }
-for (const category of EXAMPLE_CATEGORIES) {
-  const items = EXAMPLE_META.filter((e) => e.category === category.slug);
+for (const category of RECIPE_CATEGORIES) {
+  const items = RECIPE_META.filter((e) => e.category === category.slug);
   if (!items.length) continue;
   idx.push("", `## Recipes: ${category.title}`, "");
   for (const e of items)
@@ -684,6 +506,10 @@ for (const category of EXAMPLE_CATEGORIES) {
 }
 writeFileSync(join(SKILL_REFS, "index.md"), idx.join("\n") + "\n");
 
+// Complete: replace the committed references with the staged set.
+rmSync(SKILL_REFS_FINAL, { recursive: true, force: true });
+renameSync(SKILL_REFS, SKILL_REFS_FINAL);
+
 console.log(
-  `markdown export: ${guides.length} guide twins (mdx-derived), ${COMPONENTS.length} component twins (data-derived), ${EXAMPLE_META.length} example twins (folder-derived), llms.txt + recipe prompts → public/, references → skills/loamui/references/`,
+  `markdown export: ${guides.length} guide twins (mdx-derived), ${COMPONENTS.length} component twins (data-derived), ${RECIPE_META.length} example twins (folder-derived), llms.txt + search index + recipe prompts → public/, references → skills/loamui/references/`,
 );

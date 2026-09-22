@@ -1,7 +1,0 @@
-/* Range.Root carries the thumb's position, and its own grid puts the Output
-   over the thumb; only the width is set here. */
-@scope (.slider-with-output) to ([class*="loam-"]) {
-  :scope {
-    max-inline-size: 32rem;
-  }
-}

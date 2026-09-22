@@ -5,8 +5,8 @@ import { axe } from "vitest-axe";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { Carousel } from "../components/Carousel/index";
-import { Card } from "../components/Card/Card";
+import { Carousel } from "../components/Carousel/index.js";
+import { Card } from "../components/Card/Card.js";
 
 afterEach(cleanup);
 

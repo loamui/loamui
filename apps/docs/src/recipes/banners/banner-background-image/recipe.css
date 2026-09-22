@@ -1,0 +1,92 @@
+@scope (.banner-background-image) to ([class*="loam-"]) {
+  @layer loamui.components {
+    :scope {
+      background: var(--loam-color-bg);
+      border: 1px solid var(--loam-color-line);
+      border-radius: var(--loam-radius-xl);
+      color: var(--loam-color-fg);
+      container: banner-background-image / inline-size;
+      display: block grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      isolation: isolate;
+      position: relative;
+
+      &::before {
+        background: color-mix(in oklch, var(--loam-color-bg) 88%, transparent);
+        border-radius: inherit;
+        content: "";
+        inset: 0;
+        position: absolute;
+        z-index: -1;
+      }
+    }
+
+    img {
+      block-size: 100%;
+      border-radius: inherit;
+      inline-size: 100%;
+      inset: 0;
+      object-fit: cover;
+      position: absolute;
+      z-index: -2;
+    }
+
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
+    .copy {
+      align-content: center;
+      display: block grid;
+      font-size: var(--loam-text-md);
+      gap: var(--loam-space-xs);
+      grid-template-columns: minmax(0, 1fr);
+      overflow-wrap: anywhere;
+      padding: var(--loam-space-l);
+    }
+
+    h2,
+    p {
+      margin-block: 0;
+    }
+
+    p.eyebrow {
+      --loam-context: primary;
+
+      align-items: center;
+      display: block flex;
+      flex-wrap: wrap;
+      font-size: var(--loam-text-sm);
+      gap: var(--loam-space-2xs);
+    }
+
+    h2 {
+      max-inline-size: 22ch;
+    }
+
+    p.description {
+      max-inline-size: var(--loam-measure);
+    }
+
+    div.actions {
+      display: block flex;
+      flex-wrap: wrap;
+      gap: var(--loam-space-xs);
+    }
+
+    @container banner-background-image (inline-size < 44rem) {
+      .copy {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (forced-colors: active) {
+      :scope {
+        border-color: CanvasText;
+      }
+
+      img,
+      :scope::before {
+        display: none;
+      }
+    }
+  }
+}

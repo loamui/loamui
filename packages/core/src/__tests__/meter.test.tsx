@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
-import { Meter } from "../components/Meter/index";
+import { Meter } from "../components/Meter/index.js";
 
 afterEach(cleanup);
 

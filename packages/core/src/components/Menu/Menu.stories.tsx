@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { Menu } from "../../index";
+import { Menu } from "../../index.js";
 
 function PencilIcon() {
   return (

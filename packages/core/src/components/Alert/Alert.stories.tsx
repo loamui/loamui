@@ -1,100 +1,124 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import type { CSSProperties } from "react";
-import { Alert } from "../../index";
+import { Alert } from "../../index.js";
 
 const meta = {
   title: "Feedback/Alert",
-  component: Alert,
+  component: Alert.Root,
   tags: ["autodocs"],
-  args: {
-    title: "Heads up",
-    children: "Your changes have been saved to the draft.",
-  },
   parameters: {
     docs: {
       description: {
         component:
-          "Neutral by default; the surrounding region sets the status " +
-          "(`--loam-context` on an ancestor region — a wrapper for a " +
-          "single alert), not by props.",
+          "Compose the icon, heading, description and dismiss button as children. The surrounding --loam-context region supplies the status colour.",
       },
     },
   },
-} satisfies Meta<typeof Alert>;
+} satisfies Meta<typeof Alert.Root>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Neutral by default — there is no variant or color prop. */
-export const Default: Story = {};
+export const Default: Story = {
+  render: (args) => (
+    <Alert.Root {...args}>
+      <Alert.Body>
+        <Alert.Title>Heads up</Alert.Title>
+        <Alert.Description>Your changes have been saved to the draft.</Alert.Description>
+      </Alert.Body>
+    </Alert.Root>
+  ),
+};
 
-/**
- * Declare `--loam-context` on a region — any ancestor; a one-element region
- * is a wrapper — and the whole look (tint, border, accent, title) derives
- * from that status's colour.
- */
 export const Contexts: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-      <Alert title="Neutral">A plain, unopinionated notice.</Alert>
+      <Alert.Root>
+        <Alert.Body>
+          <Alert.Title>Neutral</Alert.Title>
+          <Alert.Description>A plain notice.</Alert.Description>
+        </Alert.Body>
+      </Alert.Root>
       <div style={{ "--loam-context": "info" } as CSSProperties}>
-        <Alert title="Info">A neutral, informational message.</Alert>
+        <Alert.Root>
+          <Alert.Body>
+            <Alert.Title>Info</Alert.Title>
+            <Alert.Description>A neutral, informational message.</Alert.Description>
+          </Alert.Body>
+        </Alert.Root>
       </div>
       <div style={{ "--loam-context": "success" } as CSSProperties}>
-        <Alert title="Success">Your payment went through.</Alert>
+        <Alert.Root>
+          <Alert.Body>
+            <Alert.Title>Success</Alert.Title>
+            <Alert.Description>Your payment went through.</Alert.Description>
+          </Alert.Body>
+        </Alert.Root>
       </div>
       <div style={{ "--loam-context": "warning" } as CSSProperties}>
-        <Alert title="Warning">Your trial ends in three days.</Alert>
+        <Alert.Root>
+          <Alert.Body>
+            <Alert.Title>Warning</Alert.Title>
+            <Alert.Description>Your trial ends in three days.</Alert.Description>
+          </Alert.Body>
+        </Alert.Root>
       </div>
       <div style={{ "--loam-context": "danger" } as CSSProperties}>
-        <Alert title="Error">We couldn&apos;t reach the server.</Alert>
+        <Alert.Root>
+          <Alert.Body>
+            <Alert.Title>Error</Alert.Title>
+            <Alert.Description>We couldn&apos;t reach the server.</Alert.Description>
+          </Alert.Body>
+        </Alert.Root>
       </div>
     </div>
   ),
 };
 
 export const WithIcon: Story = {
-  args: {
-    title: "Deployed",
-    children: "Your site is live at loamui.dev.",
-    icon: <span aria-hidden>✅</span>,
-  },
   render: (args) => (
     <div style={{ "--loam-context": "success" } as CSSProperties}>
-      <Alert {...args} />
+      <Alert.Root {...args}>
+        <Alert.Icon>
+          <span aria-hidden>✅</span>
+        </Alert.Icon>
+        <Alert.Body>
+          <Alert.Title>Deployed</Alert.Title>
+          <Alert.Description>Your site is live at loamui.dev.</Alert.Description>
+        </Alert.Body>
+      </Alert.Root>
     </div>
   ),
 };
 
 export const DescriptionOnly: Story = {
-  args: {
-    title: undefined,
-    children: "A concise, single-line notice with no heading.",
-  },
+  render: (args) => (
+    <Alert.Root {...args}>
+      <Alert.Body>
+        <Alert.Description>A concise, single-line notice with no heading.</Alert.Description>
+      </Alert.Body>
+    </Alert.Root>
+  ),
 };
 
-/**
- * `onClose` renders an `Alert.Close`: a LoamUI Button at the inline end,
- * named "Dismiss" (or `labels.close`). The alert does not remove itself; the
- * handler stops rendering it.
- */
 export const Dismissible: Story = {
-  args: {
-    title: "Draft restored",
-    children: "We recovered the draft you were editing.",
-    onClose: () => {},
-  },
+  render: (args) => (
+    <Alert.Root {...args}>
+      <Alert.Body>
+        <Alert.Title>Draft restored</Alert.Title>
+        <Alert.Description>We recovered the draft you were editing.</Alert.Description>
+      </Alert.Body>
+      <Alert.Close onClose={() => {}} />
+    </Alert.Root>
+  ),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await expect(canvas.getByRole("button", { name: "Dismiss" })).toBeInTheDocument();
+    await expect(
+      within(canvasElement).getByRole("button", { name: "Dismiss" }),
+    ).toBeInTheDocument();
   },
 };
 
-/**
- * The parts, in the anatomy the convenience form renders. `Alert.Title`
- * takes `render` where the title belongs in the page outline.
- */
 export const Composed: Story = {
   render: () => (
     <div style={{ "--loam-context": "warning" } as CSSProperties}>
@@ -112,24 +136,20 @@ export const Composed: Story = {
   ),
 };
 
-/**
- * `role="alert"` interrupts: for a message that appears in response to an
- * action. Forwarded props spread after the default `role="status"`, so the
- * consumer's role wins.
- */
 export const Interrupting: Story = {
-  args: {
-    role: "alert",
-    title: "Payment declined",
-    children: "Your card was refused. Try another card or contact your bank.",
-  },
   render: (args) => (
     <div style={{ "--loam-context": "danger" } as CSSProperties}>
-      <Alert {...args} />
+      <Alert.Root {...args} role="alert">
+        <Alert.Body>
+          <Alert.Title>Payment declined</Alert.Title>
+          <Alert.Description>
+            Your card was refused. Try another card or contact your bank.
+          </Alert.Description>
+        </Alert.Body>
+      </Alert.Root>
     </div>
   ),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await expect(canvas.getByRole("alert")).toHaveTextContent("Payment declined");
+    await expect(within(canvasElement).getByRole("alert")).toHaveTextContent("Payment declined");
   },
 };

@@ -37,7 +37,7 @@ export function MobileNav() {
       />
       <Drawer.Popup side="start" className="site-MobileNav-panel">
         <VisuallyHidden render={<Drawer.Title />}> Navigation</VisuallyHidden>
-        <div className="nav site-NavLinks">
+        <div className="site-NavLinks">
           <NavLinks onNavigate={() => setOpen(false)} />
           <Link href="/recipes" onClick={() => setOpen(false)}>
             Recipes

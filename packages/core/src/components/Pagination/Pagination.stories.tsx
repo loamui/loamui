@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { Pagination } from "../../index";
+import { Pagination } from "../../index.js";
 
 /**
  * Stories intercept the real links to keep navigation inside Storybook.

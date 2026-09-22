@@ -1,7 +1,0 @@
-/* The ticks and labels are Range's own picture of the datalist, placed by
-   the thumb's geometry; only the width is set here. */
-@scope (.slider-with-marks) to ([class*="loam-"]) {
-  :scope {
-    max-inline-size: 32rem;
-  }
-}

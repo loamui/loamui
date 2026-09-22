@@ -6,8 +6,7 @@
 //
 // Pass `--watch` (used by `pnpm dev`) to rebuild the stylesheet whenever a
 // library CSS file changes, so library-CSS edits are live during dev. Watch
-// mode touches only the CSS; the `"use client"` step on index.js is left to
-// the one-shot build (tsup owns index.js while `tsup --watch` is running).
+// mode rebuilds CSS independently of TypeScript’s module watcher.
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, watch } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,7 +18,6 @@ const componentsDir = join(src, "components");
 const header = `/*!\n * LoamUI — @loamui/core\n * The complete, static stylesheet. Import once at your app root:\n *   import "@loamui/core/styles.css";\n * Nothing runs at runtime — no CSS-in-JS.\n */\n\n`;
 const layerOrder = "@layer loamui.tokens, loamui.elements, loamui.components;\n";
 
-/** Assemble dist/styles.css from tokens, elements and every component. */
 function buildCss() {
   let out = header + layerOrder;
   for (const base of ["tokens.css", "elements.css"]) {
@@ -62,22 +60,9 @@ function buildCss() {
   console.log(`build-css: wrote dist/styles.css (${count} components, ${out.length} bytes)`);
 }
 
-// LoamUI ships as a client-safe package (like @mantine/core): prepend the
-// "use client" directive so every component can be imported directly from a
-// React Server Component. esbuild strips this when bundling, so we add it here.
-function ensureUseClient() {
-  const entry = join(pkgRoot, "dist", "index.js");
-  const js = readFileSync(entry, "utf8");
-  if (!js.startsWith('"use client"')) {
-    writeFileSync(entry, `"use client";\n${js}`);
-    console.log('build-css: prepended "use client" to dist/index.js');
-  }
-}
-
 const watchMode = process.argv.includes("--watch");
 
 buildCss();
-if (!watchMode) ensureUseClient();
 
 if (watchMode) {
   console.log("build-css: watching src for CSS changes…");

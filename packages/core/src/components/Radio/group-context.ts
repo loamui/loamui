@@ -8,7 +8,6 @@ import { createContext } from "react";
  */
 export interface RadioGroupContextValue {
   name: string;
-  /** Controlled selected value (undefined = uncontrolled group). */
   value?: string;
   defaultValue?: string;
   onSelect?: (value: string) => void;

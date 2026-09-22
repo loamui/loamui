@@ -5,8 +5,8 @@ import "./layout.css";
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="site-DocsShell">
-      <aside className="aside" aria-label="Sidebar">
-        <div className="asideInner">
+      <aside aria-label="Sidebar">
+        <div>
           <Sidebar />
         </div>
       </aside>

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { CopyButton } from "../../index";
+import { CopyButton } from "../../index.js";
 
 const meta = {
   title: "Inputs/CopyButton",

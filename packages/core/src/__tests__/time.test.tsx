@@ -2,7 +2,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import { render, cleanup } from "@testing-library/react";
 import { axe } from "vitest-axe";
 
-import { Time } from "../components/Time/index";
+import { Time } from "../components/Time/index.js";
 
 afterEach(cleanup);
 

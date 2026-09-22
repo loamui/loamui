@@ -1,0 +1,79 @@
+@scope (.site-PropsTable) {
+  :scope {
+    border: 1px solid var(--loam-color-line);
+    border-radius: var(--loam-radius-lg);
+
+    /* The shorthand: overflow-inline is not Baseline. */
+    overflow: auto;
+
+    /* Only a table that scrolls is focusable (see useScrollable). */
+    &:focus-visible {
+      outline: var(--loam-ring-width) solid var(--loam-color-ring);
+      outline-offset: 2px;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: var(--loam-text-sm);
+    inline-size: 100%;
+
+    th,
+    td {
+      border-block-end: 1px solid var(--loam-color-line);
+      padding: var(--loam-space-xs) var(--loam-space-s);
+      text-align: start;
+      vertical-align: top;
+    }
+
+    /* Identifiers never break mid-word: the table scrolls instead. */
+    code {
+      hyphens: manual;
+      overflow-wrap: normal;
+    }
+
+    td:last-child {
+      color: var(--loam-color-fg-muted);
+      min-inline-size: 16rem;
+    }
+
+    tbody tr:last-child td {
+      border-block-end: none;
+    }
+
+    th {
+      background: var(--loam-color-bg-subtle);
+      color: var(--loam-color-fg-muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+  }
+
+  .name {
+    color: var(--loam-color-primary);
+    font-family: var(--loam-font-mono);
+    font-size: var(--loam-text-sm);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .type {
+    background: var(--loam-color-bg-subtle);
+    border-radius: var(--loam-radius-sm);
+    color: var(--loam-color-fg);
+    font-family: var(--loam-font-mono);
+    font-size: var(--loam-text-xs);
+    padding: var(--loam-space-4xs) var(--loam-space-3xs);
+  }
+
+  .default {
+    color: var(--loam-color-fg-muted);
+    font-family: var(--loam-font-mono);
+    font-size: var(--loam-text-xs);
+    white-space: nowrap;
+  }
+
+  td > span {
+    color: var(--loam-color-fg-dim);
+  }
+}

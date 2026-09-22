@@ -1,0 +1,88 @@
+@scope (.hero-background-image) to ([class*="loam-"]) {
+  @layer loamui.components {
+    :scope {
+      background: var(--loam-color-bg);
+      border-radius: var(--loam-radius-xl);
+      color: var(--loam-color-fg);
+      container-type: inline-size;
+      isolation: isolate;
+      position: relative;
+
+      &::before {
+        background: color-mix(in oklch, var(--loam-color-bg) 88%, transparent);
+        border-radius: inherit;
+        content: "";
+        inset: 0;
+        position: absolute;
+        z-index: -1;
+      }
+    }
+
+    img {
+      block-size: 100%;
+      border-radius: inherit;
+      inline-size: 100%;
+      inset: 0;
+      object-fit: cover;
+      position: absolute;
+      z-index: -2;
+    }
+
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
+    .copy {
+      align-content: end;
+      display: block grid;
+      font-size: var(--loam-text-md);
+      gap: var(--loam-space-s);
+      grid-template-columns: minmax(0, 1fr);
+      min-block-size: clamp(28rem, 20rem + 20cqi, 34rem);
+      overflow-wrap: anywhere;
+      padding: clamp(var(--loam-space-s), var(--loam-space-xs) + 3cqi, var(--loam-space-l) * 1.5);
+    }
+
+    h1,
+    p {
+      margin-block: 0;
+    }
+
+    h1 {
+      max-inline-size: 20ch;
+    }
+
+    p.lede {
+      font-size: var(--loam-text-lg);
+      max-inline-size: var(--loam-measure);
+    }
+
+    div.actions {
+      align-items: center;
+      display: block flex;
+      flex-wrap: wrap;
+      gap: var(--loam-space-xs);
+
+      > a {
+        align-items: center;
+        display: inline flex;
+        gap: var(--loam-space-3xs);
+
+        svg {
+          block-size: 1em;
+          flex: none;
+          inline-size: 1em;
+        }
+      }
+    }
+
+    @media (forced-colors: active) {
+      :scope {
+        border: 1px solid CanvasText;
+      }
+
+      img,
+      :scope::before {
+        display: none;
+      }
+    }
+  }
+}

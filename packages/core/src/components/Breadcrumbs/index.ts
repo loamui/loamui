@@ -1,7 +1,3 @@
-export { Breadcrumbs } from "./Breadcrumbs";
-export type {
-  BreadcrumbsLabels,
-  BreadcrumbsRootProps,
-  BreadcrumbsItemProps,
-  BreadcrumbsItemRenderProps,
-} from "./Breadcrumbs";
+export * as Breadcrumbs from "./index.parts.js";
+export type { BreadcrumbsLabels, BreadcrumbsRootProps } from "./root/BreadcrumbsRoot.js";
+export type { BreadcrumbsItemProps, BreadcrumbsItemRenderProps } from "./item/BreadcrumbsItem.js";

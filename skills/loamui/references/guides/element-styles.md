@@ -38,8 +38,6 @@ the top of a container.
 - `mark` takes the highlight token, the same yellow as text selection.
 - Tables collapse their borders and start-align their headers.
 
-</div>
-
 ## Forms without components
 
 Native controls wear the component recipes: buttons get the Button anatomy on the neutral
@@ -87,3 +85,7 @@ Unlayered normal declarations take precedence over layered normal declarations. 
 how the cascade works, but it is not the recommended way to extend LoamUI: an unlayered
 global rule can also override component styles. Use the established layers and scope
 the rule to its owner.
+
+> Element styles are a primitive precisely because downstream work builds on them: new components
+> start from styled native elements, so most of a new component's CSS is already written before its
+> stylesheet exists.

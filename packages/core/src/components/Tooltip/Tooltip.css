@@ -143,7 +143,6 @@
     }
   }
 
-  /* Arrow — points back toward the trigger for the requested side. */
   span.arrow {
     block-size: 0;
     border: var(--_arrow) solid transparent;

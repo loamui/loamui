@@ -3,8 +3,8 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 
-import { PasswordInput } from "../components/PasswordInput/index";
-import { Field } from "../index";
+import { PasswordInput } from "../components/PasswordInput/index.js";
+import { Field } from "../index.js";
 
 afterEach(cleanup);
 
@@ -24,9 +24,8 @@ describe("PasswordInput", () => {
     expect(input).toHaveAttribute("autocomplete", "current-password");
     expect(input).toHaveAttribute("autocapitalize", "none");
     expect(input).toHaveAttribute("spellcheck", "false");
-    expect(container.querySelector(".loam-PasswordInput > .loam-Input-field")).toContainElement(
-      input,
-    );
+    // The input sits inside Input's own field box, inside the PasswordInput row.
+    expect(container.querySelector(".loam-PasswordInput .loam-Input-field > input")).toBe(input);
 
     const toggle = screen.getByRole("button", { name: "Show password" });
     expect(toggle).toHaveAttribute("type", "button");
@@ -47,7 +46,7 @@ describe("PasswordInput", () => {
 
   it("takes the Field's description and error like any Input", () => {
     render(
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>Password</Field.Label>
         <Field.Description>At least 12 characters.</Field.Description>
         <Field.Error>Enter a password of at least 12 characters</Field.Error>

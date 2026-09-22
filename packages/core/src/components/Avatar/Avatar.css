@@ -1,22 +1,16 @@
 @scope (.loam-Avatar) to ([class*="loam-"]) {
   :scope {
-    --_bg: var(--loam-color-primary-strong);
-    --_fg: var(--loam-color-on-strong);
-
-    align-items: center;
-    background: var(--_bg);
-
-    /* Public size hook, set per instance or on a region; the type inside
-       is em-based so it follows. */
+    background: var(--loam-color-primary-strong);
     block-size: var(--loam-avatar-size, 2.5rem);
     border-radius: var(--_radius, var(--loam-radius-full));
-    color: var(--_fg);
-    display: inline flex;
+    color: var(--loam-color-on-strong);
+    display: inline grid;
     flex: none;
     font-size: var(--loam-text-sm);
     font-weight: 600;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     inline-size: var(--loam-avatar-size, 2.5rem);
-    justify-content: center;
     line-height: 1;
     overflow: clip;
     user-select: none;
@@ -25,51 +19,31 @@
   img.image {
     block-size: 100%;
     display: block flow;
+    grid-area: 1 / 1;
     inline-size: 100%;
     object-fit: cover;
+
+    &[data-loading],
+    &[data-error] {
+      visibility: hidden;
+    }
   }
 
-  span.initials {
+  span.fallback:not([hidden]) {
+    display: block grid;
     font-size: 0.85em;
+    grid-area: 1 / 1;
     letter-spacing: 0.02em;
+    place-items: center;
   }
 
-  svg.glyph {
+  svg {
     block-size: 65%;
     inline-size: 65%;
     opacity: 0.9;
   }
-
-  /* The initials background answers the surrounding context region, the
-     same contract as every status-coloured component. */
-  @container (style(--loam-context: danger)) {
-    :scope {
-      --_bg: var(--loam-color-danger-strong);
-    }
-  }
-
-  @container (style(--loam-context: warning)) {
-    :scope {
-      --_bg: var(--loam-color-warning-strong);
-    }
-  }
-
-  @container (style(--loam-context: info)) {
-    :scope {
-      --_bg: var(--loam-color-info-strong);
-    }
-  }
-
-  @container (style(--loam-context: success)) {
-    :scope {
-      --_bg: var(--loam-color-success-strong);
-    }
-  }
 }
 
-/* Group — a list whose items overlap, each ringed in the surface colour.
-   The ring and overlap sit on the item, so the avatars inside stay behind
-   the donut untouched. */
 @scope (.loam-Avatar-group) to ([class*="loam-"]) {
   :scope {
     align-items: center;
@@ -85,8 +59,6 @@
     display: block flex;
     margin: 0;
     margin-inline-start: calc(-1 * var(--loam-avatar-overlap, 0.5rem));
-
-    /* Identity at rest — the hover lift transitions both ways. */
     translate: 0 0;
 
     &:first-child {

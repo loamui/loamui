@@ -1,0 +1,69 @@
+@layer loamui.components {
+  @scope (.site-AgentShowcase) to ([class*="loam-"], [class*="site-"]) {
+    :scope {
+      align-items: start;
+      display: block grid;
+      gap: var(--loam-space-l);
+
+      @container (width > 62rem) {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      }
+
+      @container (width <= 62rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+
+  @scope (.site-AgentAsk) to ([class*="loam-"], [class*="site-"]) {
+    :scope {
+      container-type: inline-size;
+    }
+
+    h3 {
+      font-size: var(--loam-text-lg);
+    }
+
+    p {
+      color: var(--loam-color-fg-muted);
+      font-size: var(--loam-text-sm);
+      margin-block: var(--loam-space-l) var(--loam-space-2xs);
+    }
+
+    .promptBox {
+      margin-block-start: var(--loam-space-l);
+
+      + p {
+        margin-block-start: var(--loam-space-l);
+      }
+    }
+  }
+
+  @scope (.site-AgentResult) to ([class*="loam-"], [class*="site-"]) {
+    :scope {
+      container-type: inline-size;
+      min-inline-size: 0;
+    }
+
+    .caption {
+      color: var(--loam-color-fg-muted);
+      font-size: var(--loam-text-sm);
+      margin-block: var(--loam-space-s) 0;
+    }
+  }
+
+  @scope (.site-AgentShowcase-stage) to ([class*="loam-"], :scope > *) {
+    :scope {
+      container-type: inline-size;
+      padding-block: var(--loam-space-2xs);
+    }
+  }
+
+  @scope (.site-AgentShowcase-panel) to (:scope > *) {
+    :scope {
+      max-block-size: min(36rem, 70svb);
+      overflow: auto;
+      scrollbar-gutter: stable;
+    }
+  }
+}

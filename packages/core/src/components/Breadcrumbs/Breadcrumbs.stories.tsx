@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
-import { Breadcrumbs } from "../../index";
+import { Breadcrumbs } from "../../index.js";
 
 const meta = {
   title: "Navigation/Breadcrumbs",

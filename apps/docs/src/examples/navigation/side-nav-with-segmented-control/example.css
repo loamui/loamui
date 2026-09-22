@@ -1,7 +1,0 @@
-@scope (.side-nav-with-segmented-control) to ([class*="loam-"]) {
-  :scope {
-    display: block grid;
-    gap: var(--loam-space-xs);
-    inline-size: min(100%, 18rem);
-  }
-}

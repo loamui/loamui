@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
-import { Button } from "../Button/Button";
-import type { ButtonProps } from "../Button/Button";
+import { Button } from "../Button/Button.js";
+import type { ButtonProps } from "../Button/Button.js";
 
 /** The words the button says. */
 export interface CopyButtonLabels {

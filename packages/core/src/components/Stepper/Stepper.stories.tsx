@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-// Until the barrel exports Stepper: import from the part, not ../../index.
-import { Stepper } from "../../index";
+import { Stepper } from "../../index.js";
 
 const ORDER = [
   ["Order placed", "We have your order and your payment has cleared."],

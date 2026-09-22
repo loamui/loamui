@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
-import { Progress } from "../components/Progress/index";
+import { Progress } from "../components/Progress/index.js";
 
 afterEach(cleanup);
 

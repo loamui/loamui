@@ -3,7 +3,7 @@ import { render, screen, cleanup, act, fireEvent, waitFor } from "@testing-libra
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 
-import { CopyButton } from "../components/CopyButton/index";
+import { CopyButton } from "../components/CopyButton/index.js";
 
 const writeText = vi.fn<(text: string) => Promise<void>>();
 

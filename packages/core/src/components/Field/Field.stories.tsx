@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Field, Input } from "../../index";
+import { Field, Input } from "../../index.js";
 
 const meta = {
   title: "Inputs/Field",
@@ -32,7 +32,7 @@ export const Playground: Story = {
 
 export const WithError: Story = {
   render: () => (
-    <Field.Root style={{ maxWidth: 320 }}>
+    <Field.Root invalid style={{ maxWidth: 320 }}>
       <Field.Label>Email</Field.Label>
       <Field.Error>Enter a valid email address.</Field.Error>
       <Field.Control render={<Input defaultValue="not-an-email" />} />

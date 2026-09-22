@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Field, Range } from "../../index";
+import { expect, userEvent, within } from "storybook/test";
+import { Field, Range } from "../../index.js";
 
 const meta = {
   title: "Inputs/Range",
-  component: Range,
+  component: Range.Control,
   tags: ["autodocs"],
   parameters: {
     docs: {
@@ -31,10 +32,10 @@ const meta = {
   render: (args) => (
     <Field.Root>
       <Field.Label>Irrigation level</Field.Label>
-      <Range {...args} />
+      <Range.Control {...args} />
     </Field.Root>
   ),
-} satisfies Meta<typeof Range>;
+} satisfies Meta<typeof Range.Control>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -46,7 +47,7 @@ export const Steps: Story = {
   render: (args) => (
     <Field.Root>
       <Field.Label>Field count</Field.Label>
-      <Range {...args} />
+      <Range.Control {...args} />
     </Field.Root>
   ),
 };
@@ -62,10 +63,24 @@ export const Disabled: Story = {
  */
 export const WithError: Story = {
   render: (args) => (
-    <Field.Root>
+    <Field.Root invalid>
       <Field.Label>Irrigation level</Field.Label>
       <Field.Error>Choose a level of at least 20</Field.Error>
-      <Range {...args} />
+      <Range.Control {...args} />
     </Field.Root>
   ),
+};
+
+/** Interaction test: the Field label names the slider; the arrow keys step its value. */
+export const StepsWithArrowKeys: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const slider = canvas.getByRole("slider", { name: "Irrigation level" });
+    await expect(slider).toHaveValue("40");
+    slider.focus();
+    await userEvent.keyboard("{ArrowRight}{ArrowRight}");
+    await expect(slider).toHaveValue("42");
+    await userEvent.keyboard("{Home}");
+    await expect(slider).toHaveValue("0");
+  },
 };

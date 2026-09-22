@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { Button, VisuallyHidden } from "../../index";
+import { Button, VisuallyHidden } from "../../index.js";
 
 const meta = {
   title: "Utilities/VisuallyHidden",

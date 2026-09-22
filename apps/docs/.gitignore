@@ -4,3 +4,4 @@ public/**/*.md
 public/llms.txt
 public/recipe-prompts/
 public/agent-assets/
+public/search-index.json

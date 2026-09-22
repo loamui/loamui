@@ -1,0 +1,29 @@
+@scope (.site-RecipeCode) {
+  /* A zero minimum on the column and the pane: the code block scrolls inside
+     its own box rather than setting the page's width to its longest line. */
+  :scope {
+    gap: 0;
+    min-inline-size: 0;
+  }
+
+  /* The tab list and the copy-both button share one row above the panel.
+     The row's line is the Tabs list's own, so the bar draws none. */
+  .bar {
+    align-items: center;
+    display: block flex;
+    flex-wrap: wrap;
+    gap: var(--loam-space-2xs) var(--loam-space-s);
+    justify-content: space-between;
+    padding: var(--loam-space-2xs);
+  }
+
+  .panel {
+    min-inline-size: 0;
+    padding: 0;
+  }
+
+  .code {
+    border: none;
+    border-radius: 0;
+  }
+}

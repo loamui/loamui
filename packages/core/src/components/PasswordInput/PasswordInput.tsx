@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { Button } from "../Button/Button";
-import { Input } from "../Input/Input";
-import type { InputProps } from "../Input/Input";
-import { cx } from "../../utils";
-import type { PartProps } from "../../utils";
+import { Button } from "../Button/Button.js";
+import { Input } from "../Input/Input.js";
+import type { InputProps } from "../Input/Input.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 /** The words the field says on its own, each with an English default. */
 export interface PasswordInputLabels {
@@ -22,8 +22,7 @@ const DEFAULT_LABELS: Required<PasswordInputLabels> = {
   show: "Show password",
 };
 
-export interface PasswordInputProps extends Omit<InputProps, "type" | "wrapperProps"> {
-  /** The field's own words. */
+export interface PasswordInputProps extends Omit<InputProps, "type"> {
   labels?: PasswordInputLabels;
   /**
    * Props for the row that holds the box and the toggle

@@ -5,8 +5,8 @@ import { axe } from "vitest-axe";
 import { useState } from "react";
 import type { FormEvent } from "react";
 
-import { Combobox } from "../components/Combobox/index";
-import { Field } from "../index";
+import { Combobox } from "../components/Combobox/index.js";
+import { Field } from "../index.js";
 
 afterEach(cleanup);
 
@@ -333,5 +333,55 @@ describe("Combobox", () => {
     await user.type(screen.getByRole("combobox"), "x");
     expect(screen.getByText("Aucune ville")).toBeVisible();
     expect(screen.getByRole("status")).toHaveTextContent("0 villes");
+  });
+});
+
+describe("Combobox composition", () => {
+  it.each(["part", "render"] as const)("uses the %s ID for the active option", async (source) => {
+    render(
+      <Combobox.Root>
+        <Combobox.Input aria-label="Fruit" />
+        <Combobox.List>
+          <Combobox.Option
+            id={source === "part" ? "custom-option" : "part-option"}
+            render={source === "render" ? <li id="custom-option" /> : undefined}
+            value="apple"
+          >
+            Apple
+          </Combobox.Option>
+        </Combobox.List>
+      </Combobox.Root>,
+    );
+    const user = userEvent.setup();
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    await user.keyboard("{ArrowDown}");
+    expect(input).toHaveAttribute("aria-activedescendant", "custom-option");
+    expect(screen.getByRole("option")).toHaveAttribute("id", "custom-option");
+    expect(screen.getByRole("option")).toHaveAttribute("data-highlighted", "true");
+    await user.keyboard("{Enter}");
+    expect(input).toHaveValue("Apple");
+  });
+
+  it("commits the current label when the rendered option element changes", async () => {
+    function Example({ custom }: { custom: boolean }) {
+      return (
+        <Combobox.Root>
+          <Combobox.Input aria-label="Fruit" />
+          <Combobox.List>
+            <Combobox.Option value="apple" render={custom ? <div /> : undefined}>
+              {custom ? "Green apple" : "Apple"}
+            </Combobox.Option>
+          </Combobox.List>
+        </Combobox.Root>
+      );
+    }
+    const { rerender } = render(<Example custom={false} />);
+    rerender(<Example custom />);
+    const user = userEvent.setup();
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    await user.keyboard("{ArrowDown}{Enter}");
+    expect(input).toHaveValue("Green apple");
   });
 });

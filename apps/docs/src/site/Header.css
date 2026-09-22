@@ -32,7 +32,7 @@
     gap: var(--loam-space-xs);
   }
 
-  .nav {
+  nav {
     color: var(--loam-color-fg-muted);
     display: block flex;
     font-size: var(--loam-text-sm);
@@ -67,8 +67,9 @@
     }
   }
 
-  /* Matches ThemeToggle's .btn box so the icon buttons read as a set. */
-  .stars {
+  /* The repository link. Matches ThemeToggle's button box so the icon buttons
+     read as a set. */
+  .right > a {
     block-size: 2.5rem;
     border: 1px solid var(--loam-color-line);
     border-radius: var(--loam-radius-md);

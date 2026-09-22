@@ -4,8 +4,8 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 
-import { QuantityInput } from "../components/QuantityInput/index";
-import { Field } from "../index";
+import { QuantityInput } from "../components/QuantityInput/index.js";
+import { Field } from "../index.js";
 
 afterEach(cleanup);
 

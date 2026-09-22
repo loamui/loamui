@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import type { CSSProperties } from "react";
-import { Progress } from "../../index";
+import { Progress } from "../../index.js";
 
 const meta = {
   title: "Feedback/Progress",

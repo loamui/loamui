@@ -1,0 +1,52 @@
+@layer loamui.components {
+  @scope (.site-CopyPanel) to ([class*="loam-"], [class*="site-"]) {
+    :scope {
+      background: var(--loam-color-surface);
+      border: 1px solid var(--loam-color-line);
+      border-radius: var(--loam-radius-md);
+      container-type: inline-size;
+      min-inline-size: 0;
+      overflow: clip;
+    }
+
+    .bar {
+      align-items: center;
+      border-block-end: 1px solid var(--loam-color-line);
+      color: var(--loam-color-fg-muted);
+      display: block flex;
+      font-size: var(--loam-text-sm);
+      gap: var(--loam-space-xs);
+      justify-content: space-between;
+      padding: var(--loam-space-3xs) var(--loam-space-xs);
+
+      > span {
+        align-items: center;
+        display: inline flex;
+        gap: var(--loam-space-2xs);
+        min-inline-size: 0;
+
+        svg {
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    p {
+      font-size: var(--loam-text-md);
+      margin: 0;
+      overflow-wrap: anywhere;
+      padding: var(--loam-space-s);
+      text-wrap: pretty;
+    }
+  }
+
+  @scope (.site-CopyAction) to ([class*="loam-"]) {
+    :scope {
+      --loam-space-xs: var(--loam-space-2xs);
+      --loam-text-md: var(--loam-text-sm);
+
+      display: inline flex;
+      flex-shrink: 0;
+    }
+  }
+}

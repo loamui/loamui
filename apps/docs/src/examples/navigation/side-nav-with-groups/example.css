@@ -1,9 +1,0 @@
-@scope (.side-nav-with-groups) to ([class*="loam-"]) {
-  :scope {
-    /* The icon is 1.25em of the link's md type: the indent puts nested words
-       under the group's words, not under its icon. */
-    --loam-nav-indent: calc(1.25 * var(--loam-text-md) + var(--loam-space-2xs));
-
-    inline-size: min(100%, 18rem);
-  }
-}

@@ -9,14 +9,14 @@ import {
   Switch,
   Range,
   QuantityInput,
-} from "../index";
+} from "../index.js";
 
 afterEach(cleanup);
 
 describe("Inline controls composed inside Field", () => {
   it("wires a Checkbox from Field context (label + describedby + detected invalid)", () => {
     render(
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>
           <Checkbox /> Accept the terms
         </Field.Label>
@@ -36,10 +36,15 @@ describe("Inline controls composed inside Field", () => {
 
   it("points a Field.Label at a labelled Checkbox and joins the Field's error to its description", () => {
     render(
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>Terms</Field.Label>
         <Field.Error>Accept the terms to continue</Field.Error>
-        <Checkbox label="I accept" description="You can withdraw at any time." />
+        <>
+          <Field.Label>
+            <Checkbox /> I accept
+          </Field.Label>
+          <Field.Description>You can withdraw at any time.</Field.Description>
+        </>
       </Field.Root>,
     );
     const checkbox = screen.getByRole("checkbox");
@@ -53,41 +58,73 @@ describe("Inline controls composed inside Field", () => {
   });
 
   it("keeps a standalone Checkbox working with its own label", () => {
-    render(<Checkbox label="Stay signed in" />);
+    render(
+      <Field.Item>
+        <Field.Label>
+          <Checkbox /> Stay signed in
+        </Field.Label>
+      </Field.Item>,
+    );
     expect(screen.getByLabelText("Stay signed in")).toBeInTheDocument();
   });
 
-  it("lands className and ref on the input and wrapperProps on the row", () => {
+  it("keeps input and composed wrapper props on their own elements", () => {
     let node: HTMLInputElement | null = null;
     const { container } = render(
       <>
-        <Checkbox
-          label="Email"
-          className="mine"
-          ref={(el) => {
-            node = el;
-          }}
-          wrapperProps={{ className: "row" }}
-        />
-        <Radio label="Post" wrapperProps={{ className: "radio-row", id: "radio-row" }} />
-        <Switch label="Push" wrapperProps={{ className: "switch-row" }} />
-        <Switch.Control aria-label="Bare" wrapperProps={{ className: "bare" }} />
+        <Field.Item {...{ className: "row" }}>
+          <Field.Label>
+            <Checkbox
+              className="mine"
+              ref={(el) => {
+                node = el;
+              }}
+            />{" "}
+            Email
+          </Field.Label>
+        </Field.Item>
+        <Field.Item {...{ className: "radio-row", id: "radio-row" }}>
+          <Field.Label>
+            <Radio /> Post
+          </Field.Label>
+        </Field.Item>
+        <Field.Item>
+          <Field.Label>
+            <Switch.Root {...{ className: "switch-row" }}>
+              <Switch.Control />
+              <Switch.Track>
+                <Switch.Thumb />
+              </Switch.Track>
+            </Switch.Root>{" "}
+            Push
+          </Field.Label>
+        </Field.Item>
+        <Switch.Root {...{ className: "bare" }}>
+          <Switch.Control aria-label="Bare" />
+          <Switch.Track>
+            <Switch.Thumb />
+          </Switch.Track>
+        </Switch.Root>
       </>,
     );
     expect(node).toBe(screen.getByLabelText("Email"));
     expect(screen.getByLabelText("Email")).toHaveClass("mine");
-    expect(container.querySelector(".loam-Checkbox-wrapper")).toHaveClass("row");
-    expect(container.querySelector("#radio-row")).toHaveClass("loam-Radio-wrapper", "radio-row");
-    expect(container.querySelector(".loam-Switch-wrapper")).toHaveClass("switch-row");
+    expect(container.querySelector(".loam-Field.row")).toHaveClass("row");
+    expect(container.querySelector(".loam-Field.radio-row")).toHaveClass("loam-Field", "radio-row");
+    expect(container.querySelector(".loam-Switch-control.switch-row")).toHaveClass("switch-row");
     expect(screen.getByLabelText("Bare").parentElement).toHaveClass("loam-Switch-control", "bare");
   });
 
   it("puts aria-invalid on the radiogroup, never the radios", () => {
     render(
-      <RadioGroup.Root>
+      <RadioGroup.Root invalid>
         <RadioGroup.Legend>Plan</RadioGroup.Legend>
         <RadioGroup.Error>Select a plan</RadioGroup.Error>
-        <Radio value="a" label="A" />
+        <Field.Item>
+          <Field.Label>
+            <Radio value="a" /> A
+          </Field.Label>
+        </Field.Item>
       </RadioGroup.Root>,
     );
     const group = screen.getByRole("radiogroup");
@@ -102,8 +139,16 @@ describe("Inline controls composed inside Field", () => {
       <form>
         <RadioGroup.Root name="plan">
           <RadioGroup.Legend>Plan</RadioGroup.Legend>
-          <Radio value="free" label="Free" required />
-          <Radio value="pro" label="Pro" />
+          <Field.Item>
+            <Field.Label>
+              <Radio value="free" required /> Free
+            </Field.Label>
+          </Field.Item>
+          <Field.Item>
+            <Field.Label>
+              <Radio value="pro" /> Pro
+            </Field.Label>
+          </Field.Item>
         </RadioGroup.Root>
       </form>,
     );
@@ -125,7 +170,13 @@ describe("Inline controls composed inside Field", () => {
     render(
       <Field.Root>
         <Field.Label>
-          <Switch.Control /> Email notifications
+          <Switch.Root>
+            <Switch.Control />
+            <Switch.Track>
+              <Switch.Thumb />
+            </Switch.Track>
+          </Switch.Root>{" "}
+          Email notifications
         </Field.Label>
         <Field.Description>Sent at most once a day.</Field.Description>
       </Field.Root>,
@@ -141,7 +192,7 @@ describe("Inline controls composed inside Field", () => {
       <Field.Root>
         <Field.Label>Volume</Field.Label>
         <Field.Description>Between 0 and 100.</Field.Description>
-        <Field.Control render={<Range />} />
+        <Field.Control render={<Range.Control />} />
       </Field.Root>,
     );
 
@@ -155,7 +206,7 @@ describe("Inline controls composed inside Field", () => {
       <>
         <Field.Root>
           <Field.Label>Brightness</Field.Label>
-          <Range defaultValue={40} />
+          <Range.Control defaultValue={40} />
         </Field.Root>
       </>,
     );
@@ -165,10 +216,28 @@ describe("Inline controls composed inside Field", () => {
   it("detects disabled on the input rather than declaring it on a wrapper", () => {
     const { container } = render(
       <>
-        <Checkbox label="Off" disabled />
-        <Radio label="Off" disabled />
-        <Switch label="Off" disabled />
-        <Range aria-label="Off" disabled />
+        <Field.Item>
+          <Field.Label>
+            <Checkbox disabled /> Off
+          </Field.Label>
+        </Field.Item>
+        <Field.Item>
+          <Field.Label>
+            <Radio disabled /> Off
+          </Field.Label>
+        </Field.Item>
+        <Field.Item>
+          <Field.Label>
+            <Switch.Root>
+              <Switch.Control disabled />
+              <Switch.Track>
+                <Switch.Thumb />
+              </Switch.Track>
+            </Switch.Root>{" "}
+            Off
+          </Field.Label>
+        </Field.Item>
+        <Range.Control aria-label="Off" disabled />
       </>,
     );
     expect(container.querySelector("[data-disabled]")).toBeNull();
@@ -181,8 +250,16 @@ describe("Fieldset / grouped controls", () => {
     render(
       <Fieldset.Root>
         <Fieldset.Legend>Notifications</Fieldset.Legend>
-        <Checkbox label="Email" />
-        <Checkbox label="SMS" />
+        <Field.Item>
+          <Field.Label>
+            <Checkbox /> Email
+          </Field.Label>
+        </Field.Item>
+        <Field.Item>
+          <Field.Label>
+            <Checkbox /> SMS
+          </Field.Label>
+        </Field.Item>
       </Fieldset.Root>,
     );
     // The group is exposed via native fieldset/legend semantics.
@@ -212,8 +289,16 @@ describe("Fieldset / grouped controls", () => {
       <RadioGroup.Root name="plan">
         <RadioGroup.Legend optional>Plan</RadioGroup.Legend>
         <RadioGroup.Description>You can change it later.</RadioGroup.Description>
-        <Radio value="free" label="Free" />
-        <Radio value="pro" label="Pro" />
+        <Field.Item>
+          <Field.Label>
+            <Radio value="free" /> Free
+          </Field.Label>
+        </Field.Item>
+        <Field.Item>
+          <Field.Label>
+            <Radio value="pro" /> Pro
+          </Field.Label>
+        </Field.Item>
       </RadioGroup.Root>,
     );
     const group = screen.getByRole("radiogroup", { name: "Plan (optional)" });
@@ -225,10 +310,14 @@ describe("Fieldset / grouped controls", () => {
 
   it("says a RadioGroup's own words in the language its labels give it", () => {
     render(
-      <RadioGroup.Root labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}>
+      <RadioGroup.Root invalid labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}>
         <RadioGroup.Legend optional>Formule</RadioGroup.Legend>
         <RadioGroup.Error>Choisissez une formule</RadioGroup.Error>
-        <Radio value="a" label="A" />
+        <Field.Item>
+          <Field.Label>
+            <Radio value="a" /> A
+          </Field.Label>
+        </Field.Item>
       </RadioGroup.Root>,
     );
     expect(
@@ -240,9 +329,17 @@ describe("Fieldset / grouped controls", () => {
     render(
       <RadioGroup.Root name="plan" defaultValue="pro">
         <RadioGroup.Legend>Plan</RadioGroup.Legend>
-        <Radio value="free" label="Free" />
+        <Field.Item>
+          <Field.Label>
+            <Radio value="free" /> Free
+          </Field.Label>
+        </Field.Item>
         <div>
-          <Radio value="pro" label="Pro" />
+          <Field.Item>
+            <Field.Label>
+              <Radio value="pro" /> Pro
+            </Field.Label>
+          </Field.Item>
         </div>
       </RadioGroup.Root>,
     );
@@ -263,7 +360,11 @@ describe("Fieldset / grouped controls", () => {
         }}
       >
         <RadioGroup.Legend>Contact</RadioGroup.Legend>
-        <Radio value="email" label="Email" />
+        <Field.Item>
+          <Field.Label>
+            <Radio value="email" /> Email
+          </Field.Label>
+        </Field.Item>
       </RadioGroup.Root>,
     );
     const group = screen.getByRole("radiogroup", { name: "Contact" });
@@ -304,4 +405,23 @@ describe("QuantityInput naming", () => {
       error.mockRestore();
     }
   });
+});
+
+it.each([
+  { name: "Checkbox", Control: Checkbox, role: "checkbox" },
+  { name: "Radio", Control: Radio, role: "radio" },
+])("keeps the Field label connected to a $name with an explicit ID", ({ Control, role }) => {
+  function Example({ id }: { id: string }) {
+    return (
+      <Field.Root>
+        <Field.Label>Choice</Field.Label>
+        <Control id={id} />
+      </Field.Root>
+    );
+  }
+  const { rerender } = render(<Example id="first-choice" />);
+  expect(screen.getByRole(role)).toHaveAccessibleName("Choice");
+  rerender(<Example id="next-choice" />);
+  expect(screen.getByRole(role)).toHaveAttribute("id", "next-choice");
+  expect(screen.getByRole(role)).toHaveAccessibleName("Choice");
 });

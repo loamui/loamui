@@ -28,7 +28,7 @@ Five native radios, one under each star. Click or tap a star, or arrow through t
 
 ### Prefilled
 
-An existing rating the user can change. Use defaultValue for a form the browser owns, or value with onChange to hold the number yourself, exactly as with RadioGroup.
+An existing rating the user can change. Use defaultValue for a form the browser owns, or value with onValueChange to hold the number yourself, exactly as with RadioGroup.
 
 ```tsx
 <Rating label="Rate this recipe" defaultValue={4} />
@@ -129,10 +129,10 @@ Status is not a prop: it comes from the surrounding `--loam-context` region (see
 | `showLabel` | `boolean` | `false` | Show the label as text beside the stars. |
 | `max` | `number` | `5` | How many stars. |
 | `name` | `string` | — | Shared name for the star radios (auto-generated if omitted). |
-| `value` | `number` | — | Controlled rating (pair with onChange). With readOnly, the rating shown; halves allowed. |
+| `value` | `number` | — | Controlled rating (pair with onValueChange). With readOnly, the rating shown; halves allowed. |
 | `defaultValue` | `number` | — | Initial rating for uncontrolled usage. |
 | `labels` | `{ star?: (n: number) => string; value?: (value: number, max: number) => string }` | `{ star: (n) => "n stars", value: (v, max) => "v out of max" }` | The words the stars speak, for another language or a different noun: star names each input ("3 stars"), value names the picture in display mode ("3.5 out of 5"). |
-| `onChange` | `(value: number) => void` | — | Fires with the number of stars chosen. |
+| `onValueChange` | `(value: number) => void` | — | Fires with the number of stars chosen. |
 | `readOnly` | `boolean` | `false` | Display mode: a picture of value with one accessible name, no inputs. |
 | `required` | `boolean` | — | The user must choose a star before the form submits. |
 | `disabled` | `boolean` | — | Disables every star through the fieldset. |

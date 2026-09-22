@@ -31,10 +31,7 @@ metadata:
   purpose and the recipe's **When to use** guidance, then read the recipe and
   [recipe guide](references/guides/guide.md). The sections are Heroes,
   Banners, Cards, Media, Grids, Content and Forms.
-  A hero introduces a page; a banner promotes one message within it;
-  a card represents one item.
-  Gallery card browses photos of one item; Article carousel browses several
-  items. Match that role before adapting the appearance.
+  Match the recipe's purpose before adapting its appearance.
 
 ## Start by checking the environment
 
@@ -96,10 +93,10 @@ package and rendering capabilities; never fake LoamUI or claim unrun checks.
   value that a breakpoint immediately overrides.
   Establish the host’s layer order before loading recipes. Limit scopes at
   embedded content so article styling cannot change a recipe’s layout.
-- **Composition through components.** Assemble named parts and use `render`
-  when changing the element. Button icons and loaders are children; Input
-  instead documents `startSection` and `endSection`. Read each component’s
-  actual contract. Recipes own their layout; core parts own their internals.
+- **Composition.** Follow each component's contract: callable components for
+  simple needs, named parts for composition, `render` for supported element
+  swaps. Internal markup need not be public. Button icons and loaders are
+  children; Input accepts `startSection` / `endSection`.
 - **Contextualism throughout the primitives.** Declare `--loam-context` on the
   region with that meaning; size follows the available space. Do not invent
   appearance props. Intrinsic display sizes and native HTML attributes are
@@ -147,11 +144,14 @@ No layout components (use native grid, flex or flow with the space tokens), no
    types when versions differ. Consult the Modern CSS and
    Google Chrome guidance for the task. LoamUI uses Baseline Newly/Widely
    Available features natively; enhance progressively beyond that policy.
-3. **Compose.** Parts inside a `Root`; bare form controls (`Input`, `Select`,
-   `Textarea`, `Range`, `QuantityInput`, `FileInput.Control`, `Search.Input`)
-   inside `Field.Root` wire their label, description, error, and `aria-*`
-   automatically. `Checkbox`, `Radio`, `Switch` take an inline `label`;
-   errors still go through `Field.Error`.
+3. **Compose.** Use callable components or namespace parts such as `Alert.Root`
+   and `Alert.Title`, as documented. Controls (`Input`, `Select.Root`,
+   `Textarea`, `Range.Control`, `QuantityInput`, `FileInput.Control`, `Search.Input`)
+   receive label/invalid wiring from `Field.Root`; message IDs register after
+   hydration. Compose Checkbox and Radio with Field.Label;
+   Field.Item scopes grouped options. Switch has Root, Control, Track and Thumb
+   parts.
+   Set Field.Root invalid explicitly; use ARIA links for initial SSR hints.
 4. **Declare context, don't configure.** Wrap a region:
    `<div style={{ "--loam-context": "danger" }}>…</div>` — buttons, inputs,
    badges and checkboxes inside all adapt. Only reach for identity when it is
@@ -235,8 +235,8 @@ Each of these has been seen in real migrations. Check your output against them.
   Say what happened and how to fix it, in the words of the question:
   "Enter your email address", "Select a country". No "please", "invalid",
   "required", or error codes.
-- **Treating all components as the same API.** Button icons are children;
-  Input uses `startSection` / `endSection` for adornments. Read the reference.
+- **Input's wrapper.** `className`, `style` and `ref` target the native input;
+  `wrapperProps` targets its bordered box.
 - **Reset-then-restyle.** Do not add a CSS reset or zero every margin — the
   element styles are the baseline. Build on them.
 - **`!important`, BEM, physical properties, viewport units for sizing.** The

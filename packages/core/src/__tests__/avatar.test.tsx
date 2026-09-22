@@ -1,87 +1,117 @@
-import { afterEach, describe, expect, it } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { StrictMode, createRef } from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 import { axe } from "vitest-axe";
-import { Avatar } from "../components/Avatar/index";
+import { Avatar } from "../components/Avatar/index.js";
 
 afterEach(cleanup);
+const portrait = "/ada.png";
+function Person({ src = portrait, showImage = true }) {
+  return (
+    <Avatar.Root role="img" aria-label="Ada Lovelace">
+      {showImage && <Avatar.Image src={src} alt="" loading="lazy" />}
+      <Avatar.Fallback>AL</Avatar.Fallback>
+    </Avatar.Root>
+  );
+}
 
-const axeOptions = { rules: { "color-contrast": { enabled: false } } };
-
-describe("Avatar initials", () => {
-  it("takes the first grapheme of the first and last words", () => {
-    render(<Avatar name="Ada Lovelace" />);
-    expect(screen.getByRole("img", { name: "Ada Lovelace" })).toHaveTextContent(/^AL$/);
+describe("Avatar composition", () => {
+  it("renders caller-supplied fallback content without an image", () => {
+    render(<Person showImage={false} />);
+    expect(screen.getByRole("img", { name: "Ada Lovelace" })).toHaveTextContent("AL");
+    expect(screen.getByText("AL")).toBeVisible();
   });
-
-  it("takes two graphemes of a single word", () => {
-    render(<Avatar name="Ada" />);
-    expect(screen.getByRole("img", { name: "Ada" })).toHaveTextContent(/^AD$/);
+  it("keeps native image attributes and both parts in server HTML", () => {
+    const doc = new DOMParser().parseFromString(renderToString(<Person />), "text/html");
+    expect(doc.querySelector("img")?.getAttribute("src")).toBe(portrait);
+    expect(doc.querySelector("img")?.getAttribute("loading")).toBe("lazy");
+    expect(doc.querySelector("img")?.hasAttribute("data-loading")).toBe(true);
+    expect(doc.querySelector(".fallback")?.hasAttribute("hidden")).toBe(false);
   });
-
-  it("keeps a grapheme whole where a code unit would split it", () => {
-    render(<Avatar name="👩‍🚀 Ríos" />);
-    expect(screen.getByRole("img", { name: "👩‍🚀 Ríos" })).toHaveTextContent(/^👩‍🚀R$/);
-  });
-});
-
-describe("Avatar image", () => {
-  it("names the image after the person", () => {
-    render(<Avatar src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" name="Ada Lovelace" />);
-    expect(screen.getByRole("img")).toHaveAttribute("alt", "Ada Lovelace");
-  });
-
-  it("empties the alt when the avatar is decorative", async () => {
+  it("hides the fallback after loading and restores it after an error", () => {
+    const onLoad = vi.fn(),
+      onError = vi.fn();
+    const ref = createRef<HTMLImageElement>();
     const { container } = render(
-      <p>
-        <Avatar src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" name="Ada Lovelace" aria-hidden />
-        Ada Lovelace
-      </p>,
+      <Avatar.Root role="img" aria-label="Ada Lovelace">
+        <Avatar.Fallback>AL</Avatar.Fallback>
+        <Avatar.Image src={portrait} alt="" ref={ref} onLoad={onLoad} onError={onError} />
+      </Avatar.Root>,
     );
-    expect(container.querySelector("img")).toHaveAttribute("alt", "");
-    expect(screen.queryByRole("img")).toBeNull();
-    expect(await axe(container, axeOptions)).toHaveNoViolations();
+    const image = container.querySelector("img")!;
+    expect(ref.current).toBe(image);
+    fireEvent.load(image);
+    expect(screen.getByText("AL")).not.toBeVisible();
+    expect(onLoad).toHaveBeenCalledOnce();
+    fireEvent.error(image);
+    expect(screen.getByText("AL")).toBeVisible();
+    expect(image).toHaveAttribute("data-error");
+    expect(onError).toHaveBeenCalledOnce();
+    expect(screen.getByRole("img", { name: "Ada Lovelace" })).toBeInTheDocument();
   });
-});
-
-describe("Avatar.Group", () => {
-  it("is a list of the avatars given, plus the overflow count", () => {
+  it("retries changed sources and clears the previous image state", () => {
+    const { container, rerender } = render(
+      <StrictMode>
+        <Person />
+      </StrictMode>,
+    );
+    fireEvent.error(container.querySelector("img")!);
+    rerender(
+      <StrictMode>
+        <Person src="/new.png" />
+      </StrictMode>,
+    );
+    const image = container.querySelector("img")!;
+    expect(image).toHaveAttribute("src", "/new.png");
+    expect(image).toHaveAttribute("data-loading");
+    expect(image).not.toHaveAttribute("data-error");
+    fireEvent.load(image);
+    expect(screen.getByText("AL")).not.toBeVisible();
+    rerender(
+      <StrictMode>
+        <Person showImage={false} />
+      </StrictMode>,
+    );
+    expect(screen.getByText("AL")).toBeVisible();
+  });
+  it("recognizes an image loaded before hydration", () => {
+    const complete = vi.spyOn(HTMLImageElement.prototype, "complete", "get").mockReturnValue(true);
+    const currentSrc = vi
+      .spyOn(HTMLImageElement.prototype, "currentSrc", "get")
+      .mockReturnValue(portrait);
+    const width = vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(96);
+    try {
+      render(<Person />);
+      expect(screen.getByText("AL")).not.toBeVisible();
+    } finally {
+      complete.mockRestore();
+      currentSrc.mockRestore();
+      width.mockRestore();
+    }
+  });
+  it("accepts decorative avatars without announcing initials", () => {
     render(
-      <Avatar.Group more={5}>
-        <Avatar name="Ada Lovelace" />
-        <Avatar name="Grace Hopper" />
-      </Avatar.Group>,
+      <Avatar.Root aria-hidden>
+        <Avatar.Image src={portrait} alt="" />
+        <Avatar.Fallback>AL</Avatar.Fallback>
+      </Avatar.Root>,
     );
-    const list = screen.getByRole("list");
-    expect(list).toHaveClass("loam-Avatar-group");
-    expect(screen.getAllByRole("listitem")).toHaveLength(3);
-    expect(screen.getByRole("img", { name: "5 more" })).toHaveTextContent("+5");
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
-
-  it("names the overflow through labels.more", () => {
-    render(
-      <Avatar.Group more={2} labels={{ more: (n) => `${n} more people` }}>
-        <Avatar name="Ada Lovelace" />
-      </Avatar.Group>,
-    );
-    expect(screen.getByRole("img", { name: "2 more people" })).toBeInTheDocument();
-  });
-
-  it("renders no overflow item for zero", () => {
-    render(
-      <Avatar.Group more={0}>
-        <Avatar name="Ada Lovelace" />
-      </Avatar.Group>,
-    );
-    expect(screen.getAllByRole("listitem")).toHaveLength(1);
-  });
-
-  it("has no axe violations", async () => {
+  it("groups explicit avatars, including a caller-written overflow count", async () => {
     const { container } = render(
-      <Avatar.Group more={3}>
-        <Avatar name="Ada Lovelace" />
-        <Avatar name="Grace Hopper" />
+      <Avatar.Group aria-label="Participants">
+        <Person showImage={false} />
+        <Avatar.Root role="img" aria-label="5 more people">
+          <Avatar.Fallback>+5</Avatar.Fallback>
+        </Avatar.Root>
       </Avatar.Group>,
     );
-    expect(await axe(container, axeOptions)).toHaveNoViolations();
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    expect(screen.getByRole("img", { name: "5 more people" })).toHaveTextContent("+5");
+    expect(
+      await axe(container, { rules: { "color-contrast": { enabled: false } } }),
+    ).toHaveNoViolations();
   });
 });

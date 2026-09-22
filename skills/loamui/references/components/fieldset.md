@@ -13,7 +13,7 @@ Groups related controls under a shared, semantic label using a native fieldset a
 ## Import
 
 ```tsx
-import { Checkbox, Fieldset, Radio, RadioGroup } from "@loamui/core";
+import { Fieldset, RadioGroup, Checkbox, Radio } from "@loamui/core";
 ```
 
 ## Usage
@@ -25,9 +25,21 @@ The legend names the group in the accessibility tree, the correct way to label a
 ```tsx
 <Fieldset.Root>
   <Fieldset.Legend>Email notifications</Fieldset.Legend>
-  <Checkbox label="Product updates" defaultChecked />
-  <Checkbox label="Security alerts" defaultChecked />
-  <Checkbox label="Marketing" />
+  <Field.Item>
+    <Field.Label>
+      <Checkbox defaultChecked /> Product updates
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Checkbox defaultChecked /> Security alerts
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Checkbox /> Marketing
+    </Field.Label>
+  </Field.Item>
 </Fieldset.Root>
 ```
 
@@ -38,8 +50,16 @@ Mark the whole group optional in words rather than with an asterisk.
 ```tsx
 <Fieldset.Root>
   <Fieldset.Legend optional>Interests</Fieldset.Legend>
-  <Checkbox label="Design" />
-  <Checkbox label="Engineering" />
+  <Field.Item>
+    <Field.Label>
+      <Checkbox /> Design
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Checkbox /> Engineering
+    </Field.Label>
+  </Field.Item>
 </Fieldset.Root>
 ```
 
@@ -50,9 +70,21 @@ RadioGroup.Root is a Fieldset.Root, so RadioGroup.Legend labels the set of radio
 ```tsx
 <RadioGroup.Root name="plan" defaultValue="pro">
   <RadioGroup.Legend>Plan</RadioGroup.Legend>
-  <Radio value="free" label="Free" />
-  <Radio value="pro" label="Pro" />
-  <Radio value="team" label="Team" />
+  <Field.Item>
+    <Field.Label>
+      <Radio value="free" /> Free
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="pro" /> Pro
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="team" /> Team
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 

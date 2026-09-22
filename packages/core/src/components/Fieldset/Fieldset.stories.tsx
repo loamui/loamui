@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Fieldset, Checkbox } from "../../index";
+import { Fieldset, Checkbox, Field } from "../../index.js";
 
 const meta = {
   title: "Inputs/Fieldset",
@@ -24,9 +24,21 @@ export const Playground: Story = {
   render: () => (
     <Fieldset.Root style={{ maxWidth: 320 }}>
       <Fieldset.Legend>Email notifications</Fieldset.Legend>
-      <Checkbox label="Product updates" defaultChecked />
-      <Checkbox label="Security alerts" defaultChecked />
-      <Checkbox label="Marketing" />
+      <Field.Item>
+        <Field.Label>
+          <Checkbox defaultChecked /> Product updates
+        </Field.Label>
+      </Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Checkbox defaultChecked /> Security alerts
+        </Field.Label>
+      </Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Checkbox /> Marketing
+        </Field.Label>
+      </Field.Item>
     </Fieldset.Root>
   ),
 };
@@ -35,8 +47,16 @@ export const Optional: Story = {
   render: () => (
     <Fieldset.Root style={{ maxWidth: 320 }}>
       <Fieldset.Legend optional>Interests</Fieldset.Legend>
-      <Checkbox label="Design" />
-      <Checkbox label="Engineering" />
+      <Field.Item>
+        <Field.Label>
+          <Checkbox /> Design
+        </Field.Label>
+      </Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Checkbox /> Engineering
+        </Field.Label>
+      </Field.Item>
     </Fieldset.Root>
   ),
 };

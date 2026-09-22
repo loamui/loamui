@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
-import { Button, Combobox, Field } from "../../index";
+import { Button, Combobox, Field } from "../../index.js";
 
 const COUNTRIES = [
   "Australia",
@@ -138,7 +138,7 @@ export const DisabledOptions: Story = {
 export const InAField: Story = {
   render: () => (
     <div style={{ maxInlineSize: "20rem" }}>
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>Country</Field.Label>
         <Field.Description>Where you are resident for tax.</Field.Description>
         <Field.Error>Choose a country from the list</Field.Error>

@@ -41,14 +41,14 @@ These notes explain the design. The included tests cover structure and selected 
 - [Badge](https://loamui.com/docs/components/badge.md)
 - [SignpostLink](https://loamui.com/docs/components/signpost-link.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 import { useId } from "react";
 import { Badge, SignpostLink } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const titleId = useId();
   return (
     <section className="banner-background-image" aria-labelledby={titleId}>
@@ -61,28 +61,28 @@ export default function Example() {
         height="1200"
         loading="lazy"
       />
-      <div>
-        <header>
-          <p className="eyebrow">
-            <Badge>Offer</Badge>
-            <span>Until 30 November · bare-root season</span>
-          </p>
-          <h2 id={titleId}>Members save 20% on fruit plants</h2>
-          <p className="description">
-            Apples, pears, plums and soft fruit on local rootstocks, lifted the week they are
-            posted. Order before the end of November and the discount comes off at the basket.
-          </p>
-          <div className="actions">
-            <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
-          </div>
-        </header>
+      <div className="copy">
+        <p className="eyebrow">
+          <Badge.Root>
+            <Badge.Text>Offer</Badge.Text>
+          </Badge.Root>
+          <span>Until 30 November · bare-root season</span>
+        </p>
+        <h2 id={titleId}>Members save 20% on fruit plants</h2>
+        <p className="description">
+          Apples, pears, plums and soft fruit on local rootstocks, lifted the week they are posted.
+          Order before the end of November and the discount comes off at the basket.
+        </p>
+        <div className="actions">
+          <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
+        </div>
       </div>
     </section>
   );
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.banner-background-image) to ([class*="loam-"]) {
@@ -93,6 +93,8 @@ export default function Example() {
       border-radius: var(--loam-radius-xl);
       color: var(--loam-color-fg);
       container: banner-background-image / inline-size;
+      display: block grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
       isolation: isolate;
       position: relative;
 
@@ -103,10 +105,6 @@ export default function Example() {
         inset: 0;
         position: absolute;
         z-index: -1;
-      }
-
-      > div {
-        display: block grid;
       }
     }
 
@@ -120,7 +118,9 @@ export default function Example() {
       z-index: -2;
     }
 
-    header {
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
+    .copy {
       align-content: center;
       display: block grid;
       font-size: var(--loam-text-md);
@@ -160,14 +160,8 @@ export default function Example() {
     }
 
     @container banner-background-image (inline-size < 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    @container banner-background-image (inline-size >= 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      .copy {
+        grid-column: 1 / -1;
       }
     }
 

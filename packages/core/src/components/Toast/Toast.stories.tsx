@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { Button, Toast, Toasts, useToast } from "../../index";
-import type { ToastOptions } from "../../index";
+import { Button, Toast, Toasts, useToast } from "../../index.js";
+import type { ToastOptions } from "../../index.js";
 
 /**
  * Toasts are fired imperatively via the `useToast` hook, so every story

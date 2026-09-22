@@ -5,8 +5,8 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { useState } from "react";
 
-import { Field } from "../components/Field/index";
-import { Range } from "../components/Range/index";
+import { Field } from "../components/Field/index.js";
+import { Range } from "../components/Range/index.js";
 
 afterEach(cleanup);
 
@@ -15,7 +15,7 @@ const axeOptions = { rules: { "color-contrast": { enabled: false } } };
 describe("Range marks", () => {
   it("forwards the marks to a datalist the input references", () => {
     const { container } = render(
-      <Range
+      <Range.Control
         aria-label="Volume"
         marks={[{ value: 0, label: "Quiet" }, { value: 50 }, { value: 100, label: "Loud" }]}
       />,
@@ -31,7 +31,7 @@ describe("Range marks", () => {
 
   it("draws the labels beside their ticks, hidden from assistive technology", () => {
     const { container } = render(
-      <Range
+      <Range.Control
         aria-label="Volume"
         min={0}
         max={200}
@@ -47,7 +47,7 @@ describe("Range marks", () => {
   });
 
   it("renders the bare input, and nothing else, without marks", () => {
-    const { container } = render(<Range aria-label="Volume" defaultValue={30} />);
+    const { container } = render(<Range.Control aria-label="Volume" defaultValue={30} />);
     expect(container.children).toHaveLength(1);
     expect(container.querySelector("datalist")).toBeNull();
   });
@@ -71,7 +71,7 @@ describe("Range.Output", () => {
   it("is a native output bound to the input, showing its value", () => {
     render(
       <Range.Root>
-        <Range aria-label="Volume" defaultValue={40} />
+        <Range.Control aria-label="Volume" defaultValue={40} />
         <Range.Output />
       </Range.Root>,
     );
@@ -85,7 +85,7 @@ describe("Range.Output", () => {
   it("follows the thumb and sets the root's --_value", () => {
     const { container } = render(
       <Range.Root>
-        <Range aria-label="Volume" min={0} max={200} defaultValue={50} />
+        <Range.Control aria-label="Volume" min={0} max={200} defaultValue={50} />
         <Range.Output />
       </Range.Root>,
     );
@@ -105,7 +105,7 @@ describe("Range.Output", () => {
             Louder
           </button>
           <Range.Root>
-            <Range
+            <Range.Control
               aria-label="Volume"
               value={value}
               onChange={(e) => setValue(e.target.valueAsNumber)}
@@ -126,7 +126,7 @@ describe("Range.Output", () => {
       <Field.Root id="volume">
         <Field.Label>Volume</Field.Label>
         <Range.Root>
-          <Range defaultValue={7} />
+          <Range.Control defaultValue={7} />
           <Range.Output labels={{ value: (n) => `${n} dB` }} />
         </Range.Root>
       </Field.Root>,
@@ -149,7 +149,7 @@ describe("Range.Output", () => {
       <Field.Root>
         <Field.Label>Volume</Field.Label>
         <Range.Root>
-          <Range
+          <Range.Control
             defaultValue={40}
             marks={[{ value: 0, label: "Quiet" }, { value: 50 }, { value: 100, label: "Loud" }]}
           />

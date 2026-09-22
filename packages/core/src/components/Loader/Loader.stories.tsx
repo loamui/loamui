@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
-import { Loader } from "../../index";
+import { Loader } from "../../index.js";
 
 const meta = {
   title: "Feedback/Loader",

@@ -30,7 +30,6 @@
     }
   }
 
-  /* ---- Track ---- */
   :scope::-webkit-slider-runnable-track {
     background: var(--loam-color-line-strong);
     block-size: var(--_track-h);
@@ -50,7 +49,6 @@
     border-radius: var(--loam-radius-full);
   }
 
-  /* ---- Thumb ---- */
   :scope::-webkit-slider-thumb {
     appearance: none;
     background: var(--loam-color-primary-strong);
@@ -78,8 +76,6 @@
     border-radius: var(--loam-radius-full);
     box-shadow: var(--loam-shadow-sm);
     inline-size: var(--_thumb);
-
-    /* Identity at rest — the hover grow transitions both ways. */
     scale: 1;
 
     @media (prefers-reduced-motion: no-preference) {

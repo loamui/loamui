@@ -29,15 +29,27 @@ import {
   SkipLink,
   Textarea,
   Field,
-} from "../index";
-import type { ToastOptions } from "../index";
+} from "../index.js";
+import type { ToastOptions } from "../index.js";
 
 afterEach(cleanup);
 
 describe("Switch", () => {
   it("toggles on click", async () => {
     const user = userEvent.setup();
-    render(<Switch label="Notifications" />);
+    render(
+      <Field.Item>
+        <Field.Label>
+          <Switch.Root>
+            <Switch.Control />
+            <Switch.Track>
+              <Switch.Thumb />
+            </Switch.Track>
+          </Switch.Root>{" "}
+          Notifications
+        </Field.Label>
+      </Field.Item>,
+    );
     const sw = screen.getByRole("switch") as HTMLInputElement;
     expect(sw.checked).toBe(false);
     await user.click(sw);
@@ -47,7 +59,13 @@ describe("Switch", () => {
 
 describe("Checkbox", () => {
   it("reflects the indeterminate prop on the DOM node", () => {
-    render(<Checkbox label="Select all" indeterminate />);
+    render(
+      <Field.Item>
+        <Field.Label>
+          <Checkbox indeterminate /> Select all
+        </Field.Label>
+      </Field.Item>,
+    );
     const cb = screen.getByRole("checkbox") as HTMLInputElement;
     expect(cb.indeterminate).toBe(true);
   });
@@ -1207,9 +1225,9 @@ describe("DateInput", () => {
 
   it("an error narrowed with parts marks only those fields invalid", () => {
     render(
-      <DateInput.Root name="dob">
+      <DateInput.Root invalid={["year"]} name="dob">
         <DateInput.Legend>Date of birth</DateInput.Legend>
-        <DateInput.Error parts={["year"]}>The year must include four digits</DateInput.Error>
+        <DateInput.Error>The year must include four digits</DateInput.Error>
         <DateInput.Fields>
           <DateInput.Day />
           <DateInput.Month />
@@ -1294,19 +1312,19 @@ describe("Card", () => {
 
 describe("Table", () => {
   const table = (
-    <Table>
-      <caption>Invoices</caption>
-      <thead>
-        <tr>
-          <th>Invoice</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>INV-1</td>
-        </tr>
-      </tbody>
-    </Table>
+    <Table.Root>
+      <Table.Caption>Invoices</Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Invoice</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        <Table.Tr>
+          <Table.Td>INV-1</Table.Td>
+        </Table.Tr>
+      </Table.Tbody>
+    </Table.Root>
   );
 
   it("adds no tab stop while the table fits its container", async () => {
@@ -1326,9 +1344,14 @@ describe("Table", () => {
     const ref = { current: null as HTMLDivElement | null };
     const tableRef = { current: null as HTMLTableElement | null };
     const { container } = render(
-      <Table ref={ref} className="mine" data-testid="wrap" tableProps={{ ref: tableRef, id: "t" }}>
-        <caption>Invoices</caption>
-      </Table>,
+      <Table.Root
+        ref={ref}
+        className="mine"
+        data-testid="wrap"
+        tableProps={{ ref: tableRef, id: "t" }}
+      >
+        <Table.Caption>Invoices</Table.Caption>
+      </Table.Root>,
     );
     const wrap = container.querySelector(".loam-Table");
     expect(wrap).toHaveClass("mine");
@@ -1342,13 +1365,13 @@ describe("Table", () => {
     const clientWidth = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(400);
     try {
       render(
-        <Table labels={{ scrollable: "Tabelle" }}>
-          <tbody>
-            <tr>
-              <td>INV-1</td>
-            </tr>
-          </tbody>
-        </Table>,
+        <Table.Root labels={{ scrollable: "Tabelle" }}>
+          <Table.Tbody>
+            <Table.Tr>
+              <Table.Td>INV-1</Table.Td>
+            </Table.Tr>
+          </Table.Tbody>
+        </Table.Root>,
       );
       expect(await screen.findByRole("region", { name: "Tabelle" })).toBeInTheDocument();
     } finally {

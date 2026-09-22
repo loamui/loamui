@@ -40,14 +40,14 @@ These notes explain the design. The included tests cover structure and selected 
 - [Element styles](https://loamui.com/docs/element-styles.md)
 - [SignpostLink](https://loamui.com/docs/components/signpost-link.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 import { useId } from "react";
 import { SignpostLink } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const titleId = useId();
   return (
     <section className="hero-background-image" aria-labelledby={titleId}>
@@ -60,7 +60,7 @@ export default function Example() {
         height="900"
         fetchPriority="high"
       />
-      <header>
+      <div className="copy">
         <h1 id={titleId}>A field of seed, saved by the people who sow it.</h1>
         <p className="lede">
           Hedgerow grows open-pollinated vegetables, herbs and flowers on member plots across
@@ -75,13 +75,13 @@ export default function Example() {
             Watch the harvest
           </a>
         </div>
-      </header>
+      </div>
     </section>
   );
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.hero-background-image) to ([class*="loam-"]) {
@@ -114,7 +114,9 @@ export default function Example() {
       z-index: -2;
     }
 
-    header {
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
+    .copy {
       align-content: end;
       display: block grid;
       font-size: var(--loam-text-md);

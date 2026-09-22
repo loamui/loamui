@@ -13,7 +13,7 @@ A surface container that groups related content: the one surface primitive, whic
 ## Import
 
 ```tsx
-import { Card } from "@loamui/core";
+import { Card, Button } from "@loamui/core";
 ```
 
 ## Usage

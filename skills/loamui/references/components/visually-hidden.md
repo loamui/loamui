@@ -13,7 +13,7 @@ Text for assistive technology alone: the name of an icon-only control, the word 
 ## Import
 
 ```tsx
-import { VisuallyHidden } from "@loamui/core";
+import { VisuallyHidden, Button, Input } from "@loamui/core";
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ The glyph is decoration and the words are the name. Nothing is visible in the bu
 
 ```tsx
 <Button>
-  <TrashIcon aria-hidden />
+  <IconTrash aria-hidden />
   <VisuallyHidden>Remove Climbing bean ‘Blue Lake’ seeds</VisuallyHidden>
 </Button>
 ```
@@ -45,9 +45,7 @@ Four buttons that all read “Add to basket” are four buttons a screen reader 
 A search box whose placeholder stands in for its label visually still needs a real label. `render` swaps the span for the element the slot requires.
 
 ```tsx
-<VisuallyHidden render={<label htmlFor="q" />}>
-  Search the catalogue
-</VisuallyHidden>
+<VisuallyHidden render={<label htmlFor="q" />}>Search the catalogue</VisuallyHidden>
 <Input id="q" type="search" placeholder="Search…" />
 ```
 

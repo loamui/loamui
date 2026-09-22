@@ -39,12 +39,12 @@ These notes explain the design. The included tests cover structure and selected 
 - [Tokens](https://loamui.com/docs/tokens.md)
 - [Element styles](https://loamui.com/docs/element-styles.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   return (
     <div className="timeline">
       <ol role="list">
@@ -91,7 +91,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.timeline) to ([class*="loam-"]) {

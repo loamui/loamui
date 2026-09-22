@@ -1,5 +1,5 @@
-import { Button, Checkbox } from "@loamui/core";
-import { ComputedTokens } from "./tokens.client";
+import { Button, Checkbox, Field } from "@loamui/core";
+import { ComputedTokens } from "./demos";
 import "../prose.css";
 
 export const metadata = {
@@ -139,7 +139,7 @@ with everything on this page:
     }}
   >
     <strong>Delete workspace</strong>
-    <Checkbox label="I understand this is permanent" />
+    <Field.Item><Field.Label><Checkbox /> I understand this is permanent</Field.Label></Field.Item>
     <div style={{ display: "flex", gap: "var(--loam-space-xs)" }}>
       <Button>Delete</Button>
       <Button>Cancel</Button>
@@ -161,7 +161,7 @@ with everything on this page:
 <section className="danger-zone">
   {/* everything inside adopts the danger accent: buttons, checked
       states, carets: even focus rings */}
-  <Checkbox label="I understand this is permanent" />
+  <Field.Item><Field.Label><Checkbox /> I understand this is permanent</Field.Label></Field.Item>
   <Button>Delete</Button>
 </section>
 ```

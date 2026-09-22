@@ -41,14 +41,14 @@ These notes explain the design. The included tests cover structure and selected 
 - [Card](https://loamui.com/docs/components/card.md)
 - [SignpostLink](https://loamui.com/docs/components/signpost-link.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 import { useId } from "react";
 import { Card, SignpostLink } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const instanceId = useId();
   return (
     <div className="grid-asymmetric">
@@ -112,7 +112,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.grid-asymmetric) to ([class*="loam-"]) {

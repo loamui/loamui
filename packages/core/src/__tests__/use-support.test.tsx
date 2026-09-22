@@ -3,7 +3,7 @@ import { render, cleanup } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { useLayoutEffect, useRef } from "react";
 
-import { useHydrated, useSupports } from "../use-support";
+import { useHydrated, useSupports } from "../hooks/use-support.js";
 
 afterEach(cleanup);
 

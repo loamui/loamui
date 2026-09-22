@@ -13,7 +13,7 @@ The single-line text box. Compose it inside a Field for its label, description a
 ## Import
 
 ```tsx
-import { Field, Input } from "@loamui/core";
+import { Field, Input, Button } from "@loamui/core";
 ```
 
 ## Usage
@@ -63,14 +63,12 @@ Field.Description is linked to the input through aria-describedby, so the hint i
 
 ### Error state
 
-A Field.Error before the control marks the field invalid and is announced: no error prop, the message's presence is the state.
+Set invalid on Field.Root and compose Field.Error before the control for its announced message.
 
 ```tsx
-<Field.Root>
+<Field.Root invalid>
   <Field.Label>Email</Field.Label>
-  <Field.Error>
-    Enter an email address in the correct format, like name@example.com
-  </Field.Error>
+  <Field.Error>Enter an email address in the correct format, like name@example.com</Field.Error>
   <Input defaultValue="not-an-email" />
 </Field.Root>
 ```
@@ -100,26 +98,26 @@ The disabled attribute forwards to the native input: the field is dimmed, skippe
 </Field.Root>
 ```
 
-### With sections
+### Prefixes and suffixes
 
-Sections sit inside the field but outside the accessible name, so the Field.Label still does the naming. A placeholder alone never can.
+Use startSection and endSection for content inside the bordered box. Field.Label names the input; include any meaningful unit or suffix in the label or description.
 
 ```tsx
 <Field.Root>
   <Field.Label>Handle</Field.Label>
-  <Input startSection="@" />
+  <Input startSection={<span aria-hidden="true">@</span>} />
 </Field.Root>
 
 <Field.Root>
-  <Field.Label>Site name</Field.Label>
-  <Input endSection=".dev" />
+  <Field.Label>Site name on .dev</Field.Label>
+  <Input endSection={<span aria-hidden="true">.dev</span>} />
 </Field.Root>
 ```
 
 ## When to use it
 
 - For short, free-form single-line text: names, emails, search terms, URLs.
-- Inside a Field.Root, which ties the label, helper description and inline error together: the control self-wires from the surrounding field, so the accessibility is correct by construction. See the Field page.
+- Inside a Field.Root, which ties the label, helper description and inline error together: the control self-wires from the surrounding field, with message IDs registered after hydration. Supply explicit ARIA links when needed in initial server HTML; see the Field page.
 
 ## When not to
 
@@ -165,7 +163,7 @@ A placeholder vanishes the moment the user types, is skipped by some assistive t
 
 ### Width belongs to the container, or to the answer
 
-The field fills whatever it is placed in; there is no width prop. Width is information: a four-character reference in a page-wide box reads as a harder question than it is. For an answer of a known length, the native size attribute is the platform's own measure: the input is as wide as that many characters and the box shrink-wraps it. DateInput is built on it. For anything else, put the field in a container sized to the expected answer.
+The field fills whatever it is placed in; there is no width prop. Width is information: a four-character reference in a page-wide box reads as a harder question than it is. For an answer of a known length, the native size attribute is the platform's own measure: the input is as wide as that many characters and it keeps its intrinsic width. DateInput is built on it. For anything else, put the field in a container sized to the expected answer.
 
 ```tsx
 <Field.Root>
@@ -177,9 +175,9 @@ The field fills whatever it is placed in; there is no width prop. Width is infor
 ## Accessibility
 
 - Inside a Field.Root the input reads its id from the field, so Field.Label is a real <label> tied to it: clicking the label focuses the field and screen readers announce it.
-- Field.Description and Field.Error are linked via aria-describedby, and a rendered error also sets aria-invalid, announced together when the field gains focus.
+- Field.Description and Field.Error are linked via aria-describedby, and Field.Root invalid sets aria-invalid, announced together when the field gains focus.
 - Field.Error uses role="alert" so the message is announced as it appears.
-- startSection / endSection render your content beside the input but outside its accessible name. Mark visual content like currency symbols or icons aria-hidden, and carry the unit in the label or description so non-visual users get it too.
+- Mark decorative startSection and endSection content aria-hidden, and carry meaningful units in the label or description so non-visual users get them too.
 - Under forced colours the danger border colour is dropped, so an invalid field carries its state as an outline in a system colour, with the focus ring offset further out.
 - Mark optional fields in words (Field.Label's optional prop) rather than asterisking required ones: required lives on the control as the native required attribute, which drives validation after submission.
 
@@ -197,9 +195,8 @@ The field fills whatever it is placed in; there is no width prop. Width is infor
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `startSection` | `ReactNode` | — | Content inside the box, before the input. |
-| `endSection` | `ReactNode` | — | Content inside the box, after the input. |
-| `size` | `number` | — | The native size attribute, honoured: the input is as wide as that many characters and the box shrink-wraps it. |
-| `wrapperProps` | `PartProps<"div">` | — | Props for the bordered box around the input. className, style, ref and every other prop land on the <input> itself; this is the one way to reach the box. |
+| `startSection / endSection` | `ReactNode` | — | Content inside the bordered box, before or after the input. |
+| `wrapperProps` | `Omit<PartProps<"div">, "children">` | — | Props for the bordered wrapper. className, style, ref and other native input props on Input target the input itself. |
+| `size` | `number` | — | The native size attribute, honoured: the input is as wide as that many characters and it keeps its intrinsic width. |
 | `...others` | `InputHTMLAttributes` | — | All native <input> props, and ref, are forwarded to the <input>. |
 

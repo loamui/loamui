@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { useState } from "react";
 import type { CSSProperties } from "react";
-import { Field } from "../../index";
-import { QuantityInput } from "./index";
+import { Field } from "../../index.js";
+import { QuantityInput } from "./index.js";
 
 const meta = {
   title: "Inputs/QuantityInput",

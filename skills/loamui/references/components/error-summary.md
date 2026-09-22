@@ -28,13 +28,11 @@ Submit the empty form: the summary appears, takes keyboard focus so the problem 
     <ErrorSummary.Root>
       <ErrorSummary.Title />
       <ErrorSummary.List>
-        <ErrorSummary.Item href="#demo-email">
-          Enter your email address
-        </ErrorSummary.Item>
+        <ErrorSummary.Item href="#demo-email">Enter your email address</ErrorSummary.Item>
       </ErrorSummary.List>
     </ErrorSummary.Root>
   )}
-  <Field.Root id="demo-email">
+  <Field.Root invalid={Boolean(emailError)} id="demo-email">
     <Field.Label>Email address</Field.Label>
     <Field.Error>{emailError}</Field.Error>
     <Input />

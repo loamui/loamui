@@ -43,6 +43,27 @@ assets. The hosted stylesheet used in the guides follows the docs deployment
 and is unversioned. Follow the [installation guide](https://loamui.com/docs/installation)
 for delivery and cascade-layer order before using the example below.
 
+## Import components and parts
+
+```tsx
+import { Alert } from "@loamui/core/alert";
+import { Modal } from "@loamui/core/modal";
+```
+
+Compound components are ES module namespaces: compose `Alert.Root`,
+`Alert.Title` and `Alert.Description`, or `Modal.Root` and `Modal.Trigger`.
+Every compound component has an explicit `.Root`; the namespace itself is
+not a component. The package root also exports these namespaces.
+
+Standalone components such as `Button` and `Input` are callable. Compound
+parts are accessed through their namespace, without parallel `AlertRoot` or
+`AlertTitle` value exports. Prefer component entry points when controlling
+lazy-loaded chunks.
+
+JavaScript ships as separate ES modules with client boundaries preserved.
+Static components can render on the server; interactive parts declare their
+own client boundary. Styles remain one complete stylesheet.
+
 ## Three primitives, working together
 
 - **Tokens** describe colour, typography, spacing and motion through `--loam-*`
@@ -77,7 +98,7 @@ export function UploadStatus() {
     <section style={{ "--loam-context": "info" } as CSSProperties}>
       <h2>Your photos</h2>
       <p>Keep this page open until the upload finishes.</p>
-      <Badge>In progress</Badge>
+      <Badge.Root>In progress</Badge.Root>
       <Progress value={60}>Uploading photos</Progress>
     </section>
   );
@@ -149,7 +170,7 @@ This is a pnpm and Turborepo monorepo. Use Node.js 22.13 or later and pnpm 11.
 - [`packages/create-loamui`](./packages/create-loamui): the published
   `create-loamui` scaffolder and setup checker.
 - [`apps/docs`](./apps/docs): the documentation site and live examples.
-- [`apps/docs/src/examples`](./apps/docs/src/examples): the worked recipes.
+- [`apps/docs/src/recipes`](./apps/docs/src/recipes): the worked recipes.
 
 ```bash
 pnpm install
@@ -192,13 +213,14 @@ the authority for everything it covers: run it and believe it.
   specific to live here. Larger sections live as worked recipes on the docs
   site: product-specific compositions to study and adapt, built on core the
   way any consumer would, and held to the same pillars and gates.
-- **Composition.** Compound components expose parts; element swap goes through
-  `render`; Button icons and loaders are children. Input's documented
-  `startSection` and `endSection` props supply adornments inside its field box.
-  Bare form
-  controls (Input, Select, Textarea, Range, QuantityInput, `FileInput.Control`,
-  `Search.Input`) self-wire from `Field`; Checkbox / Radio / Switch keep an
-  inline label because the control lives inside it.
+- **Composition.** Simple components remain callable; compound components expose
+  parts where consumers need control, without making every internal element
+  public. Element swap goes through `render`, Button icons and loaders are
+  children, and Input accepts `startSection` and `endSection` content inside
+  its wrapper. Avatar composes Root, Image and Fallback; Switch exposes Root,
+  Control, Track and Thumb. Controls self-wire from Field; compose labels and
+  messages through Field, use its Item part for independent option associations,
+  and set validation explicitly with Root `invalid`.
 - **CSS.** Selectors are `@scope`d, not BEM: one `loam-` class per root, parts
   by element type or short class. A scope that hosts foreign content is fenced
   with a donut (`to ([class*="loam-"])`). Refer to elements directly, with no
@@ -206,7 +228,7 @@ the authority for everything it covers: run it and believe it.
   No `!important`, ever: stylelint bans it, and everything wins through
   layers. Follow the `modern-css` skill for authoring.
 - **Colour & motion.** All colour is `oklch()` / `light-dark()` / `color-mix()`.
-  Every token pair is contrast-audited in CI (4.5:1 text, 3:1 non-text, both
+  Enumerated token pairs are contrast-audited in CI (4.5:1 text, 3:1 non-text, both
   schemes); contexted checked and filled controls use the `-strong` family so
   they hold contrast in every context. Motion is opt-in via
   `prefers-reduced-motion: no-preference`; state carried by background paint

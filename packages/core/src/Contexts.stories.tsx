@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties, HTMLAttributes } from "react";
-import { Button, Checkbox, Field, Input, Range, Switch } from "./index";
+import { Button, Checkbox, Field, Input, Range, Switch } from "./index.js";
 
 /**
  * Contextual meaning as a custom property.
@@ -52,15 +52,21 @@ export const DangerContext: Story = {
         <strong>Delete workspace</strong>
         <Field.Root>
           <Field.Label>
-            <Checkbox.Control defaultChecked /> I understand this is permanent
+            <Checkbox defaultChecked /> I understand this is permanent
           </Field.Label>
         </Field.Root>
         <Field.Root>
           <Field.Label>
-            <Switch.Control defaultChecked /> Also delete backups
+            <Switch.Root>
+              <Switch.Control defaultChecked />
+              <Switch.Track>
+                <Switch.Thumb />
+              </Switch.Track>
+            </Switch.Root>{" "}
+            Also delete backups
           </Field.Label>
         </Field.Root>
-        <Range defaultValue={70} aria-label="Retention days" />
+        <Range.Control defaultValue={70} aria-label="Retention days" />
         <Input aria-label="Workspace name" />
         <div style={{ display: "flex", gap: "0.75rem" }}>
           <Button>Delete</Button>
@@ -89,7 +95,7 @@ export const InvertedRegion: Story = {
       <strong style={{ color: "var(--loam-color-fg)" }}>An on-dark section</strong>
       <Field.Root style={{ color: "var(--loam-color-fg)" }}>
         <Field.Label>
-          <Checkbox.Control defaultChecked /> Dark-scheme tokens throughout
+          <Checkbox defaultChecked /> Dark-scheme tokens throughout
         </Field.Label>
       </Field.Root>
       <div style={{ display: "flex", gap: "0.75rem" }}>

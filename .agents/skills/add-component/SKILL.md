@@ -35,7 +35,9 @@ component is the last resort, not the first.
    consumer's wrapper, not a library component.
 2. **Is it a native element the element-styles layer already dresses?** Then a
    scoped rule on a semantic element (see the Typography guide's "components are
-   yours to name"), not a React wrapper.
+   yours to name"), not automatically a React wrapper. A public part needs a
+   consumer composition use case; internal markup and CSS selectors alone do
+   not justify one.
 3. **Is it a value?** Then a token, not a component.
 4. **Does it genuinely need a new primitive** (a token or an element style)?
    That is the highest bar and needs a recorded ruling — components adapt to
@@ -50,8 +52,8 @@ are the smell.
 Precedents that were deliberately _not_ built (cite them when pushing back):
 no spacer (`gap` replaced spacers), no `Heading`/`Text` (typography is
 domain-specific and yours to name), no layout components (compose native CSS
-modules), and no `size`/`variant`/`color` props anywhere. Name what you do build
-for the HTML element it's built on, not a design-system alias — `Range`
+modules), and no appearance props beyond the documented exceptions. Name what
+you do build for the HTML element it's built on, not a design-system alias — `Range`
 (`<input type="range">`), not `Slider`; `Details` (`<details>`), not `Accordion`.
 
 ## Step 2 — Read the primitives first
@@ -65,16 +67,16 @@ the tokens already hold, stop.
 
 Copy the structure of the closest existing component rather than inventing one:
 
-| Shape                                                   | Model                                   |
-| ------------------------------------------------------- | --------------------------------------- |
-| Bare form control (self-wires from `Field`)             | `Input`, `Select`, `Textarea`           |
-| Control with an inline label + a bare `*Control` export | `Checkbox`, `Switch`                    |
-| A set participating via context (never `cloneElement`)  | `RadioGroup`+`Radio`, `Tabs`            |
-| Compound overlay (Root/Trigger/Popup parts)             | `Modal`, `Popover`, `Menu`, `Drawer`    |
-| Native disclosure                                       | `Details`                               |
-| Display element that keeps `size`                       | `Badge`, `Loader`, `Progress`, `Meter`  |
-| Composed from other components, behind the donut        | `Search`, `QuantityInput`, `CopyButton` |
-| Text derived by `Intl` from a value (`<time>`, a price) | `Time`, `Price`                         |
+| Shape                                                   | Model                                     |
+| ------------------------------------------------------- | ----------------------------------------- |
+| Form control (self-wires from `Field`)                  | `Input`, `Select.Root`, `Textarea`        |
+| Native choice with independently composed text          | `Checkbox` or `Radio` inside `Field.Item` |
+| A set participating via context (never `cloneElement`)  | `RadioGroup`+`Radio`, `Tabs`              |
+| Compound overlay (Root/Trigger/Popup parts)             | `Modal`, `Popover`, `Menu`, `Drawer`      |
+| Native disclosure                                       | `Details`                                 |
+| Display element that keeps `size`                       | `Badge`, `Loader`, `Progress`, `Meter`    |
+| Composed from other components, behind the donut        | `Search`, `QuantityInput`, `CopyButton`   |
+| Text derived by `Intl` from a value (`<time>`, a price) | `Time`, `Price`                           |
 
 ## Step 4 — Hold the API and CSS doctrine
 
@@ -90,11 +92,20 @@ Non-negotiables (full reasons in the README Standards section):
 - **Every default string is overridable.** An `aria-label`, a "Copied" status,
   a button's name: a prop or children with an English default, never a
   hard-coded string, so a page in another language passes its own.
-- **Compose, don't configure.** Compound components expose parts; element swap
-  goes through the `render` prop; icons and loaders are detected children
-  (`:has(svg, .loam-Loader)`), never slot props. Bare form controls self-wire
-  from `Field` (no `label`/`error` props); Checkbox/Radio/Switch keep an inline
-  label because the control lives inside it.
+- **Compose where consumers need control.** Simple components remain callable;
+  compound components expose meaningful parts. Element swap goes through
+  `render` where supported. Button icons and loaders are children; Input accepts
+  `startSection` and `endSection` content. Controls self-wire from `Field`.
+  Checkbox and Radio accept optional `label` and `description` content;
+  omit those props when composing their text with Field.Label. Field.Item
+  gives each grouped option independent associations. Switch exposes Root,
+  Control, Track and Thumb while the input remains native. Avatar composes
+  Root, Image and Fallback with explicit child content. Field validation is
+  explicit through Root invalid; message IDs register after hydration, with
+  explicit ARIA links for initial server associations.
+- **Public parts need a purpose.** Expose structure or behaviour consumers need
+  to arrange. Internal wrappers and decoration can remain implementation
+  details; do not generate a part for every styled element.
 - **Scope, don't BEM.** One `loam-` class on each scope root; parts are type
   selectors or short classes. **Add the donut** (`@scope (root) to
 ([class*="loam-"])`) whenever the scope hosts foreign content (children, a
@@ -118,7 +129,8 @@ Non-negotiables (full reasons in the README Standards section):
 
 The CSS and TSX are the easy part; these are the steps low-risk additions miss:
 
-- [ ] Export the component (and any `*Control`) from `src/index.ts`.
+- [ ] Export the callable component or compound namespace and public types from
+      `src/index.ts`.
 - [ ] Add the component's `@import` (with `layer()`) to `src/styles.css` — this
       is what loads it in Storybook/dev **and** what `scripts/build-css.mjs`
       scans (it warns if the import is missing).
@@ -136,12 +148,16 @@ The CSS and TSX are the easy part; these are the steps low-risk additions miss:
       marketing and overview pages are the exception: there, citing what the
       accessibility pillar is distilled from is a credibility signal, and the
       attribution is deliberate.
-- [ ] **JSX that uses compound parts lives in `<slug>.client.tsx` with
-      `"use client"`; the server content page imports it.** The core bundle is
-      one client reference, so `Search.Root` or `FileInput.Control` is
-      `undefined` in a server module and the page crashes at prerender.
-      Callable forms (`<Rating>`, `<Meter>`, `<CopyButton>`) render from the
-      server page as they are.
+- [ ] **Use one public export shape.** Compound implementations use prefixed
+      names internally, re-exported as `Root`, `Control` and other parts from
+      `index.parts.ts`. Expose that namespace with `export * as Name` from the
+      component index and add its subpath to `package.json` exports. Do not
+      also publish prefixed part values, attach parts to functions or collect
+      them in runtime objects. Standalone components remain callable.
+- [ ] **Preserve client boundaries.** Modules using client hooks or creating
+      event handlers declare `"use client"`. Static parts remain server-compatible;
+      server compositions can render named client parts with serializable props.
+      Consumer hooks and callbacks belong in a client module.
 - [ ] Every default string (an `aria-label`, a status, a button's name) is a
       prop or children, documented in the props table with its default.
 - [ ] If it introduces a new colour pairing, add a check to
@@ -152,15 +168,15 @@ The CSS and TSX are the easy part; these are the steps low-risk additions miss:
 If the ladder in Step 1 ends at "composition of existing parts", the thing is
 not a component: it is an example, a section built from core the way any
 consumer would and copied rather than installed. Examples live in
-`apps/docs/src/examples/<category>/<slug>/` as four files (`Example.tsx`,
-`example.css`, `meta.ts`, `example.test.tsx`) and are held to the seven
-rules in [CONTRIBUTING → Examples](../../../CONTRIBUTING.md): a real problem
-solved honestly; the markup is the deliverable; built the way any consumer
+`apps/docs/src/recipes/<category>/<slug>/` as four files (`Recipe.tsx`,
+`recipe.css`, `meta.ts`, `recipe.test.tsx`) and are held to the seven
+rules in [CONTRIBUTING → Recipes](../../../CONTRIBUTING.md#recipes-recipes): a
+real problem solved honestly; the markup is the deliverable; built the way any consumer
 would (core imports only, the donut, tokens, core parts never restyled); the
 pillars in the copy; idiomatic current React; it says why in `meta.ts`; it
-proves one promise in its test. Model a new one on `forms/input-with-button`
-or `commerce/order-summary`, run `pnpm --filter @loamui/docs build-examples`
-so the registry picks it up, and `pnpm check:examples` refuses anything that
+proves one promise in its test. Model a new one on `forms/sign-in-with-errors`
+or `cards/article-card`, run `pnpm --filter @loamui/docs build-recipes`
+so the registry picks it up, and `pnpm check:recipes` refuses anything that
 breaks the rules. Only when an example needs behaviour that is not an
 arrangement (a carousel's paging, a nav's dropdown) does a new core primitive
 follow, through Steps 1 to 6.
@@ -171,7 +187,7 @@ Run the full suite and believe it, then verify what no tool can:
 
 ```
 pnpm -r lint · pnpm lint:md · pnpm -r exec tsc --noEmit
-pnpm --filter @loamui/core test · pnpm format:check
+pnpm --filter @loamui/core test · pnpm --filter @loamui/core test:package · pnpm format:check
 pnpm --filter @loamui/core audit:contrast
 pnpm --filter @loamui/core build-storybook · PAGES=true pnpm -r build
 ```

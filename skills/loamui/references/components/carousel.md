@@ -13,7 +13,7 @@ A scroll-snap track of items with buttons that page it, indicators that jump to 
 ## Import
 
 ```tsx
-import { Carousel } from "@loamui/core";
+import { Carousel, Card } from "@loamui/core";
 ```
 
 ## Usage

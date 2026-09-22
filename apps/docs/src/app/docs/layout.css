@@ -1,4 +1,8 @@
-@scope (.site-DocsShell) {
+/* The docs shell: the sidebar beside the content. The aside is the part;
+   its inner scroller is the div it holds. The donut matters here more than
+   anywhere: the content column hosts every page, and its `.content` once
+   padded Details.Content, whose class is the same word. */
+@scope (.site-DocsShell) to ([class*="loam-"], [class*="site-"]) {
   :scope {
     align-items: start;
     display: block grid;
@@ -8,17 +12,17 @@
     margin-inline: auto;
   }
 
-  .aside {
+  aside {
     block-size: calc(100dvb - var(--site-nav-h));
     inset-block-start: var(--site-nav-h);
     overflow: hidden;
     position: sticky;
-  }
 
-  .asideInner {
-    block-size: 100%;
-    border-inline-end: 1px solid var(--loam-color-line);
-    overflow-block: auto;
+    > div {
+      block-size: 100%;
+      border-inline-end: 1px solid var(--loam-color-line);
+      overflow-block: auto;
+    }
   }
 
   .content {
@@ -33,7 +37,7 @@
       grid-template-columns: 1fr;
     }
 
-    .aside {
+    aside {
       display: none;
     }
   }

@@ -32,7 +32,6 @@
     }
   }
 
-  /* Spinner — rotating ring */
   span.spinner {
     block-size: 100%;
     border: max(2px, calc(var(--_size) * 0.12)) solid

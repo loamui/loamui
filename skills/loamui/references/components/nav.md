@@ -13,7 +13,7 @@ Vertical navigation composed from parts: a landmark named by its title, lists of
 ## Import
 
 ```tsx
-import { Nav, useScrollSpy } from "@loamui/core";
+import { Nav, useScrollSpy, Menu } from "@loamui/core";
 ```
 
 ## Usage

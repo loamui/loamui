@@ -1,4 +1,3 @@
-// Extends vitest's `expect` with jest-dom + axe matchers (runtime).
 import "@testing-library/jest-dom/vitest";
 import { expect } from "vitest";
 import * as axeMatchers from "vitest-axe/matchers";
@@ -24,4 +23,20 @@ if (
     this.removeAttribute("open");
     this.dispatchEvent(new Event("close"));
   };
+}
+
+// jsdom implements no layout, so it has no scrollIntoView. The command menu
+// keeps its highlighted option in view with it; here it is a no-op.
+if (typeof Element !== "undefined" && typeof Element.prototype.scrollIntoView !== "function") {
+  Element.prototype.scrollIntoView = function scrollIntoView() {};
+}
+
+// jsdom has no layout, so no ResizeObserver either. The docs' scroll regions
+// and some demos observe their own size; here nothing ever resizes.
+if (typeof globalThis.ResizeObserver === "undefined") {
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
 }

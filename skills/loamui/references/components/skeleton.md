@@ -13,7 +13,7 @@ A placeholder shown while content loads, sized by the content it stands in for.
 ## Import
 
 ```tsx
-import { Skeleton } from "@loamui/core";
+import { Skeleton, Avatar } from "@loamui/core";
 ```
 
 ## Usage
@@ -34,7 +34,9 @@ An avatar-and-text placeholder for a list item. The circle is a wrapped Avatar: 
 
 ```tsx
 <div style={{ display: "flex", gap: "var(--loam-space-xs)", alignItems: "center" }}>
-  <Skeleton><Avatar /></Skeleton>
+  <Skeleton>
+    <Avatar.Root />
+  </Skeleton>
   <div style={{ display: "grid", gap: "var(--loam-space-2xs)", flex: 1 }}>
     <Skeleton style={{ "--loam-skeleton-inline-size": "40%" }} />
     <Skeleton style={{ "--loam-skeleton-inline-size": "70%" }} />
@@ -62,7 +64,9 @@ Wrapped children size the box, so the placeholder matches the coming layout with
 
 ```tsx
 <Skeleton visible={loading}>
-  <Avatar name="Ada Lovelace" />
+  <Avatar.Root role="img" aria-label="Ada Lovelace">
+    <Avatar.Fallback>AL</Avatar.Fallback>
+  </Avatar.Root>
 </Skeleton>
 ```
 
