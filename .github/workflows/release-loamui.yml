@@ -1,11 +1,11 @@
-name: Release create-loamui
+name: Release loamui
 on:
   push:
-    tags: ["create-loamui-v*"]
+    tags: ["loamui-v*"]
 permissions:
   contents: read
 concurrency:
-  group: release-create-loamui-${{ github.ref }}
+  group: release-loamui-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   checks:
@@ -29,19 +29,19 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          TAG_VERSION="${RELEASE_TAG#create-loamui-v}"
-          PKG_VERSION="$(node -p "require('./packages/create-loamui/package.json').version")"
+          TAG_VERSION="${RELEASE_TAG#loamui-v}"
+          PKG_VERSION="$(node -p "require('./packages/cli/package.json').version")"
           if [[ ! "$TAG_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Release tags must use create-loamui-vMAJOR.MINOR.PATCH. Prereleases need a separate npm dist-tag."
+            echo "Release tags must use loamui-vMAJOR.MINOR.PATCH. Prereleases need a separate npm dist-tag."
             exit 1
           fi
           if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
-            echo "Tag create-loamui-v$TAG_VERSION does not match create-loamui version $PKG_VERSION — bump the package version before tagging."
+            echo "Tag loamui-v$TAG_VERSION does not match loamui version $PKG_VERSION — bump the package version before tagging."
             exit 1
           fi
       - run: pnpm install --frozen-lockfile
-      - run: pnpm check:cli-assets
+      - run: pnpm --filter loamui test
       - run: npm pack --dry-run
-        working-directory: packages/create-loamui
+        working-directory: packages/cli
       - run: npm publish --access public --provenance
-        working-directory: packages/create-loamui
+        working-directory: packages/cli

@@ -41,15 +41,16 @@ verification.
 
 Before writing UI, follow [Project setup](references/guides/agent-workflow.md#project-setup):
 
-1. Inspect the framework, installed package, CSS delivery, layer order, tools
-   and active agent's skill discovery. Installing this skill installs no runtime.
-   Next.js and TanStack Start currently need the linked-stylesheet workaround in
-   [installation](references/guides/installation.md), not a bundled core CSS import.
+1. Run `npx loamui@latest doctor`: it reports the framework, package, CSS
+   delivery, layer order, tools and skills, and `npx loamui@latest init`
+   completes the gaps additively. Check the active agent's skill discovery
+   yourself. Installing this skill installs no runtime.
 2. Complete missing additive project-local setup within the build request's
-   authorization: package/CSS integration, Stylelint, composition checks and
-   companion skills. Explain changes; ask before replacing conflicting tools
-   or styles, changing framework/browser policy, or global/CI changes. Respect
-   installation limits; resolve necessary approval before composing.
+   authorization: package/CSS integration, Stylelint, Oxlint, Oxfmt,
+   composition checks and companion skills. Explain changes; ask before
+   replacing conflicting tools or styles, changing framework/browser policy,
+   or global/CI changes. Respect installation limits; resolve necessary
+   approval before composing.
 3. Verify dependencies and lockfile, project-owned configuration/checker files,
    and runnable scripts covering authored paths. Scratchpad and one-off checks
    are not persistent setup. Reuse working tools; never disable them to pass.

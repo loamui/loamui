@@ -7,8 +7,8 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { spacingFindings } from "../skills/loamui/assets/spacing-rules.mjs";
-export { bypassesScale, spacingFindings } from "../skills/loamui/assets/spacing-rules.mjs";
+import { spacingFindings } from "../packages/cli/assets/spacing-rules.mjs";
+export { bypassesScale, spacingFindings } from "../packages/cli/assets/spacing-rules.mjs";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 

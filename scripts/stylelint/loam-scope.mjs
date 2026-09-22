@@ -4,7 +4,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import postcss from "postcss";
 import stylelint from "stylelint";
-import { nakedScopes, scopeFindings } from "../../skills/loamui/assets/scope-rules.mjs";
+import { nakedScopes, scopeFindings } from "../../packages/cli/assets/scope-rules.mjs";
 
 const ruleName = "loamui/scope";
 const messages = stylelint.utils.ruleMessages(ruleName, {

@@ -17,18 +17,17 @@ teaches those foundations, component APIs and worked recipes to your coding agen
 
 ## Install
 
-Start a new project with the package, stylesheet, quality checks and agent
-skill wired in one command:
+Set up the package, stylesheet, quality checks and agent skill in your
+application with one command:
 
 ```bash
-npm create loamui@latest my-app
+npx loamui@latest init
 ```
 
-Or add the package to an existing application:
-
-```bash
-npm install @loamui/core
-```
+That installs `@loamui/core` in your application, links its stylesheet, and
+adds the checks and the agent skill. From nothing,
+`npx loamui@latest create my-app` creates a Next.js application and does the
+same.
 
 Use a **React 19 application with ESM support**. Load the stylesheet as well as
 installing the package; no LoamUI provider is needed. Follow the setup guide for
@@ -167,8 +166,8 @@ package includes an `AGENTS.md` summary of the consumer conventions.
 This is a pnpm and Turborepo monorepo. Use Node.js 22.13 or later and pnpm 11.
 
 - [`packages/core`](./packages/core): the published `@loamui/core` library.
-- [`packages/create-loamui`](./packages/create-loamui): the published
-  `create-loamui` scaffolder and setup checker.
+- [`packages/cli`](./packages/cli): the published `loamui` command that sets
+  up a project and checks it.
 - [`apps/docs`](./apps/docs): the documentation site and live examples.
 - [`apps/docs/src/recipes`](./apps/docs/src/recipes): the worked recipes.
 

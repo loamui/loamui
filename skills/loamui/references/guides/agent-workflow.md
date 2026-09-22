@@ -70,7 +70,7 @@ bunx skills@latest add loamui/loamui --skill loamui --agent codex --yes
 
 Open a new agent session in the project and confirm `loamui` appears among its available skills before using a recipe prompt. For another agent, use its explicit target from the [installer's supported agents](https://github.com/vercel-labs/skills#supported-agents).
 
-LoamUI pairs with two companion skills, Modern CSS and Google Chrome Modern Web Guidance. Your agent installs them the first time you ask it to build, or you can set up everything at once with [`create loamui`](/docs/installation#quick-start).
+LoamUI pairs with two companion skills, Modern CSS and Google Chrome Modern Web Guidance. Your agent installs them the first time you ask it to build, or [`loamui init`](/docs/installation#quick-start) sets up everything at once.
 
 ## 2. Describe what you want to build
 
@@ -108,6 +108,8 @@ The following reference guides the agent through setup. Setup is complete when t
 
 ### Inspect and complete setup
 
+Run `npx loamui@latest doctor` first: it reports the package, stylesheet, layer order, checks and skills, and `npx loamui@latest init` completes what is missing additively. The rest of this section is the same setup by hand, for a project the tool cannot wire or for reviewing what it did.
+
 Read the project instructions, package manifest, lockfile, framework entry and styles. Check the installed LoamUI exports, stylesheet delivery and layer order. Identify existing formatting, type checking, CSS linting, interaction tests and CI commands. Check which agent is running and whether it supports project-local skills and browser tools. Confirm that LoamUI, Modern CSS and Google Chrome’s Modern Web Guidance skills are available to that agent; a folder on disk alone does not establish availability. Check the Stylelint configuration and composition checks as well as their installed dependencies.
 
 Keep the user's framework, package manager and browser support policy. Explain specific conflicts with resets or global rules; do not silently remove Tailwind or rewrite unrelated styles. If the framework or library is missing, follow Installation before composing UI.
@@ -118,7 +120,7 @@ Before composing, verify dependencies in the application's manifest and lockfile
 
 ### Configure CSS checks
 
-LoamUI maintains these Stylelint files, bundled under `assets/` in the skill and available here:
+LoamUI maintains these Stylelint files; `loamui init` installs them, and they are available here:
 
 - [Shared Stylelint rules](/agent-assets/stylelint-base.mjs)
 - [Consumer Stylelint configuration](/agent-assets/stylelint.config.mjs)
@@ -203,6 +205,10 @@ These are focused static checks. Dynamic styles, indirect or aliased imports, CS
 
 Keep these files together when updating them from the skill and preserve project customizations. Run CSS lint and composition checks alongside the existing type check and build. Never suppress a finding simply to obtain a passing result.
 
+### Lint and format JavaScript
+
+`loamui init` also installs [Oxlint](https://oxc.rs/docs/guide/usage/linter) and [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) with a configuration for each — [`.oxlintrc.json`](https://github.com/loamui/loamui/blob/main/packages/cli/assets/.oxlintrc.json) and [`.oxfmtrc.json`](https://github.com/loamui/loamui/blob/main/packages/cli/assets/.oxfmtrc.json) — and the scripts `lint:js`, `format` and `format:check`. Existing scripts are never replaced: a project that already has `lint` or `format` keeps them, and the new scripts sit alongside. By hand, copy both files beside the package manifest, add the two development dependencies, and add the scripts.
+
 ### Add the companion skills
 
 The LoamUI skill carries the composition contract; Modern CSS and Google Chrome Modern Web Guidance supply the companion guidance used by this repository. Install missing companions as project-local setup for the active agent. Use these exact repositories and skill names with the [skills installer](https://github.com/vercel-labs/skills), not similarly named alternatives.
@@ -233,7 +239,7 @@ If companion installation is unavailable or declined, report incomplete setup an
 
 ### Run and record the checks
 
-Run the formatter, CSS lint, composition checks, type check and production build using the application's commands. Classify pre-existing failures separately from setup failures, repair issues within scope and rerun affected checks. Never disable checks or report a failed build as successful.
+Run the formatter, CSS lint, JavaScript lint, composition checks, type check and production build using the application's commands. Classify pre-existing failures separately from setup failures, repair issues within scope and rerun affected checks. Never disable checks or report a failed build as successful.
 
 Use existing browser and interaction tooling to check the first composition. If none exists, propose the smallest suitable addition, such as Playwright with axe for interaction and automated accessibility checks. Do not install another test runner when the existing one can do the job, or add screenshot archives and generated browser files to the project. Keep temporary inspection artifacts outside the repository.
 
@@ -241,7 +247,7 @@ Review the rendered UI as well as test results. For a recipe, check narrow and w
 
 The supplied checks do not establish complete scope ownership, token usage, accessible interactions or good visual design. Review those against the [composition contract](/docs/agent-workflow#the-contract-for-every-implementation) and recipe source. A passing automated accessibility scan is only one part of verification.
 
-Add a short LoamUI section to the project's existing agent instructions when that is part of the agreed setup. Record the stylesheet entry, composition directories, browser policy, skill/reference locations and commands that actually ran. Preserve unrelated instructions; use the host's existing instruction file rather than creating competing copies.
+`loamui init` writes a short LoamUI section into `AGENTS.md`; add one by hand when that is part of the agreed setup and the tool has not run. Record the stylesheet entry, composition directories, browser policy, skill/reference locations and commands that actually ran. Preserve unrelated instructions; use the host's existing instruction file rather than creating competing copies.
 
 Report evidence in four short lines:
 

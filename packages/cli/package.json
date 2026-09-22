@@ -1,8 +1,8 @@
 {
-  "name": "create-loamui",
+  "name": "loamui",
   "version": "0.1.0",
-  "description": "Scaffold a LoamUI application and verify LoamUI setup in an existing project.",
-  "keywords": ["loamui", "create", "scaffold", "cli", "setup"],
+  "description": "Set up LoamUI in a project, or create one, and check that the setup is complete.",
+  "keywords": ["loamui", "cli", "init", "setup"],
   "homepage": "https://loamui.com/",
   "bugs": {
     "url": "https://github.com/loamui/loamui/issues"
@@ -12,11 +12,11 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/loamui/loamui.git",
-    "directory": "packages/create-loamui"
+    "directory": "packages/cli"
   },
   "type": "module",
   "bin": {
-    "create-loamui": "bin/create-loamui.mjs"
+    "loamui": "bin/loamui.mjs"
   },
   "files": ["bin", "src", "assets", "README.md"],
   "engines": {
@@ -26,7 +26,7 @@
     "access": "public"
   },
   "scripts": {
-    "sync-assets": "node scripts/sync-assets.mjs",
+    "lint": "oxlint --config ../../.oxlintrc.json bin src test",
     "test": "node --test \"test/**/*.test.mjs\""
   }
 }
