@@ -20,6 +20,6 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     // One glob per source folder, so a test added anywhere under src/ runs:
     // a narrower list once cut the suite from 198 tests to 26 without failing.
-    include: ["src/**/*.test.{ts,tsx}"],
+    include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.{ts,mts}"],
   },
 });

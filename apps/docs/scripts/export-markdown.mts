@@ -1,15 +1,4 @@
-/**
- * Markdown twins for every docs page, plus /llms.txt — all SOURCE-derived,
- * generated in one prebuild step into public/ so `next dev` and the static
- * export both serve raw text/markdown at the sibling URL
- * (/docs/tokens → /docs/tokens.md).
- *
- * Guides are authored as page.mdx: markdown IS their source, so the twin is
- * the same file with imports/JSX islands resolved (lead → paragraph,
- * callout → blockquote, live demos omitted — the fences and prose are the
- * document). Component pages render from the same registry data the page
- * renders. Nothing derives from built output, so nothing can drift.
- */
+// Generate public Markdown, offline skill references and search data from docs sources.
 import {
   readFileSync,
   writeFileSync,
@@ -28,13 +17,7 @@ import { RECIPE_CATEGORIES } from "../src/recipes/categories.js";
 import { RECIPE_META } from "../src/recipes/generated/meta.js";
 import { linkedRecipePrompt } from "../src/recipes/recipe-prompt.js";
 import { PILLARS } from "../src/recipes/types.js";
-import {
-  PACKAGE_COMMANDS,
-  SKILL_AGENTS,
-  packageCommand,
-  PACKAGE_MANAGERS,
-  type PackageCommandName,
-} from "../src/renderer/shared/package-commands.js";
+import { mdxToMarkdown } from "./mdx-to-markdown.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const APP = join(ROOT, "src", "app");
@@ -79,7 +62,11 @@ function writeBoth(publicFile: string, refFile: string, md: string) {
     url: url === "/docs" ? "/docs" : url,
     title: front?.[1] ?? "",
     description: front?.[2] ?? "",
-    text: md.slice(front?.[0].length ?? 0).replace(/^> .*\n/gm, "").replace(/\s+/g, " ").trim(),
+    text: md
+      .slice(front?.[0].length ?? 0)
+      .replace(PREAMBLE, "")
+      .replace(/\s+/g, " ")
+      .trim(),
   });
 }
 
@@ -146,195 +133,6 @@ for (const directory of ["examples", "recipes"])
 
 // ---- guides: page.mdx source → markdown --------------------------------
 
-function jsxToText(s: string): string {
-  return s
-    .replace(/\{\/\*[\s\S]*?\*\/\}/g, "")
-    .replace(/\{"\s*"\}/g, " ")
-    .replace(/<\/?code>/g, "`")
-    .replace(/<\/?strong>/g, "**")
-    .replace(/<\/?em>/g, "_")
-    .replace(/<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, "[$2]($1)")
-    .replace(/<[^>]+>/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-/** Ignore fenced examples when locating MDX module exports. */
-function moduleSource(src: string): string {
-  let fence = false;
-  return src
-    .split("\n")
-    .map((line) => {
-      if (/^\s*```/.test(line)) {
-        fence = !fence;
-        return " ".repeat(line.length);
-      }
-      return fence ? " ".repeat(line.length) : line;
-    })
-    .join("\n");
-}
-
-function mdxToMarkdown(src: string): { md: string; title: string; description: string } {
-  const meta = moduleSource(src).match(
-    /export const metadata = \{[\s\S]*?title: "([^"]+)"[\s\S]*?description:\s*\n?\s*"([^"]+)"/,
-  );
-  const title = meta?.[1] ?? "";
-  const description = meta?.[2] ?? "";
-
-  // Drop the metadata export (balanced-brace scan). MDX-level imports are
-  // dropped line by line in the walk below, where code fences are known —
-  // a multi-line regex here once swallowed everything between an `import`
-  // inside one fence and the next `from "…"` in another.
-  let s = src;
-  const mi = moduleSource(s).indexOf("export const metadata");
-  if (mi > -1) {
-    let depth = 0,
-      j = s.indexOf("{", mi),
-      k = j;
-    for (; ; k++) {
-      if (s[k] === "{") depth++;
-      else if (s[k] === "}") {
-        depth--;
-        if (depth === 0) break;
-      }
-    }
-    k = s.indexOf(";", k) + 1;
-    s = s.slice(0, mi) + s.slice(k);
-  }
-  // Other top-level exports (helper components, icons): drop each one by
-  // scanning to the bracket that closes it, whatever bracket opened it.
-  for (
-    let ei = moduleSource(s).indexOf("\nexport const ");
-    ei > -1;
-    ei = moduleSource(s).indexOf("\nexport const ")
-  ) {
-    const start = ei + 1;
-    const open = s.slice(start).search(/[({[]/);
-    if (open === -1) break;
-    const pairs: Record<string, string> = { "(": ")", "{": "}", "[": "]" };
-    const stack: string[] = [];
-    let k = start + open;
-    for (; k < s.length; k++) {
-      const ch = s[k]!;
-      if (pairs[ch]) stack.push(pairs[ch]);
-      else if (ch === stack[stack.length - 1]) {
-        stack.pop();
-        if (stack.length === 0) {
-          // `() => (` … `)`: an arrow's parameter list closes first; carry
-          // on to the body it introduces.
-          const arrow = /^\s*=>\s*/.exec(s.slice(k + 1));
-          if (!arrow) break;
-          const next = s.slice(k + 1 + arrow[0].length).search(/[({[]/);
-          if (next === -1) break;
-          k = k + 1 + arrow[0].length + next - 1;
-        }
-      }
-    }
-    const lineEnd = s.indexOf("\n", k);
-    s = s.slice(0, start) + s.slice(lineEnd === -1 ? s.length : lineEnd + 1);
-  }
-  // Inline template expressions the page computes from the manifest.
-  s = s.replaceAll("{COMPONENTS.length}", String(COMPONENTS.length));
-
-  const out: string[] = [];
-  let i = 0;
-  let inFence = false;
-  const lines = s.split("\n");
-  while (i < lines.length) {
-    const line = lines[i]!;
-    // Code fences are verbatim: their JSX is documentation, not an island,
-    // and their imports are the example's own.
-    if (/^\s*```/.test(line)) {
-      inFence = !inFence;
-      out.push(line);
-      i++;
-      continue;
-    }
-    if (inFence) {
-      out.push(line);
-      i++;
-      continue;
-    }
-    if (/^import (?:.* from )?"[^"]+";\s*$/.test(line)) {
-      i++;
-      continue;
-    }
-    if (
-      /^\s*<\/?details(?:\s[^>]*)?>\s*$/.test(line) ||
-      /^\s*<summary\b.*<\/summary>\s*$/.test(line)
-    ) {
-      i++;
-      continue;
-    }
-    const command = /^<PackageCommands name="([^"]+)" \/>$/.exec(line);
-    if (command) {
-      const name = command[1] as PackageCommandName;
-      if (!Object.hasOwn(PACKAGE_COMMANDS, name)) throw new Error(`Unknown command: ${name}`);
-      const agents = name === "skill" ? SKILL_AGENTS : [SKILL_AGENTS[0]];
-      for (const agent of agents) {
-        if (name === "skill") out.push(`**${agent.label}**`, "");
-        for (const manager of PACKAGE_MANAGERS) {
-          out.push(
-            `**${manager}**`,
-            "",
-            "```bash",
-            packageCommand(name, manager, agent.value),
-            "```",
-            "",
-          );
-        }
-      }
-      i++;
-      continue;
-    }
-    if (/^\s*<\w/.test(line)) {
-      // A JSX island: consume until tags balance.
-      let block = "";
-      let depth = 0;
-      do {
-        const l = lines[i]!;
-        block += l + "\n";
-        depth += (l.match(/<[A-Za-z][^/>]*(?<!\/)>/g) ?? []).length; // opening tags
-        depth += (l.match(/<[A-Za-z][^>]*\/>/g) ?? []).length * 0; // self-closing: net 0
-        depth -= (l.match(/<\/[A-Za-z][^>]*>/g) ?? []).length; // closing tags
-        i++;
-      } while (i < lines.length && depth > 0);
-
-      if (/<PromptBlock\b/.test(block)) {
-        const prompt = /^\s*<PromptBlock\s+prompt="([^"]*)"\s*\/>\s*$/.exec(block);
-        if (!prompt)
-          throw new Error("MDX prompts must use a literal PromptBlock prompt attribute.");
-        out.push("> " + prompt[1]!.replace(/\s+/g, " ").trim(), "");
-      } else if (/className=\{prose\.callout\}/.test(block)) {
-        out.push("> " + jsxToText(block), "");
-      } else if (/<ComputedTokens/.test(block)) {
-        // The live table reads getComputedStyle; the twin gets the same
-        // names and their declared values, straight from tokens.css.
-        out.push(tokenTable(), "");
-      }
-      // other islands (live demos) are omitted — the prose + fences are the doc
-      continue;
-    }
-    out.push(line);
-    i++;
-  }
-
-  const body = out
-    .join("\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-  const front = [
-    "---",
-    `title: ${title}`,
-    `description: ${description}`,
-    "---",
-    "",
-    PREAMBLE,
-    "",
-  ].join("\n");
-  return { md: `${front}\n${body}\n`, title, description };
-}
-
 function* mdxFiles(dir: string): Generator<string> {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
@@ -347,8 +145,21 @@ const guides: { route: string; title: string; description: string }[] = [];
 for (const file of mdxFiles(APP)) {
   const route0 = "/" + relative(APP, dirname(file)).split("\\").join("/");
   const route = route0 === "/." ? "/" : route0;
-  const { md, title, description } = mdxToMarkdown(readFileSync(file, "utf8"));
-  writeGuideTwin(route, md);
+  const { body, title, description } = mdxToMarkdown(readFileSync(file, "utf8"), {
+    path: file,
+    componentCount: COMPONENTS.length,
+    tokenTable,
+  });
+  const front = [
+    "---",
+    `title: ${title}`,
+    `description: ${description}`,
+    "---",
+    "",
+    PREAMBLE,
+    "",
+  ].join("\n");
+  writeGuideTwin(route, `${front}\n${body}`);
   guides.push({ route, title, description });
 }
 
