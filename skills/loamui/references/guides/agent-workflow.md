@@ -110,6 +110,8 @@ The following reference guides the agent through setup. Setup is complete when t
 
 Run `npx loamui@latest doctor` first: it reports the package, stylesheet, layer order, checks and skills, and `npx loamui@latest init` completes what is missing additively. The rest of this section is the same setup by hand, for a project the tool cannot wire or for reviewing what it did.
 
+`init` also adds a `check` script that runs `lint:css`, `lint:js`, `check:composition` and `format:check` together, and writes a `## LoamUI` section into `AGENTS.md` (imported from `CLAUDE.md` for Claude Code) recording the stylesheet entry, the layer file, the composition directories, that command and the skills to read. It appends to an existing file and never rewrites one; a project that already has the section keeps it.
+
 Read the project instructions, package manifest, lockfile, framework entry and styles. Check the installed LoamUI exports, stylesheet delivery and layer order. Identify existing formatting, type checking, CSS linting, interaction tests and CI commands. Check which agent is running and whether it supports project-local skills and browser tools. Confirm that LoamUI, Modern CSS and Google Chrome’s Modern Web Guidance skills are available to that agent; a folder on disk alone does not establish availability. Check the Stylelint configuration and composition checks as well as their installed dependencies.
 
 Keep the user's framework, package manager and browser support policy. Explain specific conflicts with resets or global rules; do not silently remove Tailwind or rewrite unrelated styles. If the framework or library is missing, follow Installation before composing UI.

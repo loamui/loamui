@@ -40,6 +40,19 @@
       max-inline-size: 42ch;
     }
 
+    .install {
+      display: block grid;
+      gap: var(--loam-space-xs);
+      margin-block-end: var(--loam-space-l);
+      max-inline-size: 36rem;
+
+      > p {
+        color: var(--loam-color-fg-muted);
+        font-size: var(--loam-text-sm);
+        margin: 0;
+      }
+    }
+
     .specimen {
       inline-size: 100%;
       justify-self: center;

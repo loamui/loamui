@@ -10,7 +10,7 @@ description: Set up LoamUI with TanStack Start and native CSS, without Tailwind 
 
 TanStack Start is a full-stack React framework with routing, server rendering and server functions. Follow its [current setup requirements](https://tanstack.com/start/latest/docs/framework/react/getting-started) for your Node.js runtime.
 
-## Prepare the application
+## 1. Create the application
 
 Create a blank React project:
 
@@ -48,39 +48,41 @@ cd my-app
 
 The [blank starter](https://tanstack.com/cli/latest/docs/cli-reference) has one route and no Tailwind, shadcn, or other UI kit. No styling packages need to be removed.
 
-Already have an application? Follow the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing its styling foundation.
+Already have an application? Go to step 2, and follow the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing its styling foundation.
 
-Install LoamUI:
+## 2. Set up LoamUI
+
+Run this in the application:
 
 **pnpm**
 
 ```bash
-pnpm add @loamui/core
+pnpm dlx loamui@latest init
 ```
 
 **npm**
 
 ```bash
-npm install @loamui/core
+npx loamui@latest init
 ```
 
 **yarn**
 
 ```bash
-yarn add @loamui/core
+yarn dlx loamui@latest init
 ```
 
 **bun**
 
 ```bash
-bun add @loamui/core
+bunx loamui@latest init
 ```
 
-## Load the stylesheet directly
+`init` installs `@loamui/core`, adds Stylelint, Oxlint and Oxfmt with the composition checker and a `check` script, writes a LoamUI section into `AGENTS.md`, and installs the agent skills. For TanStack Start it reports the two cascade steps rather than editing your root route; they follow.
 
-Load the stylesheet with a `<link>` so it reaches the browser unchanged. This avoids a build-time parsing limitation in Lightning CSS, used by TanStack Start, which currently rejects some modern CSS syntax used by LoamUI.
+## 3. Link the stylesheet and declare the layer order
 
-Add the hosted core stylesheet before the application stylesheet in `src/routes/__root.tsx`:
+Add the core stylesheet before the application stylesheet in `src/routes/__root.tsx`:
 
 ```tsx
 import appCss from "../styles.css?url";
@@ -92,7 +94,7 @@ links: [
 ],
 ```
 
-Keep the existing route, metadata, other links and `HeadContent` rendering. The browser loads tokens, element styles and component styles without sending core CSS through Vite. Do not add a JavaScript import or CSS `@import` of `@loamui/core/styles.css`. No provider is needed.
+Keep the existing route, metadata, other links and `HeadContent` rendering. The browser loads tokens, element styles and component styles without sending core CSS through Vite, which avoids a parsing limitation in Lightning CSS. Do not add a JavaScript import or CSS `@import` of `@loamui/core/styles.css`. No provider is needed.
 
 The URL is pinned to the installed version of `@loamui/core`; keep the two in step when you update. See [stylesheet delivery](/docs/installation#stylesheet-delivery) for self-hosting.
 
@@ -104,7 +106,9 @@ Start `src/styles.css` with the layer order, before any imports or rules that cr
 
 For a fresh application, replace the starter styles with that declaration. Preserve existing application styles when integrating into a working project. Import recipe styles alongside their components. Check the emitted stylesheet order on a direct page load and after client navigation; a recipe must not register `loamui.components` before this order is established.
 
-## Check your first interface
+Run `npx loamui@latest doctor` to confirm both steps are in place.
+
+## 4. Check your first interface
 
 Copy the [foundation example](/docs/installation#2-check-the-foundation) into `src/components/Welcome.tsx` and put `welcome.css` beside it. Omit `"use client"` in this framework.
 

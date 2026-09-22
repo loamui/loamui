@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Badge, Card, SignpostLink } from "@loamui/core";
 import { HeroShowcase, ContextShowcase } from "@/home/Showcases";
 import { AgentShowcase } from "@/home/AgentShowcase";
+import { CodeBlock } from "@/renderer/components/CodeBlock";
 import { RestaurantMenu } from "@/home/agent-demo/menu";
 import { menu } from "@/home/agent-demo/generated";
 import "@/home/home.css";
@@ -45,6 +46,13 @@ export default function HomePage() {
             Use our agent skill to quickly build bespoke, accessible UIs on top of our contextual
             tokens, element styles, and React components.
           </p>
+          <div className="install">
+            <CodeBlock code="npx loamui@latest init" language="bash" />
+            <p>
+              One command in your React application: the package, the stylesheet, the checks and the
+              agent skills. From nothing, <code>npx loamui@latest create</code>.
+            </p>
+          </div>
           <SignpostLink render={<Link href="/docs/installation" />}>Get started</SignpostLink>
         </div>
         <div className="specimen">
