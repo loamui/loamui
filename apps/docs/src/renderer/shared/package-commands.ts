@@ -22,10 +22,10 @@ export const PACKAGE_COMMANDS = {
     bun: "bun add @loamui/core",
   },
   "loamui-create": {
-    pnpm: "pnpm dlx loamui@latest create my-app",
-    npm: "npx loamui@latest create my-app",
-    yarn: "yarn dlx loamui@latest create my-app",
-    bun: "bunx loamui@latest create my-app",
+    pnpm: "pnpm dlx loamui@latest create",
+    npm: "npx loamui@latest create",
+    yarn: "yarn dlx loamui@latest create",
+    bun: "bunx loamui@latest create",
   },
   "loamui-init": {
     pnpm: "pnpm dlx loamui@latest init",

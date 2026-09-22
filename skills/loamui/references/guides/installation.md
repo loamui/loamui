@@ -42,30 +42,30 @@ bunx loamui@latest init
 
 `init` installs `@loamui/core`, links the stylesheet for the installed version, writes the layer order, adds Stylelint, Oxlint and Oxfmt with the composition checker, their scripts and one `check` that runs them all, writes a LoamUI section into `AGENTS.md` so your agent knows the setup and the checks, and installs the LoamUI skill and its companions for your agent. It only adds; nothing you have is replaced, and running it again changes nothing. `--dry-run` shows the plan first.
 
-Starting from nothing? One command creates a Next.js App Router application and runs `init` in it:
+Starting from nothing? For Next.js there is a shortcut that runs `create-next-app` and then `init`; for another framework, use its own scaffolder and then `init`:
 
 **pnpm**
 
 ```bash
-pnpm dlx loamui@latest create my-app
+pnpm dlx loamui@latest create
 ```
 
 **npm**
 
 ```bash
-npx loamui@latest create my-app
+npx loamui@latest create
 ```
 
 **yarn**
 
 ```bash
-yarn dlx loamui@latest create my-app
+yarn dlx loamui@latest create
 ```
 
 **bun**
 
 ```bash
-bunx loamui@latest create my-app
+bunx loamui@latest create
 ```
 
 To see what is missing in a project, or to check it in CI:

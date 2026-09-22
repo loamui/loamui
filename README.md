@@ -26,7 +26,7 @@ npx loamui@latest init
 
 That installs `@loamui/core` in your application, links its stylesheet, and
 adds the checks and the agent skill. From nothing,
-`npx loamui@latest create my-app` creates a Next.js application and does the
+`npx loamui@latest create` creates a Next.js application and does the
 same.
 
 Use a **React 19 application with ESM support**. Load the stylesheet as well as

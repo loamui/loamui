@@ -6,7 +6,7 @@ complete.
 ```bash
 npx loamui@latest init            # set up LoamUI in the current project
 npx loamui@latest doctor          # check the setup and report what is missing
-npx loamui@latest create my-app   # create a Next.js app with LoamUI set up
+npx loamui@latest create          # create a Next.js app with LoamUI set up
 ```
 
 With pnpm use `pnpm dlx loamui@latest …`, with Yarn `yarn dlx loamui@latest …`,
@@ -55,7 +55,8 @@ missing, so it can run in CI or from an agent.
 
 ## create
 
-`create <dir>` runs `create-next-app` with the flags the guides use, installs
+`create [dir]` runs `create-next-app` with the flags the guides use (asking
+for the directory when none is given), installs
 core, writes a layout that links the versioned stylesheet, a welcome page and
 its stylesheet, then runs `init`. Pass `.` to create in the current, empty
 folder.

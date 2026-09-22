@@ -15,7 +15,7 @@ const HELP = `loamui — set up LoamUI in a project, or create one
 Usage:
   loamui init [options]          Set up LoamUI in the current project
   loamui doctor [options]        Check the setup and report what is missing
-  loamui create <dir> [options]  Create a Next.js app with LoamUI set up
+  loamui create [dir] [options]  Create a Next.js app with LoamUI set up
 
 Options:
   --dry-run                      init: show what would change without changing it
