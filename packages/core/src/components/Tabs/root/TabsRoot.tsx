@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useId, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { cx } from "../../../utils/cx.js";
 import type { PartProps } from "../../../utils/props.js";
@@ -38,18 +38,10 @@ export function TabsRoot({
     [isControlled, onValueChange],
   );
 
-  // The tabs, keyed by value. `tabCount` mirrors the map's size so an effect
-  // can wait for the collection to settle; the map is the source.
-  const tabsRef = useRef(new Map<string, TabsTabEntry>());
-  const [tabCount, setTabCount] = useState(0);
-
+  const [tabs, setTabs] = useState<TabsTabEntry[]>([]);
   const registerTab = useCallback((tab: TabsTabEntry) => {
-    tabsRef.current.set(tab.value, tab);
-    setTabCount(tabsRef.current.size);
-    return () => {
-      tabsRef.current.delete(tab.value);
-      setTabCount(tabsRef.current.size);
-    };
+    setTabs((current) => [...current, tab]);
+    return () => setTabs((current) => current.filter((entry) => entry !== tab));
   }, []);
 
   // Registration order is mount order, which a reordered list does not
@@ -57,17 +49,17 @@ export function TabsRoot({
   // document can answer.
   const enabledTabs = useCallback(
     () =>
-      [...tabsRef.current.values()]
+      tabs
         .filter((tab) => !tab.disabled && tab.node)
         .sort((a, b) =>
           a.node!.compareDocumentPosition(b.node!) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
         ),
-    [],
+    [tabs],
   );
 
   const ctx = useMemo<TabsContextValue>(
-    () => ({ value, setValue, isControlled, baseId, registerTab, enabledTabs, tabCount }),
-    [value, setValue, isControlled, baseId, registerTab, enabledTabs, tabCount],
+    () => ({ value, setValue, isControlled, baseId, registerTab, enabledTabs }),
+    [value, setValue, isControlled, baseId, registerTab, enabledTabs],
   );
 
   return (

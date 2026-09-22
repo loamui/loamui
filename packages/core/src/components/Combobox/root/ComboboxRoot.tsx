@@ -190,7 +190,7 @@ export function ComboboxRoot({
   // Keep the highlighted option in view; the list scrolls, the page does not.
   useEffect(() => {
     if (!open || !highlightedId) return;
-    optionsRef.current.get(highlightedId)?.node?.scrollIntoView?.({ block: "nearest" });
+    optionsRef.current.get(highlightedId)?.ref.current?.scrollIntoView?.({ block: "nearest" });
   }, [open, highlightedId]);
 
   const labels = useMemo(

@@ -28,6 +28,7 @@ import { useRequiredContext } from "../../../hooks/use-required-context.js";
 export interface FileInputContextValue {
   /** The control's id, shared so the Prompt can label it. */
   id: string;
+  registerControl: (id: string) => () => void;
   files: File[];
   setFiles: (files: File[]) => void;
   /**

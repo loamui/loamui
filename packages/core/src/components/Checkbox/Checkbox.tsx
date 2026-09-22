@@ -42,7 +42,7 @@ function CheckboxControl({
   ref,
   ...rest
 }: CheckboxControlProps) {
-  const field = useFieldControlProps(ariaDescribedby);
+  const field = useFieldControlProps(ariaDescribedby, id);
   const innerRef = useRef<HTMLInputElement>(null);
   const { nativeInvalid, validationRef, checkOnInput, checkOnInvalid } =
     useUserInvalid<HTMLInputElement>();

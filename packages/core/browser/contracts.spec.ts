@@ -92,6 +92,33 @@ test("native modal contains focus, closes with Escape and restores the trigger",
   await expect(trigger).toBeFocused();
 });
 
+test("Avatar centers fallback content before hydration in either parts order", async ({
+  browser,
+  baseURL,
+  colorScheme,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, colorScheme });
+  const page = await context.newPage();
+  await page.goto(baseURL!);
+  const section = page.getByRole("region", { name: "Avatar fallbacks" });
+  for (const name of ["Grace Hopper", "Katherine Johnson", "Anonymous"]) {
+    const avatar = section.getByRole("img", { name });
+    await expect(avatar.locator(".fallback")).toBeVisible();
+    const offset = await avatar.evaluate((root) => {
+      const range = document.createRange();
+      range.selectNodeContents(root.querySelector(".fallback")!);
+      const content = range.getBoundingClientRect();
+      const box = root.getBoundingClientRect();
+      return Math.abs(content.x + content.width / 2 - box.x - box.width / 2);
+    });
+    expect(offset).toBeLessThan(1);
+  }
+  const icon = section.getByRole("img", { name: "Anonymous" }).locator("svg");
+  expect((await icon.boundingBox())!.width).toBeCloseTo(26, 0);
+  await page.screenshot({ path: test.info().outputPath("avatar-fallbacks.png"), fullPage: true });
+  await context.close();
+});
+
 test("Field composes with native checkbox, radio and switch behavior", async ({ page }) => {
   await page.goto("/");
   const checkbox = page.getByRole("checkbox", { name: "Email updates" });

@@ -123,6 +123,23 @@ export function Fixture() {
         <Avatar.Fallback>AL</Avatar.Fallback>
       </Avatar.Root>
       <Button onClick={() => setSrc("/avatar.svg")}>Retry image</Button>
+      <section aria-label="Avatar fallbacks">
+        <Avatar.Root role="img" aria-label="Grace Hopper">
+          <Avatar.Image src="/avatar.svg" alt="" />
+          <Avatar.Fallback>GH</Avatar.Fallback>
+        </Avatar.Root>
+        <Avatar.Root role="img" aria-label="Katherine Johnson">
+          <Avatar.Fallback>KJ</Avatar.Fallback>
+          <Avatar.Image src="/avatar.svg" alt="" />
+        </Avatar.Root>
+        <Avatar.Root role="img" aria-label="Anonymous">
+          <Avatar.Fallback>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" fill="currentColor" />
+            </svg>
+          </Avatar.Fallback>
+        </Avatar.Root>
+      </section>
       <Modal.Root>
         <Modal.Trigger>Open dialog</Modal.Trigger>
         <Modal.Popup>

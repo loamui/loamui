@@ -13,7 +13,6 @@ interface Result {
   href: string;
 }
 
-/** One twin's worth of searchable text, as export-markdown writes it. */
 interface Entry {
   url: string;
   title: string;
@@ -21,8 +20,6 @@ interface Entry {
   text: string;
 }
 
-// The exported index is a static file, so it sits under the deployment's base
-// path the same as every other asset.
 const INDEX_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/search-index.json`;
 
 function sectionOf(url: string): string {
@@ -31,12 +28,6 @@ function sectionOf(url: string): string {
   return "Guide";
 }
 
-/**
- * Rank a page for a query: every word must appear somewhere; a word in the
- * title outranks one in the description, which outranks one in the body.
- * Plain substring matching over the twins' prose — no engine, no index
- * build, and it finds a phrase that only appears in a page's body.
- */
 function score(entry: Entry, words: string[]): number {
   const title = entry.title.toLowerCase();
   const description = entry.description.toLowerCase();
@@ -79,14 +70,6 @@ const ALL: Result[] = [
   })),
 ];
 
-/**
- * The site search: a native modal dialog (focus containment, Escape and
- * the backdrop come with `showModal()`) holding an APG editable combobox.
- * The text box owns focus; the list is a listbox the box points into with
- * `aria-activedescendant`, so arrow keys move a highlight that a screen
- * reader hears without focus leaving the box. Opens from the trigger or
- * with ⌘K / Ctrl+K.
- */
 export function CommandMenu() {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
@@ -98,16 +81,17 @@ export function CommandMenu() {
   const optionId = (i: number) => `${baseId}-option-${i}`;
   const router = useRouter();
 
-  // The index is fetched once, the first time the palette opens, so the
-  // page never pays for it and a visitor who never searches never loads it.
   const [index, setIndex] = useState<Entry[] | null>(null);
   useEffect(() => {
     if (!open || index) return;
     let live = true;
     fetch(INDEX_URL)
-      .then((response) => (response.ok ? response.json() : []))
-      .then((entries: Entry[]) => live && setIndex(entries))
-      .catch(() => live && setIndex([]));
+      .then((response) => (response.ok ? response.json() : null))
+      .catch(() => null)
+      .then((entries: Entry[] | null) => {
+        // Failed requests keep title search available and retry on the next open.
+        if (live && entries) setIndex(entries);
+      });
     return () => {
       live = false;
     };
@@ -115,11 +99,9 @@ export function CommandMenu() {
 
   const results = useMemo<Result[]>(() => {
     const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    // With no query there is nothing to rank, so the curated list stands in
-    // and the palette still works as a way to browse.
     if (!words.length) return ALL;
-    // Until the index arrives (or if it never does), titles still match.
-    if (!index) return ALL.filter((r) => words.every((w) => r.label.toLowerCase().includes(w)));
+    if (!index?.length)
+      return ALL.filter((r) => words.every((w) => r.label.toLowerCase().includes(w)));
     return index
       .map((entry) => ({ entry, rank: score(entry, words) }))
       .filter(({ rank }) => rank > 0)
@@ -132,8 +114,6 @@ export function CommandMenu() {
       }));
   }, [q, index]);
 
-  // Stable (only state setters inside), so the window keydown listener can
-  // depend on it without re-subscribing per render.
   const openPalette = useCallback(() => {
     setQ("");
     setActive(0);
@@ -152,8 +132,6 @@ export function CommandMenu() {
     return () => window.removeEventListener("keydown", onKey);
   }, [openPalette]);
 
-  // Native <dialog>: showModal() brings focus containment, Escape and the
-  // ::backdrop; the effect reconciles React state with the element.
   useEffect(() => {
     const el = dialogRef.current;
     if (!el) return;
@@ -165,9 +143,7 @@ export function CommandMenu() {
     }
   }, [open]);
 
-  // Backdrop-click fallback for browsers without `closedby`: clicks on the
-  // backdrop hit the dialog element itself, never its children. Wired
-  // imperatively, the same shape as Modal's own fallback.
+  // Browsers without closedby still need backdrop dismissal.
   useEffect(() => {
     const el = dialogRef.current;
     if (!el) return;
@@ -178,8 +154,6 @@ export function CommandMenu() {
     return () => el.removeEventListener("click", onBackdropClick);
   }, []);
 
-  // The highlighted option stays in view as the arrow keys move it; the
-  // list scrolls, the page does not.
   useEffect(() => {
     if (!open) return;
     const el = document.getElementById(`${baseId}-option-${active}`);
@@ -256,9 +230,6 @@ export function CommandMenu() {
         {results.length === 0 && (
           <p role="status">No results for “{q}”. Try a component name, a guide or an example.</p>
         )}
-        {/* APG combobox: the options are never focused (the box keeps focus
-            and points at one with aria-activedescendant), so they carry no
-            tabindex and no key handler of their own. */}
         <ul id={listId} aria-label="Results" hidden={results.length === 0} {...{ role: "listbox" }}>
           {results.map((r, i) => {
             const option = {

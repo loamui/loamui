@@ -5,6 +5,7 @@ import { cx } from "../../../utils/cx.js";
 import type { PartProps } from "../../../utils/props.js";
 import { composeRefs } from "../../../utils/render.js";
 import { useFieldControlProps } from "../../Field/root/FieldRootContext.js";
+import { useIsoLayoutEffect } from "../../../hooks/use-id-registry.js";
 import { useFormReset } from "../../../hooks/use-form-reset.js";
 import { useUserInvalid } from "../../../hooks/use-user-invalid.js";
 import { FileInputContext } from "../root/FileInputRootContext.js";
@@ -36,6 +37,10 @@ export function FileInputControl({
   const field = useFieldControlProps(ariaDescribedby, id);
   const ctx = use(FileInputContext);
   const setFiles = ctx?.setFiles;
+  const registerControl = ctx?.registerControl;
+  useIsoLayoutEffect(() => {
+    if (id !== undefined && registerControl) return registerControl(id);
+  }, [id, registerControl]);
   const { nativeInvalid, validationRef, checkOnInput, checkOnInvalid } =
     useUserInvalid<HTMLInputElement>();
   // A form reset empties the control natively; the list follows it.

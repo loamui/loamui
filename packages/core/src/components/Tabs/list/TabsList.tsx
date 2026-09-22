@@ -16,20 +16,16 @@ export function TabsList({
   ref: refProp,
   ...rest
 }: TabsListProps) {
-  const { value, setValue, isControlled, enabledTabs, tabCount } = useTabsContext("Tabs.List");
+  const { value, setValue, isControlled, enabledTabs } = useTabsContext("Tabs.List");
   const listRef = useRef<HTMLDivElement>(null);
   const composedRef = useMemo(() => composeRefs(refProp, listRef), [refProp]);
 
-  // The type requires an initial selection. This runtime fallback also keeps
-  // plain JavaScript and stale values accessible by selecting the first
-  // enabled tab instead of leaving every panel hidden. It waits on tabCount
-  // because the tabs register in their own effects, after this one first runs.
   useEffect(() => {
     if (isControlled) return;
     const tabs = enabledTabs();
     if (tabs.length === 0 || tabs.some((tab) => tab.value === value)) return;
     setValue(tabs[0]!.value);
-  }, [isControlled, setValue, value, enabledTabs, tabCount]);
+  }, [isControlled, setValue, value, enabledTabs]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     onKeyDownProp?.(event);

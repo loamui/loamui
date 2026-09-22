@@ -1,5 +1,6 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
+import { createRef } from "react";
 import userEvent from "@testing-library/user-event";
 
 import { Menu } from "../components/Menu/index.js";
@@ -106,5 +107,47 @@ describe("Menu keyboard navigation", () => {
 
     await user.keyboard("de");
     expect(screen.getByRole("menuitem", { name: "Delete" })).toHaveFocus();
+  });
+});
+
+describe("Menu composition", () => {
+  it("composes the part and render target refs and cleans both up", () => {
+    const partRef = createRef<HTMLButtonElement>();
+    const targetRef = createRef<HTMLButtonElement>();
+    const { unmount } = render(
+      <Menu.Root>
+        <Menu.Popup>
+          <Menu.Item ref={partRef} render={<button ref={targetRef} />}>
+            Rename
+          </Menu.Item>
+        </Menu.Popup>
+      </Menu.Root>,
+    );
+    expect(partRef.current).toBe(screen.getByText("Rename"));
+    expect(targetRef.current).toBe(partRef.current);
+    unmount();
+    expect(partRef.current).toBeNull();
+    expect(targetRef.current).toBeNull();
+  });
+
+  it("navigates to the current element when an item changes from button to link", async () => {
+    function Example({ href }: { href?: string }) {
+      return (
+        <Menu.Root>
+          <Menu.Trigger>Actions</Menu.Trigger>
+          <Menu.Popup>
+            <Menu.Item href={href}>First</Menu.Item>
+            <Menu.Item>Second</Menu.Item>
+          </Menu.Popup>
+        </Menu.Root>
+      );
+    }
+    const { rerender } = render(<Example />);
+    rerender(<Example href="/target" />);
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "Actions" }));
+    expect(screen.getByRole("menuitem", { name: "First" })).toHaveFocus();
+    await user.keyboard("{ArrowDown}{Home}");
+    expect(screen.getByRole("menuitem", { name: "First" })).toHaveFocus();
   });
 });

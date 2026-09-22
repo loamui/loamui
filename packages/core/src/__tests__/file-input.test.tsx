@@ -200,3 +200,24 @@ describe("FileInput", () => {
     expect(await axe(container, axeOptions)).toHaveNoViolations();
   });
 });
+
+it.each([false, true])(
+  "links the Prompt to an explicit Control ID (inside Field: %s)",
+  (inField) => {
+    function Example({ id }: { id?: string }) {
+      const picker = (
+        <FileInput.Root>
+          <FileInput.Control id={id} />
+          <FileInput.Prompt>Upload</FileInput.Prompt>
+        </FileInput.Root>
+      );
+      return inField ? <Field.Root>{picker}</Field.Root> : picker;
+    }
+    const { rerender } = render(<Example id="first-upload" />);
+    expect(screen.getByLabelText("Upload")).toHaveAttribute("id", "first-upload");
+    rerender(<Example id="next-upload" />);
+    expect(screen.getByLabelText("Upload")).toHaveAttribute("id", "next-upload");
+    rerender(<Example />);
+    expect(screen.getByLabelText("Upload")).not.toHaveAttribute("id", "next-upload");
+  },
+);

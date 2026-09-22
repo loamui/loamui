@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useLayoutEffect, useRef } from "react";
+import { isValidElement, useEffect, useId, useLayoutEffect, useRef } from "react";
 import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 
 import type { PartProps } from "../../../utils/props.js";
@@ -36,6 +36,7 @@ export interface ComboboxOptionProps extends Omit<PartProps<"li">, "value"> {
 }
 
 export function ComboboxOption({
+  id: idProp,
   value,
   label,
   disabled,
@@ -45,18 +46,18 @@ export function ComboboxOption({
   ...rest
 }: ComboboxOptionProps) {
   const ctx = useComboboxContext("Combobox.Option");
-  const id = `${useId()}-option`;
+  const autoId = `${useId()}-option`;
+  const renderedId = isValidElement<{ id?: string }>(render) ? render.props.id : undefined;
+  const id = renderedId ?? idProp ?? autoId;
   const selected = ctx.value !== null && ctx.value === value;
   const highlighted = ctx.highlightedId === id;
 
   const { registerOption, releaseHighlight, adoptLabel } = ctx;
   const textRef = useRef<HTMLElement | null>(null);
 
-  // A layout effect, so the Root's status reads the settled collection in the
-  // same commit the options appear in. The node goes in with the entry: it is
-  // what settles painted order, and what the Root scrolls into view.
+  // Settle registrations before the Root announces the result count.
   useLayoutEffect(() => {
-    const unregister = registerOption({ id, value, disabled, node: textRef.current });
+    const unregister = registerOption({ id, value, disabled, ref: textRef });
     return () => {
       unregister();
       releaseHighlight(id);
@@ -92,7 +93,7 @@ export function ComboboxOption({
   return (
     <>
       {render
-        ? renderWithProps(render, mergeProps(wiring, { ...rest, children, className }))
+        ? renderWithProps(render, mergeProps(wiring, { ...rest, children, className }), { id })
         : renderWithProps(
             <li className={className} {...rest}>
               {children}

@@ -24,8 +24,6 @@ export interface TabsContextValue {
   registerTab: (tab: TabsTabEntry) => () => void;
   /** The selectable tabs in the order they are painted. */
   enabledTabs: () => TabsTabEntry[];
-  /** Changes whenever the collection does, so effects can depend on it. */
-  tabCount: number;
 }
 
 export const TabsContext = createContext<TabsContextValue | null>(null);

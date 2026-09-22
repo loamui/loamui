@@ -35,7 +35,7 @@ function RadioControl({
   ref,
   ...rest
 }: RadioControlProps) {
-  const field = useFieldControlProps(ariaDescribedby);
+  const field = useFieldControlProps(ariaDescribedby, id);
   const group = use(RadioGroupContext);
   // No aria-invalid here: ARIA allows it on the radiogroup, not the
   // individual radio, so the group's fieldset carries composed errors.

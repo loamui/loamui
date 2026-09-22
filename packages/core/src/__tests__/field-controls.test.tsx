@@ -406,3 +406,22 @@ describe("QuantityInput naming", () => {
     }
   });
 });
+
+it.each([
+  { name: "Checkbox", Control: Checkbox, role: "checkbox" },
+  { name: "Radio", Control: Radio, role: "radio" },
+])("keeps the Field label connected to a $name with an explicit ID", ({ Control, role }) => {
+  function Example({ id }: { id: string }) {
+    return (
+      <Field.Root>
+        <Field.Label>Choice</Field.Label>
+        <Control id={id} />
+      </Field.Root>
+    );
+  }
+  const { rerender } = render(<Example id="first-choice" />);
+  expect(screen.getByRole(role)).toHaveAccessibleName("Choice");
+  rerender(<Example id="next-choice" />);
+  expect(screen.getByRole(role)).toHaveAttribute("id", "next-choice");
+  expect(screen.getByRole(role)).toHaveAccessibleName("Choice");
+});

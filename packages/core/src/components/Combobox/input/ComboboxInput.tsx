@@ -64,11 +64,10 @@ export function ComboboxInput({ ref, style, ...rest }: ComboboxInputProps) {
       case "Enter": {
         if (!ctx.open || !ctx.highlightedId) return;
         const option = ctx.getOption(ctx.highlightedId);
-        if (!option?.node) return;
+        const node = option?.ref.current;
+        if (!option || !node) return;
         e.preventDefault();
-        // The label is the words the option renders, so it is read from the
-        // node; the value is the option's own and comes from the collection.
-        ctx.commit(option.value, optionLabel(option.node));
+        ctx.commit(option.value, optionLabel(node));
         break;
       }
       case "Escape":

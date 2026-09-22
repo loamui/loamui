@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { cx } from "../../../utils/cx.js";
 import type { PartProps } from "../../../utils/props.js";
-import { renderWithProps } from "../../../utils/render.js";
+import { mergeProps, renderWithProps } from "../../../utils/render.js";
 import type { RenderProp } from "../../../utils/render.js";
 import { useMenuContext } from "../root/MenuRootContext.js";
 
@@ -61,12 +61,9 @@ export function ItemBase({
     `Menu.${role === "menuitem" ? "Item" : role === "menuitemcheckbox" ? "CheckboxItem" : "RadioItem"}`,
   );
 
-  // The node goes in with the entry: it is what settles painted order, and
-  // what roving focus and typeahead move to. An item may be a button, a link
-  // or the consumer's own element, so the ref rides the wiring either way.
   const node = useRef<HTMLElement | null>(null);
   const { registerItem } = ctx;
-  useEffect(() => registerItem({ node: node.current, disabled }), [registerItem, disabled]);
+  useEffect(() => registerItem({ ref: node, disabled }), [registerItem, disabled]);
 
   const itemProps: MenuItemRenderProps = {
     role,
@@ -83,18 +80,16 @@ export function ItemBase({
     },
   };
 
-  // The render path must honor the same merge contract as the built-ins:
-  // consumer children/className/rest ride along with the wiring.
   if (render) {
     return (
       <>
-        {renderWithProps(render, {
-          ...rest,
-          ...itemProps,
-          ref: node,
-          children,
-          className: cx("item", className),
-        })}
+        {renderWithProps(
+          render,
+          mergeProps(
+            { ...itemProps, ref: node },
+            { ...rest, children, className: cx("item", className) },
+          ),
+        )}
       </>
     );
   }

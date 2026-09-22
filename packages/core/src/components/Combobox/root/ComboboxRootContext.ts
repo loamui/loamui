@@ -52,16 +52,11 @@ export function defaultStatus(count: number): string {
 
 export const NO_LABELS: ComboboxLabels = {};
 
-/**
- * What an Option tells the Root about itself. The options are the Root's own
- * collection rather than something re-read from the DOM: the markup is the
- * consumer's, so a query would couple keyboard movement to their structure.
- */
 export interface ComboboxOptionEntry {
   id: string;
   value: string;
   disabled?: boolean;
-  node: HTMLElement | null;
+  ref: RefObject<HTMLElement | null>;
 }
 
 /**
@@ -71,8 +66,10 @@ export interface ComboboxOptionEntry {
  */
 export function inPaintedOrder(options: Iterable<ComboboxOptionEntry>): ComboboxOptionEntry[] {
   return [...options]
-    .filter((option) => !option.disabled && option.node)
+    .filter((option) => !option.disabled && option.ref.current)
     .sort((a, b) =>
-      a.node!.compareDocumentPosition(b.node!) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
+      a.ref.current!.compareDocumentPosition(b.ref.current!) & Node.DOCUMENT_POSITION_FOLLOWING
+        ? -1
+        : 1,
     );
 }

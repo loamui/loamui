@@ -2,6 +2,7 @@
 
 import { useId, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { useIdRegistry } from "../../../hooks/use-id-registry.js";
 import { useFieldControlProps } from "../../Field/root/FieldRootContext.js";
 import { cx } from "../../../utils/cx.js";
 import type { PartProps } from "../../../utils/props.js";
@@ -45,7 +46,8 @@ export function FileInputRoot({
 }: FileInputRootProps) {
   const field = useFieldControlProps();
   const autoId = useId();
-  const id = field.id ?? autoId;
+  const [controlIds, registerControl] = useIdRegistry();
+  const id = field.id ?? controlIds.at(-1) ?? autoId;
   const [files, setFiles] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
   // dragenter/dragleave fire for every descendant the pointer crosses; a
@@ -53,8 +55,8 @@ export function FileInputRoot({
   const depth = useRef(0);
   const controlRef = useRef<HTMLInputElement | null>(null);
   const value = useMemo<FileInputContextValue>(
-    () => ({ id, files, setFiles, controlRef }),
-    [id, files],
+    () => ({ id, files, setFiles, controlRef, registerControl }),
+    [id, files, registerControl],
   );
 
   return (

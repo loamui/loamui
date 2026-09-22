@@ -323,3 +323,25 @@ describe("group composition and server state", () => {
     expect(inputs[1]?.getAttribute("aria-invalid")).toBe("true");
   });
 });
+
+it("selects an enabled fallback when the active uncontrolled tab becomes disabled", () => {
+  function Example({ disabled }: { disabled: boolean }) {
+    return (
+      <Tabs.Root defaultValue="one">
+        <Tabs.List>
+          <Tabs.Tab value="one" disabled={disabled}>
+            One
+          </Tabs.Tab>
+          <Tabs.Tab value="two">Two</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="one">First</Tabs.Panel>
+        <Tabs.Panel value="two">Second</Tabs.Panel>
+      </Tabs.Root>
+    );
+  }
+  const { rerender } = render(<Example disabled={false} />);
+  rerender(<Example disabled />);
+  expect(screen.getByRole("tab", { name: "Two" })).toHaveAttribute("aria-selected", "true");
+  expect(screen.getByRole("tab", { name: "Two" })).toHaveAttribute("tabindex", "0");
+  expect(screen.getByRole("tabpanel")).toHaveTextContent("Second");
+});

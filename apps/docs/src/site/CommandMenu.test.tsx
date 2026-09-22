@@ -7,12 +7,6 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
 
 import { CommandMenu } from "./CommandMenu";
 
-/**
- * The palette is an APG editable combobox in a native dialog. What it has to
- * get right: the box keeps focus and points at an option, the arrow keys move
- * that pointer, Enter follows it — and, since the index carries each page's
- * prose, a phrase from a page's body finds the page.
- */
 const INDEX = [
   {
     url: "/docs/accessibility",
@@ -90,3 +84,31 @@ describe("the command menu", () => {
     await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("No results"));
   });
 });
+
+it.each(["network", "http"])(
+  "keeps title search and retries after a %s failure",
+  async (failure) => {
+    const fetchIndex = vi.fn();
+    if (failure === "network") fetchIndex.mockRejectedValueOnce(new Error("Offline"));
+    else fetchIndex.mockResolvedValueOnce({ ok: false });
+    fetchIndex.mockResolvedValueOnce({
+      ok: true,
+      json: async () => [
+        { url: "/docs/components/popover", title: "Popover", description: "", text: "Anchoring" },
+      ],
+    });
+    vi.stubGlobal("fetch", fetchIndex);
+    render(<CommandMenu />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Search documentation" }));
+    fireEvent.change(screen.getByRole("combobox"), { target: { value: "Button" } });
+    await waitFor(() => expect(fetchIndex).toHaveBeenCalledTimes(1));
+    expect(screen.getByRole("option", { name: "Button Inputs" })).toBeVisible();
+
+    fireEvent.keyDown(window, { key: "k", ctrlKey: true });
+    fireEvent.click(screen.getByRole("button", { name: "Search documentation" }));
+    fireEvent.change(screen.getByRole("combobox"), { target: { value: "Anchoring" } });
+    expect(await screen.findByRole("option", { name: "Popover Component" })).toBeVisible();
+    expect(fetchIndex).toHaveBeenCalledTimes(2);
+  },
+);
