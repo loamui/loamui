@@ -14,61 +14,89 @@ Create a framework application, install `@loamui/core`, and load its stylesheet.
 
 ## Quick start
 
-One command scaffolds a new Next.js App Router project with the stylesheet, layer order, quality checks and the agent skill already wired:
+Create your application with your framework's own tool, then set up LoamUI in it with one command:
 
 **pnpm**
 
 ```bash
-pnpm create loamui@latest my-app
+pnpm dlx loamui@latest init
 ```
 
 **npm**
 
 ```bash
-npm create loamui@latest my-app
+npx loamui@latest init
 ```
 
 **yarn**
 
 ```bash
-yarn create loamui my-app
+yarn dlx loamui@latest init
 ```
 
 **bun**
 
 ```bash
-bun create loamui my-app
+bunx loamui@latest init
 ```
 
-It creates the app, installs `@loamui/core`, adds the Stylelint and composition checks with their scripts, and installs the LoamUI skill and its companions for your agent. Open your agent in the new folder, confirm `loamui` is listed among its skills, and describe what to build.
+`init` installs `@loamui/core`, links the stylesheet for the installed version, writes the layer order, adds Stylelint, Oxlint and Oxfmt with the composition checker, their scripts and one `check` that runs them all, writes a LoamUI section into `AGENTS.md` so your agent knows the setup and the checks, and installs the LoamUI skill and its companions for your agent. It only adds; nothing you have is replaced, and running it again changes nothing. `--dry-run` shows the plan first.
 
-Already have a project? Run the same tool in it to add and verify LoamUI setup:
+Starting from nothing? One command creates a Next.js App Router application and runs `init` in it:
 
 **pnpm**
 
 ```bash
-pnpm create loamui doctor --fix
+pnpm dlx loamui@latest create my-app
 ```
 
 **npm**
 
 ```bash
-npm create loamui@latest -- doctor --fix
+npx loamui@latest create my-app
 ```
 
 **yarn**
 
 ```bash
-yarn create loamui doctor --fix
+yarn dlx loamui@latest create my-app
 ```
 
 **bun**
 
 ```bash
-bun create loamui doctor --fix
+bunx loamui@latest create my-app
 ```
 
-To follow each step by hand instead, or to understand what the tool does, use the guides below.
+To see what is missing in a project, or to check it in CI:
+
+**pnpm**
+
+```bash
+pnpm dlx loamui@latest doctor
+```
+
+**npm**
+
+```bash
+npx loamui@latest doctor
+```
+
+**yarn**
+
+```bash
+yarn dlx loamui@latest doctor
+```
+
+**bun**
+
+```bash
+bunx loamui@latest doctor
+```
+
+Before wiring the cascade, `init` checks for CSS that would silently override LoamUI's element styles. Tailwind 4 is resolved with one combined layer order; Tailwind 3, another design system or a reset package hold the cascade steps back until you decide. Open your agent in the project afterwards, confirm `loamui` is listed among its skills, and describe what to build.
+
+The guides below are the same setup by hand, for when you want to see what `init` does.
 
 ## 1. Choose your framework
 
@@ -81,19 +109,21 @@ The beta setup uses LoamUI as the styling foundation, without Tailwind or anothe
 
 **Already have a project?** Check its framework, React version, CSS imports and resets first. Tailwind's presence in a manifest alone does not prove a conflict: inspect Preflight, utility classes and global rules that affect the interface. LoamUI keeps every rule inside `@layer loamui.*`, so an unlayered reset overrides its element styles. With Tailwind 3, Preflight is unlayered: disable it and keep Tailwind for utilities, or scope LoamUI to a subtree. With Tailwind 4, whose layers are real cascade layers, declare one combined order before any other stylesheet: `@layer theme, base, loamui.tokens, loamui.elements, loamui.components, components, utilities;`. Follow the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing shared styles or dependencies.
 
-## Stylesheet delivery during the beta
+## Stylesheet delivery
 
-The current core stylesheet uses modern CSS that the tested Next.js and TanStack Start bundlers cannot parse. For now, both framework guides load `https://loamui.com/loamui-core.css` through a stylesheet link, so the browser receives the CSS unchanged. Do not also import `@loamui/core/styles.css` through JavaScript or CSS.
+The core stylesheet uses modern CSS that the tested Next.js and TanStack Start bundlers cannot parse, so both framework guides load it through a stylesheet link and the browser receives the CSS unchanged. Do not also import `@loamui/core/styles.css` through JavaScript or CSS.
 
-This hosted URL follows the documentation deployment, not your installed package version. It requires network access and must be allowed by your site's Content Security Policy. Use it for the beta trial; a production integration should serve a version-matched copy of the installed stylesheet from its own public assets, keeping the link and layer ordering below. Do not silently switch delivery methods or alter core CSS to get a build to pass.
+The link points at the published package on the npm CDN, pinned to the version you installed: `https://cdn.jsdelivr.net/npm/@loamui/core@0.2.0/dist/styles.css`. The URL is immutable, so a later release never changes a deployed application; update the package and the link together, which `init` does. The link needs network access and must be allowed by your site's Content Security Policy. To serve the stylesheet yourself, copy `node_modules/@loamui/core/dist/styles.css` into your public assets and link that instead, keeping the layer order below. Do not alter core CSS to get a build to pass.
 
 ## 2. Check the foundation
 
 After completing your framework guide, confirm the application builds and the LoamUI styles load. You can use this small interface to check the foundation.
 
-Replace the starter page with this interface. Use `app/page.tsx` in Next.js or `src/components/Welcome.tsx` in TanStack Start. The TanStack guide shows how to render it from your index route. The named Field parts can be composed from a Next.js server component. Add a client directive when your composition needs client hooks or event handlers.
+Replace the starter page with this interface. Use `app/page.tsx` in Next.js or `src/components/Welcome.tsx` in TanStack Start. The TanStack guide shows how to render it from your index route. In Next.js the file is a client component: the package is one client module, so its parts such as `Field.Root` are only defined on the client, and a server component rendering them fails at prerender.
 
 ```tsx
+"use client";
+
 import { Checkbox, Field, Input } from "@loamui/core";
 import "./welcome.css";
 
@@ -106,7 +136,11 @@ export default function Welcome() {
         <Field.Label>Your name</Field.Label>
         <Input name="name" autoComplete="name" />
       </Field.Root>
-      <Field.Item><Field.Label><Checkbox /> Send me product updates</Field.Label></Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Checkbox /> Send me product updates
+        </Field.Label>
+      </Field.Item>
     </main>
   );
 }

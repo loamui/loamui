@@ -1,6 +1,6 @@
 {
   "name": "@loamui/core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Modern UI primitives for agent-assisted developers \u2014 contextual tokens, element styles and React components on native modern CSS.",
   "keywords": [
     "a11y",

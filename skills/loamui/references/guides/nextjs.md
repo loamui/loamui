@@ -50,6 +50,8 @@ This creates an empty application without Tailwind or a UI kit.
 
 Already have an application? Keep its routes and configuration. Check the [existing-project workflow](/docs/agent-workflow#establish-the-environment-first) before changing its styling foundation.
 
+Every step below is what `npx loamui@latest init` does; run it instead to have them applied and checked.
+
 The paths below use `app/`; use `src/app/` instead if your project has a `src` directory.
 
 Install the package:
@@ -91,7 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <link rel="stylesheet" href="https://loamui.com/loamui-core.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@loamui/core@0.2.0/dist/styles.css" />
       </head>
       <body>{children}</body>
     </html>
@@ -101,7 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 The browser loads tokens, element styles and component styles without sending core CSS through the bundler. Do not add an import of `@loamui/core/styles.css`. No provider is needed.
 
-**Hosted stylesheet:** the URL follows the documentation deployment rather than your installed package version. See [stylesheet delivery](/docs/installation#stylesheet-delivery-during-the-beta) for versioning and self-hosting guidance.
+The URL is pinned to the installed version of `@loamui/core`; keep the two in step when you update. See [stylesheet delivery](/docs/installation#stylesheet-delivery) for self-hosting.
 
 The `--empty` scaffold does not create `app/globals.css`. Create it with this layer order as its first line, before any imports or rules that create LoamUI layers:
 
@@ -115,7 +117,7 @@ For a fresh application, this declaration is the whole file, and the layout abov
 
 ## Check your first interface
 
-Copy the [foundation example](/docs/installation#2-check-the-foundation) into `app/page.tsx` and put its CSS alongside it. Namespace parts such as `Field.Root` and `Field.Label` can be composed from a server component. Add `"use client"` only when your composition uses client hooks, event handlers or render callbacks; the root layout stays a server component.
+Copy the [foundation example](/docs/installation#2-check-the-foundation) into `app/page.tsx` and put its CSS alongside it. It starts with `"use client"`: the package is one client module, so compound parts such as `Field.Root` are undefined in a server component and the page fails at prerender. Keep components that render LoamUI parts on the client; the root layout stays a server component.
 
 **pnpm**
 
