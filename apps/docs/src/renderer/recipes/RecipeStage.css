@@ -1,0 +1,135 @@
+@layer loamui.components {
+  @scope (.site-RecipeStage) to ([class*="loam-"], .frame > *) {
+    :scope {
+      border: 1px solid var(--loam-color-line);
+      border-radius: var(--loam-radius-lg);
+      min-inline-size: 0;
+      overflow: clip;
+    }
+
+    .toolbar {
+      align-items: center;
+      background: var(--loam-color-surface);
+      border-block-end: 1px solid var(--loam-color-line);
+      display: block flex;
+      flex-wrap: wrap;
+      gap: var(--loam-space-xs);
+      justify-content: space-between;
+      padding: var(--loam-space-2xs) var(--loam-space-2xs);
+
+      a {
+        border: 1px solid transparent;
+        border-radius: var(--loam-radius-md);
+        color: var(--loam-color-fg-muted);
+        display: inline grid;
+        padding: var(--loam-space-2xs);
+        place-items: center;
+
+        &:hover {
+          color: var(--loam-color-fg);
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+          transition: color var(--loam-duration-md) var(--loam-ease);
+        }
+      }
+    }
+
+    fieldset,
+    .options {
+      align-items: center;
+      display: block flex;
+      gap: var(--loam-space-3xs);
+    }
+
+    fieldset {
+      border: 0;
+      margin: 0;
+      min-inline-size: 0;
+      padding: 0;
+    }
+
+    label,
+    button {
+      align-items: center;
+      background: var(--loam-color-bg);
+      border: 1px solid var(--loam-color-line);
+      border-radius: var(--loam-radius-sm);
+      box-shadow: none;
+      color: var(--loam-color-fg-muted);
+      cursor: pointer;
+      display: inline flex;
+      font-size: var(--loam-text-sm);
+      justify-content: center;
+      min-block-size: 2.75rem;
+      min-inline-size: 2.75rem;
+      padding: var(--loam-space-3xs);
+
+      &:has(input:checked),
+      &[aria-pressed="true"] {
+        border-color: var(--loam-color-fg);
+        color: var(--loam-color-fg);
+      }
+
+      &:has(input:focus-visible) {
+        outline: var(--loam-ring-width) solid var(--loam-color-ring);
+        outline-offset: 2px;
+      }
+
+      @media (forced-colors: active) {
+        &:has(input:checked),
+        &[aria-pressed="true"] {
+          outline: 2px solid Highlight;
+        }
+      }
+    }
+
+    /* The stage is the ground the frame sits on: a dotted subtle surface in
+     both schemes, so the frame's edge reads even where the frame and the
+     page share a colour. */
+    .stage {
+      background-color: var(--loam-color-bg-subtle);
+      background-image: radial-gradient(
+        circle at 1px 1px,
+        var(--loam-color-line-strong) 1px,
+        transparent 0
+      );
+      background-size: 1.25rem 1.25rem;
+      display: block grid;
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+      padding: var(--loam-space-xs);
+
+      &[data-width="narrow"] {
+        --_w: 24rem;
+      }
+
+      &[data-width="medium"] {
+        --_w: 40rem;
+      }
+
+      &[data-width="wide"] {
+        --_w: 64rem;
+      }
+    }
+
+    /* The frame is the example's page: its own background and text colour
+     resolve under its own color-scheme, and it is a container so the
+     example's queries and fluid tokens answer the frame's width. */
+    .frame {
+      background: var(--loam-color-bg);
+      border-radius: var(--loam-radius-md);
+      box-shadow: var(--loam-shadow-sm);
+      color: var(--loam-color-fg);
+      container-type: inline-size;
+      inline-size: 100%;
+      max-inline-size: var(--_w, 100%);
+      outline: 1px solid var(--loam-color-line-strong);
+      padding: clamp(1rem, 0.5rem + 2cqi, 2.5rem);
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition: max-inline-size var(--loam-duration-lg) var(--loam-ease);
+      }
+    }
+  }
+}

@@ -1,17 +1,15 @@
-export { Nav } from "./Nav";
+export * as Nav from "./index.parts.js";
+export type { NavLabels } from "./root/NavRootContext.js";
+export type { NavRootProps } from "./root/NavRoot.js";
+export type { NavTitleProps } from "./title/NavTitle.js";
+export type { NavListProps } from "./list/NavList.js";
+export type { NavItemProps } from "./item/NavItem.js";
+export type { NavCurrent, NavLinkProps, NavLinkRenderProps } from "./link/NavLink.js";
+export type { NavGroupProps } from "./group/NavGroup.js";
+export type { NavGroupTitleProps } from "./group-title/NavGroupTitle.js";
+export type { NavDropdownProps } from "./dropdown/NavDropdown.js";
 export type {
-  NavLabels,
-  NavCurrent,
-  NavRootProps,
-  NavTitleProps,
-  NavListProps,
-  NavItemProps,
-  NavLinkProps,
-  NavLinkRenderProps,
-  NavGroupProps,
-  NavGroupTitleProps,
-  NavDropdownProps,
   NavDropdownTriggerProps,
   NavDropdownTriggerRenderProps,
-  NavDropdownPanelProps,
-} from "./Nav";
+} from "./dropdown-trigger/NavDropdownTrigger.js";
+export type { NavDropdownPanelProps } from "./dropdown-panel/NavDropdownPanel.js";

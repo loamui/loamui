@@ -36,9 +36,7 @@ Field.Description is linked to the textarea through aria-describedby, so the hin
 ```tsx
 <Field.Root>
   <Field.Label>Bio</Field.Label>
-  <Field.Description>
-    A short description for your public profile.
-  </Field.Description>
+  <Field.Description>A short description for your public profile.</Field.Description>
   <Textarea required />
 </Field.Root>
 ```
@@ -48,7 +46,7 @@ Field.Description is linked to the textarea through aria-describedby, so the hin
 A Field.Error before the control marks the field invalid and is announced: the message's presence is the state.
 
 ```tsx
-<Field.Root>
+<Field.Root invalid>
   <Field.Label>Message</Field.Label>
   <Field.Error>Message must be 20 characters or more</Field.Error>
   <Textarea defaultValue="Too short" />

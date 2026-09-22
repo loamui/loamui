@@ -44,14 +44,14 @@ These notes explain the design. The included tests cover structure and selected 
 - [Input](https://loamui.com/docs/components/input.md)
 - [Textarea](https://loamui.com/docs/components/textarea.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 "use client";
 
 import { useCallback, useId, useState, type FormEvent } from "react";
 import { Button, ErrorSummary, Field, Input, Textarea } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
 type ContactResponse =
   | { status: "sent" }
@@ -61,7 +61,7 @@ type ContactResponse =
       errors: { email?: string; message?: string; form?: string };
     };
 
-export default function Example({
+export default function Recipe({
   action = "/contact",
   initialResponse,
 }: {
@@ -246,7 +246,7 @@ export default function Example({
                 )}
               </ErrorSummary.Root>
             )}
-            <Field.Root id={`${id}-email`}>
+            <Field.Root invalid={Boolean(validation.email && validation.email)} id={`${id}-email`}>
               <Field.Label>Email address</Field.Label>
               <Field.Description>We’ll reply to this address.</Field.Description>
               {validation.email && <Field.Error>{validation.email}</Field.Error>}
@@ -262,7 +262,10 @@ export default function Example({
                 required
               />
             </Field.Root>
-            <Field.Root id={`${id}-message`}>
+            <Field.Root
+              invalid={Boolean(validation.message && validation.message)}
+              id={`${id}-message`}
+            >
               <Field.Label>Message</Field.Label>
               {validation.message && <Field.Error>{validation.message}</Field.Error>}
               <Textarea name="message" defaultValue={failure?.values.message} rows={5} required />
@@ -278,7 +281,7 @@ export default function Example({
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.contact-us-with-details) to ([class*="loam-"]) {

@@ -21,18 +21,23 @@
     padding: var(--_inset);
   }
 
-  /* Floated, the legend leaves the fieldset's legend slot and lines up as
-     a flex item before the segments. Hidden, it wears loam-VisuallyHidden
-     and is out of this scope. */
+  /* The legend leaves the fieldset's legend slot and lines up before the
+     segments as the text of an anonymous flex item. display: contents, not
+     a float: the spec makes a floated legend an ordinary child, but WebKit
+     still draws it in the slot, across the pill's border. A box-less legend
+     takes no padding, so the room around it is the pill's and the first
+     segment's. Hidden, it wears loam-VisuallyHidden and is out of this
+     scope. */
   legend {
     color: var(--loam-color-fg-muted);
-    float: inline-start;
+    display: contents;
     font-size: var(--loam-text-sm);
     font-weight: 500;
     line-height: 1.2;
-    margin: 0;
-    padding-block: 0;
-    padding-inline: var(--loam-space-2xs) var(--loam-space-3xs);
+  }
+
+  :scope:has(> legend:not([class~="loam-VisuallyHidden"])) {
+    padding-inline-start: calc(var(--_inset) + var(--loam-space-2xs));
   }
 
   label.segment {
@@ -60,17 +65,23 @@
     user-select: none;
     white-space: nowrap;
 
-    /* The consumer's icon, sized on the text. Alone after the radio, or
-       beside hidden text, it sits in a circle. The hidden text's class is
-       written as an attribute: the donut gate reads a `.loam-` anywhere in
-       a subject as dead, and this one is a :has() argument, not a subject. */
+    legend:not([class~="loam-VisuallyHidden"]) + & {
+      margin-inline-start: var(--loam-space-3xs);
+    }
+
+    /* The consumer's icon, sized on the text. An icon-only segment is the
+       icon beside its hidden text (the name a bare icon lacks), and sits in
+       a circle. Detected from that pair, never from the svg being the last
+       element: bare text after an icon is not an element, so `svg:last-child`
+       would strip the padding from "icon + word" too. The hidden text's
+       class is written as an attribute: the donut gate reads a `.loam-`
+       anywhere in a subject as dead, and this one is a :has() argument. */
     svg {
       block-size: auto;
       flex: none;
       inline-size: 1em;
     }
 
-    &:has(> input:first-child + svg:last-child),
     &:has(> input:first-child + svg + [class~="loam-VisuallyHidden"]:last-child) {
       padding-inline: 0;
     }

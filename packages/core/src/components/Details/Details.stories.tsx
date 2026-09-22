@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Details } from "../../index";
+import { Details } from "../../index.js";
 
 const meta = {
   title: "Navigation/Details",

@@ -31,6 +31,27 @@ assets. The hosted stylesheet used in the guides follows the docs deployment
 and is unversioned. Follow the [installation guide](https://loamui.com/docs/installation)
 for delivery and cascade-layer order before using the example below.
 
+## Import components and parts
+
+```tsx
+import { Alert } from "@loamui/core/alert";
+import { Modal } from "@loamui/core/modal";
+```
+
+Compound components are ES module namespaces: compose `Alert.Root`,
+`Alert.Title` and `Alert.Description`, or `Modal.Root` and `Modal.Trigger`.
+Every compound component has an explicit `.Root`; the namespace itself is
+not a component. The package root also exports these namespaces.
+
+Standalone components such as `Button` and `Input` are callable. Compound
+parts are accessed through their namespace, without parallel `AlertRoot` or
+`AlertTitle` value exports. Prefer component entry points when controlling
+lazy-loaded chunks.
+
+JavaScript ships as separate ES modules with client boundaries preserved.
+Static components can render on the server; interactive parts declare their
+own client boundary. Styles remain one complete stylesheet.
+
 ## Three primitives, working together
 
 - **Tokens** describe colour, typography, spacing and motion through `--loam-*`
@@ -65,7 +86,7 @@ export function UploadStatus() {
     <section style={{ "--loam-context": "info" } as CSSProperties}>
       <h2>Your photos</h2>
       <p>Keep this page open until the upload finishes.</p>
-      <Badge>In progress</Badge>
+      <Badge.Root>In progress</Badge.Root>
       <Progress value={60}>Uploading photos</Progress>
     </section>
   );

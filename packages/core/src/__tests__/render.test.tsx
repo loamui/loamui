@@ -3,7 +3,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
 
-import { composeRefs, mergeProps, renderWithProps } from "../render";
+import { composeRefs, mergeProps, renderWithProps } from "../utils/render.js";
 
 afterEach(cleanup);
 
@@ -103,7 +103,7 @@ describe("Popover.Trigger render merge", () => {
   it("merges consumer className, children and onClick into the render element", async () => {
     const user = userEvent.setup();
     const spy = vi.fn();
-    const { Popover } = await import("../index");
+    const { Popover } = await import("../index.js");
     render(
       <Popover.Root>
         <Popover.Trigger render={<a href="#x" />} className="mine" onClick={spy}>

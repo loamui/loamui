@@ -103,16 +103,17 @@ function resolve(expr, scheme) {
     if (!(v[1] in decls)) throw new Error(`unknown token ${v[1]}`);
     return resolve(decls[v[1]], scheme);
   }
-  // Relative colour, the reference derivation idiom: pinned L and C,
-  // source hue kept — oklch(from <colour> <L>% <C> h). Only this shape is
-  // supported; anything fancier (calc channels, alpha) throws loudly.
-  const rel = expr.match(/^oklch\(from\s+([\s\S]+?)\s+([\d.]+)%\s+([\d.]+)\s+h\)$/);
+  // Relative colour, the reference derivation idiom: each of L and C either
+  // pinned to a number or kept from the source (`l`, `c`), hue always kept —
+  // oklch(from <colour> <L>% <C> h). Anything fancier (calc channels,
+  // alpha) throws loudly.
+  const rel = expr.match(/^oklch\(from\s+([\s\S]+?)\s+([\d.]+%|l)\s+([\d.]+|c)\s+h\)$/);
   if (rel) {
     const srcRgb = resolve(rel[1], scheme);
-    const [, a0, b0] = srgbToOklab(srcRgb);
+    const [L0, a0, b0] = srgbToOklab(srcRgb);
     const hue = Math.atan2(b0, a0);
-    const L = +rel[2] / 100;
-    const C = +rel[3];
+    const L = rel[2] === "l" ? L0 : +rel[2].slice(0, -1) / 100;
+    const C = rel[3] === "c" ? Math.hypot(a0, b0) : +rel[3];
     return oklabToSrgb([L, C * Math.cos(hue), C * Math.sin(hue)]);
   }
   const ok = expr.match(/^oklch\(([\d.]+)%\s+([\d.]+)\s+([\d.]+)deg(\s*\/\s*[\d.]+%?)?\)$/);
@@ -219,7 +220,7 @@ for (const scheme of ["light", "dark"]) {
   check("text-strong (headings) on surface", scheme, t("--loam-color-fg-strong"), t("--loam-color-surface"), 4.5);
   check("text-muted on bg", scheme, t("--loam-color-fg-muted"), t("--loam-color-bg"), 4.5);
   check("text-dim (placeholder) on surface", scheme, t("--loam-color-fg-dim"), t("--loam-color-surface"), 4.5);
-  check("danger text (Field.Error) on bg", scheme, t("--loam-color-danger"), t("--loam-color-bg"), 4.5);
+  check("danger text (FieldError) on bg", scheme, t("--loam-color-danger"), t("--loam-color-bg"), 4.5);
   // The -strong family is also TEXT: Tabs' selected tab, Details' open
   // summary and any contexted label lean on it holding 4.5:1 on both
   // surfaces, where the raw hue does not (light warning is 2.5:1).
@@ -280,6 +281,33 @@ for (const scheme of ["light", "dark"]) {
   for (const s of ["primary", "success", "danger", "warning", "info"]) {
     check(`${s} focus ring vs bg`, scheme, t(`--loam-color-${s}-strong`), t("--loam-color-bg"), 3.0);
   }
+}
+
+// ---- the docs site's own pairings -----------------------------------
+// The site defines no colours of its own — every colour is a core token —
+// but it combines them in ways no component does: a dim count on the page
+// ground, the raw primary as a category label, the accent as text on its
+// own 14% tint behind the current page. Those pairings are the site's to
+// audit, so the site is held to the bar it documents.
+for (const scheme of ["light", "dark"]) {
+  const t = (n) => T(n, scheme);
+  // The current item's tint: color-mix(in oklab, accent 14%, transparent)
+  // over the page ground (Sidebar, RecipesRail) or the surface (CommandMenu).
+  const tintOn = (ground) => mixOklab(t("--loam-color-accent"), ground, 0.86);
+  check("site: dim count/hint text on bg", scheme, t("--loam-color-fg-dim"), t("--loam-color-bg"), 4.5);
+  check("site: dim category title on bg (NavLinks)", scheme, t("--loam-color-fg-dim"), t("--loam-color-bg"), 4.5);
+  check("site: primary category label on bg (DocPage)", scheme, t("--loam-color-primary"), t("--loam-color-bg"), 4.5);
+  check("site: primary guidance heading on surface", scheme, t("--loam-color-primary"), t("--loam-color-surface"), 4.5);
+  check("site: danger guidance heading on surface", scheme, t("--loam-color-danger"), t("--loam-color-surface"), 4.5);
+  check("site: accent current-page text on its tint over bg", scheme, t("--loam-color-accent"), tintOn(t("--loam-color-bg")), 4.5);
+  check("site: accent current-result text on its tint over surface", scheme, t("--loam-color-accent"), tintOn(t("--loam-color-surface")), 4.5);
+  check("site: accent as text on bg (h1 emphasis)", scheme, t("--loam-color-accent"), t("--loam-color-bg"), 4.5);
+  check("site: text on surface-hover (nav/result hover)", scheme, t("--loam-color-fg"), t("--loam-color-surface-hover"), 4.5);
+  check("site: link on bg-subtle (empty panel)", scheme, t("--loam-color-link"), t("--loam-color-bg-subtle"), 4.5);
+  check("site: text-strong on bg-subtle (empty title)", scheme, t("--loam-color-fg-strong"), t("--loam-color-bg-subtle"), 4.5);
+  check("site: text on bg-subtle (context demo)", scheme, t("--loam-color-fg"), t("--loam-color-bg-subtle"), 4.5);
+  check("site: text-muted on primary-soft (usage note)", scheme, t("--loam-color-fg-muted"), t("--loam-color-primary-soft"), 4.5);
+  check("site: text-muted on surface (card body)", scheme, t("--loam-color-fg-muted"), t("--loam-color-surface"), 4.5);
 }
 
 if (failures.length) {

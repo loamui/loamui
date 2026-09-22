@@ -13,7 +13,7 @@ A native button whose appearance is decided by its context, not by props.
 ## Import
 
 ```tsx
-import { Button } from "@loamui/core";
+import { Button, Checkbox, Loader, VisuallyHidden } from "@loamui/core";
 ```
 
 ## Usage
@@ -40,7 +40,11 @@ Buttons are neutral by default. Declare --loam-context on a region and the butto
 
 ```tsx
 <div style={{ "--loam-context": "danger" }}>
-  <Checkbox label="Also delete backups" defaultChecked />
+  <Field.Item>
+    <Field.Label>
+      <Checkbox defaultChecked /> Also delete backups
+    </Field.Label>
+  </Field.Item>
   <Button>Delete account</Button>
   <Loader label="Deleting" />
 </div>
@@ -71,19 +75,16 @@ There are no leftSection or rightSection props. An svg child is detected via :ha
 
 ```tsx
 <Button>
-  <svg viewBox="0 -0.5 25 25" fill="none" aria-hidden>
-    <path d="M5.5 12.5L10.167 17L19.5 8" stroke="currentColor"
-      strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
+  <IconCheck aria-hidden />
   Approve
 </Button>
 
 <Button aria-label="Approve">
-  <svg>…</svg>
+  <IconCheck aria-hidden />
 </Button>
 
 <Button>
-  <svg>…</svg>
+  <IconCheck aria-hidden />
   <VisuallyHidden>Approve</VisuallyHidden>
 </Button>
 ```

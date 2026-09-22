@@ -39,13 +39,13 @@ These notes explain the design. The included tests cover structure and selected 
 - [Tokens](https://loamui.com/docs/tokens.md)
 - [Element styles](https://loamui.com/docs/element-styles.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 import { useId } from "react";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const instanceId = useId();
   return (
     <section className="faq" aria-labelledby={`${instanceId}-faq-title`}>
@@ -96,7 +96,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.faq) to ([class*="loam-"]) {

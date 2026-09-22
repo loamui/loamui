@@ -1,4 +1,6 @@
-@scope (.site-NotFound) {
+/* The page hosts a core button beside its own link; the donut keeps the
+   bare heading rule off it. */
+@scope (.site-NotFound) to ([class*="loam-"]) {
   :scope {
     display: block grid;
     gap: var(--loam-space-s);
@@ -7,7 +9,7 @@
     padding-block: clamp(3rem, 2.286rem + 3.571vi, 6rem);
   }
 
-  .title {
+  h1 {
     font-size: var(--site-h1);
     font-weight: 800;
     text-wrap: balance;

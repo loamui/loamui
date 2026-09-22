@@ -1,2 +1,2 @@
-export { Meter } from "./Meter";
-export type { MeterProps } from "./Meter";
+export { Meter } from "./Meter.js";
+export type { MeterProps } from "./Meter.js";

@@ -30,8 +30,7 @@
     padding: var(--loam-space-3xs);
     z-index: var(--loam-z-popup);
 
-    /* Enhanced: tethered to the box (the Input's wrapper carries the anchor
-       name), as wide as it, flipping above when the viewport runs out. */
+    /* Enhanced: tethered to the native input (which carries the anchor name), as wide as it, flipping above when the viewport runs out. */
     @supports (anchor-name: --loam-probe) {
       inline-size: anchor-size(inline);
       inset: auto;

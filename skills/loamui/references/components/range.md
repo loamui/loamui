@@ -23,7 +23,7 @@ import { Field, Range } from "@loamui/core";
 Rendered bare, the control needs an aria-label; a Field.Label (below) is the usual way to name it.
 
 ```tsx
-<Range defaultValue={40} aria-label="Value" />
+<Range.Control defaultValue={40} aria-label="Value" />
 ```
 
 ### Labelled inside a Field
@@ -34,7 +34,7 @@ Wrap the control in Field.Root: it reads its id, description and error wiring fr
 <Field.Root>
   <Field.Label>Volume</Field.Label>
   <Field.Description>Applies to alerts only.</Field.Description>
-  <Range defaultValue={70} />
+  <Range.Control defaultValue={70} />
 </Field.Root>
 ```
 
@@ -45,7 +45,7 @@ Snap to increments with the step prop.
 ```tsx
 <Field.Root>
   <Field.Label>Fertiliser (kg)</Field.Label>
-  <Range min={0} max={100} step={10} defaultValue={30} />
+  <Range.Control min={0} max={100} step={10} defaultValue={30} />
 </Field.Root>
 ```
 
@@ -56,7 +56,12 @@ marks are points on the track: they go to a <datalist> the input references, so 
 ```tsx
 <Field.Root>
   <Field.Label>Zoom</Field.Label>
-  <Range min={0} max={100} defaultValue={50} marks={[{ value: 0 }, { value: 25 }, { value: 50 }, { value: 75 }, { value: 100 }]} />
+  <Range.Control
+    min={0}
+    max={100}
+    defaultValue={50}
+    marks={[{ value: 0 }, { value: 25 }, { value: 50 }, { value: 75 }, { value: 100 }]}
+  />
 </Field.Root>
 ```
 
@@ -67,7 +72,7 @@ A mark's label is written under its tick, aligned to where the thumb sits at tha
 ```tsx
 <Field.Root>
   <Field.Label>Fertiliser</Field.Label>
-  <Range
+  <Range.Control
     min={0}
     max={100}
     step={25}
@@ -89,7 +94,7 @@ Range.Root carries the value between the Range and a Range.Output, a native <out
 <Field.Root>
   <Field.Label>Volume</Field.Label>
   <Range.Root>
-    <Range defaultValue={70} />
+    <Range.Control defaultValue={70} />
     <Range.Output labels={{ value: (n) => `${n}%` }} />
   </Range.Root>
 </Field.Root>
@@ -103,7 +108,17 @@ min, max and step are the platform's own; the output and the marks read them fro
 <Field.Root>
   <Field.Label>Year</Field.Label>
   <Range.Root>
-    <Range min={1990} max={2030} step={5} defaultValue={2010} marks={[{ value: 1990, label: "1990" }, { value: 2010, label: "2010" }, { value: 2030, label: "2030" }]} />
+    <Range.Control
+      min={1990}
+      max={2030}
+      step={5}
+      defaultValue={2010}
+      marks={[
+        { value: 1990, label: "1990" },
+        { value: 2010, label: "2010" },
+        { value: 2030, label: "2030" },
+      ]}
+    />
     <Range.Output labels={{ value: String }} />
   </Range.Root>
 </Field.Root>
@@ -116,7 +131,7 @@ disabled reaches the native input: the track and thumb dim, the value stays read
 ```tsx
 <Field.Root>
   <Field.Label>Alert volume</Field.Label>
-  <Range defaultValue={50} disabled />
+  <Range.Control defaultValue={50} disabled />
 </Field.Root>
 ```
 
@@ -134,14 +149,14 @@ disabled reaches the native input: the track and thumb dim, the value stays read
 
 ### Show the current value
 
-A track communicates roughly where you are, never what you chose, so render the number where the user can see it. Range.Output is the component's answer: a native <output> bound to the input, above the thumb, that follows it. Field.Label accepts any content and the control is stateless, so the value can instead ride in the label, driven by value and onChange.
+The thumb shows an approximate position. Display the chosen number with Range.Output, a native <output> bound to the input that follows the thumb. Field.Label accepts any content and the control is stateless, so the value can instead ride in the label, driven by value and onChange.
 
 ```tsx
 const [volume, setVolume] = useState(70);
 
 <Field.Root>
   <Field.Label>Volume: {volume}</Field.Label>
-  <Range
+  <Range.Control
     value={volume}
     onChange={(e) => setVolume(e.target.valueAsNumber)}
   />
@@ -159,7 +174,11 @@ step sets the smallest move a user can make, so match it to differences that act
 - Assistive tech hears the value change as it moves; sighted users have no equivalent unless you render the value visibly: Range.Output, or the value in the label.
 - Range.Output is a native <output for>, so it is bound to the input and announced as a status; marks are a real <datalist>, which the platform snaps to, and the drawn ticks and labels are a picture of it, hidden from assistive technology rather than exposed as a list of options after the slider.
 
-## Props
+## Parts
+
+### Range.Control
+
+The native range input. It self-wires inside Field.Root; Range.Root is optional when composing an output.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -170,11 +189,9 @@ step sets the smallest move a user can make, so match it to differences that act
 | `marks` | `Array<{ value: number; label?: string }>` | — | Points on the track: forwarded to a <datalist> the input references, drawn as ticks under the track with each label beneath its tick. |
 | `...others` | `InputHTMLAttributes` | — | All native <input type="range"> props are forwarded. |
 
-## Parts
-
 ### Range.Root
 
-The optional <div> wrapper that carries the value between a Range and its Range.Output; native <div> props are forwarded. Not needed for a range without an output.
+The optional <div> wrapper that carries the value between Range and Range.Output; native <div> props are forwarded. Not needed for a range without an output.
 
 ### Range.Output
 

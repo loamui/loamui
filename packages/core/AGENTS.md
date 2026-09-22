@@ -40,10 +40,23 @@ Inspect existing resets and Tailwind Preflight before changing them.
 Installing the skill does not install the package. An authorized setup request
 can include missing dependencies. No provider is needed.
 
-In React Server Components every
-compound part (`Field.Root`, `Modal.Trigger`) is a client reference, so JSX
-that uses parts lives in a `"use client"` file; callable forms (`<Button>`,
-`<Alert title>`) work from server modules.
+Import namespaces such as `Field` and `Alert` from `@loamui/core` or a
+component entry point such as `@loamui/core/field`. Compose `Field.Root`,
+`Field.Label` and `Alert.Title`; compound components always use an explicit
+`.Root`. Alert has no title, icon or dismissal props on its root: use
+`Alert.Title`, `Alert.Icon` and `Alert.Close`. Avatar uses `Avatar.Root`,
+`Avatar.Image` and `Avatar.Fallback`; fallback content is supplied as children.
+
+Parts are accessed through the namespace; prefixed names such as `FieldRoot`
+are implementation details, not public value exports. Simple components such as
+Button, Input, Checkbox and Radio remain callable. Internal markup does not
+require separate public parts.
+
+The package preserves module-level client boundaries. React Server Components
+can compose individual parts with serializable props; a composition needs
+`"use client"` when it uses client hooks, event handlers or render callbacks.
+Static components such as `Separator`, `Card` and `Details.Root` can execute
+on the server without shipping their implementation to the browser.
 
 ## Three primitives
 
@@ -100,16 +113,19 @@ separately; passing a check proves only the behaviour it covers.
 4. **Compose, don't configure.** `Field.Root > Field.Label,
 Field.Description, Field.Error, Input` in that order.
 
-   - The controls self-wire: `Input`, `Select`, `Textarea`, `Range`,
+   - The controls self-wire: `Input`, `Select.Root`, `Textarea`, `Range.Control`,
      `QuantityInput`, `FileInput.Control`, `Search.Input`.
    - Overlays are `Modal.Root > Modal.Trigger + Modal.Popup`.
    - Swap the rendered element with `render={<a href="…" />}`.
 
 5. **Icons are children.** `<Button><Icon /> Save</Button>`; the component
-   detects the `svg`. Input adornments use its documented `startSection` /
-   `endSection` props.
-6. **Errors are detected.** Render `<Field.Error>` and the field is invalid;
-   there is no `invalid` prop. Write the message in the words of the question
+   detects the `svg`. Input accepts `startSection` and `endSection` content
+   inside its bordered wrapper. Its native input receives `className`, `style`
+   and `ref`; use `wrapperProps` for the surrounding box.
+6. **Validation is explicit.** Set `Field.Root invalid={hasError}` and compose
+   `<Field.Error>` for the message. Message IDs register after hydration; supply
+   explicit `aria-describedby` links for initial server HTML. Write the message
+   in the words of the question
    ("Enter your first name"), never "required" or "invalid". Show new errors
    after submission; clear displayed native constraint errors when corrected.
    Native validity cannot resolve server failures such as rejected credentials.
@@ -158,7 +174,7 @@ alphabetical order; and put a blank line before every comment.
 | `data-read-only`                                                          | Rating                 | display mode: a picture, not inputs                                                                                                     |
 | `data-size`                                                               | Badge, Progress, Meter | the `size` prop, for the stylesheet                                                                                                     |
 | `data-striped` / `data-hover` / `data-col-borders` / `data-sticky-header` | Table                  | the display props (`striped`, `highlightOnHover`, `withColumnBorders`, `stickyHeader`); cap the scroller with `--loam-table-block-size` |
-| `aria-invalid`                                                            | control                | derived from a rendered error                                                                                                           |
+| `aria-invalid`                                                            | control                | explicit Field validation or native constraint state                                                                                    |
 
 Public custom properties are `--loam-*`; anything `--_*` is private.
 

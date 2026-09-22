@@ -17,7 +17,7 @@ a decision nobody can audit; here the decisions are the hues and neutrals, and t
 arithmetic:
 
 | Token | Value |
-| --- | --- |
+| - | - |
 | `--loam-font` | `system-ui, sans-serif` |
 | `--loam-font-display` | `var(--loam-font)` |
 | `--loam-font-mono` | `ui-monospace, "SF Mono", "JetBrains Mono", menlo, consolas, monospace` |
@@ -136,9 +136,6 @@ CSS and differ only in where the token is set:
 </div>
 ```
 
-  </div>
-</div>
-
 ## Dark mode
 
 Dark mode is native. Tokens are defined with CSS `light-dark()` and the root declares
@@ -164,6 +161,12 @@ The same mechanism gives you an inverted "on-dark" section: set `data-theme="dar
 resolved values and don't re-resolve, so the inverted region must also re-declare `color` (e.g.
 `color: var(--loam-color-fg)`) for descendants to pick up the flipped value.
 
+> This is one instance of LoamUI's baseline posture:&#x20;
+> **the user's stated preferences are the default.** Colour scheme is followed
+> natively, motion exists only inside `prefers-reduced-motion: no-preference`, and forced
+> colour palettes are honoured rather than overridden. Everything beyond that baseline (a saved
+> theme, an animation) is an explicit opt-in layered on top.
+
 ## Contexts
 
 A **context** declares what a region _means_, as a custom property (`--loam-context`) that every
@@ -171,8 +174,6 @@ LoamUI component inside adopts. The mechanics (the vocabulary, one-element regio
 property lives on an ancestor) are the [Contextualism guide](/docs/contextualism)'s subject;
 what matters for theming is that a context remaps _semantic colour tokens only_, so it composes
 with everything on this page:
-
-</div>
 
 ```css
 @scope (.danger-zone) to ([class*="loam-"]) {
@@ -188,10 +189,14 @@ with everything on this page:
 <section className="danger-zone">
   {/* everything inside adopts the danger accent: buttons, checked
       states, carets: even focus rings */}
-  <Checkbox label="I understand this is permanent" />
+  <Field.Item><Field.Label><Checkbox /> I understand this is permanent</Field.Label></Field.Item>
   <Button>Delete</Button>
 </section>
 ```
+
+> Theme, context, and instance are one mechanism at three scopes: remap tokens on `:root`&#x20;
+> to set a brand, declare a context on a region to give it meaning, set a property on an instance to
+> override one control.
 
 ## Most useful to override
 
@@ -237,6 +242,9 @@ plain parent without a preview wrapper.
 Corner radii are deliberately _not_ fluid: rounding shouldn't breathe. Control heights aren't
 tokens at all: buttons and form controls share one derived anatomy (padding + line-height +
 border), so they align by construction at every container width.
+
+> Because tokens cascade, you can theme per-brand or per-section by setting variables on any wrapper
+> element; the whole theme is just values in the cascade.
 
 ## Extending styles through public contracts
 

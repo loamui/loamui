@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
-import { SignpostLink } from "../../index";
+import { SignpostLink } from "../../index.js";
 
 const meta = {
   title: "Navigation/SignpostLink",

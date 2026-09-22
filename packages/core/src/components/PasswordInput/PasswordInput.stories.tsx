@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { Field } from "../../index";
-import { PasswordInput } from "./index";
+import { Field } from "../../index.js";
+import { PasswordInput } from "./index.js";
 
 const meta = {
   title: "Inputs/PasswordInput",
@@ -63,7 +63,7 @@ export const NewPassword: Story = {
 /** A Field.Error marks the box invalid, as it does any Input. */
 export const WithError: Story = {
   render: () => (
-    <Field.Root>
+    <Field.Root invalid>
       <Field.Label>Password</Field.Label>
       <Field.Error>Enter your password</Field.Error>
       <PasswordInput name="password" autoComplete="current-password" />

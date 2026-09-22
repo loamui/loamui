@@ -13,7 +13,7 @@ A composable form-field primitive that wires label, description, error and acces
 ## Import
 
 ```tsx
-import { Field } from "@loamui/core";
+import { Field, Input, Button } from "@loamui/core";
 ```
 
 ## Usage
@@ -32,14 +32,12 @@ Assemble the parts in order (label, description, error, control): the message si
 
 ### Error state
 
-A Field.Error with content flips the field to invalid and is announced via role="alert".
+Set invalid on Field.Root for the validation state. Field.Error supplies the message and is announced via role="alert".
 
 ```tsx
-<Field.Root>
+<Field.Root invalid>
   <Field.Label>Email</Field.Label>
-  <Field.Error>
-    Enter an email address in the correct format, like name@example.com
-  </Field.Error>
+  <Field.Error>Enter an email address in the correct format, like name@example.com</Field.Error>
   <Input defaultValue="not-an-email" />
 </Field.Root>
 ```
@@ -61,12 +59,12 @@ Fields compose into a form with nothing extra: each control self-wires, each Fie
 
 ```tsx
 <form onSubmit={onSubmit} noValidate>
-  <Field.Root>
+  <Field.Root invalid={Boolean(errors.name)}>
     <Field.Label>Full name</Field.Label>
     <Field.Error>{errors.name}</Field.Error>
     <Input name="name" autoComplete="name" />
   </Field.Root>
-  <Field.Root>
+  <Field.Root invalid={Boolean(errors.email)}>
     <Field.Label>Email address</Field.Label>
     <Field.Description>We'll only use this to reply.</Field.Description>
     <Field.Error>{errors.email}</Field.Error>
@@ -84,9 +82,7 @@ Field.Control wires the field's id, aria-describedby and aria-invalid onto any e
 <Field.Root>
   <Field.Label>Amount</Field.Label>
   <Field.Description>A bare native input, not a LoamUI control.</Field.Description>
-  <Field.Control
-    render={(props) => <input {...props} inputMode="decimal" />}
-  />
+  <Field.Control render={(props) => <input {...props} inputMode="decimal" />} />
 </Field.Root>
 ```
 
@@ -97,10 +93,14 @@ Field.Control wires the field's id, aria-describedby and aria-invalid onto any e
 
 ## When not to
 
-- For inline choices: Checkbox and Switch render their own label and description beside the control; wrap them in a Field only when they need an error message.
+- For naming a whole set of controls: use Fieldset and give each option its own Field.Item.
 - As a layout grid: Field only arranges a single control and its supporting text.
 
 ## How it works
+
+### Server rendering and custom IDs
+
+Parts can live inside custom child components. They register their actual IDs in client layout effects; custom IDs and conditional removal are supported. For description and error links in initial server HTML, supply stable IDs on the parts and aria-describedby on the control. Put the control ID on Root when it must be fixed before hydration. invalid is explicit and works during server rendering.
 
 ### Writing error messages
 
@@ -112,7 +112,7 @@ Labels are sentence case with no trailing colon, and name the thing the field as
 
 ### When validation runs
 
-Two paths, one timing rule. Native constraints (required, type, minlength) open the error state only after a submit attempt. Once open, the error remains while the value is invalid and clears as soon as the correction is valid. The render path is explicit: a field is invalid exactly while a Field.Error with content is rendered, so server or async validation is rendering that message after submission. Neither path validates on blur or complains mid-word.
+Two paths, one timing rule. Native constraints (required, type, minlength) open the error state only after a submit attempt. Once open, the error remains while the value is invalid and clears as soon as the correction is valid. The render path is explicit: set invalid on Field.Root from the validation result and render Field.Error for its message. Error content does not determine validity. Neither path validates on blur or complains mid-word.
 
 ### Styling state from outside
 
@@ -125,8 +125,8 @@ The message renders once, inside the field, tied to the control by aria-describe
 ## Accessibility
 
 - Field.Root generates one id and hands it to Field.Label (via htmlFor) and to the control, so label and control are always associated.
-- Description and error ids are added to the control's aria-describedby only when those parts are present, ahead of any aria-describedby the control carries itself, each id once: a control that brings its own description keeps it.
-- Any Field.Error with content sets aria-invalid on the control and is announced with role="alert"; a visually hidden "Error: " prefix (labels.errorPrefix on the Root) makes the announcement unmistakable out of context.
+- After hydration, description and error ids are added to the control's aria-describedby when those parts are present, ahead of any aria-describedby the control carries itself, each id once: a control that brings its own description keeps it.
+- Field.Root invalid sets aria-invalid on the control, including server HTML. Field.Error is announced with role="alert"; a visually hidden "Error: " prefix (labels.errorPrefix on the Root) makes the announcement unmistakable out of context.
 - The LoamUI controls read this wiring from context; Field.Control hands it to arbitrary elements, letting you keep semantic, native controls instead of re-implementing them.
 
 ## Error messages
@@ -140,12 +140,17 @@ The message renders once, inside the field, tied to the control by aria-describe
 
 ## Parts
 
+### Field.Item
+
+A local label and description scope for one option within a group. Inherits Field validation state while giving its control independent IDs. Can also be used outside Field.Root. Native div props are forwarded; id sets the control ID.
+
 ### Field.Root
 
-Wraps a field and provides context. The invalid state is detected: it is true exactly when a Field.Error with content is rendered. Native <div> props are forwarded.
+Wraps a field and provides context. The invalid prop supplies validation state independently of message content. Native <div> props are forwarded.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `invalid` | `boolean` | `false` | Explicit validation state, available before hydration. |
 | `id` | `string` | — | Base id for the control; auto-generated when omitted. |
 | `labels` | `{ optional?: ReactNode; errorPrefix?: ReactNode }` | `{ optional: "(optional)", errorPrefix: "Error: " }` | The Field's own words, read by Field.Label and Field.Error: the text after an optional label, and the hidden words before an error. Pass them in the page's language. |
 
@@ -171,5 +176,5 @@ Wires id, aria-describedby and aria-invalid onto an arbitrary element. The LoamU
 
 ### Field.Error
 
-Error message with role="alert"; sets the invalid state when it has content. Native <p> props are forwarded.
+Error message with role="alert"; renders nothing for empty strings, whitespace, null or false. It does not set validation state. Native <p> props are forwarded.
 

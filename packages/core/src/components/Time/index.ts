@@ -1,2 +1,2 @@
-export { Time } from "./Time";
-export type { TimeProps, TimeStyle } from "./Time";
+export { Time } from "./Time.js";
+export type { TimeProps, TimeStyle } from "./Time.js";

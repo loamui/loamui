@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { useState } from "react";
 
-import { SegmentedControl } from "../components/SegmentedControl/index";
+import { SegmentedControl } from "../components/SegmentedControl/index.js";
 
 afterEach(cleanup);
 

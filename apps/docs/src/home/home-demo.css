@@ -1,0 +1,104 @@
+@layer loamui.components {
+  @scope (.site-SettingsDemo) to ([class*="loam-"]) {
+    :scope {
+      container-type: inline-size;
+      display: block grid;
+      gap: var(--loam-space-s);
+    }
+
+    header {
+      align-items: center;
+      display: block flex;
+      gap: var(--loam-space-xs);
+    }
+
+    small {
+      display: block flow;
+    }
+
+    small,
+    .note {
+      color: var(--loam-color-fg-muted);
+      font-size: var(--loam-text-sm);
+    }
+
+    .row {
+      align-items: center;
+      border-block-start: 1px solid var(--loam-color-line);
+      display: block flex;
+      flex-wrap: wrap;
+      gap: var(--loam-space-xs);
+      justify-content: space-between;
+      padding-block-start: var(--loam-space-s);
+
+      > span {
+        color: var(--loam-color-fg-muted);
+        font-size: var(--loam-text-sm);
+      }
+    }
+
+    footer {
+      display: block grid;
+      gap: var(--loam-space-xs);
+      grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+    }
+
+    p {
+      margin: 0;
+
+      &[role="status"] {
+        font-size: var(--loam-text-sm);
+        min-block-size: 1.5em;
+      }
+    }
+  }
+
+  @scope (.site-ContextDemo) to ([class*="loam-"], [class*="site-"]) {
+    :scope {
+      container-type: inline-size;
+      display: block grid;
+      gap: var(--loam-space-s);
+    }
+
+    .controls {
+      display: block grid;
+      gap: var(--loam-space-s);
+      grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+    }
+
+    p {
+      font-size: var(--loam-text-sm);
+      margin: 0;
+    }
+
+    .note {
+      color: var(--loam-color-fg-muted);
+    }
+  }
+
+  @scope (.site-ContextRegion) to ([class*="loam-"], [class*="site-"]) {
+    :scope {
+      --_preview-size: 32rem;
+
+      container-type: inline-size;
+      inline-size: min(100%, var(--_preview-size));
+    }
+  }
+
+  @scope (.site-ContextSample) to ([class*="loam-"]) {
+    :scope {
+      display: block grid;
+      font-size: var(--loam-text-md);
+      gap: var(--loam-space-s);
+      overflow-wrap: anywhere;
+    }
+
+    h4 {
+      margin-block: var(--loam-space-xs) 0;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}

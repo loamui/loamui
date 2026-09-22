@@ -24,7 +24,9 @@ Price sizes nothing itself: it takes the font of whatever it sits in, here a par
 
 ```tsx
 <p style={{ fontSize: "var(--loam-text-2xl)", fontWeight: 700 }}>
-  <Price value={24} currency="GBP">per seat, per month</Price>
+  <Price value={24} currency="GBP">
+    per seat, per month
+  </Price>
 </p>
 ```
 
@@ -34,9 +36,15 @@ Whole amounts drop their zeros and fractional ones keep them, so £24 and £9.50
 
 ```tsx
 <ul>
-  <li><Price value={9.5} currency="GBP" /></li>
-  <li><Price value={120} currency="GBP" /></li>
-  <li><Price value={1250.25} currency="GBP" /></li>
+  <li>
+    <Price value={9.5} currency="GBP" />
+  </li>
+  <li>
+    <Price value={120} currency="GBP" />
+  </li>
+  <li>
+    <Price value={1250.25} currency="GBP" />
+  </li>
 </ul>
 ```
 
@@ -57,9 +65,13 @@ A summary of changes shows which way each one goes. signDisplay is Intl.NumberFo
 ```tsx
 <dl>
   <dt>Prorated credit</dt>
-  <dd><Price value={2} currency="GBP" signDisplay="exceptZero" /></dd>
+  <dd>
+    <Price value={2} currency="GBP" signDisplay="exceptZero" />
+  </dd>
   <dt>New plan</dt>
-  <dd><Price value={-4.65} currency="GBP" signDisplay="exceptZero" /></dd>
+  <dd>
+    <Price value={-4.65} currency="GBP" signDisplay="exceptZero" />
+  </dd>
 </dl>
 ```
 

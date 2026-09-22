@@ -13,7 +13,7 @@ Composable labelled fields for a date the user already knows.
 ## Import
 
 ```tsx
-import { DateInput } from "@loamui/core";
+import { DateInput, ErrorSummary } from "@loamui/core";
 ```
 
 ## Usage
@@ -36,10 +36,10 @@ Type a memorable date into separate Day, Month and Year Fields in a fieldset nam
 
 ### Error on the whole date
 
-An Error without parts puts all the fields in the invalid state, the right default when you cannot tell which part is wrong.
+Set invalid on Root to mark all fields invalid when you cannot tell which part is wrong. Error supplies the message.
 
 ```tsx
-<DateInput.Root>
+<DateInput.Root invalid>
   <DateInput.Legend>Date of birth</DateInput.Legend>
   <DateInput.Description>For example, 27 3 2007</DateInput.Description>
   <DateInput.Error>Enter your date of birth</DateInput.Error>
@@ -53,15 +53,13 @@ An Error without parts puts all the fields in the invalid state, the right defau
 
 ### Error on one part
 
-When the message names a specific part, parts on the Error narrows the invalid styling to that field. The user's correct answers keep their values and their normal borders.
+When the message names a specific part, invalid on Root narrows the invalid styling to that field. The user's correct answers keep their values and their normal borders.
 
 ```tsx
-<DateInput.Root name="membership-start">
+<DateInput.Root invalid={["year"]} name="membership-start">
   <DateInput.Legend>When did your membership start?</DateInput.Legend>
   <DateInput.Description>For example, 27 3 2019</DateInput.Description>
-  <DateInput.Error parts={["year"]}>
-    Membership start date must include a year
-  </DateInput.Error>
+  <DateInput.Error>Membership start date must include a year</DateInput.Error>
   <DateInput.Fields>
     <DateInput.Day defaultValue="27" />
     <DateInput.Month defaultValue="3" />
@@ -107,7 +105,7 @@ Give an example in the Description, and choose it so it can only be read one way
 
 ### Highlight only the wrong part
 
-If one field is empty or impossible, say so ("[Date] must include a year") and pass parts to the Error to mark only that field invalid. If you cannot tell which part is wrong, or the parts are individually fine but the date is not real, leave parts unset so the whole date is highlighted. Either way the user's correct entries are never cleared.
+If one field is empty or impossible, say so ("[Date] must include a year") and pass its name in the Root invalid array to mark only that field invalid. If you cannot tell which part is wrong, or the parts are individually fine but the date is not real, set Root invalid to true so the whole date is highlighted. Either way the user's correct entries are never cleared.
 
 ### Autofill for dates of birth
 
@@ -127,12 +125,10 @@ Pass an id to the Root and the fields become {id}-day, {id}-month and {id}-year.
   </ErrorSummary.List>
 </ErrorSummary.Root>
 
-<DateInput.Root id="membership-start" name="membership-start">
+<DateInput.Root invalid={["year"]} id="membership-start" name="membership-start">
   <DateInput.Legend>When did your membership start?</DateInput.Legend>
   <DateInput.Description>For example, 27 3 2019</DateInput.Description>
-  <DateInput.Error parts={["year"]}>
-    Membership start date must include a year
-  </DateInput.Error>
+  <DateInput.Error>Membership start date must include a year</DateInput.Error>
   <DateInput.Fields>
     <DateInput.Day defaultValue="27" />
     <DateInput.Month defaultValue="3" />
@@ -171,6 +167,7 @@ The fieldset and the wiring; native <fieldset> props are forwarded.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `invalid` | `boolean \| ("day" \| "month" \| "year")[]` | `false` | Explicit validation state for all fields or named parts; available before hydration. Supply aria-describedby for initial server message associations. |
 | `name` | `string` | — | Prefix for each field's submitted name: {name}-day, {name}-month, {name}-year. |
 | `autoComplete` | `"bday"` | — | Wires browser date-of-birth autofill (WCAG 1.3.5). |
 | `labels` | `{ optional?: ReactNode; errorPrefix?: ReactNode }` | `{ optional: "(optional)", errorPrefix: "Error: " }` | The group's own words, read by the Legend and the Error. Pass them in the page's language. |
@@ -191,17 +188,13 @@ Helper text linked to the group: give an example date. Native <p> props are forw
 
 Error message announced via role="alert"; native <p> props are forwarded.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `parts` | `("day" \| "month" \| "year")[]` | — | Narrows the invalid state to the fields the error names; default is all of them. |
-
 ### DateInput.Fields
 
 Lays out the row of parts; native <div> props and ref are forwarded.
 
 ### DateInput.Day
 
-The day part: a core Field around a core Input with the right name, autocomplete, inputMode="numeric" and a size of two characters. All Input props are forwarded: value, onChange, maxLength, ref, wrapperProps.
+The day part: a core Field around a core Input with the right name, autocomplete, inputMode="numeric" and a size of two characters. All Input props are forwarded: value, onChange, maxLength and ref.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { Field } from "../../index";
-import { FileInput } from "./FileInput";
+import { Field } from "../../index.js";
+import { FileInput } from "./index.js";
 
 const meta = {
   title: "Inputs/FileInput",
@@ -56,7 +56,7 @@ export const Multiple: Story = {
 /** A Field.Error marks the control invalid: the box takes the danger border. */
 export const WithError: Story = {
   render: () => (
-    <Field.Root>
+    <Field.Root invalid>
       <Field.Label>Passport scan</Field.Label>
       <Field.Description>PDF or PNG, up to 5 MB</Field.Description>
       <Field.Error>Choose a file smaller than 5 MB</Field.Error>

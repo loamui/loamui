@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
-import { Skeleton } from "../components/Skeleton/index";
-import { Avatar } from "../components/Avatar/index";
+import { Skeleton } from "../components/Skeleton/index.js";
+import { Avatar } from "../components/Avatar/index.js";
 
 afterEach(cleanup);
 
@@ -9,7 +9,9 @@ describe("Skeleton", () => {
   it("is a hidden placeholder that keeps its children in the DOM", () => {
     const { container } = render(
       <Skeleton>
-        <Avatar name="Ada Lovelace" />
+        <Avatar.Root role="img" aria-label="Ada Lovelace">
+          <Avatar.Fallback>AL</Avatar.Fallback>
+        </Avatar.Root>
       </Skeleton>,
     );
     const root = container.querySelector(".loam-Skeleton")!;
@@ -21,7 +23,9 @@ describe("Skeleton", () => {
   it("reveals the children when visible is false", () => {
     render(
       <Skeleton visible={false}>
-        <Avatar name="Ada Lovelace" />
+        <Avatar.Root role="img" aria-label="Ada Lovelace">
+          <Avatar.Fallback>AL</Avatar.Fallback>
+        </Avatar.Root>
       </Skeleton>,
     );
     expect(screen.getByRole("img", { name: "Ada Lovelace" })).toBeInTheDocument();

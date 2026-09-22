@@ -33,7 +33,7 @@
     }
   }
 
-  .triggerLabel {
+  span {
     flex: 1;
     text-align: start;
 
@@ -42,7 +42,7 @@
     }
   }
 
-  .kbd {
+  kbd {
     background: var(--loam-color-surface);
     border: 1px solid var(--loam-color-line);
     border-radius: var(--loam-radius-sm);
@@ -89,7 +89,7 @@
     padding: var(--loam-space-xs) var(--loam-space-s);
   }
 
-  .input {
+  input {
     background: transparent;
     border: none;
     color: var(--loam-color-fg);
@@ -100,7 +100,7 @@
     outline: none;
   }
 
-  .results {
+  ul {
     list-style: none;
     margin: 0;
     max-block-size: 24rem;
@@ -108,7 +108,7 @@
     padding: var(--loam-space-2xs);
   }
 
-  .result {
+  li {
     align-items: center;
     border-radius: var(--loam-radius-sm);
     color: var(--loam-color-fg);
@@ -128,15 +128,15 @@
         color: SelectedItemText;
       }
     }
+
+    > span + span {
+      color: var(--loam-color-fg-dim);
+      font-size: var(--loam-text-xs);
+      white-space: nowrap;
+    }
   }
 
-  .hint {
-    color: var(--loam-color-fg-dim);
-    font-size: var(--loam-text-xs);
-    white-space: nowrap;
-  }
-
-  .empty {
+  p {
     color: var(--loam-color-fg-muted);
     font-size: var(--loam-text-sm);
     padding: var(--loam-space-l);

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
-import { Button, Loader } from "../../index";
+import { Button, Loader } from "../../index.js";
 
 const meta = {
   title: "Inputs/Button",

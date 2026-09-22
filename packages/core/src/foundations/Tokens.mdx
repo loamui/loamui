@@ -93,7 +93,7 @@ line-height + border) that aligns by construction at every container width.
 ## Extending & overriding: three escape hatches, none need `!important`
 
 1. **Target the class names.** Roots carry stable prefixed classes
-   (`.loam-Button`, `.loam-Card`, `.loam-Input-field`). LoamUI's styles live in a
+   (`.loam-Button`, `.loam-Card`, `.loam-Input`). LoamUI's styles live in a
    `@layer`, so any _unlayered_ rule of yours beats them.
 2. **Add your own `className`.** Every component forwards `className`, `style`
    and native props to its root.

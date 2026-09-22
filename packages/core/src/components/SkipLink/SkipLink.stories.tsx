@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { SkipLink } from "../../index";
+import { SkipLink } from "../../index.js";
 
 const meta = {
   title: "Navigation/SkipLink",

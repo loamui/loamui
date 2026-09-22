@@ -1,4 +1,3 @@
-/* Donut: the list hosts consumer-rendered items. */
 @scope (.loam-Breadcrumbs) to ([class*="loam-"]) {
   :scope {
     color: var(--loam-color-fg-muted);

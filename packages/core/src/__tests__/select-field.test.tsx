@@ -1,18 +1,18 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
-import { Field, Select } from "../index";
+import { Field, Select } from "../index.js";
 
 afterEach(cleanup);
 
 describe("Select ↔ Field wiring", () => {
   it("Select inside a Field gets id/describedby/invalid from context", () => {
     render(
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>Country</Field.Label>
         <Field.Description>Where you live.</Field.Description>
-        <Select>
-          <option>UK</option>
-        </Select>
+        <Select.Root>
+          <Select.Option>UK</Select.Option>
+        </Select.Root>
         <Field.Error>Select a country</Field.Error>
       </Field.Root>,
     );
@@ -24,11 +24,11 @@ describe("Select ↔ Field wiring", () => {
 
   it("Field.Error puts the composed select in an invalid state", () => {
     render(
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>Country</Field.Label>
-        <Select>
-          <option>UK</option>
-        </Select>
+        <Select.Root>
+          <Select.Option>UK</Select.Option>
+        </Select.Root>
         <Field.Error>Select a country</Field.Error>
       </Field.Root>,
     );
@@ -42,17 +42,17 @@ describe("Select options", () => {
   it("starts on a disabled empty option when one leads the children, else on the first option", () => {
     render(
       <>
-        <Select aria-label="Country">
-          <option value="" disabled>
+        <Select.Root aria-label="Country">
+          <Select.Option value="" disabled>
             Pick a country
-          </option>
-          <option value="ca">Canada</option>
-          <option value="uk">United Kingdom</option>
-        </Select>
-        <Select aria-label="Instrument">
-          <option>Violin</option>
-          <option>Cello</option>
-        </Select>
+          </Select.Option>
+          <Select.Option value="ca">Canada</Select.Option>
+          <Select.Option value="uk">United Kingdom</Select.Option>
+        </Select.Root>
+        <Select.Root aria-label="Instrument">
+          <Select.Option>Violin</Select.Option>
+          <Select.Option>Cello</Select.Option>
+        </Select.Root>
       </>,
     );
     const country = screen.getByLabelText("Country") as HTMLSelectElement;
@@ -66,19 +66,19 @@ describe("Select options", () => {
   it("honours a defaultValue and a controlled value over the prompt", () => {
     render(
       <>
-        <Select aria-label="Country" defaultValue="uk">
-          <option value="" disabled>
+        <Select.Root aria-label="Country" defaultValue="uk">
+          <Select.Option value="" disabled>
             Pick a country
-          </option>
-          <option value="ca">Canada</option>
-          <option value="uk">United Kingdom</option>
-        </Select>
-        <Select aria-label="Controlled" value="ca" onChange={() => {}}>
-          <option value="" disabled>
+          </Select.Option>
+          <Select.Option value="ca">Canada</Select.Option>
+          <Select.Option value="uk">United Kingdom</Select.Option>
+        </Select.Root>
+        <Select.Root aria-label="Controlled" value="ca" onChange={() => {}}>
+          <Select.Option value="" disabled>
             Pick a country
-          </option>
-          <option value="ca">Canada</option>
-        </Select>
+          </Select.Option>
+          <Select.Option value="ca">Canada</Select.Option>
+        </Select.Root>
       </>,
     );
     expect((screen.getByLabelText("Country") as HTMLSelectElement).value).toBe("uk");
@@ -88,7 +88,7 @@ describe("Select options", () => {
   it("lands className and ref on the select and wrapperProps on the box", () => {
     let node: HTMLSelectElement | null = null;
     const { container } = render(
-      <Select
+      <Select.Root
         aria-label="Country"
         className="mine"
         ref={(el) => {
@@ -96,8 +96,8 @@ describe("Select options", () => {
         }}
         wrapperProps={{ className: "box", id: "box" }}
       >
-        <option>UK</option>
-      </Select>,
+        <Select.Option>UK</Select.Option>
+      </Select.Root>,
     );
     const select = screen.getByLabelText("Country");
     expect(node).toBe(select);

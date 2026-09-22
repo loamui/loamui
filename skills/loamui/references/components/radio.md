@@ -13,7 +13,7 @@ A single choice from a small set of visible, mutually exclusive options.
 ## Import
 
 ```tsx
-import { Radio, RadioGroup } from "@loamui/core";
+import { Field, Radio, RadioGroup } from "@loamui/core";
 ```
 
 ## Usage
@@ -25,9 +25,21 @@ A RadioGroup.Root shares one name so only one option can be selected; RadioGroup
 ```tsx
 <RadioGroup.Root defaultValue="system">
   <RadioGroup.Legend>Theme</RadioGroup.Legend>
-  <Radio value="system" label="System" />
-  <Radio value="light" label="Light" />
-  <Radio value="dark" label="Dark" />
+  <Field.Item>
+    <Field.Label>
+      <Radio value="system" /> System
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="light" /> Light
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="dark" /> Dark
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -38,16 +50,18 @@ Each option can carry helper text under its label.
 ```tsx
 <RadioGroup.Root>
   <RadioGroup.Legend>Delivery</RadioGroup.Legend>
-  <Radio
-    value="standard"
-    label="Standard"
-    description="Arrives in 3-5 business days."
-  />
-  <Radio
-    value="express"
-    label="Express"
-    description="Guaranteed next-day delivery."
-  />
+  <Field.Item>
+    <Field.Label>
+      <Radio value="standard" /> Standard
+    </Field.Label>
+    <Field.Description>Arrives in 3-5 business days.</Field.Description>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="express" /> Express
+    </Field.Label>
+    <Field.Description>Guaranteed next-day delivery.</Field.Description>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -58,8 +72,16 @@ Lay the options out in a row only when there are two, short options. More than t
 ```tsx
 <RadioGroup.Root orientation="horizontal">
   <RadioGroup.Legend>Contact preference</RadioGroup.Legend>
-  <Radio value="email" label="Email" />
-  <Radio value="phone" label="Phone" />
+  <Field.Item>
+    <Field.Label>
+      <Radio value="email" /> Email
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="phone" /> Phone
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -70,24 +92,48 @@ Disable a single Radio to keep an unavailable option visible in the set. The res
 ```tsx
 <RadioGroup.Root>
   <RadioGroup.Legend>Plan</RadioGroup.Legend>
-  <Radio value="basic" label="Basic" />
-  <Radio value="pro" label="Pro" />
-  <Radio value="legacy" label="Legacy" disabled />
+  <Field.Item>
+    <Field.Label>
+      <Radio value="basic" /> Basic
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="pro" /> Pro
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="legacy" disabled /> Legacy
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
 ### Group description and error
 
-RadioGroup.Description and RadioGroup.Error are joined to the group with aria-describedby. An Error with content marks the whole group invalid: the message and the danger rings sit on the fieldset and its radios, and every choice stays selectable.
+RadioGroup.Description and RadioGroup.Error are joined to the group with aria-describedby. Set invalid on Root for validation: the message and the danger rings sit on the fieldset and its radios, and every choice stays selectable.
 
 ```tsx
-<RadioGroup.Root>
+<RadioGroup.Root invalid>
   <RadioGroup.Legend>Plan</RadioGroup.Legend>
   <RadioGroup.Description>You can change it later.</RadioGroup.Description>
   <RadioGroup.Error>Select a plan to continue</RadioGroup.Error>
-  <Radio value="basic" label="Basic" />
-  <Radio value="pro" label="Pro" />
-  <Radio value="legacy" label="Legacy" />
+  <Field.Item>
+    <Field.Label>
+      <Radio value="basic" /> Basic
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="pro" /> Pro
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="legacy" /> Legacy
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -96,11 +142,19 @@ RadioGroup.Description and RadioGroup.Error are joined to the group with aria-de
 The group's own words, the optional marker after the legend and the hidden prefix before an error, come from labels on the Root.
 
 ```tsx
-<RadioGroup.Root labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}>
+<RadioGroup.Root invalid labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}>
   <RadioGroup.Legend optional>Formule</RadioGroup.Legend>
   <RadioGroup.Error>Choisissez une formule</RadioGroup.Error>
-  <Radio value="basic" label="Essentielle" />
-  <Radio value="pro" label="Pro" />
+  <Field.Item>
+    <Field.Label>
+      <Radio value="basic" /> Essentielle
+    </Field.Label>
+  </Field.Item>
+  <Field.Item>
+    <Field.Label>
+      <Radio value="pro" /> Pro
+    </Field.Label>
+  </Field.Item>
 </RadioGroup.Root>
 ```
 
@@ -119,7 +173,7 @@ The group's own words, the optional marker after the legend and the hidden prefi
 
 ### A native radio, styled by accent-color
 
-This is a plain <input type="radio">: no custom dot. The elements layer paints it with the platform's own accent-color (the neutral primary); selection, keyboard arrow-cycling and forced-colours support come from the browser. The component adds the label anatomy, group wiring and context adaptation.
+This is a plain <input type="radio">: no custom dot. The elements layer paints it with the platform's own accent-color (the neutral primary); selection, keyboard arrow-cycling and forced-colours support come from the browser. Field.Item supplies label and description associations; RadioGroup shares the native name and selection state.
 
 ### Never pre-select
 
@@ -131,13 +185,13 @@ List options alphabetically by default, so the order carries no editorial weight
 
 ### Controls sit left of labels
 
-Radio renders the control before its label, keeping every control on the reading edge where screen-magnifier users panning a zoomed viewport will find it next to the text they are reading. Don't restyle labels to the other side: a right-hand control drifts out of the magnified view entirely.
+Compose the radio before its label text, keeping every control on the reading edge where screen-magnifier users panning a zoomed viewport will find it next to the text they are reading. Don't restyle labels to the other side: a right-hand control drifts out of the magnified view entirely.
 
 ## Accessibility
 
 - RadioGroup.Root renders a native <fieldset> with a <legend>, the accessible way to name a group: screen readers announce the legend when a radio is focused.
 - Radios share one name so the browser enforces single-selection and arrow-key navigation natively.
-- A RadioGroup.Error with content sets aria-describedby and aria-invalid on the fieldset, which carries role="radiogroup", the one place ARIA allows aria-invalid for radios. Required native groups take the same state after a submit attempt and clear it after a selection. The individual radios never claim it; their danger rings are pure CSS answering the group state.
+- RadioGroup.Root invalid sets aria-invalid on the fieldset; description and error IDs register after hydration, which carries role="radiogroup", the one place ARIA allows aria-invalid for radios. Required native groups take the same state after a submit attempt and clear it after a selection. The individual radios never claim it; their danger rings are pure CSS answering the group state.
 - Disabled is detected on the native input (:has(input:disabled) on the row), never declared on a wrapper.
 
 ## Error messages
@@ -151,16 +205,11 @@ Radio renders the control before its label, keeping every control on the reading
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `label` | `ReactNode` | — | Label rendered next to the control. |
-| `description` | `ReactNode` | — | Helper text rendered under the label. |
-| `wrapperProps` | `PartProps<"label">` | — | Props for the labelled row (the <label> around the input and its words). className, style, ref and every other prop land on the <input> itself. |
-| `...others` | `InputHTMLAttributes` | — | All native <input type="radio"> props (except type and size), and ref, are forwarded to the <input>. |
+| `label / description` | `ReactNode` | — | Optional content for a complete labelled row. Omit both when composing the control inside Field.Label. |
+| `wrapperProps` | `Omit<PartProps<"label">, "children" \| "htmlFor">` | — | Props for the row rendered with label or description. className, style and ref on the component target its native input. |
+| `...others` | `InputHTMLAttributes` | — | Native input props except type and size, including ref. Field.Item scopes each option’s label and description. |
 
 ## Parts
-
-### Radio.Control
-
-The bare input without a label row, for composing inside a Field where the label lives on Field.Label. Takes the same props as Radio minus label, description and wrapperProps.
 
 ### RadioGroup.Root
 
@@ -168,6 +217,7 @@ The group: a Fieldset.Root with role="radiogroup" that shares a name and the sel
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `invalid` | `boolean` | `false` | Explicit validation state, available in server HTML. Message content is independent; supply aria-describedby for server-rendered associations. |
 | `name` | `string` | — | Shared name for all radios (auto-generated if omitted). |
 | `value` | `string` | — | Controlled selected value (pair with onChange). |
 | `defaultValue` | `string` | — | Initial selected value for uncontrolled usage. |
@@ -189,5 +239,5 @@ Helper text under the legend, joined to the group with aria-describedby. Native 
 
 ### RadioGroup.Error
 
-The group's error, announced with role="alert". With content it marks the group invalid; without content it renders nothing. Native <p> props and ref are forwarded.
+The group's error, announced with role="alert". Validation state is supplied by Root; empty content renders nothing. Native <p> props and ref are forwarded.
 

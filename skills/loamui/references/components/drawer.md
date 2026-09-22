@@ -83,7 +83,14 @@ A header row with an × is a composition pattern, not configuration: compose Dra
 <Drawer.Root>
   <Drawer.Trigger>Filters</Drawer.Trigger>
   <Drawer.Popup side="end">
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBlockEnd: "var(--loam-space-2xs)" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBlockEnd: "var(--loam-space-2xs)",
+      }}
+    >
       <Drawer.Title style={{ margin: 0 }}>Filters</Drawer.Title>
       <Drawer.Close aria-label="Close">×</Drawer.Close>
     </div>

@@ -37,7 +37,6 @@
   }
 }
 
-/* ---- Single radio (labelled row) ---- */
 @scope (.loam-Radio-wrapper) to ([class*="loam-"]) {
   :scope {
     align-items: flex-start;

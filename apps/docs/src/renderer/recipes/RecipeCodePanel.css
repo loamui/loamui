@@ -1,0 +1,12 @@
+@layer loamui.ui {
+  @scope (.site-RecipeCodePanel .message) to ([class*="loam-"]) {
+    :scope {
+      margin: 0;
+      padding: var(--loam-space-xs);
+    }
+
+    a {
+      text-decoration: underline;
+    }
+  }
+}

@@ -3,8 +3,8 @@ import { render, screen, cleanup, fireEvent, within } from "@testing-library/rea
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 
-import { FileInput } from "../components/FileInput/index";
-import { Field } from "../index";
+import { FileInput } from "../components/FileInput/index.js";
+import { Field } from "../index.js";
 
 afterEach(cleanup);
 
@@ -70,7 +70,7 @@ describe("FileInput", () => {
 
   it("the bare control self-wires from a Field", () => {
     render(
-      <Field.Root>
+      <Field.Root invalid>
         <Field.Label>Receipt</Field.Label>
         <Field.Error>Choose a file smaller than 5 MB</Field.Error>
         <FileInput.Control />
@@ -200,3 +200,24 @@ describe("FileInput", () => {
     expect(await axe(container, axeOptions)).toHaveNoViolations();
   });
 });
+
+it.each([false, true])(
+  "links the Prompt to an explicit Control ID (inside Field: %s)",
+  (inField) => {
+    function Example({ id }: { id?: string }) {
+      const picker = (
+        <FileInput.Root>
+          <FileInput.Control id={id} />
+          <FileInput.Prompt>Upload</FileInput.Prompt>
+        </FileInput.Root>
+      );
+      return inField ? <Field.Root>{picker}</Field.Root> : picker;
+    }
+    const { rerender } = render(<Example id="first-upload" />);
+    expect(screen.getByLabelText("Upload")).toHaveAttribute("id", "first-upload");
+    rerender(<Example id="next-upload" />);
+    expect(screen.getByLabelText("Upload")).toHaveAttribute("id", "next-upload");
+    rerender(<Example />);
+    expect(screen.getByLabelText("Upload")).not.toHaveAttribute("id", "next-upload");
+  },
+);

@@ -117,12 +117,6 @@
     margin-inline: auto;
   }
 
-  .brandText {
-    background: var(--site-gradient);
-    background-clip: text;
-    color: transparent;
-  }
-
   .eyebrow {
     align-items: center;
     color: var(--loam-color-primary);

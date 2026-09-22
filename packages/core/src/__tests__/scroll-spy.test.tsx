@@ -2,7 +2,7 @@ import { describe, it, expect, afterEach, beforeEach, vi } from "vitest";
 import { render, screen, cleanup, act } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { useScrollSpy } from "../use-scroll-spy";
+import { useScrollSpy } from "../hooks/use-scroll-spy.js";
 
 afterEach(cleanup);
 

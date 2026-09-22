@@ -1,4 +1,3 @@
-/* Donut: the table hosts consumer-rendered cells. */
 @scope (.loam-Table) to ([class*="loam-"]) {
   :scope {
     border-radius: var(--loam-radius-md);

@@ -1,5 +1,0 @@
-@scope (.inline-search-form) to ([class*="loam-"]) {
-  :scope {
-    inline-size: min(100%, 22rem);
-  }
-}

@@ -3,7 +3,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 
-import { Rating } from "../components/Rating/index";
+import { Rating } from "../components/Rating/index.js";
 
 afterEach(cleanup);
 
@@ -25,13 +25,13 @@ describe("Rating", () => {
 
   it("checks the clicked star and reports its number", async () => {
     const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(<Rating label="Rate this recipe" onChange={onChange} />);
+    const onValueChange = vi.fn();
+    render(<Rating label="Rate this recipe" onValueChange={onValueChange} />);
     const third = screen.getByRole("radio", { name: "3 stars" }) as HTMLInputElement;
     await user.click(third);
     expect(third.checked).toBe(true);
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith(3);
+    expect(onValueChange).toHaveBeenCalledTimes(1);
+    expect(onValueChange).toHaveBeenCalledWith(3);
     expect(screen.getByRole("radio", { name: "4 stars" })).not.toBeChecked();
   });
 

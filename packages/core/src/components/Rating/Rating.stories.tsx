@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
 import { expect, userEvent, within } from "storybook/test";
-import { Rating } from "./index";
+import { Rating } from "./index.js";
 
 const meta = {
   title: "Inputs/Rating",

@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
 import { expect, userEvent, within } from "storybook/test";
-import { Card } from "../Card/Card";
-// Until the barrel exports Carousel: import from the part, not ../../index.
-import { Carousel } from "../../index";
+import { Card } from "../Card/Card.js";
+import { Carousel } from "../../index.js";
 
 const GUIDES = [
   ["Tokens", "Four hues, eight neutrals and two fluid scales; everything else is derived."],

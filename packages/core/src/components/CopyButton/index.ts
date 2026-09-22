@@ -1,2 +1,2 @@
-export { CopyButton } from "./CopyButton";
-export type { CopyButtonProps, CopyButtonLabels } from "./CopyButton";
+export { CopyButton } from "./CopyButton.js";
+export type { CopyButtonProps, CopyButtonLabels } from "./CopyButton.js";

@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Header } from "@/site/Header";
 import { Footer } from "@/site/Footer";
+import { Analytics } from "@/site/Analytics";
 import { SkipLink } from "@loamui/core";
 
 export const metadata: Metadata = {
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
       <body>
+        <Analytics />
         <SkipLink href="#content">Skip to content</SkipLink>
         <Header />
         <main id="content" tabIndex={-1}>

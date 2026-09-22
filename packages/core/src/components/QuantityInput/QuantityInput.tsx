@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
-import { Button } from "../Button/Button";
-import { useFieldControlProps } from "../Field/Field";
-import { useFormReset } from "../../use-form-reset";
-import { useUserInvalid } from "../../use-user-invalid";
-import { composeRefs } from "../../render";
-import { cx } from "../../utils";
-import type { PartProps } from "../../utils";
+import { Button } from "../Button/Button.js";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
+import { useFormReset } from "../../hooks/use-form-reset.js";
+import { useUserInvalid } from "../../hooks/use-user-invalid.js";
+import { composeRefs } from "../../utils/render.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 /** The words the buttons say, each with an English default. */
 export interface QuantityInputLabels {
@@ -90,6 +90,7 @@ export function QuantityInput({
   value,
   defaultValue,
   disabled,
+  readOnly,
   className,
   id,
   "aria-invalid": ariaInvalid,
@@ -99,7 +100,7 @@ export function QuantityInput({
   ref,
   ...rest
 }: QuantityInputProps) {
-  const field = useFieldControlProps(ariaDescribedby);
+  const field = useFieldControlProps(ariaDescribedby, id);
   const { nativeInvalid, validationRef, checkOnInput, checkOnInvalid } =
     useUserInvalid<HTMLInputElement>();
   const ownRef = useRef<HTMLInputElement>(null);
@@ -154,7 +155,7 @@ export function QuantityInput({
 
   const stepBy = (direction: -1 | 1) => {
     const input = ownRef.current;
-    if (!input) return;
+    if (!input || input.disabled || input.readOnly) return;
     if (direction < 0) input.stepDown();
     else input.stepUp();
     // stepUp/stepDown change the value silently. The browser fires input and
@@ -169,7 +170,7 @@ export function QuantityInput({
       <Button
         type="button"
         aria-label={decrementLabel}
-        disabled={disabled || atMin}
+        disabled={disabled || readOnly || atMin}
         onClick={() => stepBy(-1)}
       >
         <Glyph />
@@ -180,7 +181,8 @@ export function QuantityInput({
         inputMode="numeric"
         className={className}
         disabled={disabled}
-        id={id ?? field.id}
+        readOnly={readOnly}
+        id={field.id ?? id}
         min={min}
         max={max}
         step={step}
@@ -198,7 +200,7 @@ export function QuantityInput({
       <Button
         type="button"
         aria-label={incrementLabel}
-        disabled={disabled || atMax}
+        disabled={disabled || readOnly || atMax}
         onClick={() => stepBy(1)}
       >
         <Glyph plus />

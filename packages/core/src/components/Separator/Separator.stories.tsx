@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Separator } from "../../index";
+import { Separator } from "../../index.js";
 
 const meta = {
   title: "Layout/Separator",

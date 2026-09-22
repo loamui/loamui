@@ -41,48 +41,48 @@ These notes explain the design. The included tests cover structure and selected 
 - [Badge](https://loamui.com/docs/components/badge.md)
 - [SignpostLink](https://loamui.com/docs/components/signpost-link.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 import { useId } from "react";
 import { Badge, SignpostLink } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const titleId = useId();
   return (
     <section className="banner-with-image" aria-labelledby={titleId}>
-      <div>
-        <img
-          src="https://picsum.photos/id/429/800/600"
-          srcSet="https://picsum.photos/id/429/400/300 400w, https://picsum.photos/id/429/800/600 800w, https://picsum.photos/id/429/1600/1200 1600w"
-          sizes="auto, 100vw"
-          alt="A cup of freshly picked raspberries"
-          width="1600"
-          height="1200"
-          loading="lazy"
-        />
-        <header>
-          <p className="eyebrow">
-            <Badge>Offer</Badge>
-            <span>Until 30 November · bare-root season</span>
-          </p>
-          <h2 id={titleId}>Members save 20% on fruit plants</h2>
-          <p className="description">
-            Apples, pears, plums and soft fruit on local rootstocks, lifted the week they are
-            posted. Order before the end of November and the discount comes off at the basket.
-          </p>
-          <div className="actions">
-            <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
-          </div>
-        </header>
+      <img
+        src="https://picsum.photos/id/429/800/600"
+        srcSet="https://picsum.photos/id/429/400/300 400w, https://picsum.photos/id/429/800/600 800w, https://picsum.photos/id/429/1600/1200 1600w"
+        sizes="auto, 100vw"
+        alt="A cup of freshly picked raspberries"
+        width="1600"
+        height="1200"
+        loading="lazy"
+      />
+      <div className="copy">
+        <p className="eyebrow">
+          <Badge.Root>
+            <Badge.Text>Offer</Badge.Text>
+          </Badge.Root>
+          <span>Until 30 November · bare-root season</span>
+        </p>
+        <h2 id={titleId}>Members save 20% on fruit plants</h2>
+        <p className="description">
+          Apples, pears, plums and soft fruit on local rootstocks, lifted the week they are posted.
+          Order before the end of November and the discount comes off at the basket.
+        </p>
+        <div className="actions">
+          <SignpostLink href="/catalogue/fruit">See the fruit list</SignpostLink>
+        </div>
       </div>
     </section>
   );
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.banner-with-image) to ([class*="loam-"]) {
@@ -92,10 +92,8 @@ export default function Example() {
       border: 1px solid var(--loam-color-line);
       border-radius: var(--loam-radius-xl);
       container: banner-with-image / inline-size;
-
-      > div {
-        display: block grid;
-      }
+      display: block grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     }
 
     img {
@@ -103,7 +101,9 @@ export default function Example() {
       object-fit: cover;
     }
 
-    header {
+    /* The copy is the section's body, not its introduction, so it is a box
+       rather than a <header>. */
+    .copy {
       align-content: center;
       display: block grid;
       font-size: var(--loam-text-md);
@@ -145,8 +145,9 @@ export default function Example() {
     }
 
     @container banner-with-image (inline-size < 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 1fr);
+      img,
+      .copy {
+        grid-column: 1 / -1;
       }
 
       img {
@@ -158,10 +159,6 @@ export default function Example() {
     }
 
     @container banner-with-image (inline-size >= 44rem) {
-      :scope > div {
-        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-      }
-
       img {
         aspect-ratio: auto;
         block-size: 100%;

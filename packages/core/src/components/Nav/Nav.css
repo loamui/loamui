@@ -95,7 +95,6 @@
     text-decoration: none;
     white-space: normal;
 
-    /* The consumer's icon, sized on the text. */
     svg {
       block-size: auto;
       flex: none;
@@ -112,7 +111,6 @@
       font-weight: 600;
     }
 
-    /* The group's summary sheds the native marker. */
     &:is(summary) {
       list-style: none;
       user-select: none;

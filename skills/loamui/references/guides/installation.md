@@ -33,11 +33,9 @@ This hosted URL follows the documentation deployment, not your installed package
 
 After completing your framework guide, confirm the application builds and the LoamUI styles load. You can use this small interface to check the foundation.
 
-Replace the starter page with this interface. Use `app/page.tsx` in Next.js or `src/components/Welcome.tsx` in TanStack Start. The TanStack guide shows how to render it from your index route. The client directive is needed for the compound Field parts in Next.js; omit it in TanStack Start.
+Replace the starter page with this interface. Use `app/page.tsx` in Next.js or `src/components/Welcome.tsx` in TanStack Start. The TanStack guide shows how to render it from your index route. The named Field parts can be composed from a Next.js server component. Add a client directive when your composition needs client hooks or event handlers.
 
 ```tsx
-"use client";
-
 import { Checkbox, Field, Input } from "@loamui/core";
 import "./welcome.css";
 
@@ -50,7 +48,7 @@ export default function Welcome() {
         <Field.Label>Your name</Field.Label>
         <Input name="name" autoComplete="name" />
       </Field.Root>
-      <Checkbox label="Send me product updates" />
+      <Field.Item><Field.Label><Checkbox /> Send me product updates</Field.Label></Field.Item>
     </main>
   );
 }

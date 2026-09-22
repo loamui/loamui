@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { Tabs } from "../../index";
+import { Tabs } from "../../index.js";
 
 const meta = {
   title: "Navigation/Tabs",
@@ -12,7 +12,7 @@ const meta = {
         component:
           "Switch between related panels of content, composed from " +
           "`Tabs.Root`, `Tabs.List`, `Tabs.Tab` and `Tabs.Panel`. Supports uncontrolled " +
-          "(`defaultValue`) and controlled (`value`/`onChange`) usage.",
+          "(`defaultValue`) and controlled (`value`/`onValueChange`) usage.",
       },
     },
   },

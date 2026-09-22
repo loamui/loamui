@@ -43,14 +43,14 @@ These notes explain the design. The included tests cover structure and selected 
 - [Card](https://loamui.com/docs/components/card.md)
 - [Time](https://loamui.com/docs/components/time.md)
 
-## Example.tsx
+## Recipe.tsx
 
 ```tsx
 import { useId } from "react";
 import { Avatar, Badge, Card, Time } from "@loamui/core";
-import "./example.css";
+import "./recipe.css";
 
-export default function Example() {
+export default function Recipe() {
   const title = useId();
   return (
     <Card render={<article className="article-card" aria-labelledby={title} />}>
@@ -66,7 +66,9 @@ export default function Example() {
           srcSet="https://picsum.photos/id/292/400/225 400w, https://picsum.photos/id/292/800/450 800w"
         />
         <p className="meta">
-          <Badge>Guide</Badge>
+          <Badge.Root>
+            <Badge.Text>Guide</Badge.Text>
+          </Badge.Root>
           <Time value="2026-09-01" locale="en-GB" dateStyle="long" />
         </p>
         <h3 id={title}>
@@ -78,7 +80,9 @@ export default function Example() {
           set them, and what to do about the ones that bolt.
         </p>
         <div className="foot">
-          <Avatar name="Rhiannon Vaughan" aria-hidden />
+          <Avatar.Root aria-hidden>
+            <Avatar.Fallback>RV</Avatar.Fallback>
+          </Avatar.Root>
           <address>
             <a href="/growers/rhiannon-vaughan" rel="author">
               Rhiannon Vaughan
@@ -91,7 +95,7 @@ export default function Example() {
 }
 ```
 
-## example.css
+## recipe.css
 
 ```css
 @scope (.article-card) to ([class*="loam-"]) {

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import type { FormEvent } from "react";
-import { Field } from "../../index";
-import { Search } from "./Search";
+import { Field } from "../../index.js";
+import { Search } from "./index.js";
 
 const meta = {
   title: "Inputs/Search",

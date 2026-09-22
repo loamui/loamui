@@ -2,11 +2,11 @@
 
 import { useMemo } from "react";
 import type { ReactNode } from "react";
-import { useFieldControlProps } from "../Field/Field";
-import { useUserInvalid } from "../../use-user-invalid";
-import { composeRefs } from "../../render";
-import { cx } from "../../utils";
-import type { PartProps } from "../../utils";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
+import { useUserInvalid } from "../../hooks/use-user-invalid.js";
+import { composeRefs } from "../../utils/render.js";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 export interface InputProps extends PartProps<"input"> {
   /**
@@ -52,7 +52,10 @@ export function Input({
   ref,
   ...rest
 }: InputProps) {
-  const field = useFieldControlProps(ariaDescribedby);
+  // The id goes in, not just out: a consumer's own id is registered with the
+  // Field so its Label points at the element that actually exists. Without
+  // that the Label keeps the Field's generated id and the name is lost.
+  const field = useFieldControlProps(ariaDescribedby, id);
   const { nativeInvalid, validationRef, checkOnInput, checkOnInvalid } =
     useUserInvalid<HTMLInputElement>();
   const inputRef = useMemo(() => composeRefs(ref, validationRef), [ref, validationRef]);

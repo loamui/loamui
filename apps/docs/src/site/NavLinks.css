@@ -1,29 +1,35 @@
 /* NavLinks renders a fragment and appears in two hosts (the sidebar and the
    mobile drawer), so the scope root is a class both hosts carry rather than
-   an element of its own. */
+   an element of its own. Inside it the parts are the elements: every link
+   is an `a`, each group's title is its first `p`, its pages are its `ul`,
+   and a page's sub-pages are the `ul` nested in its `li`. The three group
+   classes only tell the sibling boxes apart. */
 @scope (.site-NavLinks) {
-  a {
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .group ul {
-    display: block flex;
-    flex-direction: column;
-    gap: var(--loam-space-4xs);
-    list-style: none;
-    margin: 0;
-    padding-block: 0;
-
-    &:not(.subpages) {
-      padding-inline: 0;
+  .group {
+    > p {
+      color: var(--loam-color-fg-dim);
+      font-size: var(--loam-text-xs);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-block-end: var(--loam-space-2xs);
+      text-transform: uppercase;
     }
 
-    &.subpages {
-      padding-inline: var(--loam-space-s) 0;
+    ul {
+      display: block flex;
+      flex-direction: column;
+      gap: var(--loam-space-4xs);
+      list-style: none;
+      margin: 0;
+      padding-block: 0;
+
+      &:not(li > ul) {
+        padding-inline: 0;
+      }
+
+      &:is(li > ul) {
+        padding-inline: var(--loam-space-s) 0;
+      }
     }
   }
 
@@ -33,34 +39,23 @@
   .section {
     display: block flex;
     flex-direction: column;
-  }
 
-  .sectionTitle {
-    color: var(--loam-color-fg-strong);
-    font-size: var(--loam-text-sm);
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    margin: 0 0 var(--loam-space-2xs);
-  }
+    > p {
+      color: var(--loam-color-fg-strong);
+      font-size: var(--loam-text-sm);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin: 0 0 var(--loam-space-2xs);
+    }
 
-  .groupTitle {
-    color: var(--loam-color-fg-dim);
-    font-size: var(--loam-text-xs);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    margin-block-end: var(--loam-space-2xs);
-    text-transform: uppercase;
-  }
-
-  /* The three primitive links (Tokens, Element styles, Components) — one ramp,
-     so all three read as siblings. */
-  .primitiveList {
-    display: block flex;
-    flex-direction: column;
-    gap: var(--loam-space-4xs);
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    > ul {
+      display: block flex;
+      flex-direction: column;
+      gap: var(--loam-space-4xs);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
   }
 
   /* The component categories sit one step in from the Components primitive that
@@ -73,31 +68,30 @@
   .subgroup {
     margin-block-start: var(--loam-space-xs);
 
+    > p {
+      color: var(--loam-color-fg-dim);
+      font-size: var(--loam-text-xs);
+      font-weight: 600;
+      margin-block-end: var(--loam-space-3xs);
+      padding-inline-start: var(--loam-space-2xs);
+    }
+
+    > ul {
+      display: block flex;
+      flex-direction: column;
+      gap: var(--loam-space-4xs);
+      list-style: none;
+      margin: 0;
+      padding-block: 0;
+      padding-inline: var(--loam-space-3xs) 0;
+    }
+
     &:first-child {
       margin-block-start: var(--loam-space-3xs);
     }
   }
 
-  .categoryTitle {
-    color: var(--loam-color-fg-dim);
-    font-size: var(--loam-text-xs);
-    font-weight: 600;
-    margin-block-end: var(--loam-space-3xs);
-    padding-inline-start: var(--loam-space-2xs);
-  }
-
-  /* Items step in once more, so the ramp is primitive → category → item. */
-  .itemList {
-    display: block flex;
-    flex-direction: column;
-    gap: var(--loam-space-4xs);
-    list-style: none;
-    margin: 0;
-    padding-block: 0;
-    padding-inline: var(--loam-space-3xs) 0;
-  }
-
-  .link {
+  a {
     border-inline-start: 2px solid transparent;
     border-radius: var(--loam-radius-sm);
     color: var(--loam-color-fg-muted);
@@ -105,10 +99,12 @@
     font-size: var(--loam-text-sm);
     overflow-wrap: anywhere;
     padding: var(--loam-space-3xs) var(--loam-space-2xs);
+    text-decoration: none;
 
     &:hover {
       background: var(--loam-color-surface-hover);
       color: var(--loam-color-fg);
+      text-decoration: underline;
     }
 
     /* The current page: tinted, and edged so it holds in forced colours. */

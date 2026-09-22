@@ -4,13 +4,42 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation";
 import { SearchIcon } from "./Icons";
 import { COMPONENTS, EXAMPLES_NAV, GETTING_STARTED, GUIDES, PRIMITIVES } from "./nav";
-import { EXAMPLE_META } from "@/examples/generated-meta";
+import { RECIPE_META } from "@/recipes/generated/meta";
 import "./CommandMenu.css";
 
 interface Result {
   label: string;
   hint: string;
   href: string;
+}
+
+interface Entry {
+  url: string;
+  title: string;
+  description: string;
+  text: string;
+}
+
+const INDEX_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/search-index.json`;
+
+function sectionOf(url: string): string {
+  if (url.startsWith("/docs/components/")) return "Component";
+  if (url.startsWith("/recipes/")) return "Recipe";
+  return "Guide";
+}
+
+function score(entry: Entry, words: string[]): number {
+  const title = entry.title.toLowerCase();
+  const description = entry.description.toLowerCase();
+  const text = entry.text.toLowerCase();
+  let total = 0;
+  for (const word of words) {
+    if (title.includes(word)) total += 8;
+    else if (description.includes(word)) total += 3;
+    else if (text.includes(word)) total += 1;
+    else return 0;
+  }
+  return total;
 }
 
 const ALL: Result[] = [
@@ -34,21 +63,13 @@ const ALL: Result[] = [
     hint: "Recipes",
     href: e.href,
   })),
-  ...EXAMPLE_META.map((e) => ({
+  ...RECIPE_META.map((e) => ({
     label: e.meta.title,
     hint: "Example",
     href: `/recipes/${e.category}/${e.slug}`,
   })),
 ];
 
-/**
- * The site search: a native modal dialog (focus containment, Escape and
- * the backdrop come with `showModal()`) holding an APG editable combobox.
- * The text box owns focus; the list is a listbox the box points into with
- * `aria-activedescendant`, so arrow keys move a highlight that a screen
- * reader hears without focus leaving the box. Opens from the trigger or
- * with ⌘K / Ctrl+K.
- */
 export function CommandMenu() {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
@@ -60,14 +81,39 @@ export function CommandMenu() {
   const optionId = (i: number) => `${baseId}-option-${i}`;
   const router = useRouter();
 
-  const results = useMemo(() => {
-    const term = q.trim().toLowerCase();
-    if (!term) return ALL;
-    return ALL.filter((r) => r.label.toLowerCase().includes(term));
-  }, [q]);
+  const [index, setIndex] = useState<Entry[] | null>(null);
+  useEffect(() => {
+    if (!open || index) return;
+    let live = true;
+    fetch(INDEX_URL)
+      .then((response) => (response.ok ? response.json() : null))
+      .catch(() => null)
+      .then((entries: Entry[] | null) => {
+        // Failed requests keep title search available and retry on the next open.
+        if (live && entries) setIndex(entries);
+      });
+    return () => {
+      live = false;
+    };
+  }, [open, index]);
 
-  // Stable (only state setters inside), so the window keydown listener can
-  // depend on it without re-subscribing per render.
+  const results = useMemo<Result[]>(() => {
+    const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (!words.length) return ALL;
+    if (!index?.length)
+      return ALL.filter((r) => words.every((w) => r.label.toLowerCase().includes(w)));
+    return index
+      .map((entry) => ({ entry, rank: score(entry, words) }))
+      .filter(({ rank }) => rank > 0)
+      .sort((a, b) => b.rank - a.rank || a.entry.title.localeCompare(b.entry.title))
+      .slice(0, 20)
+      .map(({ entry }) => ({
+        label: entry.title,
+        hint: sectionOf(entry.url),
+        href: entry.url,
+      }));
+  }, [q, index]);
+
   const openPalette = useCallback(() => {
     setQ("");
     setActive(0);
@@ -86,8 +132,6 @@ export function CommandMenu() {
     return () => window.removeEventListener("keydown", onKey);
   }, [openPalette]);
 
-  // Native <dialog>: showModal() brings focus containment, Escape and the
-  // ::backdrop; the effect reconciles React state with the element.
   useEffect(() => {
     const el = dialogRef.current;
     if (!el) return;
@@ -99,9 +143,7 @@ export function CommandMenu() {
     }
   }, [open]);
 
-  // Backdrop-click fallback for browsers without `closedby`: clicks on the
-  // backdrop hit the dialog element itself, never its children. Wired
-  // imperatively, the same shape as Modal's own fallback.
+  // Browsers without closedby still need backdrop dismissal.
   useEffect(() => {
     const el = dialogRef.current;
     if (!el) return;
@@ -112,8 +154,6 @@ export function CommandMenu() {
     return () => el.removeEventListener("click", onBackdropClick);
   }, []);
 
-  // The highlighted option stays in view as the arrow keys move it; the
-  // list scrolls, the page does not.
   useEffect(() => {
     if (!open) return;
     const el = document.getElementById(`${baseId}-option-${active}`);
@@ -154,10 +194,8 @@ export function CommandMenu() {
         aria-keyshortcuts="Meta+K Control+K"
       >
         <SearchIcon width={16} height={16} />
-        <span className="triggerLabel">Search…</span>
-        <kbd className="kbd" aria-hidden>
-          ⌘K
-        </kbd>
+        <span>Search…</span>
+        <kbd aria-hidden>⌘K</kbd>
       </button>
 
       <dialog
@@ -171,7 +209,6 @@ export function CommandMenu() {
           <SearchIcon width={18} height={18} />
           <input
             ref={inputRef}
-            className="input"
             type="text"
             role="combobox"
             aria-label="Search components, guides and recipes"
@@ -191,20 +228,9 @@ export function CommandMenu() {
           />
         </div>
         {results.length === 0 && (
-          <p className="empty" role="status">
-            No results for “{q}”. Try a component name, a guide or an example.
-          </p>
+          <p role="status">No results for “{q}”. Try a component name, a guide or an example.</p>
         )}
-        {/* APG combobox: the options are never focused (the box keeps focus
-            and points at one with aria-activedescendant), so they carry no
-            tabindex and no key handler of their own. */}
-        <ul
-          id={listId}
-          className="results"
-          aria-label="Results"
-          hidden={results.length === 0}
-          {...{ role: "listbox" }}
-        >
+        <ul id={listId} aria-label="Results" hidden={results.length === 0} {...{ role: "listbox" }}>
           {results.map((r, i) => {
             const option = {
               id: optionId(i),
@@ -216,9 +242,9 @@ export function CommandMenu() {
               onClick: () => go(r.href),
             };
             return (
-              <li key={r.href} className="result" {...option}>
+              <li key={r.href} {...option}>
                 <span>{r.label}</span>
-                <span className="hint">{r.hint}</span>
+                <span>{r.hint}</span>
               </li>
             );
           })}

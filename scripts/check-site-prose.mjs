@@ -79,7 +79,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       // UI docs deliberately repeat component names and use terms such as
       // "step". Those are technical vocabulary, not narrative movement or
       // rhetorical repetition. Paragraph-length and fragment heuristics also
-      // misread API names such as Field.Root. Other prose rules still apply.
+      // misread API names such as FieldRoot. Other prose rules still apply.
       const exceptions =
         "<!-- textlint-disable slopless/body-action-density, slopless/word-repetition, slopless/fragment-stacking, slopless/paragraph-length -->\n\n";
       writeFileSync(target, exceptions + prose.replace(/[‘’]/g, "'").replace(/[“”]/g, '\"'));

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { Tooltip } from "../../index";
+import { Tooltip } from "../../index.js";
 
 const meta = {
   title: "Overlays/Tooltip",

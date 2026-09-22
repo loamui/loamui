@@ -4,8 +4,8 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import type { FormEvent } from "react";
 
-import { Search } from "../components/Search/index";
-import { Field } from "../index";
+import { Search } from "../components/Search/index.js";
+import { Field } from "../index.js";
 
 afterEach(cleanup);
 

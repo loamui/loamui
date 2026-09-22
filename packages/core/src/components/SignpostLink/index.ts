@@ -1,2 +1,2 @@
-export { SignpostLink } from "./SignpostLink";
-export type { SignpostLinkProps } from "./SignpostLink";
+export { SignpostLink } from "./SignpostLink.js";
+export type { SignpostLinkProps } from "./SignpostLink.js";

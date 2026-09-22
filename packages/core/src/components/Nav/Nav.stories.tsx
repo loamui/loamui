@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
 import { expect, userEvent, within } from "storybook/test";
-import { Nav } from "./Nav";
+import { Nav } from "./index.js";
 
 function DashboardIcon() {
   return (

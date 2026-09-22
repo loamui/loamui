@@ -42,7 +42,12 @@ timeZone names the zone a moment is written in, a fact of the page like locale. 
 
 ```tsx
 <Time value="2026-08-12T14:30:00Z" locale="en-GB" timeStyle="short" timeZone="Europe/London" />
-<Time value="2026-08-12T14:30:00Z" locale="en-US" timeStyle="short" timeZone="America/Los_Angeles" />
+<Time
+  value="2026-08-12T14:30:00Z"
+  locale="en-US"
+  timeStyle="short"
+  timeZone="America/Los_Angeles"
+/>
 <Time value="2026-08-12T14:30:00Z" locale="en-GB" timeStyle="full" timeZone="Asia/Tokyo" />
 ```
 

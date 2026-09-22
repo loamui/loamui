@@ -21,13 +21,7 @@ export function Header() {
         <div className="right">
           <HeaderNav resources />
           <CommandMenu />
-          <a
-            className="stars"
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LoamUI on GitHub"
-          >
+          <a href={GITHUB_URL} target="_blank" rel="noreferrer" aria-label="LoamUI on GitHub">
             <GitHubIcon width={16} height={16} />
           </a>
           <ThemeToggle />

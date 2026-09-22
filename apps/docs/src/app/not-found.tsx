@@ -8,12 +8,11 @@ export const metadata: Metadata = {
   description: "There is no page at this address.",
 };
 
-/** The 404: what is missing, and the two ways on. */
 export default function NotFound() {
   return (
     <section className="container site-NotFound" data-no-hyphens>
       <p className="eyebrow">404</p>
-      <h1 className="title">There is no page at this address.</h1>
+      <h1>There is no page at this address.</h1>
       <p className="lead">
         The link may be out of date, or the address mistyped. The documentation starts at the
         introduction, and every component and example is listed in the search (⌘K or Ctrl+K).

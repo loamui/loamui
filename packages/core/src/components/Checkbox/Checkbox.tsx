@@ -2,14 +2,13 @@
 
 import { useEffect, useId, useMemo, useRef } from "react";
 import type { ReactNode } from "react";
-import { cx } from "../../utils";
-import type { PartProps } from "../../utils";
-import { composeRefs, idList } from "../../render";
-import { useFieldControlProps } from "../Field/Field";
-import { useUserInvalid } from "../../use-user-invalid";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
+import { composeRefs, idList } from "../../utils/render.js";
+import { useFieldControlProps } from "../Field/root/FieldRootContext.js";
+import { useUserInvalid } from "../../hooks/use-user-invalid.js";
 
 export interface CheckboxProps extends Omit<PartProps<"input">, "size" | "type"> {
-  /** Label rendered next to the checkbox. */
   label?: ReactNode;
   /** Helper text rendered below the label. */
   description?: ReactNode;
@@ -43,7 +42,7 @@ function CheckboxControl({
   ref,
   ...rest
 }: CheckboxControlProps) {
-  const field = useFieldControlProps(ariaDescribedby);
+  const field = useFieldControlProps(ariaDescribedby, id);
   const innerRef = useRef<HTMLInputElement>(null);
   const { nativeInvalid, validationRef, checkOnInput, checkOnInvalid } =
     useUserInvalid<HTMLInputElement>();
@@ -93,7 +92,7 @@ function CheckboxControl({
  * same Field points at it, and the Field's description and error join its
  * own description in `aria-describedby`.
  */
-function CheckboxLabelled({
+export function Checkbox({
   label,
   description,
   id,
@@ -134,8 +133,3 @@ function CheckboxLabelled({
     </div>
   );
 }
-
-export const Checkbox = Object.assign(CheckboxLabelled, {
-  /** The bare box, for composing inside a `Field.Label` of its own. */
-  Control: CheckboxControl,
-});

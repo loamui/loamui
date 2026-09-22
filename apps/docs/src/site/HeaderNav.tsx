@@ -20,7 +20,7 @@ export function HeaderNav({ resources = false }: { resources?: boolean }) {
   const pathname = usePathname() ?? "";
   const current = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   return (
-    <nav className="nav" aria-label={resources ? "Resources" : "Primitives"}>
+    <nav aria-label={resources ? "Resources" : "Primitives"}>
       {(resources
         ? [
             { name: "Documentation", href: "/docs" },

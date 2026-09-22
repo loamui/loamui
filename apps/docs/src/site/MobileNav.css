@@ -33,14 +33,15 @@
   }
 }
 
-@scope (.site-MobileNav-panel) {
+/* The panel is a core Drawer popup; the donut keeps the nav rule off its parts. */
+@scope (.site-MobileNav-panel) to ([class*="loam-"]) {
   :scope {
     --loam-drawer-size: 18rem;
-  }
 
-  .nav {
-    display: block flex;
-    flex-direction: column;
-    gap: var(--loam-space-l);
+    > div {
+      display: block flex;
+      flex-direction: column;
+      gap: var(--loam-space-l);
+    }
   }
 }

@@ -88,7 +88,7 @@ block inheritance: those components still receive the region's context and token
 
 ```tsx
 <section className="danger-zone">
-  <Checkbox label="I understand this is permanent" />
+  <Field.Item><Field.Label><Checkbox /> I understand this is permanent</Field.Label></Field.Item>
   <Button>Delete workspace</Button>
 </section>
 ```
@@ -100,12 +100,10 @@ consequence still lives in the stylesheets:
 
 ```tsx
 <section style={{ "--loam-context": "danger" }}>
-  <Checkbox label="I understand this is permanent" />
+  <Field.Item><Field.Label><Checkbox /> I understand this is permanent</Field.Label></Field.Item>
   <Button>Delete workspace</Button>
 </section>
 ```
-
-</div>
 
 Notice the checkbox: `--loam-context` is not a button feature. Core's token rules
 remap semantic colours on descendants of the region. Native elements and components
@@ -137,7 +135,12 @@ region, or inherited from an ancestor that already means something):
 
 ```tsx
 <div style={{ "--loam-context": "success" }}>
-  <Alert title="Saved">Your changes have been stored.</Alert>
+  <Alert.Root>
+<Alert.Body>
+<Alert.Title>Saved</Alert.Title>
+<Alert.Description>Your changes have been stored.</Alert.Description>
+</Alert.Body>
+</Alert.Root>
 </div>
 ```
 
@@ -184,8 +187,6 @@ export function BrandButton(props: ButtonProps) {
 }
 ```
 
-</div>
-
 ## The size of the space
 
 For local sizing, establish a measuring ancestor with `container-type: inline-size`.
@@ -201,9 +202,6 @@ these exceptions.
 Padding and font are fluid container-relative tokens, and in a
 container of 16rem or less a button takes the full width. The layout decides, per instance
 of the layout, not per instance of the button:
-
-  </div>
-</div>
 
 When the design wants stacked full-width actions in a wide container, that intent is still
 declared on the region, not the buttons. It is declared as actual layout: a grid (or
@@ -227,20 +225,22 @@ asking you to repeat it as a prop. An icon inside a button is detected (no
 }
 ```
 
-Form errors work the same way. A field is invalid exactly when it contains a rendered error
-message; there is no `invalid` prop anywhere in the library:
+Form styling reads accessibility state. Set `Field.Root invalid` from the validation
+result and compose the message with `Field.Error`:
 
 ```css
-/* the box keys off the control's own accessibility state, which Field
-   derives from the presence of a rendered error message */
-.loam-Input-field:has(input[aria-invalid="true"]) {
-  border-color: var(--loam-color-danger);
+@scope (.loam-Input-field) to ([class*="loam-"]) {
+  :scope:has(input[aria-invalid="true"]) {
+    border-color: var(--loam-color-danger);
+  }
 }
 ```
 
 Accessibility state still flows through React (`aria-invalid` is wired onto the
-control because screen readers can't run `:has()`), but it is _derived from the same
-source_: the presence of the error message. One source of truth, no prop to forget.
+control because screen readers cannot run `:has()`). Validation state and message
+content are separate: invalidity is available in server HTML, while parts register
+their message IDs after hydration. Supply explicit ARIA links when those links
+must exist in the initial HTML.
 
 The platform itself is a detection source too. Native constraint validation
 (`required`, `type="email"`) opens the field's invalid state only after an attempted

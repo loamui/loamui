@@ -1,2 +1,2 @@
-export { Progress } from "./Progress";
-export type { ProgressProps, ProgressLabels } from "./Progress";
+export { Progress } from "./Progress.js";
+export type { ProgressProps, ProgressLabels } from "./Progress.js";

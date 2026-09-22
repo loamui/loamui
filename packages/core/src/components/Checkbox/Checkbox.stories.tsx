@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Checkbox, Field } from "../../index";
+import { expect, userEvent, within } from "storybook/test";
+import { Checkbox, Field } from "../../index.js";
 
 const meta = {
   title: "Inputs/Checkbox",
@@ -10,14 +11,18 @@ const meta = {
       description: {
         component:
           'A native `<input type="checkbox">` painted with the platform\'s own ' +
-          "`accent-color`. The `label`/`description` props render an accessible " +
-          "inline row; without them you get the bare control, which self-wires " +
-          "when placed inside a `Field`.",
+          "`accent-color`. Compose Field.Label and Field.Description around the native control.",
       },
     },
   },
+  render: (args) => (
+    <Field.Root>
+      <Field.Label>
+        <Checkbox {...args} /> I accept the terms and conditions
+      </Field.Label>
+    </Field.Root>
+  ),
   args: {
-    label: "I accept the terms and conditions",
     indeterminate: false,
     disabled: false,
     defaultChecked: false,
@@ -30,39 +35,40 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {};
 
 export const Checked: Story = {
-  args: { label: "Subscribe to the newsletter", defaultChecked: true },
+  args: { defaultChecked: true },
 };
 
 export const Required: Story = {
-  args: { label: "Accept the terms", required: true },
+  args: { required: true },
 };
 
 export const Indeterminate: Story = {
-  args: { label: "Select all", indeterminate: true },
+  args: { indeterminate: true },
 };
 
 export const WithDescription: Story = {
-  args: {
-    label: "Enable notifications",
-    description: "We'll email you when something important happens.",
-  },
+  args: {},
 };
 
 export const WithError: Story = {
   render: (args) => (
-    <Field.Root>
+    <Field.Root invalid>
       <Field.Error>You must accept the terms to continue.</Field.Error>
-      <Checkbox {...args} label="I accept the terms and conditions" />
+      <>
+        <Field.Label>
+          <Checkbox {...args} /> I accept the terms and conditions
+        </Field.Label>
+      </>
     </Field.Root>
   ),
 };
 
 export const Disabled: Story = {
-  args: { label: "Unavailable option", disabled: true },
+  args: { disabled: true },
 };
 
 /**
- * A label-less `Checkbox.Control` self-wires from the surrounding Field: it reads
+ * A label-less `Checkbox` self-wires from the surrounding Field: it reads
  * its id from `Field.Root` (so `Field.Label` points at it) plus any
  * `aria-describedby`/`aria-invalid`, with no label or error props of its own.
  */
@@ -70,7 +76,21 @@ export const SelfWiringInField: Story = {
   render: () => (
     <Field.Root>
       <Field.Label>I accept the terms and conditions</Field.Label>
-      <Checkbox.Control />
+      <Checkbox />
     </Field.Root>
   ),
+};
+
+/** Interaction test: the label toggles the native control, and Space toggles it from the keyboard. */
+export const TogglesFromLabelAndKeyboard: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const box = canvas.getByRole("checkbox", { name: "I accept the terms and conditions" });
+    await expect(box).not.toBeChecked();
+    await userEvent.click(canvas.getByText("I accept the terms and conditions"));
+    await expect(box).toBeChecked();
+    box.focus();
+    await userEvent.keyboard(" ");
+    await expect(box).not.toBeChecked();
+  },
 };

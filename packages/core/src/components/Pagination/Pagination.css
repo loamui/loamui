@@ -1,4 +1,3 @@
-/* Donut: the list hosts Buttons (the Links), which keep their own recipe. */
 @scope (.loam-Pagination) to ([class*="loam-"]) {
   :scope {
     /* The Button anatomy's height (incl. 1px borders), so the ellipsis cell

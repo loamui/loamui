@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
-import { Avatar, Skeleton } from "../../index";
+import { Avatar, Skeleton } from "../../index.js";
 
 const meta = {
   title: "Feedback/Skeleton",
@@ -59,7 +59,9 @@ export const TextLines: Story = {
 export const Circle: Story = {
   render: (args) => (
     <Skeleton {...args}>
-      <Avatar name="Ada Lovelace" />
+      <Avatar.Root role="img" aria-label="Ada Lovelace">
+        <Avatar.Fallback>AL</Avatar.Fallback>
+      </Avatar.Root>
     </Skeleton>
   ),
 };
@@ -75,7 +77,9 @@ export const Card: Story = {
       }}
     >
       <Skeleton {...args}>
-        <Avatar name="Ada Lovelace" />
+        <Avatar.Root role="img" aria-label="Ada Lovelace">
+          <Avatar.Fallback>AL</Avatar.Fallback>
+        </Avatar.Root>
       </Skeleton>
       <div
         style={{

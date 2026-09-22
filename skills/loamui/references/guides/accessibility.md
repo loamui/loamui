@@ -71,16 +71,16 @@ opt-in:
   to be switched off.
 - **Colour scheme is followed natively** via `color-scheme` and `light-dark()` tokens; the
   `data-theme` attribute is the explicit override.
-- **Forced colours are honoured, not fought.** Every component is verified under forced-colors
-  mode; where a state was carried only by background paint (switch tracks, radio dots, progress
+- **Forced colours are honoured, not fought.** Components provide forced-colors styles; browser coverage is tracked separately; where a state was carried only by background paint (switch tracks, radio dots, progress
   fills, selection highlights) it is re-expressed in system colours (`Highlight`, `CanvasText`,
   `GrayText`) inside `@media (forced-colors: active)`.
 
 ## ARIA is derived, not declared
 
-Accessibility state is derived from one source of truth rather than set by hand. A field is
-invalid exactly when it contains a rendered error message: the CSS detects it with `:has()` and
-`aria-invalid` is wired from the same fact. On the native validation path, an attempted submission
+Accessibility state is derived from one source of truth rather than set by hand. A field receives
+explicit validation state through `Field.Root invalid`; CSS reads the control’s
+`aria-invalid`. Error messages are composed independently. Message IDs register
+after hydration; explicit ARIA links support initial server HTML. On the native validation path, an attempted submission
 opens the invalid state; later input clears it as soon as the value is valid. The same state is
 mirrored onto `aria-invalid`, so what assistive technology hears always matches what the screen
 shows. Icon-only buttons are detected by the `aria-label` they must carry anyway; the compact style

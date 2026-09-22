@@ -1,11 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Radio, RadioGroup } from "../../index";
+import { expect, userEvent, within } from "storybook/test";
+import { Radio, RadioGroup, Field } from "../../index.js";
 
 const cropOptions = (
   <>
-    <Radio value="wheat" label="Wheat" />
-    <Radio value="barley" label="Barley" />
-    <Radio value="oats" label="Oats" />
+    <Field.Item>
+      <Field.Label>
+        <Radio value="wheat" /> Wheat
+      </Field.Label>
+    </Field.Item>
+    <Field.Item>
+      <Field.Label>
+        <Radio value="barley" /> Barley
+      </Field.Label>
+    </Field.Item>
+    <Field.Item>
+      <Field.Label>
+        <Radio value="oats" /> Oats
+      </Field.Label>
+    </Field.Item>
   </>
 );
 
@@ -58,7 +71,7 @@ export const Horizontal: Story = {
 export const WithError: Story = {
   args: { defaultValue: undefined },
   render: (args) => (
-    <RadioGroup.Root {...args}>
+    <RadioGroup.Root invalid {...args}>
       <RadioGroup.Legend>Crop</RadioGroup.Legend>
       <RadioGroup.Error>Select a crop</RadioGroup.Error>
       {cropOptions}
@@ -70,9 +83,22 @@ export const OptionDescriptions: Story = {
   render: (args) => (
     <RadioGroup.Root {...args} defaultValue="active">
       <RadioGroup.Legend>Field status</RadioGroup.Legend>
-      <Radio value="active" label="Active" />
-      <Radio value="fallow" label="Fallow" description="Resting this season" />
-      <Radio value="retired" label="Retired" disabled />
+      <Field.Item>
+        <Field.Label>
+          <Radio value="active" /> Active
+        </Field.Label>
+      </Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Radio value="fallow" /> Fallow
+        </Field.Label>
+        <Field.Description>Resting this season</Field.Description>
+      </Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Radio value="retired" disabled /> Retired
+        </Field.Label>
+      </Field.Item>
     </RadioGroup.Root>
   ),
 };
@@ -80,11 +106,38 @@ export const OptionDescriptions: Story = {
 /** The group's own words come from `labels`; the legend's optional marker among them. */
 export const InAnotherLanguage: Story = {
   render: (args) => (
-    <RadioGroup.Root {...args} labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}>
+    <RadioGroup.Root
+      invalid
+      {...args}
+      labels={{ optional: "(facultatif)", errorPrefix: "Erreur : " }}
+    >
       <RadioGroup.Legend optional>Culture</RadioGroup.Legend>
       <RadioGroup.Error>Choisissez une culture</RadioGroup.Error>
-      <Radio value="wheat" label="Blé" />
-      <Radio value="barley" label="Orge" />
+      <Field.Item>
+        <Field.Label>
+          <Radio value="wheat" /> Blé
+        </Field.Label>
+      </Field.Item>
+      <Field.Item>
+        <Field.Label>
+          <Radio value="barley" /> Orge
+        </Field.Label>
+      </Field.Item>
     </RadioGroup.Root>
   ),
+};
+
+/** Interaction test: one radiogroup named by its Legend; clicking a label selects it, and ArrowDown moves the selection. */
+export const SelectsByLabelAndArrowKeys: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const group = canvas.getByRole("radiogroup", { name: "Crop" });
+    const wheat = within(group).getByRole("radio", { name: "Wheat" });
+    const barley = within(group).getByRole("radio", { name: "Barley" });
+    await expect(wheat).toBeChecked();
+    await userEvent.click(within(group).getByText("Barley"));
+    await expect(barley).toBeChecked();
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(within(group).getByRole("radio", { name: "Oats" })).toBeChecked();
+  },
 };

@@ -49,14 +49,254 @@
       "default": "./dist/index.js"
     },
     "./styles.css": "./dist/styles.css",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./alert": {
+      "types": "./dist/components/Alert/index.d.ts",
+      "import": "./dist/components/Alert/index.js",
+      "default": "./dist/components/Alert/index.js"
+    },
+    "./avatar": {
+      "types": "./dist/components/Avatar/index.d.ts",
+      "import": "./dist/components/Avatar/index.js",
+      "default": "./dist/components/Avatar/index.js"
+    },
+    "./badge": {
+      "types": "./dist/components/Badge/index.d.ts",
+      "import": "./dist/components/Badge/index.js",
+      "default": "./dist/components/Badge/index.js"
+    },
+    "./breadcrumbs": {
+      "types": "./dist/components/Breadcrumbs/index.d.ts",
+      "import": "./dist/components/Breadcrumbs/index.js",
+      "default": "./dist/components/Breadcrumbs/index.js"
+    },
+    "./button": {
+      "types": "./dist/components/Button/index.d.ts",
+      "import": "./dist/components/Button/index.js",
+      "default": "./dist/components/Button/index.js"
+    },
+    "./card": {
+      "types": "./dist/components/Card/index.d.ts",
+      "import": "./dist/components/Card/index.js",
+      "default": "./dist/components/Card/index.js"
+    },
+    "./carousel": {
+      "types": "./dist/components/Carousel/index.d.ts",
+      "import": "./dist/components/Carousel/index.js",
+      "default": "./dist/components/Carousel/index.js"
+    },
+    "./checkbox": {
+      "types": "./dist/components/Checkbox/index.d.ts",
+      "import": "./dist/components/Checkbox/index.js",
+      "default": "./dist/components/Checkbox/index.js"
+    },
+    "./combobox": {
+      "types": "./dist/components/Combobox/index.d.ts",
+      "import": "./dist/components/Combobox/index.js",
+      "default": "./dist/components/Combobox/index.js"
+    },
+    "./copy-button": {
+      "types": "./dist/components/CopyButton/index.d.ts",
+      "import": "./dist/components/CopyButton/index.js",
+      "default": "./dist/components/CopyButton/index.js"
+    },
+    "./date-input": {
+      "types": "./dist/components/DateInput/index.d.ts",
+      "import": "./dist/components/DateInput/index.js",
+      "default": "./dist/components/DateInput/index.js"
+    },
+    "./details": {
+      "types": "./dist/components/Details/index.d.ts",
+      "import": "./dist/components/Details/index.js",
+      "default": "./dist/components/Details/index.js"
+    },
+    "./drawer": {
+      "types": "./dist/components/Drawer/index.d.ts",
+      "import": "./dist/components/Drawer/index.js",
+      "default": "./dist/components/Drawer/index.js"
+    },
+    "./error-summary": {
+      "types": "./dist/components/ErrorSummary/index.d.ts",
+      "import": "./dist/components/ErrorSummary/index.js",
+      "default": "./dist/components/ErrorSummary/index.js"
+    },
+    "./field": {
+      "types": "./dist/components/Field/index.d.ts",
+      "import": "./dist/components/Field/index.js",
+      "default": "./dist/components/Field/index.js"
+    },
+    "./fieldset": {
+      "types": "./dist/components/Fieldset/index.d.ts",
+      "import": "./dist/components/Fieldset/index.js",
+      "default": "./dist/components/Fieldset/index.js"
+    },
+    "./file-input": {
+      "types": "./dist/components/FileInput/index.d.ts",
+      "import": "./dist/components/FileInput/index.js",
+      "default": "./dist/components/FileInput/index.js"
+    },
+    "./input": {
+      "types": "./dist/components/Input/index.d.ts",
+      "import": "./dist/components/Input/index.js",
+      "default": "./dist/components/Input/index.js"
+    },
+    "./loader": {
+      "types": "./dist/components/Loader/index.d.ts",
+      "import": "./dist/components/Loader/index.js",
+      "default": "./dist/components/Loader/index.js"
+    },
+    "./menu": {
+      "types": "./dist/components/Menu/index.d.ts",
+      "import": "./dist/components/Menu/index.js",
+      "default": "./dist/components/Menu/index.js"
+    },
+    "./meter": {
+      "types": "./dist/components/Meter/index.d.ts",
+      "import": "./dist/components/Meter/index.js",
+      "default": "./dist/components/Meter/index.js"
+    },
+    "./modal": {
+      "types": "./dist/components/Modal/index.d.ts",
+      "import": "./dist/components/Modal/index.js",
+      "default": "./dist/components/Modal/index.js"
+    },
+    "./nav": {
+      "types": "./dist/components/Nav/index.d.ts",
+      "import": "./dist/components/Nav/index.js",
+      "default": "./dist/components/Nav/index.js"
+    },
+    "./pagination": {
+      "types": "./dist/components/Pagination/index.d.ts",
+      "import": "./dist/components/Pagination/index.js",
+      "default": "./dist/components/Pagination/index.js"
+    },
+    "./password-input": {
+      "types": "./dist/components/PasswordInput/index.d.ts",
+      "import": "./dist/components/PasswordInput/index.js",
+      "default": "./dist/components/PasswordInput/index.js"
+    },
+    "./popover": {
+      "types": "./dist/components/Popover/index.d.ts",
+      "import": "./dist/components/Popover/index.js",
+      "default": "./dist/components/Popover/index.js"
+    },
+    "./price": {
+      "types": "./dist/components/Price/index.d.ts",
+      "import": "./dist/components/Price/index.js",
+      "default": "./dist/components/Price/index.js"
+    },
+    "./progress": {
+      "types": "./dist/components/Progress/index.d.ts",
+      "import": "./dist/components/Progress/index.js",
+      "default": "./dist/components/Progress/index.js"
+    },
+    "./quantity-input": {
+      "types": "./dist/components/QuantityInput/index.d.ts",
+      "import": "./dist/components/QuantityInput/index.js",
+      "default": "./dist/components/QuantityInput/index.js"
+    },
+    "./radio": {
+      "types": "./dist/components/Radio/index.d.ts",
+      "import": "./dist/components/Radio/index.js",
+      "default": "./dist/components/Radio/index.js"
+    },
+    "./range": {
+      "types": "./dist/components/Range/index.d.ts",
+      "import": "./dist/components/Range/index.js",
+      "default": "./dist/components/Range/index.js"
+    },
+    "./rating": {
+      "types": "./dist/components/Rating/index.d.ts",
+      "import": "./dist/components/Rating/index.js",
+      "default": "./dist/components/Rating/index.js"
+    },
+    "./search": {
+      "types": "./dist/components/Search/index.d.ts",
+      "import": "./dist/components/Search/index.js",
+      "default": "./dist/components/Search/index.js"
+    },
+    "./segmented-control": {
+      "types": "./dist/components/SegmentedControl/index.d.ts",
+      "import": "./dist/components/SegmentedControl/index.js",
+      "default": "./dist/components/SegmentedControl/index.js"
+    },
+    "./select": {
+      "types": "./dist/components/Select/index.d.ts",
+      "import": "./dist/components/Select/index.js",
+      "default": "./dist/components/Select/index.js"
+    },
+    "./separator": {
+      "types": "./dist/components/Separator/index.d.ts",
+      "import": "./dist/components/Separator/index.js",
+      "default": "./dist/components/Separator/index.js"
+    },
+    "./signpost-link": {
+      "types": "./dist/components/SignpostLink/index.d.ts",
+      "import": "./dist/components/SignpostLink/index.js",
+      "default": "./dist/components/SignpostLink/index.js"
+    },
+    "./skeleton": {
+      "types": "./dist/components/Skeleton/index.d.ts",
+      "import": "./dist/components/Skeleton/index.js",
+      "default": "./dist/components/Skeleton/index.js"
+    },
+    "./skip-link": {
+      "types": "./dist/components/SkipLink/index.d.ts",
+      "import": "./dist/components/SkipLink/index.js",
+      "default": "./dist/components/SkipLink/index.js"
+    },
+    "./stepper": {
+      "types": "./dist/components/Stepper/index.d.ts",
+      "import": "./dist/components/Stepper/index.js",
+      "default": "./dist/components/Stepper/index.js"
+    },
+    "./switch": {
+      "types": "./dist/components/Switch/index.d.ts",
+      "import": "./dist/components/Switch/index.js",
+      "default": "./dist/components/Switch/index.js"
+    },
+    "./table": {
+      "types": "./dist/components/Table/index.d.ts",
+      "import": "./dist/components/Table/index.js",
+      "default": "./dist/components/Table/index.js"
+    },
+    "./tabs": {
+      "types": "./dist/components/Tabs/index.d.ts",
+      "import": "./dist/components/Tabs/index.js",
+      "default": "./dist/components/Tabs/index.js"
+    },
+    "./textarea": {
+      "types": "./dist/components/Textarea/index.d.ts",
+      "import": "./dist/components/Textarea/index.js",
+      "default": "./dist/components/Textarea/index.js"
+    },
+    "./time": {
+      "types": "./dist/components/Time/index.d.ts",
+      "import": "./dist/components/Time/index.js",
+      "default": "./dist/components/Time/index.js"
+    },
+    "./toast": {
+      "types": "./dist/components/Toast/index.d.ts",
+      "import": "./dist/components/Toast/index.js",
+      "default": "./dist/components/Toast/index.js"
+    },
+    "./tooltip": {
+      "types": "./dist/components/Tooltip/index.d.ts",
+      "import": "./dist/components/Tooltip/index.js",
+      "default": "./dist/components/Tooltip/index.js"
+    },
+    "./visually-hidden": {
+      "types": "./dist/components/VisuallyHidden/index.d.ts",
+      "import": "./dist/components/VisuallyHidden/index.js",
+      "default": "./dist/components/VisuallyHidden/index.js"
+    }
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsup && node scripts/build-css.mjs",
-    "dev": "node scripts/build-css.mjs --watch & tsup --watch",
+    "build": "pnpm clean && tsc -p tsconfig.build.json && node scripts/build-css.mjs",
+    "dev": "node scripts/build-css.mjs --watch & tsc -p tsconfig.build.json --watch",
     "check-types": "tsc --noEmit",
     "lint": "oxlint --config ../../.oxlintrc.json src && stylelint \"src/**/*.css\"",
     "lint:css": "stylelint \"src/**/*.css\"",
@@ -66,9 +306,13 @@
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build",
-    "audit:contrast": "node scripts/contrast-audit.mjs"
+    "audit:contrast": "node scripts/contrast-audit.mjs",
+    "test:package": "node --test scripts/package.test.mjs",
+    "test:browser": "playwright test"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
     "@storybook/addon-a11y": "^10.4.2",
     "@storybook/addon-docs": "^10.4.2",
     "@storybook/react-vite": "^10.4.2",
@@ -78,12 +322,12 @@
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.27.7",
     "jsdom": "^25.0.1",
     "postcss": "^8.5.26",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "storybook": "^10.4.2",
-    "tsup": "^8.5.0",
     "typescript": "5.9.2",
     "vite": "^6.0.0",
     "vitest": "^3.0.0",

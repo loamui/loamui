@@ -7,8 +7,8 @@ import { resolve } from "node:path";
 import { useState } from "react";
 import type { CSSProperties } from "react";
 
-import { Table } from "../components/Table/index";
-import type { TableProps, TableSortDirection } from "../components/Table/index";
+import { Table } from "../components/Table/index.js";
+import type { TableProps, TableSortDirection } from "../components/Table/index.js";
 
 afterEach(cleanup);
 
@@ -17,10 +17,10 @@ const axeOptions = { rules: { "color-contrast": { enabled: false } } };
 function SortableDemo({ onSortChange }: { onSortChange?: (next: TableSortDirection) => void }) {
   const [sort, setSort] = useState<TableSortDirection>("none");
   return (
-    <Table>
-      <caption>People</caption>
-      <thead>
-        <tr>
+    <Table.Root>
+      <Table.Caption>People</Table.Caption>
+      <Table.Thead>
+        <Table.Tr>
           <Table.Th sort={sort}>
             <Table.SortButton
               onSortChange={(next) => {
@@ -32,15 +32,15 @@ function SortableDemo({ onSortChange }: { onSortChange?: (next: TableSortDirecti
             </Table.SortButton>
           </Table.Th>
           <Table.Th>Role</Table.Th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Ada</td>
-          <td>Engineer</td>
-        </tr>
-      </tbody>
-    </Table>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        <Table.Tr>
+          <Table.Td>Ada</Table.Td>
+          <Table.Td>Engineer</Table.Td>
+        </Table.Tr>
+      </Table.Tbody>
+    </Table.Root>
   );
 }
 
@@ -72,14 +72,14 @@ function overflow(el: Element, sizes: Partial<Record<"inline" | "block", [number
 
 function People(props: TableProps) {
   return (
-    <Table {...props}>
-      <caption>People</caption>
-      <tbody>
-        <tr>
-          <td>Ada</td>
-        </tr>
-      </tbody>
-    </Table>
+    <Table.Root {...props}>
+      <Table.Caption>People</Table.Caption>
+      <Table.Tbody>
+        <Table.Tr>
+          <Table.Td>Ada</Table.Td>
+        </Table.Tr>
+      </Table.Tbody>
+    </Table.Root>
   );
 }
 
@@ -110,13 +110,13 @@ describe("Table scroll region", () => {
   it("is a region too when a fixed block size makes it scroll", () => {
     vi.stubGlobal("ResizeObserver", FakeResizeObserver);
     const { container } = render(
-      <Table style={{ blockSize: "12rem" }}>
-        <tbody>
-          <tr>
-            <td>Ada</td>
-          </tr>
-        </tbody>
-      </Table>,
+      <Table.Root style={{ blockSize: "12rem" }}>
+        <Table.Tbody>
+          <Table.Tr>
+            <Table.Td>Ada</Table.Td>
+          </Table.Tr>
+        </Table.Tbody>
+      </Table.Root>,
     );
     overflow(container.firstElementChild!, { block: [900, 192] });
     const region = screen.getByRole("region", { name: "Scrollable table" });
@@ -129,19 +129,19 @@ describe("Table scroll region", () => {
   it("is a region when --loam-table-block-size caps it and the rows overflow", () => {
     vi.stubGlobal("ResizeObserver", FakeResizeObserver);
     const { container } = render(
-      <Table stickyHeader style={{ "--loam-table-block-size": "12rem" } as CSSProperties}>
-        <caption>People</caption>
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Ada</td>
-          </tr>
-        </tbody>
-      </Table>,
+      <Table.Root stickyHeader style={{ "--loam-table-block-size": "12rem" } as CSSProperties}>
+        <Table.Caption>People</Table.Caption>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th scope="col">Name</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          <Table.Tr>
+            <Table.Td>Ada</Table.Td>
+          </Table.Tr>
+        </Table.Tbody>
+      </Table.Root>,
     );
     const wrapper = container.firstElementChild as HTMLElement;
     expect(wrapper.style.getPropertyValue("--loam-table-block-size")).toBe("12rem");
@@ -261,17 +261,17 @@ describe("Table sort header", () => {
 
   it("takes its words from the consumer", () => {
     render(
-      <Table>
-        <thead>
-          <tr>
+      <Table.Root>
+        <Table.Thead>
+          <Table.Tr>
             <Table.Th sort="descending">
               <Table.SortButton labels={{ sort: (column, next) => ` nach ${column} ${next}` }}>
                 Name
               </Table.SortButton>
             </Table.Th>
-          </tr>
-        </thead>
-      </Table>,
+          </Table.Tr>
+        </Table.Thead>
+      </Table.Root>,
     );
     expect(screen.getByRole("button", { name: "Name nach Name ascending" })).toBeInTheDocument();
   });
@@ -288,18 +288,18 @@ describe("Table sort header", () => {
           </thead>
         </table>,
       ),
-    ).toThrow("Table.Th must be rendered inside <Table>.");
+    ).toThrow("Table.Th must be rendered inside <Table.Root>.");
     expect(() =>
       render(
-        <Table>
-          <thead>
-            <tr>
+        <Table.Root>
+          <Table.Thead>
+            <Table.Tr>
               <Table.Th>
                 <Table.SortButton>Name</Table.SortButton>
               </Table.Th>
-            </tr>
-          </thead>
-        </Table>,
+            </Table.Tr>
+          </Table.Thead>
+        </Table.Root>,
       ),
     ).toThrow(/inside a <Table.Th sort>/);
     error.mockRestore();

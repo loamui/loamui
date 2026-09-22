@@ -32,11 +32,7 @@ An svg child is detected by Button as an icon, and the aria-label names the butt
 
 ```tsx
 <CopyButton value="pnpm add @loamui/core" aria-label="Copy install command">
-  <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-    <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"
-      stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
+  <IconCopy aria-hidden />
 </CopyButton>
 ```
 

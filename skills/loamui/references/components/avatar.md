@@ -8,7 +8,7 @@ description: Represent a user with an image or initials.
 
 # Avatar
 
-An image, initials, or fallback glyph representing a user.
+An image and an explicit fallback representing a person.
 
 ## Import
 
@@ -18,109 +18,126 @@ import { Avatar } from "@loamui/core";
 
 ## Usage
 
-### Image
+### Image and fallback
 
-Pass a src to render a cover-fit image.
+Image owns the source and native loading attributes. Fallback holds the content shown while loading or after an error.
 
 ```tsx
-<Avatar src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop&crop=faces" name="Ada Lovelace" />
+<Avatar.Root role="img" aria-label="Ada Lovelace">
+  <Avatar.Image
+    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop&crop=faces"
+    alt=""
+    loading="lazy"
+  />
+  <Avatar.Fallback>AL</Avatar.Fallback>
+</Avatar.Root>
 ```
 
 ### Initials
 
-With no image, initials are derived from name. There is no colour prop: declare --loam-context on a one-element wrapper region (see the Contextualism guide) and the status colours follow, exactly like Badge; or let it inherit from a larger region.
+Supply initials as children. The background answers the surrounding --loam-context region.
 
 ```tsx
-<Avatar name="Jane Doe" />
-<span style={{ "--loam-context": "info" }}><Avatar name="Amara Okafor" /></span>
-<span style={{ "--loam-context": "success" }}><Avatar name="Sam Reed" /></span>
-```
-
-### Fallback glyph
-
-A bare Avatar with no name from any source renders a decorative person glyph. It carries no identity: the glyph is marked aria-hidden, so give an avatar a name whenever it stands in for a specific person.
-
-```tsx
-<Avatar />
+<span style={{ "--loam-context": "info" }}>
+  <Avatar.Root role="img" aria-label="Amara Okafor">
+    <Avatar.Fallback>AO</Avatar.Fallback>
+  </Avatar.Root>
+</span>
 ```
 
 ### Size
 
-There is no size prop. The public --loam-avatar-size property sets the diameter per instance or on a region, and the initials follow it.
+Set the public --loam-avatar-size property on an instance or region.
 
 ```tsx
-<Avatar name="Jane Doe" style={{ "--loam-avatar-size": "1.5rem" }} />
-<Avatar name="Jane Doe" />
-<Avatar name="Jane Doe" style={{ "--loam-avatar-size": "4rem" }} />
+<Avatar.Root role="img" aria-label="Jane Doe" style={{ "--loam-avatar-size": "4rem" }}>
+  <Avatar.Fallback>JD</Avatar.Fallback>
+</Avatar.Root>
 ```
 
 ### Group
 
-Avatar.Group is a list: each avatar is an item, overlapped and ringed in the surface colour, and more adds the overflow count as a final avatar named by labels.more.
+Each child is a list item. Compose an additional avatar for an overflow count.
 
 ```tsx
-<Avatar.Group more={5} labels={{ more: (n) => `${n} more people` }}>
-  <Avatar name="Jane Doe" />
-  <Avatar name="Sam Reed" />
-  <Avatar name="Amara Okafor" />
+<Avatar.Group aria-label="Participants">
+  <Avatar.Root role="img" aria-label="Jane Doe">
+    <Avatar.Fallback>JD</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="Sam Reed">
+    <Avatar.Fallback>SR</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="Amara Okafor">
+    <Avatar.Fallback>AO</Avatar.Fallback>
+  </Avatar.Root>
+  <Avatar.Root role="img" aria-label="5 more people">
+    <Avatar.Fallback>+5</Avatar.Fallback>
+  </Avatar.Root>
 </Avatar.Group>
 ```
 
 ## When to use it
 
-- To identify a person next to something they did: a comment, an assignee, a row in a member list.
-- With Avatar.Group, to show a set of participants compactly where listing every name would not fit.
+- To identify a person beside their comment, assignment or member record.
+- With Avatar.Group, to show a compact set of participants.
 
 ## When not to
 
-- For arbitrary images. The image is cover-cropped into a fixed square or circle, which is right for faces and wrong for logos, screenshots or product photos; use a plain <img>.
-- As a click target. Avatar renders a <span>; if it should open a profile, wrap it in a real link or button rather than adding onClick to it.
+- For logos, screenshots or product photos: use a plain image without the avatar's cover crop.
+- As a click target: wrap the avatar in a link or button when it opens a profile.
 
 ## How it works
 
-### The name is the API
+### Explicit parts
 
-Pass the person's full name and everything derives from it: the initials (first and last word, uppercased), the image alt when you give a src, and the aria-label when you do not. One prop keeps what sighted users see and what screen readers hear describing the same person.
+Root provides the shared loading state. Compose one Image and a Fallback in either order. Root accepts native span attributes; it does not generate an image, initials, icon or overflow count from content props.
 
-### Identifying or decorative: decide which
+### Native image loading
 
-An avatar identifies when it is the only place the person appears; it decorates when their name is printed right beside it. A decorative avatar should be aria-hidden so the name is not announced twice; an identifying one must have a name (or alt), never neither.
+Image stays in the DOM and loads in place, so loading="lazy", srcSet and sizes reach the browser. Loading and failed images keep their layout box with visibility: hidden. Fallback remains visible until a successful load. A new source starts a new loading attempt.
+
+### Server rendering
+
+Both parts are present in server HTML. Fallback remains visible until hydration resolves image status, including an image already in the browser cache. With JavaScript unavailable the fallback remains visible.
 
 ## Accessibility
 
-- With src, a real <img> is rendered and its alt falls back to name: pass the name and the image announces the person.
-- Without an image, the root becomes role="img" with aria-label from name (or alt): screen readers hear the full name (“Jane Doe”), never the raw initials (“JD”).
-- A bare <Avatar /> with no name from any source is treated as decorative automatically (aria-hidden, no role). An identifying avatar must be given a name, an alt, or an aria-label.
-- When the name is visibly printed next to the avatar, pass aria-hidden so assistive tech does not read the same name twice; the image's alt is then empty as well, so the name is not read where aria-hidden is not honoured.
-- The fallback glyph is aria-hidden and focusable="false": it is decoration; identity always comes from the name/alt wiring above.
-
-## Props
-
-Status is not a prop: it comes from the surrounding `--loam-context` region (see the Contextualism guide).
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `src` | `string` | — | Image source. When set, renders an <img>. |
-| `alt` | `string` | — | Alt text for the image (falls back to name). Empty when the Avatar is aria-hidden, so a decorative image is not described. |
-| `name` | `string` | — | Person's name; used for initials (the first grapheme of the first and last words) and as image alt. |
-| `children` | `ReactNode` | — | Custom content; overrides the derived image/initials/glyph. |
-| `...others` | `SpanHTMLAttributes` | — | All native <span> props are forwarded. |
+- When the avatar identifies a person, put role="img" and aria-label with the full name on Root, and alt="" on Image. The name then remains available during loading and failure.
+- When the person’s name is printed beside the avatar, use aria-hidden on Root and alt="" on Image to avoid repeating it.
+- Fallback content is supplied by the caller: initials, an icon, or other meaningful content. Initials alone do not replace the person's full accessible name.
 
 ## Parts
 
-### Avatar.Group
+### Avatar.Root
 
-A <ul role="list"> of avatars, each child an item, overlapped with a surface-coloured ring; all native <ul> props are forwarded.
+A span containing one Image and a Fallback, or plain content. It holds parts, not content props: what shows is composed, never derived behind your back.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `more` | `number` | — | How many more people than avatars shown; rendered as a final +n avatar. |
-| `labels` | `{ more?: (n: number) => string }` | `(n) => `${n} more`` | The overflow avatar's accessible name. |
+| `...others` | `SpanHTMLAttributes` | — | Native span props, including children, role, aria-label and aria-hidden. |
+
+### Avatar.Image
+
+A native image which loads in place.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `src` | `string` | — | Image source. |
+| `alt` | `string` | — | Required image alternative. Use an empty string when Root supplies the name or is decorative. |
+| `...others` | `ImgHTMLAttributes` | — | Native image props, including loading, srcSet, sizes, onLoad, onError and ref. |
+
+### Avatar.Fallback
+
+A span shown while loading or when the image fails; children supply its content.
+
+### Avatar.Group
+
+An overlapping list; each supplied child becomes a list item. Native ul props are forwarded.
 
 ## Custom properties
 
 | Property | Syntax | Default | Description |
 | --- | --- | --- | --- |
 | `--loam-avatar-size` | `CSS length` | `2.5rem` | The diameter; set per instance or on a region. |
-| `--loam-avatar-overlap` | `CSS length` | `0.5rem` | How far each item in an Avatar.Group overlaps the one before. |
+| `--loam-avatar-overlap` | `CSS length` | `0.5rem` | How far each group item overlaps the preceding item. |
 

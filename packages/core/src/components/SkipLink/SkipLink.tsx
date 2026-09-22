@@ -1,5 +1,5 @@
-import { cx } from "../../utils";
-import type { PartProps } from "../../utils";
+import { cx } from "../../utils/cx.js";
+import type { PartProps } from "../../utils/props.js";
 
 export interface SkipLinkProps extends PartProps<"a"> {
   /** The id of the main content landmark, e.g. `"#content"`. */

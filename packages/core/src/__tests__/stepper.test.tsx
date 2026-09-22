@@ -5,8 +5,8 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Stepper } from "../components/Stepper/index";
-import type { StepperLabels } from "../components/Stepper/index";
+import { Stepper } from "../components/Stepper/index.js";
+import type { StepperLabels } from "../components/Stepper/index.js";
 
 afterEach(cleanup);
 
