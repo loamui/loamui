@@ -26,6 +26,7 @@ jobs:
       - run: pnpm -r build
         env:
           PAGES: "true"
+          NEXT_PUBLIC_GTM_ID: GTM-MWBLRTDP
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/docs/out
