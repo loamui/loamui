@@ -1,6 +1,10 @@
 ---
 name: loamui
-description: Design and build UI with @loamui/core. The conductor for LoamUI work: it holds the philosophy and composition model, orders the work across the frontend-design, modern-css and modern-web-guidance skills, and runs the review before anything is reported. Use for any LoamUI build, design, theme or review task.
+description: >-
+  Design and build UI with @loamui/core. The conductor for LoamUI work. It holds the philosophy
+  and composition model, orders the work across the frontend-design, modern-css and
+  modern-web-guidance skills, and runs the review before anything is reported. Use for any
+  LoamUI build, design, theme or review task.
 metadata:
   library: "@loamui/core"
   docs: https://loamui.com

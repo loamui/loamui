@@ -20,6 +20,7 @@
     "test:checks": "node --test scripts/checks.test.mjs"
   },
   "devDependencies": {
+    "js-yaml": "4.3.0",
     "loamui-typescript": "npm:typescript@5.9.2",
     "oxfmt": "0.63.0",
     "oxlint": "^1.73.0",
