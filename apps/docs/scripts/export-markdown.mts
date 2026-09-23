@@ -127,8 +127,9 @@ function writeComponentTwin(slug: string, md: string) {
 
 // Start the staging directory from empty so removed pages don't linger.
 rmSync(SKILL_REFS, { recursive: true, force: true });
-// Generated recipe twins must disappear when their catalog entries are disabled.
-for (const directory of ["examples", "recipes"])
+// Every twin under these is regenerated below, so a page retired since the
+// last export leaves no stale copy behind.
+for (const directory of ["docs", "examples", "recipes"])
   rmSync(join(PUBLIC, directory), { recursive: true, force: true });
 
 // ---- guides: page.mdx source → markdown --------------------------------

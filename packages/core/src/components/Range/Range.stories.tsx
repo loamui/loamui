@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { userEvent as browser } from "@vitest/browser/context";
+import { expect, within } from "storybook/test";
 import { Field, Range } from "../../index.js";
 
 const meta = {
@@ -78,9 +79,11 @@ export const StepsWithArrowKeys: Story = {
     const slider = canvas.getByRole("slider", { name: "Irrigation level" });
     await expect(slider).toHaveValue("40");
     slider.focus();
-    await userEvent.keyboard("{ArrowRight}{ArrowRight}");
+    // Stepping is the native slider's own; a synthetic key event never
+    // reaches it, so the real keyboard is Playwright's under Vitest.
+    await browser.keyboard("{ArrowRight}{ArrowRight}");
     await expect(slider).toHaveValue("42");
-    await userEvent.keyboard("{Home}");
+    await browser.keyboard("{Home}");
     await expect(slider).toHaveValue("0");
   },
 };

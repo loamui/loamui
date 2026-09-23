@@ -3,7 +3,15 @@
 Notable changes to `@loamui/core`. Release tags use the `vMAJOR.MINOR.PATCH`
 form.
 
-## 0.2.0 — unreleased
+## Unreleased
+
+### Fixed
+
+- `Alert.Description` keeps full-strength text next to a title. The muted
+  colour it took there fell short of 4.5:1 on the neutral tint; the
+  contrast audit now reads that pair for every channel.
+
+## 0.2.0 — 2026-09-22
 
 A breaking release: the composition model is settled, and the API is one
 shape or the other with nothing in between.

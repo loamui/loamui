@@ -96,13 +96,24 @@ export const LinkBack: Story = {
   ),
 };
 
-/** Interaction test: the complete and current steps carry their words as hidden text. */
+/**
+ * Interaction test: every step carries both words as hidden text and the
+ * stylesheet keeps the wrong one out of the accessibility tree, so the check
+ * is on what is displayed, not on the text content.
+ */
 export const AnnouncesState: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const items = canvas.getAllByRole("listitem");
-    await expect(items[0]).toHaveTextContent("Completed");
-    await expect(items[1]).toHaveTextContent("Current step");
-    await expect(items[2]).not.toHaveTextContent("Completed");
+    const [complete, current, upcoming] = canvas.getAllByRole("listitem") as [
+      HTMLElement,
+      HTMLElement,
+      HTMLElement,
+    ];
+    await expect(within(complete).getByText("Completed")).toBeVisible();
+    await expect(within(complete).getByText("Current step")).not.toBeVisible();
+    await expect(within(current).getByText("Current step")).toBeVisible();
+    await expect(within(current).getByText("Completed")).not.toBeVisible();
+    await expect(within(upcoming).getByText("Completed")).not.toBeVisible();
+    await expect(within(upcoming).getByText("Current step")).not.toBeVisible();
   },
 };

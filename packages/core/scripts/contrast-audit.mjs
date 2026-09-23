@@ -118,7 +118,10 @@ function resolve(expr, scheme) {
   }
   const ok = expr.match(/^oklch\(([\d.]+)%\s+([\d.]+)\s+([\d.]+)deg(\s*\/\s*[\d.]+%?)?\)$/);
   if (ok) {
-    if (ok[4]) throw new Error(`translucent colour in an audited chain: ${expr} — contrast depends on what shows through, which this audit cannot know`);
+    if (ok[4])
+      throw new Error(
+        `translucent colour in an audited chain: ${expr} — contrast depends on what shows through, which this audit cannot know`,
+      );
     return oklchToSrgb(+ok[1] / 100, +ok[2], +ok[3]);
   }
   const mix = expr.match(/^color-mix\(in oklab,\s*([\s\S]+)\)$/);
@@ -137,11 +140,16 @@ function resolve(expr, scheme) {
 }
 function splitTop(s) {
   const out = [];
-  let depth = 0, cur = "";
+  let depth = 0,
+    cur = "";
   for (const ch of s) {
     if (ch === "(") depth++;
     if (ch === ")") depth--;
-    if (ch === "," && depth === 0) { out.push(cur); cur = ""; continue; }
+    if (ch === "," && depth === 0) {
+      out.push(cur);
+      cur = "";
+      continue;
+    }
     cur += ch;
   }
   out.push(cur);
@@ -160,7 +168,8 @@ function labelWeights(file, channel) {
     String.raw`light-dark\(\s*color-mix\(in oklab,\s*var\(${channel}\)\s+([\d.]+)%,\s*oklch\(0% 0 0deg\)\s*\),\s*color-mix\(in oklab,\s*var\(${channel}\)\s+([\d.]+)%,\s*oklch\(100% 0 0deg\)\s*\)\s*\)`,
   );
   const m = text.match(re);
-  if (!m) throw new Error(`label recipe not found in ${file} — update this audit alongside the recipe`);
+  if (!m)
+    throw new Error(`label recipe not found in ${file} — update this audit alongside the recipe`);
   return { light: +m[1] / 100, dark: +m[2] / 100 };
 }
 const labelRecipes = [
@@ -172,7 +181,9 @@ const labelRecipes = [
 ];
 for (const r of labelRecipes.slice(1)) {
   if (r.light !== labelRecipes[0].light || r.dark !== labelRecipes[0].dark) {
-    throw new Error("label recipes have drifted apart across Button/Badge/Alert/ErrorSummary/elements");
+    throw new Error(
+      "label recipes have drifted apart across Button/Badge/Alert/ErrorSummary/elements",
+    );
   }
 }
 const LABEL = labelRecipes[0];
@@ -190,11 +201,13 @@ function tintWeights(file, channel) {
     String.raw`light-dark\(\s*color-mix\(in oklab,\s*var\(${channel}\),\s*var\(--loam-color-bg\)\s+([\d.]+)%\s*\),\s*color-mix\(in oklab,\s*var\(${channel}\),\s*var\(--loam-color-bg\)\s+([\d.]+)%\s*\)\s*\)`,
   );
   const m = text.match(re);
-  if (!m) throw new Error(`tint recipe not found in ${file} — update this audit alongside the recipe`);
+  if (!m)
+    throw new Error(`tint recipe not found in ${file} — update this audit alongside the recipe`);
   return { light: +m[1] / 100, dark: +m[2] / 100 };
 }
 const TINT = tintWeights("components/Button/Button.css", "--_color");
 const elementsTint = tintWeights("elements.css", "--loam-color-fg");
+const ALERT_TINT = tintWeights("components/Alert/Alert.css", "--_accent");
 if (elementsTint.light !== TINT.light || elementsTint.dark !== TINT.dark) {
   throw new Error("native button tint in elements.css has drifted from Button.css");
 }
@@ -205,7 +218,9 @@ function check(name, scheme, fg, bg, need) {
   const r = contrast(fg, bg);
   const ok = r >= need;
   if (!ok) failures.push(name);
-  console.log(`${ok ? "PASS" : "FAIL"}  ${r.toFixed(2).padStart(5)}  (≥${need})  [${scheme}] ${name}`);
+  console.log(
+    `${ok ? "PASS" : "FAIL"}  ${r.toFixed(2).padStart(5)}  (≥${need})  [${scheme}] ${name}`,
+  );
 }
 
 for (const scheme of ["light", "dark"]) {
@@ -215,35 +230,143 @@ for (const scheme of ["light", "dark"]) {
   check("link on surface", scheme, t("--loam-color-link"), t("--loam-color-surface"), 4.5);
   // <mark> and ::selection paint a fixed dark text on the highlight fill; the
   // dark stays put but the highlight token could drift, so lock the pair.
-  check("mark/selection text on highlight", scheme, resolve("oklch(20% 0 0deg)", scheme), t("--loam-color-highlight"), 4.5);
-  check("text-strong (headings) on bg", scheme, t("--loam-color-fg-strong"), t("--loam-color-bg"), 4.5);
-  check("text-strong (headings) on surface", scheme, t("--loam-color-fg-strong"), t("--loam-color-surface"), 4.5);
+  check(
+    "mark/selection text on highlight",
+    scheme,
+    resolve("oklch(20% 0 0deg)", scheme),
+    t("--loam-color-highlight"),
+    4.5,
+  );
+  check(
+    "text-strong (headings) on bg",
+    scheme,
+    t("--loam-color-fg-strong"),
+    t("--loam-color-bg"),
+    4.5,
+  );
+  check(
+    "text-strong (headings) on surface",
+    scheme,
+    t("--loam-color-fg-strong"),
+    t("--loam-color-surface"),
+    4.5,
+  );
   check("text-muted on bg", scheme, t("--loam-color-fg-muted"), t("--loam-color-bg"), 4.5);
-  check("text-dim (placeholder) on surface", scheme, t("--loam-color-fg-dim"), t("--loam-color-surface"), 4.5);
-  check("danger text (FieldError) on bg", scheme, t("--loam-color-danger"), t("--loam-color-bg"), 4.5);
+  check(
+    "text-dim (placeholder) on surface",
+    scheme,
+    t("--loam-color-fg-dim"),
+    t("--loam-color-surface"),
+    4.5,
+  );
+  check(
+    "danger text (FieldError) on bg",
+    scheme,
+    t("--loam-color-danger"),
+    t("--loam-color-bg"),
+    4.5,
+  );
   // The -strong family is also TEXT: Tabs' selected tab, Details' open
   // summary and any contexted label lean on it holding 4.5:1 on both
   // surfaces, where the raw hue does not (light warning is 2.5:1).
   for (const status of ["primary", "success", "danger", "warning", "info"]) {
-    check(`${status}-strong text on bg`, scheme, t(`--loam-color-${status}-strong`), t("--loam-color-bg"), 4.5);
-    check(`${status}-strong text on surface`, scheme, t(`--loam-color-${status}-strong`), t("--loam-color-surface"), 4.5);
+    check(
+      `${status}-strong text on bg`,
+      scheme,
+      t(`--loam-color-${status}-strong`),
+      t("--loam-color-bg"),
+      4.5,
+    );
+    check(
+      `${status}-strong text on surface`,
+      scheme,
+      t(`--loam-color-${status}-strong`),
+      t("--loam-color-surface"),
+      4.5,
+    );
   }
   // Fills and edges on the subtle surface: Meter and Progress tracks, the
   // SchemeToggle's chosen option, FileInput's drop zone; and the accent as a
   // glyph on a Card (Rating in a ProductCard).
   for (const status of ["primary", "success", "danger", "warning", "info"]) {
-    check(`${status}-strong fill on bg-subtle`, scheme, t(`--loam-color-${status}-strong`), t("--loam-color-bg-subtle"), 3.0);
+    check(
+      `${status}-strong fill on bg-subtle`,
+      scheme,
+      t(`--loam-color-${status}-strong`),
+      t("--loam-color-bg-subtle"),
+      3.0,
+    );
   }
-  check("line-strong on bg-subtle", scheme, t("--loam-color-line-strong"), t("--loam-color-bg-subtle"), 3.0);
-  check("text-muted on bg-subtle", scheme, t("--loam-color-fg-muted"), t("--loam-color-bg-subtle"), 4.5);
-  check("primary-strong edge on primary-soft", scheme, t("--loam-color-primary-strong"), t("--loam-color-primary-soft"), 3.0);
-  check("accent glyph on surface", scheme, t("--loam-color-accent"), t("--loam-color-surface"), 3.0);
-  check("fill text on primary-strong", scheme, t("--loam-color-on-strong"), t("--loam-color-primary-strong"), 4.5);
-  check("fill text on success-strong", scheme, t("--loam-color-on-strong"), t("--loam-color-success-strong"), 4.5);
-  check("fill text on danger-strong", scheme, t("--loam-color-on-strong"), t("--loam-color-danger-strong"), 4.5);
-  check("fill text on warning-strong", scheme, t("--loam-color-on-strong"), t("--loam-color-warning-strong"), 4.5);
-  check("fill text on info-strong", scheme, t("--loam-color-on-strong"), t("--loam-color-info-strong"), 4.5);
-  check("ErrorSummary link on danger-soft", scheme, mixedLabel(t("--loam-color-danger"), scheme), t("--loam-color-danger-soft"), 4.5);
+  check(
+    "line-strong on bg-subtle",
+    scheme,
+    t("--loam-color-line-strong"),
+    t("--loam-color-bg-subtle"),
+    3.0,
+  );
+  check(
+    "text-muted on bg-subtle",
+    scheme,
+    t("--loam-color-fg-muted"),
+    t("--loam-color-bg-subtle"),
+    4.5,
+  );
+  check(
+    "primary-strong edge on primary-soft",
+    scheme,
+    t("--loam-color-primary-strong"),
+    t("--loam-color-primary-soft"),
+    3.0,
+  );
+  check(
+    "accent glyph on surface",
+    scheme,
+    t("--loam-color-accent"),
+    t("--loam-color-surface"),
+    3.0,
+  );
+  check(
+    "fill text on primary-strong",
+    scheme,
+    t("--loam-color-on-strong"),
+    t("--loam-color-primary-strong"),
+    4.5,
+  );
+  check(
+    "fill text on success-strong",
+    scheme,
+    t("--loam-color-on-strong"),
+    t("--loam-color-success-strong"),
+    4.5,
+  );
+  check(
+    "fill text on danger-strong",
+    scheme,
+    t("--loam-color-on-strong"),
+    t("--loam-color-danger-strong"),
+    4.5,
+  );
+  check(
+    "fill text on warning-strong",
+    scheme,
+    t("--loam-color-on-strong"),
+    t("--loam-color-warning-strong"),
+    4.5,
+  );
+  check(
+    "fill text on info-strong",
+    scheme,
+    t("--loam-color-on-strong"),
+    t("--loam-color-info-strong"),
+    4.5,
+  );
+  check(
+    "ErrorSummary link on danger-soft",
+    scheme,
+    mixedLabel(t("--loam-color-danger"), scheme),
+    t("--loam-color-danger-soft"),
+    4.5,
+  );
   // Text on the -soft surfaces. A page link inside a soft-tinted region
   // (a notice, a callout, an ErrorSummary body) keeps the link colour, so
   // the link must read on every soft. The status's own text there is the
@@ -255,31 +378,73 @@ for (const scheme of ["light", "dark"]) {
     // No component sets small -strong TEXT on its -soft: the pair in use is a
     // glyph or an edge (a Feature icon, FileInput's drop-zone border), so the
     // non-text threshold applies. Small text on a tint stays the mixed label.
-    check(`${s}-strong glyph on ${s}-soft`, scheme, t(`--loam-color-${s}-strong`), t(`--loam-color-${s}-soft`), 3.0);
+    check(
+      `${s}-strong glyph on ${s}-soft`,
+      scheme,
+      t(`--loam-color-${s}-strong`),
+      t(`--loam-color-${s}-soft`),
+      3.0,
+    );
   }
   for (const s of ["primary", "success", "danger", "warning", "info"]) {
     const colour = t(`--loam-color-${s}`);
-    const tint = mixOklab(colour, t("--loam-color-bg"), scheme === "light" ? TINT.light : TINT.dark);
+    const tint = mixOklab(
+      colour,
+      t("--loam-color-bg"),
+      scheme === "light" ? TINT.light : TINT.dark,
+    );
     check(`button ${s} text on its tint`, scheme, mixedLabel(colour, scheme), tint, 4.5);
+  }
+  {
+    // Alert's description is full-strength text on the alert's tint, which
+    // mixes more of the channel in than Button's; the neutral channel (the
+    // text colour itself) makes the darkest tint, so every channel is read.
+    const alertTint = ALERT_TINT[scheme];
+    for (const channel of ["fg", "primary", "success", "danger", "warning", "info"]) {
+      const tint = mixOklab(t(`--loam-color-${channel}`), t("--loam-color-bg"), alertTint);
+      check(`Alert description on ${channel} tint`, scheme, t("--loam-color-fg"), tint, 4.5);
+    }
   }
   {
     // The elements layer's native button: neutral text channel on its tint.
     const colour = t("--loam-color-fg");
-    const tint = mixOklab(colour, t("--loam-color-bg"), scheme === "light" ? TINT.light : TINT.dark);
+    const tint = mixOklab(
+      colour,
+      t("--loam-color-bg"),
+      scheme === "light" ? TINT.light : TINT.dark,
+    );
     check("native button text on its tint", scheme, mixedLabel(colour, scheme), tint, 4.5);
   }
-  check("input border-strong vs surface", scheme, t("--loam-color-line-strong"), t("--loam-color-surface"), 3.0);
+  check(
+    "input border-strong vs surface",
+    scheme,
+    t("--loam-color-line-strong"),
+    t("--loam-color-surface"),
+    3.0,
+  );
   // Checked Checkbox/Radio/Switch/Slider paint their glyph (tick, dot,
   // thumb) in --loam-color-on-strong over the -strong fill — a non-text
   // state indicator, so the 1.4.11 3:1 bar applies. In a --loam-context
   // region the fill becomes that status's -strong, already audited for
   // on-strong at 4.5:1 above, so every context clears 3:1 too.
-  check("checked-control glyph on primary-strong", scheme, t("--loam-color-on-strong"), t("--loam-color-primary-strong"), 3.0);
+  check(
+    "checked-control glyph on primary-strong",
+    scheme,
+    t("--loam-color-on-strong"),
+    t("--loam-color-primary-strong"),
+    3.0,
+  );
   // Accent is a graphical indicator (e.g. the Loader arc) painted on the page
   // background — a non-text object, so the 1.4.11 3:1 bar applies.
   check("accent indicator on bg", scheme, t("--loam-color-accent"), t("--loam-color-bg"), 3.0);
   for (const s of ["primary", "success", "danger", "warning", "info"]) {
-    check(`${s} focus ring vs bg`, scheme, t(`--loam-color-${s}-strong`), t("--loam-color-bg"), 3.0);
+    check(
+      `${s} focus ring vs bg`,
+      scheme,
+      t(`--loam-color-${s}-strong`),
+      t("--loam-color-bg"),
+      3.0,
+    );
   }
 }
 
@@ -294,20 +459,104 @@ for (const scheme of ["light", "dark"]) {
   // The current item's tint: color-mix(in oklab, accent 14%, transparent)
   // over the page ground (Sidebar, RecipesRail) or the surface (CommandMenu).
   const tintOn = (ground) => mixOklab(t("--loam-color-accent"), ground, 0.86);
-  check("site: dim count/hint text on bg", scheme, t("--loam-color-fg-dim"), t("--loam-color-bg"), 4.5);
-  check("site: dim category title on bg (NavLinks)", scheme, t("--loam-color-fg-dim"), t("--loam-color-bg"), 4.5);
-  check("site: primary category label on bg (DocPage)", scheme, t("--loam-color-primary"), t("--loam-color-bg"), 4.5);
-  check("site: primary guidance heading on surface", scheme, t("--loam-color-primary"), t("--loam-color-surface"), 4.5);
-  check("site: danger guidance heading on surface", scheme, t("--loam-color-danger"), t("--loam-color-surface"), 4.5);
-  check("site: accent current-page text on its tint over bg", scheme, t("--loam-color-accent"), tintOn(t("--loam-color-bg")), 4.5);
-  check("site: accent current-result text on its tint over surface", scheme, t("--loam-color-accent"), tintOn(t("--loam-color-surface")), 4.5);
-  check("site: accent as text on bg (h1 emphasis)", scheme, t("--loam-color-accent"), t("--loam-color-bg"), 4.5);
-  check("site: text on surface-hover (nav/result hover)", scheme, t("--loam-color-fg"), t("--loam-color-surface-hover"), 4.5);
-  check("site: link on bg-subtle (empty panel)", scheme, t("--loam-color-link"), t("--loam-color-bg-subtle"), 4.5);
-  check("site: text-strong on bg-subtle (empty title)", scheme, t("--loam-color-fg-strong"), t("--loam-color-bg-subtle"), 4.5);
-  check("site: text on bg-subtle (context demo)", scheme, t("--loam-color-fg"), t("--loam-color-bg-subtle"), 4.5);
-  check("site: text-muted on primary-soft (usage note)", scheme, t("--loam-color-fg-muted"), t("--loam-color-primary-soft"), 4.5);
-  check("site: text-muted on surface (card body)", scheme, t("--loam-color-fg-muted"), t("--loam-color-surface"), 4.5);
+  check(
+    "site: dim count/hint text on bg",
+    scheme,
+    t("--loam-color-fg-dim"),
+    t("--loam-color-bg"),
+    4.5,
+  );
+  check(
+    "site: dim category title on bg (NavLinks)",
+    scheme,
+    t("--loam-color-fg-dim"),
+    t("--loam-color-bg"),
+    4.5,
+  );
+  check(
+    "site: primary category label on bg (DocPage)",
+    scheme,
+    t("--loam-color-primary"),
+    t("--loam-color-bg"),
+    4.5,
+  );
+  check(
+    "site: primary guidance heading on surface",
+    scheme,
+    t("--loam-color-primary"),
+    t("--loam-color-surface"),
+    4.5,
+  );
+  check(
+    "site: danger guidance heading on surface",
+    scheme,
+    t("--loam-color-danger"),
+    t("--loam-color-surface"),
+    4.5,
+  );
+  check(
+    "site: accent current-page text on its tint over bg",
+    scheme,
+    t("--loam-color-accent"),
+    tintOn(t("--loam-color-bg")),
+    4.5,
+  );
+  check(
+    "site: accent current-result text on its tint over surface",
+    scheme,
+    t("--loam-color-accent"),
+    tintOn(t("--loam-color-surface")),
+    4.5,
+  );
+  check(
+    "site: accent as text on bg (h1 emphasis)",
+    scheme,
+    t("--loam-color-accent"),
+    t("--loam-color-bg"),
+    4.5,
+  );
+  check(
+    "site: text on surface-hover (nav/result hover)",
+    scheme,
+    t("--loam-color-fg"),
+    t("--loam-color-surface-hover"),
+    4.5,
+  );
+  check(
+    "site: link on bg-subtle (empty panel)",
+    scheme,
+    t("--loam-color-link"),
+    t("--loam-color-bg-subtle"),
+    4.5,
+  );
+  check(
+    "site: text-strong on bg-subtle (empty title)",
+    scheme,
+    t("--loam-color-fg-strong"),
+    t("--loam-color-bg-subtle"),
+    4.5,
+  );
+  check(
+    "site: text on bg-subtle (context demo)",
+    scheme,
+    t("--loam-color-fg"),
+    t("--loam-color-bg-subtle"),
+    4.5,
+  );
+  check(
+    "site: text-muted on primary-soft (usage note)",
+    scheme,
+    t("--loam-color-fg-muted"),
+    t("--loam-color-primary-soft"),
+    4.5,
+  );
+  check(
+    "site: text-muted on surface (card body)",
+    scheme,
+    t("--loam-color-fg-muted"),
+    t("--loam-color-surface"),
+    4.5,
+  );
 }
 
 if (failures.length) {
