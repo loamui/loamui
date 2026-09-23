@@ -5,8 +5,10 @@ import { test } from "node:test";
 import { detectFramework } from "../src/frameworks.mjs";
 import {
   LAYER_DECLARATION,
+  coreSpecifier,
   coreStylesheet,
   declaresLayerOrder,
+  latestCore,
   driftedCopies,
   localCopyCurrent,
   steps,
@@ -391,4 +393,28 @@ test("a CDN link switches to the local copy in place when local delivery is aske
   assert.equal(local.fix(dir), true);
   assert.equal(read(dir, "app/layout.tsx"), '<link rel="stylesheet" href="/loamui-core.css" />');
   assert.equal(local.check(dir), true);
+});
+
+test("core is installed as the exact latest version the registry reports, or bare when it cannot be reached", () => {
+  const calls = [];
+  const registry = (bin, args) => {
+    calls.push([bin, ...args].join(" "));
+    return { ok: true, stdout: "0.2.0\n" };
+  };
+  assert.equal(latestCore(registry), "0.2.0");
+  assert.deepEqual(calls, ["npm view @loamui/core version"]);
+  assert.equal(coreSpecifier(registry), "@loamui/core@0.2.0");
+  assert.equal(
+    latestCore(() => ({ ok: false, stdout: "" })),
+    null,
+  );
+  assert.equal(
+    latestCore(() => ({ ok: true, stdout: "not a version" })),
+    null,
+  );
+  assert.equal(
+    coreSpecifier(() => ({ ok: false })),
+    "@loamui/core",
+  );
+  assert.match(step(nextProject(), "core").describe(), /@loamui\/core@<latest>/);
 });

@@ -3,6 +3,16 @@
 Notable changes to `loamui`, the setup command. It is versioned independently
 of `@loamui/core`; release tags use the `loamui-vMAJOR.MINOR.PATCH` form.
 
+## Unreleased
+
+### Fixed
+
+- `init` and `create` install `@loamui/core` as the exact latest version,
+  asked of the registry directly. pnpm holds back anything published in the
+  last day when it resolves a range or a tag, so a plain add could land a
+  core a release behind and the welcome page `create` writes would not
+  build. An exact version is exempt.
+
 ## 0.2.0 — 2026-09-23
 
 ### Added

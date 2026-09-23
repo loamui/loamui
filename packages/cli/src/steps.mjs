@@ -54,6 +54,25 @@ const LOCAL_PATTERN = /href(?:=|:\s*)["']\/loamui-core\.css["']/;
 export const DELIVERIES = ["cdn", "local"];
 
 /**
+ * The newest published core, asked of the registry directly, or null when the
+ * registry cannot be reached. It is installed as an exact version: pnpm holds
+ * back anything published in the last day when it resolves a range or a tag,
+ * so a plain add can land a core a release behind. An exact version is exempt,
+ * and every package manager treats it the same way.
+ */
+export function latestCore(exec = run) {
+  const result = exec("npm", ["view", "@loamui/core", "version"], { quiet: true });
+  const version = result.ok ? String(result.stdout ?? "").trim() : "";
+  return /^\d+\.\d+\.\d+$/.test(version) ? version : null;
+}
+
+/** The specifier to install: the exact latest version, or the bare name when the registry is unreachable. */
+export function coreSpecifier(exec = run) {
+  const version = latestCore(exec);
+  return version ? `@loamui/core@${version}` : "@loamui/core";
+}
+
+/**
  * The stylesheet for the installed core, served immutable from the npm CDN.
  * Null until core is installed: the version is read, never guessed.
  */
@@ -393,8 +412,8 @@ export function steps({ pm, agent, framework: fw, delivery = "cdn" }) {
       id: "core",
       title: "@loamui/core installed",
       check: (cwd) => hasDependency(cwd, "@loamui/core"),
-      describe: () => `${pm} ${addArgs(pm, ["@loamui/core"]).join(" ")}`,
-      fix: (cwd) => run(pm, addArgs(pm, ["@loamui/core"]), { cwd }).ok,
+      describe: () => `${pm} ${addArgs(pm, ["@loamui/core@<latest>"]).join(" ")}`,
+      fix: (cwd) => run(pm, addArgs(pm, [coreSpecifier()]), { cwd }).ok,
     },
     layerStep(fw),
     ...(fw.layerImport ? [layerImportStep(fw)] : []),
