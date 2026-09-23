@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
-import { coreStylesheet, LAYER_DECLARATION, LOCAL_STYLESHEET } from "../steps.mjs";
+import { coreSpecifier, coreStylesheet, LAYER_DECLARATION, LOCAL_STYLESHEET } from "../steps.mjs";
 import { ui } from "../ui.mjs";
 import { addArgs, dlx, run } from "../util.mjs";
 import { init } from "./init.mjs";
@@ -176,8 +176,9 @@ export function create({ dir, pm, agent, framework, delivery = "cdn" }) {
   }
 
   // The foundation links the stylesheet for the installed core version, so core goes in first.
-  ui.step("Installing @loamui/core");
-  if (!run(pm, addArgs(pm, ["@loamui/core"]), { cwd: target }).ok) {
+  const core = coreSpecifier();
+  ui.step(`Installing ${core}`);
+  if (!run(pm, addArgs(pm, [core]), { cwd: target }).ok) {
     ui.fail("Installing @loamui/core failed; see the output above.");
     return 1;
   }
