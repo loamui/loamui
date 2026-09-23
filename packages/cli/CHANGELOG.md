@@ -3,7 +3,25 @@
 Notable changes to `loamui`, the setup command. It is versioned independently
 of `@loamui/core`; release tags use the `loamui-vMAJOR.MINOR.PATCH` form.
 
-## 0.1.1 — unreleased
+## Unreleased
+
+### Added
+
+- `--stylesheet local` on `init` and `create`: the installed stylesheet is
+  copied to `public/loamui-core.css` and linked from there, so a page makes
+  no third-party request. `doctor` reports a copy that is not the installed
+  version, and `init` refreshes it. A project already linking the copy is
+  treated as local without the flag. The installed Oxfmt configuration ignores
+  `public/`, so served assets such as that copy are never reformatted.
+
+### Changed
+
+- `init` installs a third companion skill, `frontend-design` from
+  `anthropics/skills`, and the `AGENTS.md` section names it. It decides the
+  design direction of what an agent builds; the `loamui` skill decides how
+  that direction is expressed through the primitives.
+
+## 0.1.1 — 2026-09-22
 
 ### Added
 

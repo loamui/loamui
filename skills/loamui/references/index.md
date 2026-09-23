@@ -14,6 +14,7 @@
 - [Components](guides/components.md) — The third primitive: a small, curated set of accessible components composed from tokens and element styles. · [live](https://loamui.com/docs/components.md)
 - [Contextualism](guides/contextualism.md) — The paradigm shift under all three primitives: context decides appearance, and identity is the last resort. · [live](https://loamui.com/docs/contextualism.md)
 - [Building your own recipes](guides/guide.md) — Build portable React components from LoamUI’s tokens, element styles and components, using the Recipes as worked references. · [live](https://loamui.com/recipes/guide.md)
+- [Design](guides/design.md) — Give an interface its own identity on the primitives: a design plan first, then the token inputs, typefaces and layout that express it. · [live](https://loamui.com/docs/design.md)
 - [Layout](guides/layout.md) — Layout is native CSS. Pick the module that fits the shape of the content, and space it with the space tokens. · [live](https://loamui.com/docs/layout.md)
 - [Typography](guides/typography.md) — How the type scale, rhythm and figures work, and how to build your own domain-specific typography on top of them. · [live](https://loamui.com/docs/typography.md)
 - [Accessibility](guides/accessibility.md) — What LoamUI guarantees: platform semantics, APG keyboard patterns, engineered WCAG specifics, and user preferences as the baseline. · [live](https://loamui.com/docs/accessibility.md)

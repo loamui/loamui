@@ -35,6 +35,7 @@ export const GETTING_STARTED: GuideLink[] = [
 
 export const GUIDES: GuideLink[] = [
   { name: "Contextualism", href: "/docs/contextualism" },
+  { name: "Design", href: "/docs/design" },
   { name: "Layout", href: "/docs/layout" },
   { name: "Typography", href: "/docs/typography" },
   { name: "Accessibility", href: "/docs/accessibility" },

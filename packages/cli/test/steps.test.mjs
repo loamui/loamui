@@ -8,6 +8,7 @@ import {
   coreStylesheet,
   declaresLayerOrder,
   driftedCopies,
+  localCopyCurrent,
   steps,
 } from "../src/steps.mjs";
 import { TAILWIND4_LAYER_ORDER } from "../src/conflicts.mjs";
@@ -154,14 +155,14 @@ test("every step can describe itself for a dry run", () => {
     assert.equal(typeof s.describe(dir), "string", s.id);
 });
 
-test("agent 'none' installs no skills; an agent gets loamui and both companions", () => {
+test("agent 'none' installs no skills; an agent gets loamui and its companions", () => {
   const dir = nextProject();
   const ids = (agent) =>
     steps({ pm: "npm", agent, framework: detectFramework(dir) }).map((s) => s.id);
   assert.ok(!ids("none").some((id) => id.startsWith("skill:")));
   assert.deepEqual(
     ids("claude-code").filter((id) => id.startsWith("skill:")),
-    ["skill:loamui", "skill:modern-css", "skill:modern-web-guidance"],
+    ["skill:loamui", "skill:modern-css", "skill:modern-web-guidance", "skill:frontend-design"],
   );
 });
 
@@ -330,4 +331,64 @@ test("a project copy that differs from the packaged asset is reported as drift",
   assert.deepEqual(driftedCopies(dir), []);
   writeFileSync(join(dir, "stylelint.config.mjs"), "export default {};\n");
   assert.deepEqual(driftedCopies(dir), ["stylelint.config.mjs"]);
+});
+
+test("local delivery copies the installed stylesheet into public/ and links it", () => {
+  const dir = nextProject(
+    {},
+    { files: { "app/layout.tsx": "<html><head><title>x</title></head><body></body></html>" } },
+  );
+  const local = (d) =>
+    steps({ pm: "npm", agent: "none", framework: detectFramework(d), delivery: "local" }).find(
+      (s) => s.id === "stylesheet",
+    );
+  assert.match(local(dir).title, /public\/loamui-core\.css is the installed stylesheet/);
+  assert.equal(local(dir).fix(dir), false, "no core installed, nothing to copy");
+  installCore(dir, "0.2.0");
+  mkdirSync(join(dir, "node_modules", "@loamui", "core", "dist"), { recursive: true });
+  writeFileSync(join(dir, "node_modules", "@loamui", "core", "dist", "styles.css"), "a{}\n");
+  assert.match(
+    local(dir).describe(dir),
+    /copy the installed stylesheet to public\/loamui-core\.css and add <link rel="stylesheet" href="\/loamui-core\.css" \/>/,
+  );
+  assert.equal(local(dir).fix(dir), true);
+  assert.equal(read(dir, "public/loamui-core.css"), "a{}\n");
+  assert.match(read(dir, "app/layout.tsx"), /<link rel="stylesheet" href="\/loamui-core\.css" \/>/);
+  assert.equal(local(dir).check(dir), true);
+
+  // A core update makes the copy stale: doctor sees it, init refreshes it, without the flag.
+  writeFileSync(join(dir, "node_modules", "@loamui", "core", "dist", "styles.css"), "b{}\n");
+  assert.equal(localCopyCurrent(dir), false);
+  const detected = step(dir, "stylesheet");
+  assert.equal(detected.check(dir), false);
+  assert.equal(detected.fix(dir), true);
+  assert.equal(read(dir, "public/loamui-core.css"), "b{}\n");
+  assert.equal(detected.check(dir), true);
+  assert.equal(read(dir, "app/layout.tsx").split("loamui-core.css").length - 1, 1, "linked once");
+});
+
+test("a CDN link switches to the local copy in place when local delivery is asked for", () => {
+  const dir = nextProject(
+    {},
+    {
+      files: {
+        "app/layout.tsx":
+          '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@loamui/core@0.2.0/dist/styles.css" />',
+      },
+    },
+  );
+  installCore(dir, "0.2.0");
+  mkdirSync(join(dir, "node_modules", "@loamui", "core", "dist"), { recursive: true });
+  writeFileSync(join(dir, "node_modules", "@loamui", "core", "dist", "styles.css"), "a{}\n");
+  assert.equal(step(dir, "stylesheet").check(dir), true, "the CDN link is complete by default");
+  const local = steps({
+    pm: "npm",
+    agent: "none",
+    framework: detectFramework(dir),
+    delivery: "local",
+  }).find((s) => s.id === "stylesheet");
+  assert.equal(local.check(dir), false);
+  assert.equal(local.fix(dir), true);
+  assert.equal(read(dir, "app/layout.tsx"), '<link rel="stylesheet" href="/loamui-core.css" />');
+  assert.equal(local.check(dir), true);
 });

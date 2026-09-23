@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
-import { coreStylesheet, LAYER_DECLARATION } from "../steps.mjs";
+import { coreStylesheet, LAYER_DECLARATION, LOCAL_STYLESHEET } from "../steps.mjs";
 import { ui } from "../ui.mjs";
 import { addArgs, dlx, run } from "../util.mjs";
 import { init } from "./init.mjs";
@@ -90,10 +90,11 @@ const scaffolds = {
     },
     // The scaffold has no globals.css and its layout has no <head>; both are
     // written whole, with the stylesheet link for the version just installed.
-    foundation(target) {
+    foundation(target, delivery) {
       const app = join(target, "app");
       mkdirSync(app, { recursive: true });
-      writeFileSync(join(app, "layout.tsx"), nextLayout(coreStylesheet(target)));
+      const href = delivery === "local" ? LOCAL_STYLESHEET : coreStylesheet(target);
+      writeFileSync(join(app, "layout.tsx"), nextLayout(href));
       writeFileSync(join(app, "page.tsx"), `"use client";\n\n${WELCOME}`);
       writeFileSync(join(app, "welcome.css"), WELCOME_CSS);
     },
@@ -160,7 +161,7 @@ const scaffolds = {
  * A new application with LoamUI set up: the framework's own scaffolder runs
  * first, then the foundation files are written and `init` completes the rest.
  */
-export function create({ dir, pm, agent, framework }) {
+export function create({ dir, pm, agent, framework, delivery = "cdn" }) {
   const kind = scaffolds[framework];
   const target = resolve(process.cwd(), dir);
   if (existsSync(target) && readdirSync(target).length) {
@@ -180,9 +181,9 @@ export function create({ dir, pm, agent, framework }) {
     ui.fail("Installing @loamui/core failed; see the output above.");
     return 1;
   }
-  kind.foundation(target);
+  kind.foundation(target, delivery);
 
-  const status = init({ cwd: target, pm, agent });
+  const status = init({ cwd: target, pm, agent, delivery });
   if (status !== 0) return status;
 
   ui.heading("Verifying");

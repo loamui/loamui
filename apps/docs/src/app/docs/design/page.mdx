@@ -1,0 +1,97 @@
+import "../prose.css";
+
+export const metadata = {
+  title: "Design",
+  description:
+    "Give an interface its own identity on the primitives: a design plan first, then the token inputs, typefaces and layout that express it.",
+};
+
+# Design
+
+Conformance is the floor, not the result. An interface that only conforms looks like the defaults: the system typeface, a neutral primary, the stock accent, every section spaced the same. Nothing is wrong with it, and nothing about it belongs to the product it serves. This guide is about the second half of the work, the part no check can verify: giving a site a considered identity while staying inside the three primitives.
+
+## Two skills, and which one decides
+
+The [Frontend Design skill](https://github.com/anthropics/skills/tree/main/skills/frontend-design) supplies the taste. It grounds every choice in the subject and audience, insists on a written design plan before any code, names the clichés that generated pages fall into, and asks for a self-critique at the end. `loamui init` installs it as a companion alongside Modern CSS and Modern Web Guidance.
+
+LoamUI supplies the expression. Where the two disagree, the split is fixed:
+
+- **Frontend Design decides** the direction: subject, palette, typefaces, layout concept, the one memorable thing, the voice of the copy.
+- **LoamUI decides** how that direction is written: colour through the token inputs in `oklch()`, type through the two font tokens and the fluid scale, gaps through the space scale, rules in layers and scopes, meaning through context regions, and no reset underneath any of it.
+
+So a plan that lists a palette as hex values is not wrong; it is translated. The hex swatches become `light-dark()` pairs on the colour inputs, and the components derive the rest.
+
+## The plan, in LoamUI terms
+
+Write the plan before the first component. Each line of it lands on a specific primitive:
+
+| The plan says       | LoamUI expresses it as                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| Brand colour        | `--loam-color-primary`; soft, strong, hover and ring derive from it                            |
+| The one bold colour | `--loam-color-accent`, spent in one place                                                      |
+| Neutrals            | `--loam-color-bg`, `-bg-subtle`, `-surface`, `-fg`, `-fg-muted`, `-line`                       |
+| Status colours      | `--loam-color-{success,warning,danger,info}`; they keep their meaning, never restyled as brand |
+| Typefaces           | `--loam-font` for reading, `--loam-font-display` for headings                                  |
+| Corners and depth   | `--loam-radius-*`, `--loam-shadow-*`                                                           |
+| Motion character    | `--loam-duration-*`, `--loam-ease`, inside `prefers-reduced-motion: no-preference` only        |
+| Layout concept      | the [layout](/docs/layout) modules and the space scale, in scoped recipe rules                 |
+
+The plan goes in a theme stylesheet loaded after the core stylesheet, so its declarations follow the defaults in the same layer:
+
+```css
+@layer loamui.tokens {
+  :root {
+    --loam-color-primary: light-dark(oklch(38% 0.09 160deg), oklch(78% 0.1 160deg));
+    --loam-color-accent: light-dark(oklch(62% 0.19 45deg), oklch(74% 0.16 45deg));
+    --loam-color-bg: light-dark(oklch(98% 0.006 160deg), oklch(18% 0.012 160deg));
+    --loam-color-surface: light-dark(oklch(100% 0 0deg), oklch(23% 0.012 160deg));
+    --loam-font: "Source Serif 4", Georgia, serif;
+    --loam-font-display: "Instrument Sans", system-ui, sans-serif;
+    --loam-radius-md: 0.25rem;
+  }
+}
+```
+
+Nothing below `:root` changes. Buttons, fields, badges and alerts read these inputs and re-derive their own states, which is why a theme is a dozen lines and not a fork.
+
+## Colour
+
+Choose the neutrals, do not inherit them. A grey with a slight bias toward the primary's hue reads as chosen; a pure grey reads as unconsidered. Give each token a real dark value in `light-dark()` rather than an inversion: a dark scheme is designed twice, with contrast checked on both grounds.
+
+The audited palette covers the defaults. A custom palette is yours to measure: every text pairing you changed at 4.5:1, every edge and indicator at 3:1, in both schemes. The status colours derive their `-strong` text forms, so a lighter warning or info hue still reads; the primary and the neutrals do not have that safety net.
+
+Spend boldness once. The accent is that place: a link colour, a highlight, the mark on the current step. When the accent competes with the ground, move it toward an analogous hue or lower its chroma before reaching for a second accent.
+
+## Type
+
+The two font tokens are the biggest visual decision on the page. Left as `system-ui`, every site looks like every other site. Choose a reading face and a display face that are clearly different from each other, or one family with a real range of weights, and load them the way the framework prefers: a font module that exposes a variable in Next.js, a stylesheet link with `display=swap` elsewhere. Always declare a fallback stack behind the name.
+
+The scale, leading and measure already exist. Headings resolve the fluid type tokens through the element styles, running text sits at `var(--loam-measure)`, and figures are set for prose or tables by the same rules. Do not set sizes in pixels or rem to make a heading bigger; give it the display face, a weight, and room.
+
+One display moment per page. A hero headline in the display face, at the top of the scale, is the moment; a page that shouts on every section has no hierarchy. A tracked-out capitals label above every heading, one italic word in a headline, and an arrow appended to every link are the commonest tells of a generated page, and they are avoided here for that reason.
+
+## The page
+
+The [recipes](/recipes) are sections. A page is their order and rhythm.
+
+- **Order by purpose.** A marketing page introduces with a [hero](/recipes/heroes), earns belief with evidence, shows what the product does, and ends with the action it wants. A step-by-step section belongs only where the content is a sequence; numbered markers on things that are not steps are decoration.
+- **Rhythm by scale.** Between sections use `--loam-space-2xl` or `-3xl`; within a section `-l` or `-m`; between controls in a row `-2xs` or `-xs`. Gaps that are all the same size are the surest sign of a template. Let one section be dense and the next open.
+- **Width by content.** Prose stops at the measure. Grids and heroes take the page. Full-bleed imagery is a deliberate break, used once.
+- **Surfaces by role.** Border, fill, radius and shadow each say "this is a separate object". A page where every block is a `Card` has no hierarchy; lift the one thing that needs lifting and let the rest sit on the ground.
+- **Navigation and landmarks.** `Nav` for the site's links with the current one marked, `SkipLink` first in the document, a `<main>`, a `<footer>` in the element styles' own dress.
+- **Imagery.** Real images, sized with `aspect-ratio` and cropped with `object-fit: cover`, alternative text that says what the image conveys, an eager hero image and lazy ones below. Text over a photograph needs its contrast measured over the photograph. A gradient wash behind a heading is decoration; a solid tint from a token is a surface.
+- **Motion.** Nothing moves without the user asking for it, and everything that moves lives inside `prefers-reduced-motion: no-preference`. One orchestrated moment on arrival lands; a fade on every section reads as generated.
+
+## Copy
+
+Words are design material. Write from the reader's side: what a thing is and what it does, in plain verbs and sentence case. A button says what happens when it is pressed and keeps that name through the flow. An error says what went wrong and how to fix it, in the words of the question. Placeholder copy that reads as filler makes a considered layout look templated; write the real thing, or something that could be.
+
+## Review it as a designer would
+
+The checks confirm the floor: lint, types, composition, contrast and the accessibility rules. They cannot see a bland page. Before reporting, render the result in both colour schemes at a narrow and a wide width and look at it against the plan:
+
+1. Does the palette, type and layout on screen match what the plan said, and does the plan still read as a choice for this subject rather than a default for any subject?
+2. Is there one memorable thing, and is everything around it quiet?
+3. Is there one thing to remove? Remove it.
+
+Then report the review alongside what the checks ran. A screenshot is evidence of appearance; it is not evidence that the page is accessible, and the checks are not evidence that it is designed. Both are needed.
