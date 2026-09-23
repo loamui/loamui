@@ -12,6 +12,7 @@ import { execSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import yaml from "js-yaml";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILL_DIR = join(ROOT, "skills", "loamui");
@@ -47,8 +48,28 @@ const drift = [...new Set([...before.keys(), ...after.keys()])].filter(
 if (drift.length)
   fail(`references/ was stale — review the regenerated files:\n${drift.join("\n")}`);
 
-// 2. named components exist ----------------------------------------------
+// 2. the frontmatter parses ------------------------------------------------
+// The skills installer reads it to find the skill at all: a stray ": " in an
+// unquoted description made the skill vanish from the installer's listing.
 const md = readFileSync(SKILL, "utf8");
+{
+  const match = /^---\n([\s\S]*?)\n---\n/.exec(md);
+  if (!match) fail("SKILL.md has no frontmatter block");
+  else {
+    try {
+      const front = yaml.load(match[1]);
+      for (const key of ["name", "description"])
+        if (typeof front?.[key] !== "string" || !front[key].trim())
+          fail(`SKILL.md frontmatter has no ${key}`);
+      if (front?.name !== "loamui")
+        fail(`SKILL.md frontmatter name is "${front?.name}", not "loamui"`);
+    } catch (error) {
+      fail(`SKILL.md frontmatter is not valid YAML: ${error.message.split("\n")[0]}`);
+    }
+  }
+}
+
+// 3. named components exist ----------------------------------------------
 const existing = new Set(readdirSync(COMPONENTS_DIR));
 const table = md.split("## Components")[1]?.split("\n## ")[0] ?? "";
 for (const row of table
@@ -65,7 +86,7 @@ for (const row of table
       fail(`SKILL.md names "${name}" but packages/core/src/components/${name} does not exist`);
 }
 
-// 3. local links resolve ----------------------------------------------------
+// 4. local links resolve ----------------------------------------------------
 for (const m of md.matchAll(/\]\(((?:references|assets)\/[^)#]+)\)/g)) {
   if (!existsSync(join(SKILL_DIR, m[1]))) fail(`SKILL.md links to missing file ${m[1]}`);
 }
@@ -73,7 +94,7 @@ for (const m of md.matchAll(/`((?:references|assets)\/[a-z/.-]+\.(?:md|mjs))`/g)
   if (!existsSync(join(SKILL_DIR, m[1]))) fail(`SKILL.md mentions missing file ${m[1]}`);
 }
 
-// 4. budget -----------------------------------------------------------------
+// 5. budget -----------------------------------------------------------------
 if (md.length > BUDGET_CHARS)
   fail(
     `SKILL.md is ${md.length} chars; budget is ${BUDGET_CHARS} (≈4k tokens). Move depth into references/.`,
