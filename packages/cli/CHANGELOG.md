@@ -18,8 +18,8 @@ of `@loamui/core`; release tags use the `loamui-vMAJOR.MINOR.PATCH` form.
 
 - `init` installs a third companion skill, `frontend-design` from
   `anthropics/skills`, and the `AGENTS.md` section names it. It decides the
-  look of what an agent builds; the `loamui` skill decides how that look is
-  expressed through the primitives.
+  design direction of what an agent builds; the `loamui` skill decides how
+  that direction is expressed through the primitives.
 
 ## 0.1.1 — 2026-09-22
 
