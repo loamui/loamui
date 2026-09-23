@@ -9,7 +9,7 @@ import { ui } from "../ui.mjs";
  * exists is replaced, and running it again changes nothing. With `dryRun`
  * it prints what it would do and touches nothing.
  */
-export function init({ cwd, pm, agent, dryRun = false }) {
+export function init({ cwd, pm, agent, delivery = "cdn", dryRun = false }) {
   const problems = preflight(cwd);
   if (problems.length) {
     for (const problem of problems) ui.fail(problem);
@@ -43,7 +43,7 @@ export function init({ cwd, pm, agent, dryRun = false }) {
   const held = [];
   const manual = [];
   const failed = [];
-  for (const step of steps({ pm, agent, framework })) {
+  for (const step of steps({ pm, agent, framework, delivery })) {
     if (step.check(cwd)) {
       ui.ok(step.title);
       continue;

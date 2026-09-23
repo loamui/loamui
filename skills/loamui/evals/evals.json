@@ -197,6 +197,20 @@
         "Runs relevant checks and repairs failures without weakening the rules"
       ],
       "forbid": ["!important", "className=\"loam-Card\""]
+    },
+    {
+      "id": "client-landing-page",
+      "prompt": "Build the marketing homepage for Fernbank, an independent garden nursery in Devon: hero, what we grow, opening times and directions, and a way to ask about a plant. Use LoamUI.",
+      "expect": [
+        "Writes a design plan before code: subject and audience, palette, typefaces, layout concept, the one memorable thing",
+        "Sets the token inputs in a theme stylesheet (--loam-color-primary and neutrals as light-dark oklch pairs, --loam-font and --loam-font-display), not the defaults",
+        "Loads the chosen typefaces with a fallback stack, through the framework's font mechanism or a stylesheet link",
+        "Assembles the page from recipes and components (a hero, a grid or cards, a form inside Field, Nav with the current link marked, SkipLink) in a purposeful order",
+        "Section gaps come from the space scale and are not all the same size; prose stops at the measure",
+        "Reports a visual review in both colour schemes at narrow and wide widths alongside the checks that ran, and the contrast pairs measured for the custom palette",
+        "Copy is specific to the nursery, not filler"
+      ],
+      "forbid": ["font-size: 48px", "#F4F1EA", "variant=", "className=\"loam-", "!important", "Lorem ipsum"]
     }
   ]
 }

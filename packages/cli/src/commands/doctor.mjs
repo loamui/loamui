@@ -5,7 +5,7 @@ import { driftedCopies, steps } from "../steps.mjs";
 import { ui } from "../ui.mjs";
 
 /** The state of LoamUI setup in the project at `cwd`, as data. */
-export function inspect({ cwd, pm, agent }) {
+export function inspect({ cwd, pm, agent, delivery = "cdn" }) {
   const problems = preflight(cwd);
   if (problems.length) return { complete: false, problems };
 
@@ -16,7 +16,7 @@ export function inspect({ cwd, pm, agent }) {
     detail: c.detail,
     fixable: Boolean(c.fix),
   }));
-  const checks = steps({ pm, agent, framework }).map((step) => {
+  const checks = steps({ pm, agent, framework, delivery }).map((step) => {
     const ok = step.check(cwd);
     return {
       id: step.id,
@@ -38,8 +38,8 @@ export function inspect({ cwd, pm, agent }) {
 }
 
 /** Report LoamUI setup without changing it. Exit 1 on any gap; `--json` prints the report as data. */
-export function doctor({ cwd, pm, agent, json = false }) {
-  const report = inspect({ cwd, pm, agent });
+export function doctor({ cwd, pm, agent, delivery = "cdn", json = false }) {
+  const report = inspect({ cwd, pm, agent, delivery });
   if (json) {
     ui.info(JSON.stringify(report, null, 2));
     return report.complete ? 0 : 1;

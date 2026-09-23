@@ -41,11 +41,17 @@ export const SKILLS_INSTALLER = "skills@1.7.0";
 export const COMPANIONS = [
   { repo: "moderncss/skills", skill: "modern-css" },
   { repo: "GoogleChrome/modern-web-guidance", skill: "modern-web-guidance" },
+  { repo: "anthropics/skills", skill: "frontend-design" },
 ];
 
 const LEGACY_STYLESHEET = "https://loamui.com/loamui-core.css";
 const STYLESHEET_PATTERN =
   /https:\/\/cdn\.jsdelivr\.net\/npm\/@loamui\/core@[^/]+\/dist\/styles\.css/;
+/** Where a self-hosted copy of the stylesheet is served from, and where it lives. */
+export const LOCAL_STYLESHEET = "/loamui-core.css";
+export const LOCAL_COPY = "public/loamui-core.css";
+const LOCAL_PATTERN = /href(?:=|:\s*)["']\/loamui-core\.css["']/;
+export const DELIVERIES = ["cdn", "local"];
 
 /**
  * The stylesheet for the installed core, served immutable from the npm CDN.
@@ -55,6 +61,19 @@ export function coreStylesheet(cwd) {
   const core = installedPath(cwd, "@loamui/core");
   const version = core && readJson(join(core, "package.json"))?.version;
   return version ? `https://cdn.jsdelivr.net/npm/@loamui/core@${version}/dist/styles.css` : null;
+}
+
+/** The installed core's stylesheet source, or null until core is installed. */
+function installedStylesheet(cwd) {
+  const core = installedPath(cwd, "@loamui/core");
+  const file = core && join(core, "dist", "styles.css");
+  return file && existsSync(file) ? readFileSync(file, "utf8") : null;
+}
+
+/** True when the self-hosted copy exists and is the installed version's stylesheet. */
+export function localCopyCurrent(cwd) {
+  const installed = installedStylesheet(cwd);
+  return installed !== null && read(cwd, LOCAL_COPY) === installed;
 }
 
 /**
@@ -190,40 +209,73 @@ function layerImportStep(fw) {
   return step;
 }
 
-function stylesheetStep(fw) {
+/**
+ * The stylesheet link, delivered from the npm CDN (the default) or from a
+ * self-hosted copy in `public/` (`local`: no third-party request, and the
+ * copy is checked against the installed version). A project already linking
+ * the local copy stays local whatever was asked.
+ */
+function stylesheetStep(fw, delivery) {
   const { mode, file, docs } = fw.stylesheet;
   const source = (cwd) => read(cwd, file) ?? "";
-  const linked = (cwd) => STYLESHEET_PATTERN.test(source(cwd));
+  const local = (cwd) => delivery === "local" || LOCAL_PATTERN.test(source(cwd));
+  const linked = (cwd) =>
+    local(cwd) ? LOCAL_PATTERN.test(source(cwd)) : STYLESHEET_PATTERN.test(source(cwd));
   const legacy = (cwd) => source(cwd).includes(LEGACY_STYLESHEET);
   const bundled = (cwd) => source(cwd).includes("@loamui/core/styles.css");
-  const url = (cwd) => coreStylesheet(cwd) ?? "<the URL init prints>";
+  const url = (cwd) =>
+    local(cwd) ? LOCAL_STYLESHEET : (coreStylesheet(cwd) ?? "<the URL init prints>");
   const link = (cwd) => `<link rel="stylesheet" href="${url(cwd)}" />`;
   const entry = (cwd) => `{ rel: "stylesheet", href: "${url(cwd)}" }`;
   const where = (cwd) =>
     mode === "links"
       ? `${entry(cwd)} first in the links array of head() in ${file}`
       : `${link(cwd)} inside <head>${file ? ` in ${file}` : ""}`;
+  const copy = (cwd) => (local(cwd) ? `copy the installed stylesheet to ${LOCAL_COPY} and ` : "");
   const manual = (cwd) =>
     legacy(cwd)
       ? `Replace the unversioned ${LEGACY_STYLESHEET} link in ${file} with ${url(cwd)}.`
       : bundled(cwd)
-        ? `Remove the @loamui/core/styles.css import in ${file} and add ${where(cwd)}.`
-        : `Add ${where(cwd)} (see ${docs}).`;
+        ? `Remove the @loamui/core/styles.css import in ${file} and ${copy(cwd)}add ${where(cwd)}.`
+        : `${copy(cwd)}add ${where(cwd)} (see ${docs}).`.replace(/^[a-z]/, (c) => c.toUpperCase());
   const step = {
     id: "stylesheet",
     wiring: true,
-    title: file ? `${file} links the core stylesheet` : "the core stylesheet is linked",
-    check: (cwd) => linked(cwd) && !bundled(cwd),
-    describe: (cwd) => `add ${where(cwd)}`,
+    title:
+      delivery === "local"
+        ? `${LOCAL_COPY} is the installed stylesheet and ${file ?? "the root document"} links it`
+        : file
+          ? `${file} links the core stylesheet`
+          : "the core stylesheet is linked",
+    check: (cwd) => linked(cwd) && !bundled(cwd) && (!local(cwd) || localCopyCurrent(cwd)),
+    describe: (cwd) => `${copy(cwd)}add ${where(cwd)}`,
     manual,
   };
   if (mode === "manual") return step;
 
   step.fix = (cwd) => {
     const src = read(cwd, file);
-    const href = coreStylesheet(cwd);
-    if (src === null || !href || bundled(cwd)) return false;
-    if (STYLESHEET_PATTERN.test(src)) return true;
+    if (src === null || bundled(cwd)) return false;
+    if (local(cwd)) {
+      const installed = installedStylesheet(cwd);
+      if (installed === null) return false;
+      if (!localCopyCurrent(cwd)) {
+        mkdirSync(join(cwd, dirname(LOCAL_COPY)), { recursive: true });
+        writeFileSync(join(cwd, LOCAL_COPY), installed);
+      }
+    }
+    const href = local(cwd) ? LOCAL_STYLESHEET : coreStylesheet(cwd);
+    if (!href) return false;
+    if (linked(cwd)) return true;
+    // A link of the other kind, or the unversioned hosted one, is switched in place.
+    const other = local(cwd) ? STYLESHEET_PATTERN : LOCAL_PATTERN;
+    if (other.test(src)) {
+      const replaced = local(cwd)
+        ? src.replace(STYLESHEET_PATTERN, href)
+        : src.replace(LOCAL_PATTERN, (m) => m.replace(LOCAL_STYLESHEET, href));
+      writeFileSync(join(cwd, file), replaced);
+      return true;
+    }
     if (legacy(cwd)) {
       writeFileSync(join(cwd, file), src.replaceAll(LEGACY_STYLESHEET, href));
       return true;
@@ -271,17 +323,25 @@ const CHECKS = ["lint:css", "lint:js", "check:composition", "format:check"];
 
 const INSTRUCTIONS_MARK = "## LoamUI";
 
-function instructions(pm, fw) {
+function instructions(pm, fw, delivery) {
   const layer = fw.layerFile ?? "the global stylesheet";
+  const delivered =
+    delivery === "local"
+      ? `- The stylesheet is a copy of the installed version at \`${LOCAL_COPY}\`, linked from`
+      : `- The stylesheet is linked in ${fw.stylesheet.file ?? "the root document"} for the installed`;
+  const delivered2 =
+    delivery === "local"
+      ? `  ${fw.stylesheet.file ?? "the root document"}; \`loamui init\` refreshes it after updating core. \`${layer}\``
+      : `  version; \`${layer}\``;
   const lines = [
     INSTRUCTIONS_MARK,
     "",
     "This project uses LoamUI (`@loamui/core`): contextual tokens, element styles and",
-    "components. Read the `loamui` skill before writing UI, and the `modern-css` and",
-    "`modern-web-guidance` skills it names.",
+    "components. Read the `loamui` skill before writing UI, and the `frontend-design`,",
+    "`modern-css` and `modern-web-guidance` skills it names.",
     "",
-    `- The stylesheet is linked in ${fw.stylesheet.file ?? "the root document"} for the installed`,
-    `  version; \`${layer}\` declares the layer order first.`,
+    delivered,
+    `${delivered2} declares the layer order first.`,
     `- Composition lives under ${fw.cssRoots.map((r) => `\`${r}/\``).join(", ")}: recipe rules in`,
     '  `@layer loamui.components` inside `@scope (.recipe) to ([class*="loam-"])`, spacing',
     "  and colour from `--loam-*` tokens, parts composed rather than props configured.",
@@ -293,7 +353,7 @@ function instructions(pm, fw) {
   return lines.join("\n");
 }
 
-function instructionsStep(pm, fw, agent) {
+function instructionsStep(pm, fw, agent, delivery) {
   const file = "AGENTS.md";
   return {
     id: "agent-instructions",
@@ -304,7 +364,7 @@ function instructionsStep(pm, fw, agent) {
     fix: (cwd) => {
       const existing = read(cwd, file);
       if (existing?.includes(INSTRUCTIONS_MARK)) return true;
-      const section = instructions(pm, fw);
+      const section = instructions(pm, fw, delivery);
       writeFileSync(
         join(cwd, file),
         existing ? `${existing.trimEnd()}\n\n${section}` : `# Agent instructions\n\n${section}`,
@@ -327,7 +387,7 @@ function instructionsStep(pm, fw, agent) {
  * a dry run, and either `fix` or `manual` instructions. Steps tagged
  * `wiring` change the cascade and are held back while a conflict stands.
  */
-export function steps({ pm, agent, framework: fw }) {
+export function steps({ pm, agent, framework: fw, delivery = "cdn" }) {
   const list = [
     {
       id: "core",
@@ -338,7 +398,7 @@ export function steps({ pm, agent, framework: fw }) {
     },
     layerStep(fw),
     ...(fw.layerImport ? [layerImportStep(fw)] : []),
-    stylesheetStep(fw),
+    stylesheetStep(fw, delivery),
     {
       id: "stylelint-files",
       title: "Stylelint configuration in the project",
@@ -439,7 +499,7 @@ export function steps({ pm, agent, framework: fw }) {
       fix: (cwd) =>
         upsertScript(cwd, "check", CHECKS.map((name) => runScript(pm, name)).join(" && ")),
     },
-    instructionsStep(pm, fw, agent),
+    instructionsStep(pm, fw, agent, delivery),
   ];
 
   if (agent !== "none") {

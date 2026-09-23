@@ -366,6 +366,7 @@ const guideOrder = [
   "/docs/components",
   "/docs/contextualism",
   "/recipes/guide",
+  "/docs/design",
   "/docs/layout",
   "/docs/typography",
   "/docs/accessibility",

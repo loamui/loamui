@@ -7,6 +7,7 @@ import { create } from "../src/commands/create.mjs";
 import { doctor } from "../src/commands/doctor.mjs";
 import { init } from "../src/commands/init.mjs";
 import { SCAFFOLDS } from "../src/frameworks.mjs";
+import { DELIVERIES } from "../src/steps.mjs";
 import { ui } from "../src/ui.mjs";
 import { PACKAGE_MANAGERS, detectPackageManager } from "../src/util.mjs";
 
@@ -23,6 +24,8 @@ Options:
   --json                         doctor: print the report as JSON
   --framework <${SCAFFOLDS.join("|")}>
                                  create: the framework to scaffold (default: next)
+  --stylesheet <${DELIVERIES.join("|")}>       Link the npm CDN (default) or a copy served
+                                 from public/ that doctor checks against the installed version
   --agent <${AGENTS.join("|")}>
                                  Agent to install the skills for (default: claude-code)
   --pm <${PACKAGE_MANAGERS.join("|")}>       Package manager (default: the one that ran this)
@@ -43,6 +46,7 @@ function parse(argv) {
     else if (arg === "--agent") opts.agent = argv[++i];
     else if (arg === "--pm") opts.pm = argv[++i];
     else if (arg === "--framework") opts.framework = argv[++i];
+    else if (arg === "--stylesheet") opts.stylesheet = argv[++i];
     else if (arg.startsWith("-")) {
       ui.fail(`Unknown option: ${arg}`);
       ui.info(HELP);
@@ -80,11 +84,13 @@ async function main() {
   oneOf("agent", opts.agent, AGENTS);
   oneOf("pm", opts.pm, PACKAGE_MANAGERS);
   oneOf("framework", opts.framework, SCAFFOLDS);
+  oneOf("stylesheet", opts.stylesheet, DELIVERIES);
 
   const [command, ...rest] = opts._;
   const interactive = process.stdin.isTTY && !opts.yes;
   const pm = opts.pm ?? detectPackageManager();
   const cwd = process.cwd();
+  const delivery = opts.stylesheet ?? "cdn";
   let agent = opts.agent;
   if (!agent) {
     agent =
@@ -99,14 +105,20 @@ async function main() {
 
   switch (command) {
     case "init":
-      process.exitCode = init({ cwd, pm, agent, dryRun: Boolean(opts.dryRun) });
+      process.exitCode = init({ cwd, pm, agent, delivery, dryRun: Boolean(opts.dryRun) });
       return;
     case "doctor":
-      process.exitCode = doctor({ cwd, pm, agent, json: Boolean(opts.json) });
+      process.exitCode = doctor({ cwd, pm, agent, delivery, json: Boolean(opts.json) });
       return;
     case "create": {
       const dir = rest[0] ?? (interactive ? await ask("Project directory?", "my-app") : "my-app");
-      process.exitCode = create({ dir, pm, agent, framework: opts.framework ?? "next" });
+      process.exitCode = create({
+        dir,
+        pm,
+        agent,
+        framework: opts.framework ?? "next",
+        delivery,
+      });
       return;
     }
     case undefined:

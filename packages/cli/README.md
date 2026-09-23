@@ -21,7 +21,7 @@ the composition checker, adds the `lint:css`, `lint:js`, `check:composition`,
 `format` and `format:check` scripts with one `check` that runs them all,
 writes a LoamUI section into `AGENTS.md` (imported from `CLAUDE.md` for
 Claude Code) so an agent knows the setup and the checks, and installs the
-`loamui` skill and its two companions for your agent.
+`loamui` skill and its three companions for your agent.
 
 Every change is additive: nothing that exists is replaced, and running `init`
 again changes nothing. `--dry-run` prints what it would do and touches nothing.
@@ -77,6 +77,8 @@ folder.
   the command.
 - `--framework <next|tanstack-start|vite>` — `create` only. Default `next`.
 - `--dry-run` — `init` only.
+- `--stylesheet <cdn|local>` — the npm CDN link (default) or a self-hosted
+  copy in `public/`; see The stylesheet below.
 - `--json` — `doctor` only.
 - `-y`, `--yes` — accept defaults without prompting.
 
@@ -86,6 +88,13 @@ folder.
 for the version of core it installed. The URL is immutable, so a later core
 release never changes a deployed application; update the package and the
 link together.
+
+`--stylesheet local` serves it yourself instead: `init` and `create` copy
+the installed stylesheet to `public/loamui-core.css` and link
+`/loamui-core.css`, so the page makes no third-party request. `doctor`
+checks the copy against the installed version, and `init` refreshes it after
+a core update. A project that already links the local copy is treated as
+local without the flag.
 
 Installing skill files does not make a running agent session discover them:
 open a new session in the project. The tool never composes UI; that is the
