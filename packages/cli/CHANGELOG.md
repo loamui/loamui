@@ -3,7 +3,7 @@
 Notable changes to `loamui`, the setup command. It is versioned independently
 of `@loamui/core`; release tags use the `loamui-vMAJOR.MINOR.PATCH` form.
 
-## Unreleased
+## 0.2.0 — 2026-09-23
 
 ### Added
 
