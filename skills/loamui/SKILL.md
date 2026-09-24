@@ -77,8 +77,11 @@ theme.
 - **Modern CSS.** Recipe rules in `@layer loamui.components` inside
   `@scope (.recipe) to ([class*="loam-"])`; nesting, logical properties,
   container queries, intrinsic grid and flex, additive non-overlapping query
-  ranges. No `!important`, BEM, resets, pixel sizing or viewport units for
-  size. The order `@layer loamui.tokens, loamui.elements, loamui.components;`
+  ranges. Inside a scope the markup is the API: reference elements by type
+  (`h2`, `figure`, `nav`, `h1 + p`); a class is for a real distinction between
+  siblings of the same type, never a hook for styling, and no wrapper element
+  exists only to carry one. No `!important`, BEM, resets, pixel sizing or
+  viewport units for size. The order `@layer loamui.tokens, loamui.elements, loamui.components;`
   must be established before any recipe registers a layer. Baseline Widely
   and Newly Available features are used natively; anything beyond that is a
   progressive enhancement, and the project's browser policy is never changed
@@ -144,11 +147,13 @@ stop at the first rung that answers the need:
    `Nav`, a `Field` form.
 4. Only then a new component, and only for behaviour a native element lacks.
 
-Whatever the rung, give it the shape every recipe has: one root class, rules
-in `@layer loamui.components` inside `@scope (.root) to ([class*="loam-"])`,
-colour, space and type from tokens, the measuring container outside the
-layout it controls, one job per section, the right heading level, real
-content. Model the structure on the nearest recipe; never force its content.
+Whatever the rung, give it the shape every recipe has: its own component
+file with its stylesheet beside it, never inline JSX in a page; one root
+class, rules in `@layer loamui.components` inside
+`@scope (.root) to ([class*="loam-"])`, colour, space and type from tokens,
+the measuring container outside the layout it controls, one job per section,
+the right heading level, real content. A page assembles sections; it does
+not contain them. Model the structure on the nearest recipe; never force its content.
 Never borrow `loam-*` class names, invent a part, or substitute another
 library. The review in step 4 applies to it exactly as to an adapted recipe.
 
@@ -175,7 +180,8 @@ library. The review in step 4 applies to it exactly as to an adapted recipe.
 
 ## 4. Review, then report
 
-Nothing is reported until it has been reviewed in this order:
+Nothing is reported until it has been reviewed, as a distinct pass with its
+findings written down, in this order:
 
 1. **Gates.** Run the project's `check` script (CSS lint, JS lint,
    composition, format), its type checker and tests. Fix what they report;
@@ -183,11 +189,12 @@ Nothing is reported until it has been reviewed in this order:
 2. **Philosophy.** Reread the composition against the rules above: primitives
    in the right order, a native element before a component, context not
    props, parts not configuration, Field wiring, the scope donut, no reset,
-   identity only where legitimate.
+   identity only where legitimate, each section its own component file.
 3. **Modern CSS.** Reread the authored CSS against the `modern-css` rules no
    lint enforces: `oklch()` only, fluid `clamp()` with a rem term, flow-relative
    properties, `:has()` over state classes, container units over fixed
-   spacing, non-overlapping ranges, motion opt-in.
+   spacing, non-overlapping ranges, motion opt-in, and for every class inside
+   a scope, whether a type selector would have done.
 4. **Modern Web Guidance.** For each pattern searched in step 3, confirm the
    guide's approach was taken, or say why not.
 5. **Rendered result.** Both colour schemes at a narrow and a wide width,
